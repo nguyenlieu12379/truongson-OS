@@ -57,3 +57,13 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 **Owner:** Son
 
 **Open items:** Set the booking link. Choose a hosting target (GitHub Pages or Vercel). Replace the Instagram placeholder. Add demo or client sites to the portfolio. Approve the copy before it goes live.
+
+## 2026-11-06 - TruongSon site serves any business, not only F&B
+
+**Decision:** The TruongSon site sells websites to any kind of business. Copy no longer names restaurants or cafés as the only market. It lists a range of business types (shops, clinics, studios, trades, restaurants, cafés, salons, gyms, agencies). The site has one booking control: a green button pinned to the top right.
+
+**Why:** Son said the offer is for any business, not only restaurants and cafés.
+
+**Alternatives considered:** Keeping an F&B-only message. Rejected by Son.
+
+**Owner:** Son
