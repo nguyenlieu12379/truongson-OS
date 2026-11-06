@@ -67,3 +67,13 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 **Alternatives considered:** Keeping an F&B-only message. Rejected by Son.
 
 **Owner:** Son
+
+## 2026-11-06 - Offer is websites for any business, F&B first
+
+**Decision:** The offer is websites for any kind of business. F&B (independent restaurants and coffee shops) is the first target segment, not the only one. Updated `CLAUDE.md`, `AGENTS.md`, `aios-intake.md`, `context/about-business.md`, `context/priorities.md`, and the TruongSon site README. The 10-client goal for 2027-02-06 stays, now counted across all businesses with F&B first.
+
+**Why:** Son's offer is for any business. F&B is chosen because it is easier to reach and sell to first, not because it is the only market.
+
+**Alternatives considered:** Keeping F&B as the sole ICP. Rejected per the 2026-11-06 site decision.
+
+**Owner:** To confirm (Son or Truong).

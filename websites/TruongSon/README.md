@@ -1,6 +1,6 @@
 # TruongSon website
 
-The agency site for TruongSon: websites for independent restaurants and cafés.
+The agency site for TruongSon: websites for any kind of business, starting with restaurants and cafés.
 
 - Page: `index.html` (single file, plain CSS, no build step)
 - Logo: `assets/logo.svg`

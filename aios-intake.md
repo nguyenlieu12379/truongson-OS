@@ -12,8 +12,8 @@ Identity, offer, ICP. One paragraph each is fine.
 
 ```
 Identity: Two co-operators share this AIOS: Son and Truong.
-Offer: AI-generated websites for local businesses.
-ICP: Local F&B businesses in the US, mainly independent restaurants and coffee shops.
+Offer: Websites for any kind of business.
+ICP: Small businesses in the US. F&B (independent restaurants and coffee shops) is the first segment.
 ```
 
 ---
@@ -33,7 +33,7 @@ PENDING: no existing writing yet (new business). Paste the first real client ema
 Quarterly priorities. Not yearly aspirations. Things that, if not done by July, would make you say "I wasted Q2."
 
 ```
-1. Sign 10 paying clients (US restaurants / coffee shops) by 2027-02-06.
+1. Sign 10 paying clients (F&B first: US restaurants / coffee shops) by 2027-02-06.
 2. Build an Instagram brand as proof/portfolio to drive sales. Target (draft, confirm): post 3x/week and showcase 5+ demo/client sites by 2027-02-06.
 3. (none for now)
 ```
