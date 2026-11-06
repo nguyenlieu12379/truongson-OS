@@ -34,8 +34,8 @@ Quarterly priorities. Not yearly aspirations. Things that, if not done by July, 
 
 ```
 1. Sign 10 paying clients (US restaurants / coffee shops) by 2027-02-06.
-2. [Priority 2]
-3. [Priority 3]
+2. Build an Instagram brand as proof/portfolio to drive sales. Target (draft, confirm): post 3x/week and showcase 5+ demo/client sites by 2027-02-06.
+3. (none for now)
 ```
 
 ---
