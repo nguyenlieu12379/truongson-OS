@@ -68,6 +68,28 @@
     .top nav a.hide-sm { display: none; }
     @media (min-width: 720px) { .top nav a.hide-sm { display: inline; } }
 
+    /* Pinned booking button: always visible top right */
+    .book-pin {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 50;
+      background: #1e7b3c;
+      color: #ffffff;
+      font-weight: 500;
+      font-size: 15px;
+      line-height: 1;
+      padding: 13px 18px;
+      text-decoration: none;
+      border-radius: 0;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+      transition: background-color 180ms var(--ease-out), transform 180ms var(--ease-out);
+    }
+    .book-pin:hover { background: #17642f; transform: translateY(-1px); }
+    .book-pin:active { transform: scale(0.97); }
+    .book-pin:focus-visible { outline: 3px solid #ffffff; outline-offset: 3px; }
+    @media (min-width: 720px) { .top nav { margin-right: 170px; } }
+
     /* Buttons: one shape across the page */
     .btn {
       display: inline-block;
@@ -207,7 +229,8 @@
 
     /* Footer: invitation over a cropped name */
     footer {
-      position: relative;
+      display: flex;
+      flex-direction: column;
       margin-top: 14vh;
       background: var(--accent);
       color: var(--accent-ink);
@@ -221,15 +244,14 @@
     .footer-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
     .footer-row { display: flex; justify-content: space-between; gap: 16px; font-size: var(--step-small); margin-top: 6vh; flex-wrap: wrap; }
     .footer-name {
-      position: absolute;
-      left: var(--margin);
-      bottom: 0;
+      margin-top: auto;
+      margin-bottom: -0.14em;
       font-weight: 900;
       font-size: 27vw;
       line-height: 0.8;
       letter-spacing: -0.06em;
       white-space: nowrap;
-      transform: translateY(30%);
+      align-self: flex-start;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -241,13 +263,14 @@
 </head>
 <body>
 
+  <a class="book-pin" href="#book" data-book>Book a free call</a>
+
   <div class="wrap">
     <header class="top">
       <a class="wordmark" href="#top" id="top">TruongSon</a>
       <nav aria-label="Main">
         <a class="hide-sm" href="#offer">What you get</a>
         <a class="hide-sm" href="#how">How it works</a>
-        <a href="#book" data-book>Book a call</a>
       </nav>
     </header>
 
@@ -330,9 +353,8 @@
 
   <footer id="book">
     <p class="invite">Let's talk about your café.</p>
-    <a class="btn" href="#book" data-book>Book a free call</a>
     <div class="footer-links">
-      <a href="#" data-book>Book a call</a>
+      <a href="#" data-book>Book a free call</a>
       <a href="#">Instagram (add link)</a>
     </div>
     <div class="footer-row">
