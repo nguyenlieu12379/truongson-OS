@@ -55,7 +55,7 @@ No revenue yet (pre-launch). Plan: collect payments via Stripe. Tracking: Stripe
 Email (which one — Gmail / Outlook)? Slack? Teams? DMs (Skool / Discord / iMessage)? Phone?
 
 ```
-[Your answer here]
+Gmail (email). Cold calls by phone for outreach. Sales calls on Google Meet. Calendar inferred: Google Calendar.
 ```
 
 ---
