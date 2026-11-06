@@ -17,6 +17,7 @@ websites/
 | --- | --- | --- | --- |
 | TruongSon | TruongSon agency site v1 | Live at https://nguyenlieu12379.github.io/truongson-OS/v1/ | `websites/TruongSon/` |
 | TruongSon | TruongSon agency site v2 (blueprint) | Live at https://nguyenlieu12379.github.io/truongson-OS/ . Booking link pending. | `websites/TruongSon-v2/` |
+| TruongSon-demos | Forno Notte, 3D scroll pizzeria demo | Local only | `websites/TruongSon-demos/forno-notte/` |
 
 ## Add a site
 
