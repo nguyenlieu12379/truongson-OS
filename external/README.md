@@ -16,4 +16,4 @@ Read-only copies of Sunaii-agency kits, installed for Son and Truong. Do not edi
 - **Excluded from the copy:** `.git`, CI config, build output, `node_modules`, media files, and bulky sample projects (`video-edit-kit/video-projects/`, `examples/`; `impeccable/crates/`, `tests/`).
 - **Credentials:** `sales-agent` and `video-edit-kit` have `.env.example` templates only. Real keys go in a local `.env` (gitignored) and never in this repo.
 - **Licenses:** each kit keeps its own `LICENSE` file. Check it before reuse outside this business.
-- **Skills not auto-loaded:** these live under `external/`, so Claude Code does not register them as `/skills`. Promote one into `.claude/skills/` when it's needed often.
+- **Skills:** each kit is one pack, kept whole in `external/`. One skill entry per kit lives in `.claude/skills/` (`impeccable`, `taste-skill`, `video-edit-kit`, `sales-agent`) and points to the pack. Mirrored to `.agents/skills/`.

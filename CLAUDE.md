@@ -19,15 +19,14 @@ Read `references/3ms-framework.md` once. It's how Son and Truong think about AI 
 - `/3d-brain`: Choose a brain name and categories, then build a local 3D knowledge globe with Cinema and interactive growth replay. Uses selected local files and the bundled app template.
 - `/level-up` — Weekly 3Ms interview. Find one automation, scope it, ship it. One per week.
 
-### Installed kits (in `external/`, read the index first)
+### Kit packs (installed, kept whole)
 
-Not auto-loaded as `/commands`. Open these when the task fits. Index: `external/README.md`.
+Each kit is one pack under `external/`, with one skill entry in `.claude/skills/` that points to it. Index: `external/README.md`.
 
-- **impeccable** (`external/impeccable/`): design review and AI-slop checks for client sites.
-- **design-skills** (`external/design-skills/`): animation and UI skills.
-- **taste-skill** (`external/taste-skill/`): stronger visual direction for sites.
-- **video-edit-kit** (`external/video-edit-kit/`): video and Instagram editing.
-- **sales-agent** (`external/sales-agent/`): cold outreach agent. Sends real email, so review before running.
+- **impeccable** (design review): `external/impeccable/`. Skill: `/impeccable`
+- **taste-skill** (site art direction): `external/taste-skill/`. Skill: `/taste-skill`
+- **video-edit-kit** (video editing): `external/video-edit-kit/`. Skill: `/video-edit-kit`
+- **sales-agent** (Harvey, cold outreach): `external/sales-agent/`. Skill: `/sales-agent`. Sends real email, so it runs only when you ask.
 
 ## Where things live
 
