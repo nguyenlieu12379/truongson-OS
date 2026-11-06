@@ -19,15 +19,15 @@ Read `references/3ms-framework.md` once. It's how Son and Truong think about AI 
 - `/3d-brain`: Choose a brain name and categories, then build a local 3D knowledge globe with Cinema and interactive growth replay. Uses selected local files and the bundled app template.
 - `/level-up` — Weekly 3Ms interview. Find one automation, scope it, ship it. One per week.
 
-### Installed kits (in `external/`, read the index first)
+### Kit skills (installed, active)
 
-Not auto-loaded as `/commands`. Open these when the task fits. Index: `external/README.md`.
+34 skills from four kits are active in `.claude/skills/` (Codex mirror in `.agents/skills/`). Each folder is a copy; the source kit lives in `external/`.
 
-- **impeccable** (`external/impeccable/`): design review and AI-slop checks for client sites.
-- **design-skills** (`external/design-skills/`): animation and UI skills.
-- **taste-skill** (`external/taste-skill/`): stronger visual direction for sites.
-- **video-edit-kit** (`external/video-edit-kit/`): video and Instagram editing.
-- **sales-agent** (`external/sales-agent/`): cold outreach agent. Sends real email, so review before running.
+- **Design and motion (design-skills):** `animate`, `animate-expo`, `animation-performance`, `animation-vocabulary`, `apple-design`, `ask-sonner`, `break-ui`, `choreograph`, `emil-design-eng`, `find-animation-opportunities`, `improve-animations`, `mobile-native`, `pick-ui-library`, `prototype`, `remove-animations`, `review-animations`, `write-swift`
+- **Frontend and sites (impeccable, taste-skill):** `impeccable`, `taste-skill` (named `design-taste-frontend`)
+- **Video (video-edit-kit):** `cut-mistakes`, `cut-silences`, `edit-video`, `gsap`, `hyperframes`, `hyperframes-cli`, `hyperframes-registry`, `hyperframes-video-beats`, `make-a-video`, `motion-showreel`, `short-form-edit`, `short-form-video`, `style-library`, `video-storytelling`, `website-to-hyperframes`
+
+**Sales-agent** (`external/sales-agent/`) is not a skill package. It's a Python agent with reference notes, so it's not installed as a skill. It sends real email, so review before running. Index: `external/README.md`.
 
 ## Where things live
 
