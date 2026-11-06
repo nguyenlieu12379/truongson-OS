@@ -77,3 +77,13 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 **Alternatives considered:** Keeping F&B as the sole ICP. Rejected per the 2026-11-06 site decision.
 
 **Owner:** To confirm (Son or Truong).
+
+## 2026-11-06 - One UI design skill: design-skills (Emil Kowalski)
+
+**Decision:** Use `design-skills` as the single UI design skill. Entry is `emil-design-eng`, then the matching sub-skill. `impeccable` and `taste-skill` are retired for new design work. Their packs stay on disk for reference. `PRODUCT.md` stays as product context.
+
+**Why:** v1 was built with impeccable and design-skills. One skill means one set of rules and less overlap between sessions.
+
+**Alternatives considered:** impeccable as the main skill (broader: layout, type, color, art direction). taste-skill for art direction.
+
+**Owner:** To confirm (Son or Truong).
