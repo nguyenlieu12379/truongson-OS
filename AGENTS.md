@@ -28,6 +28,7 @@ Read `references/3ms-framework.md` once. It's how Son and Truong think about AI 
 - `brainstorms/` - Dated interview captures and resume points. Read relevant captures on demand; confirmed current context belongs in its canonical page.
 - `audits/` — dated audit reports and finding history; point-in-time evidence, not live business state
 - `archives/` — old stuff. Don't delete. Move here.
+- `external/` — vendored Sunaii-agency kits (impeccable, design-skills, taste-skill, video-edit-kit, sales-agent). Read-only. Index and routes: `external/README.md`
 
 See `EXPANSIONS.md` for what to add as you grow.
 
@@ -52,6 +53,7 @@ Full registry: `connections.md`. None wired yet.
 - Email + calendar: Gmail, Google Calendar
 - Sales: cold calls (phone), Google Meet
 - Notes, docs, tasks: Notion
+- External kits (design, video, sales outreach): `external/README.md`. Installed but not run.
 
 ## How you work with us
 
