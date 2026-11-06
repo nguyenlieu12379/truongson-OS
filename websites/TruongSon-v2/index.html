@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TruongSon | Websites for small business. $0 until you love it.</title>
+<meta name="description" content="We build your small business website's first draft for free. Love it, then you pay. Don't love it? Walk away. Book a 15-minute call.">
+<meta name="theme-color" content="#123a6b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#123a6b;        /* blueprint ground */
+  --paper-deep:#0e3060;
+  --line:#f1f5fb;         /* white linework */
+  --line-soft:rgba(241,245,251,.55);
+  --line-faint:rgba(241,245,251,.22);
+  --ink:#f1f5fb;
+  --ink-soft:#c9d6ea;
+  --mark:#ffcf3a;         /* yellow: action + money */
+  --mark-ink:#0d2a4e;
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --ease-in-out:cubic-bezier(.77,0,.175,1);
+  --gutter:clamp(16px,3vw,32px);
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --sans:'Archivo',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px),
+    linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:120px 120px,120px 120px,24px 24px,24px 24px;
+  color:var(--ink);font-family:var(--sans);font-size:18px;line-height:1.5;
+  padding:var(--gutter);
+  -webkit-tap-highlight-color:transparent;
+}
+::selection{background:var(--mark);color:var(--mark-ink)}
+::-webkit-scrollbar{width:12px}
+::-webkit-scrollbar-track{background:var(--paper-deep)}
+::-webkit-scrollbar-thumb{background:var(--line-soft);border:3px solid var(--paper-deep)}
+html{scrollbar-color:var(--line-soft) var(--paper-deep)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--mark);outline-offset:3px}
+img,svg{display:block;max-width:100%}
+
+/* ---------- the sheet ---------- */
+.sheet{border:2px solid var(--line);position:relative}
+.sheet>section,.sheet>header,.sheet>footer,.sheet>.tb{border-bottom:2px solid var(--line)}
+.sheet>footer{border-bottom:0}
+.sec{position:relative;padding:clamp(48px,7vw,96px) var(--gutter)}
+.sheetno{position:absolute;top:0;right:0;font:400 12px/1 var(--mono);letter-spacing:.06em;padding:8px 12px;border-left:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);color:var(--ink-soft);background:var(--paper)}
+.mono{font-family:var(--mono);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft)}
+
+/* ---------- nav ---------- */
+header.nav{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:stretch;background:var(--paper)}
+.logo{display:flex;align-items:center;padding:16px var(--gutter);font-weight:900;font-stretch:112%;font-size:22px;letter-spacing:.01em;border-right:2px solid var(--line);text-decoration:none}
+.links{display:flex}
+.links a{display:flex;align-items:center;padding:0 22px;border-left:1px solid var(--line-soft);font:400 14px var(--mono);text-transform:uppercase;letter-spacing:.04em;text-decoration:none;transition:background-color 160ms ease}
+.links .short{display:none}
+.links a.book{background:var(--line);color:var(--mark-ink);font:800 16px var(--sans);text-transform:none;letter-spacing:0;border-left:2px solid var(--line)}
+@media (hover:hover) and (pointer:fine){
+  .links a:not(.book):hover{background:rgba(241,245,251,.08)}
+  .links a.book:hover{background:var(--mark)}
+}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:14px;background:var(--mark);color:var(--mark-ink);font:800 19px/1 var(--sans);padding:20px 26px;text-decoration:none;border:2px solid var(--line);transition:transform 160ms var(--ease-out),background-color 160ms ease}
+.btn svg{width:22px;height:22px;transition:transform 200ms var(--ease-out)}
+.btn:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){.btn:hover svg{transform:translateX(4px)}}
+
+/* ---------- type ---------- */
+h1,h2{font-weight:900;font-stretch:68%;text-transform:uppercase;line-height:.88;letter-spacing:-.005em;text-wrap:balance}
+h1{font-size:clamp(3.1rem,7.4vw,6rem)}
+h2{font-size:clamp(2.6rem,6vw,5.25rem)}
+h1 .m,h2 .m{color:var(--mark)}
+.lead{font-size:clamp(18px,1.6vw,21px);max-width:36ch;color:var(--ink)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;display:grid;grid-template-columns:1.1fr 1fr;padding:0}
+.hero .copy{padding:clamp(56px,8vw,112px) var(--gutter) clamp(40px,5vw,64px);border-right:2px solid var(--line);display:flex;flex-direction:column;gap:28px;justify-content:center}
+.cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}
+.flow{display:flex;align-items:center;gap:10px;margin-top:8px}
+.flow::before,.flow::after{content:"";height:1px;background:var(--line-soft);flex:1}
+.hero .fig{display:flex;align-items:center;justify-content:center;padding:clamp(32px,5vw,64px) var(--gutter)}
+.hero .fig svg{width:100%;max-width:560px;height:auto}
+
+/* ---------- title block ---------- */
+.tb{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1.6fr}
+.tb div{padding:12px 16px;border-right:1px solid var(--line-soft);font:400 14px/1.3 var(--mono);text-transform:uppercase}
+.tb div:last-child{border-right:0}
+.tb b{display:block;font-size:11px;font-weight:400;color:var(--ink-soft);margin-bottom:4px;letter-spacing:.06em}
+.tb .y{color:var(--mark)}
+
+/* ---------- spec ---------- */
+.spec{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center}
+.spec .head{display:flex;flex-direction:column;gap:22px}
+.parts{list-style:none;border-top:1px solid var(--line-soft);margin-top:12px}
+.parts li{display:grid;grid-template-columns:44px 1fr;gap:4px 16px;padding:16px 0;border-bottom:1px solid var(--line-soft)}
+.callout{grid-row:span 2;width:36px;height:36px;border:2px solid var(--line);border-radius:50%;display:grid;place-items:center;font:700 14px var(--mono)}
+.parts h3{font-size:22px;font-weight:800;font-stretch:90%;line-height:1.1}
+.parts p{color:var(--ink-soft);font-size:17px;max-width:44ch}
+.spec .fig svg{width:100%;max-width:520px;margin-inline:auto;height:auto}
+
+/* ---------- sequence ---------- */
+.seq-head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(36px,5vw,56px)}
+.steps{display:grid;grid-template-columns:1fr 64px 1fr 64px 1fr;align-items:stretch}
+.step{border:2px solid var(--line);padding:24px 22px 26px;display:flex;flex-direction:column;gap:12px;background:var(--paper)}
+.step .n{font:700 13px var(--mono);color:var(--ink-soft);letter-spacing:.06em}
+.step h3{font-size:clamp(26px,2.6vw,34px);font-weight:900;font-stretch:72%;text-transform:uppercase;line-height:.95}
+.step p{color:var(--ink-soft);font-size:17px}
+.step.last{border-color:var(--mark)}
+.step.last h3{color:var(--mark)}
+.arrow{display:flex;align-items:center}
+.arrow svg{width:100%;height:24px;overflow:visible}
+
+/* ---------- guarantee ---------- */
+.guar{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(32px,5vw,72px);align-items:center;background:rgba(14,48,96,.55)}
+.guar h2{font-size:clamp(3rem,8vw,6rem)}
+.guar .body{display:flex;flex-direction:column;gap:22px}
+.guar .body p{font-size:clamp(18px,1.6vw,21px);max-width:40ch}
+.approval{border:2px solid var(--line);background:var(--paper);position:relative;font-family:var(--mono);font-size:14px;text-transform:uppercase}
+.approval .row{display:flex;justify-content:space-between;gap:16px;padding:14px 18px;border-bottom:1px solid var(--line-soft)}
+.approval .row:last-child{border-bottom:0}
+.approval .row span:first-child{color:var(--ink-soft)}
+.approval .big{font:900 clamp(56px,7vw,88px)/1 var(--sans);font-stretch:72%;color:var(--mark);padding:22px 18px;border-bottom:1px solid var(--line-soft)}
+.approval .sign{height:56px;border-bottom:1px dashed var(--line-soft);margin:0 18px;position:relative}
+.approval .signlbl{padding:8px 18px 16px;color:var(--ink-soft);font-size:12px}
+.stamp{position:absolute;right:-12px;bottom:58px;border:4px solid var(--mark);color:var(--mark);padding:10px 16px;font:900 26px/1 var(--sans);font-stretch:80%;text-transform:uppercase;transform:rotate(-9deg);background:rgba(18,58,107,.85);letter-spacing:.02em}
+.stamp small{display:block;font:700 11px var(--mono);letter-spacing:.08em;margin-top:6px;text-align:center}
+
+/* ---------- notes / faq ---------- */
+.notes{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(32px,5vw,72px)}
+.notes .head{display:flex;flex-direction:column;gap:20px;align-self:start;position:sticky;top:96px}
+.notes ol{list-style:none;border-top:1px solid var(--line-soft)}
+.notes details{border-bottom:1px solid var(--line-soft)}
+.notes summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:92px 1fr 28px;align-items:center;gap:12px;padding:20px 0;font-size:clamp(20px,1.8vw,24px);font-weight:800;font-stretch:90%;line-height:1.2}
+.notes summary::-webkit-details-marker{display:none}
+.notes summary .mono{font-size:12px}
+.notes summary svg{width:24px;height:24px;transition:transform 200ms var(--ease-out)}
+.notes details[open] summary svg{transform:rotate(45deg)}
+.notes .a{padding:0 0 22px 104px;color:var(--ink-soft);max-width:68ch}
+@media (hover:hover) and (pointer:fine){.notes summary:hover{color:var(--mark)}}
+
+/* ---------- final ---------- */
+.final{display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(32px,5vw,72px);align-items:end}
+.final .body{display:flex;flex-direction:column;gap:26px}
+.final .side{display:flex;flex-direction:column;gap:10px;border-left:1px solid var(--line-soft);padding-left:24px}
+.final .side p{font-family:var(--mono);font-size:14px;text-transform:uppercase;display:flex;justify-content:space-between;gap:12px;border-bottom:1px dotted var(--line-faint);padding:8px 0}
+.final .side p span:last-child{color:var(--mark)}
+
+footer.tb{grid-template-columns:2fr 1.4fr 1fr 1fr}
+
+/* ---------- linework motion (one authored moment: drawings draw themselves) ---------- */
+.js .draw [data-l]{stroke-dasharray:1;stroke-dashoffset:1}
+.js .draw.in [data-l]{stroke-dashoffset:0;transition:stroke-dashoffset 1100ms var(--ease-in-out);transition-delay:calc(var(--i,0) * 90ms)}
+.js .draw [data-t]{opacity:0}
+.js .draw.in [data-t]{opacity:1;transition:opacity 400ms ease;transition-delay:calc(700ms + var(--i,0) * 90ms)}
+.js .stamp{opacity:0;transform:rotate(-9deg) scale(1.25)}
+.js .guar.in .stamp{opacity:1;transform:rotate(-9deg) scale(1);transition:transform 380ms var(--ease-out) 300ms,opacity 200ms ease 300ms}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .draw [data-l]{stroke-dasharray:none;stroke-dashoffset:0}
+  .js .draw [data-t]{opacity:1}
+  .js .stamp{opacity:1;transform:rotate(-9deg)}
+  .js .draw.in [data-l],.js .draw.in [data-t],.js .guar.in .stamp{transition:none}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:1000px){
+  .links a:not(.book){display:none}
+  .hero,.spec,.guar,.notes,.final{grid-template-columns:1fr}
+  .hero .copy{border-right:0;border-bottom:2px solid var(--line)}
+  .tb{grid-template-columns:1fr 1fr}
+  .tb div{border-right:0;border-bottom:1px solid var(--line-soft)}
+  .tb div:first-child,.tb div:nth-child(4),.tb div:last-child{grid-column:span 2}
+  .tb div:nth-child(2){border-right:1px solid var(--line-soft)}
+  .tb div:last-child{border-bottom:0}
+  footer.tb div:nth-child(4){grid-column:span 2}
+  footer.tb div:nth-child(2){border-right:1px solid var(--line-soft)}
+  footer.tb div:nth-child(3){grid-column:auto}
+  .steps{grid-template-columns:1fr;gap:0}
+  .arrow{height:48px;justify-content:center}
+  .arrow svg{width:24px;height:100%;transform:rotate(90deg);transform-origin:center}
+  .notes .head{position:static}
+  .final .side{border-left:0;padding-left:0;border-top:1px solid var(--line-soft);padding-top:12px}
+}
+@media (max-width:560px){
+  body{padding:10px;font-size:17px}
+  .logo{font-size:18px;padding:14px 16px}
+  .links a.book{padding:0 16px;font-size:15px}
+  .links .long{display:none}.links .short{display:inline}
+  .btn{width:100%;justify-content:space-between}
+  .notes summary{grid-template-columns:1fr 24px}
+  .notes summary .mono{display:none}
+  .notes .a{padding-left:0}
+  .stamp{right:8px;font-size:22px}
+  footer.tb{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="nav">
+    <a class="logo" href="#top" aria-label="TruongSon home">TRUONGSON</a>
+    <nav class="links" aria-label="Main">
+      <a href="#how">How it works</a>
+      <a href="#guarantee">Guarantee</a>
+      <a href="#faq">FAQ</a>
+      <a class="book js-book" href="#book"><span class="long">Book a 15-min call</span><span class="short">Book a call</span></a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <span class="sheetno">A-01 · COVER</span>
+    <div class="copy">
+      <h1>New website. <span class="m">$0</span> until you love it.</h1>
+      <p class="lead">We build your first draft free. Love it, then you pay. Don't love it? Walk away and owe nothing.</p>
+      <div class="cta">
+        <a class="btn js-book" href="#book">Book a 15-min call
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+        </a>
+        <span class="mono">Google Meet · 15 min · free</span>
+      </div>
+      <p class="flow mono">Call · Free draft · Love it, then pay</p>
+    </div>
+
+    <div class="fig">
+      <svg class="draw" viewBox="0 0 560 470" fill="none" stroke="#f1f5fb" stroke-width="2" role="img" aria-label="Line drawing of your new website: header, hero showing $0.00 due, and sections for mobile, Google and copy">
+        <!-- dimension line top -->
+        <g stroke-width="1" stroke="rgba(241,245,251,.6)">
+          <path data-l pathLength="1" d="M40 18 V34 M520 18 V34 M40 26 H520" style="--i:0"/>
+        </g>
+        <text data-t x="280" y="16" fill="#c9d6ea" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" stroke="none">FIG. 1 · YOUR NEW SITE</text>
+        <!-- browser frame -->
+        <path data-l pathLength="1" d="M40 50 H520 V430 H40 Z" style="--i:1"/>
+        <path data-l pathLength="1" d="M40 80 H520" style="--i:2"/>
+        <g style="--i:2"><circle cx="58" cy="65" r="5" pathLength="1" data-l/><circle cx="76" cy="65" r="5" pathLength="1" data-l/><circle cx="94" cy="65" r="5" pathLength="1" data-l/></g>
+        <!-- site nav -->
+        <path data-l pathLength="1" d="M60 96 H500 V128 H60 Z" style="--i:3"/>
+        <text data-t x="72" y="117" fill="#f1f5fb" font-family="JetBrains Mono, monospace" font-size="12" stroke="none" style="--i:3">[YOUR LOGO]</text>
+        <path data-l pathLength="1" d="M404 102 H492 V122 H404 Z" stroke="#ffcf3a" style="--i:3"/>
+        <text data-t x="448" y="116" fill="#ffcf3a" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" stroke="none" style="--i:3">BOOK NOW</text>
+        <!-- hero -->
+        <path data-l pathLength="1" d="M60 142 H500 V292 H60 Z" style="--i:4"/>
+        <path data-l pathLength="1" d="M78 180 H280 M78 202 H250 M78 224 H210" stroke="rgba(241,245,251,.6)" stroke-width="6" style="--i:5"/>
+        <text data-t x="484" y="270" fill="#ffcf3a" font-family="Archivo, sans-serif" font-weight="900" font-size="64" text-anchor="end" stroke="none" style="--i:5;font-stretch:72%">$0.00</text>
+        <text data-t x="484" y="196" fill="#c9d6ea" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="end" stroke="none" style="--i:5">DUE NOW</text>
+        <!-- three blocks -->
+        <path data-l pathLength="1" d="M60 306 H200 V370 H60 Z" style="--i:6"/>
+        <path data-l pathLength="1" d="M210 306 H350 V370 H210 Z" style="--i:7"/>
+        <path data-l pathLength="1" d="M360 306 H500 V370 H360 Z" style="--i:8"/>
+        <text data-t x="72" y="328" fill="#f1f5fb" font-family="JetBrains Mono, monospace" font-size="11" stroke="none" style="--i:6">MOBILE</text>
+        <text data-t x="222" y="328" fill="#f1f5fb" font-family="JetBrains Mono, monospace" font-size="11" stroke="none" style="--i:7">GOOGLE</text>
+        <text data-t x="372" y="328" fill="#f1f5fb" font-family="JetBrains Mono, monospace" font-size="11" stroke="none" style="--i:8">COPY</text>
+        <!-- footer bar -->
+        <path data-l pathLength="1" d="M60 384 H500 V412 H60 Z" style="--i:9"/>
+        <text data-t x="72" y="402" fill="#c9d6ea" font-family="JetBrains Mono, monospace" font-size="11" stroke="none" style="--i:9">PAY ONLY IF YOU LOVE IT</text>
+        <!-- side dimension -->
+        <g stroke-width="1" stroke="rgba(241,245,251,.6)">
+          <path data-l pathLength="1" d="M536 50 H548 M536 430 H548 M542 50 V430" style="--i:10"/>
+        </g>
+        <text data-t x="0" y="0" fill="#c9d6ea" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" stroke="none" transform="translate(556 240) rotate(90)" style="--i:10">FITS ANY SCREEN</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- TITLE BLOCK -->
+  <div class="tb" role="group" aria-label="Project details">
+    <div><b>Project</b>Your new website</div>
+    <div><b>Drawn by</b>Son</div>
+    <div><b>Checked by</b>Truong</div>
+    <div><b>Cost to start</b><span class="y">$0.00</span></div>
+    <div><b>Guarantee</b>Love it or don't pay</div>
+  </div>
+
+  <!-- WHAT YOU GET -->
+  <section class="sec" id="what">
+    <span class="sheetno">A-02 · SPEC</span>
+    <div class="spec">
+      <div class="head">
+        <h2>Everything your site needs. <span class="m">Drawn for you.</span></h2>
+        <p class="lead">You run your business. We handle the website, start to finish.</p>
+        <ol class="parts">
+          <li><span class="callout">1</span><h3>Custom design</h3><p>Designed from scratch around your business and your customers.</p></li>
+          <li><span class="callout">2</span><h3>Mobile-ready</h3><p>Looks sharp on every phone. That's where your customers are.</p></li>
+          <li><span class="callout">3</span><h3>Found on Google</h3><p>Set up so people nearby can find you when they search.</p></li>
+          <li><span class="callout">4</span><h3>Words written for you</h3><p>We write the copy. You just read it and tell us what to change.</p></li>
+          <li><span class="callout">5</span><h3>Launch + setup</h3><p>We put it live and handle the setup for you.</p></li>
+        </ol>
+      </div>
+      <div class="fig">
+        <svg class="draw" viewBox="0 0 460 560" fill="none" stroke="#f1f5fb" stroke-width="2" role="img" aria-label="Line drawing of a phone showing your site, with five numbered callouts">
+          <!-- phone -->
+          <rect data-l pathLength="1" x="130" y="40" width="200" height="420" rx="28" style="--i:0"/>
+          <path data-l pathLength="1" d="M200 58 H260" stroke-width="4" style="--i:1"/>
+          <rect data-l pathLength="1" x="146" y="76" width="168" height="360" rx="4" style="--i:1"/>
+          <!-- screen content -->
+          <path data-l pathLength="1" d="M158 92 H302 V116 H158 Z" style="--i:2"/>
+          <path data-l pathLength="1" d="M258 98 H296 V110 H258 Z" stroke="#ffcf3a" style="--i:2"/>
+          <path data-l pathLength="1" d="M158 128 H302 V230 H158 Z" style="--i:3"/>
+          <path data-l pathLength="1" d="M170 150 H270 M170 168 H250 M170 186 H230" stroke-width="6" stroke="rgba(241,245,251,.6)" style="--i:3"/>
+          <path data-l pathLength="1" d="M158 242 H302 V300 H158 Z" style="--i:4"/>
+          <path data-l pathLength="1" d="M170 260 H290 M170 274 H280 M170 288 H260" stroke-width="2" stroke="rgba(241,245,251,.6)" style="--i:4"/>
+          <path data-l pathLength="1" d="M158 312 H302 V360 H158 Z" style="--i:5"/>
+          <path data-l pathLength="1" d="M158 372 H302 V420 H158 Z" style="--i:5"/>
+          <text data-t x="170" y="342" fill="#c9d6ea" font-family="JetBrains Mono, monospace" font-size="10" stroke="none" style="--i:5">GOOGLE MAPS</text>
+          <text data-t x="170" y="400" fill="#c9d6ea" font-family="JetBrains Mono, monospace" font-size="10" stroke="none" style="--i:5">LIVE</text>
+          <!-- callouts -->
+          <g stroke-width="1.5">
+            <path data-l pathLength="1" d="M158 180 H64" style="--i:6"/><circle data-l pathLength="1" cx="46" cy="180" r="18" style="--i:6"/>
+            <path data-l pathLength="1" d="M330 80 H396" style="--i:7"/><circle data-l pathLength="1" cx="414" cy="80" r="18" style="--i:7"/>
+            <path data-l pathLength="1" d="M302 336 H396" style="--i:8"/><circle data-l pathLength="1" cx="414" cy="336" r="18" style="--i:8"/>
+            <path data-l pathLength="1" d="M158 270 H64" style="--i:9"/><circle data-l pathLength="1" cx="46" cy="270" r="18" style="--i:9"/>
+            <path data-l pathLength="1" d="M302 396 H396" style="--i:10"/><circle data-l pathLength="1" cx="414" cy="396" r="18" style="--i:10"/>
+          </g>
+          <g fill="#f1f5fb" stroke="none" font-family="JetBrains Mono, monospace" font-size="14" font-weight="700" text-anchor="middle">
+            <text data-t x="46" y="185" style="--i:6">1</text><text data-t x="414" y="85" style="--i:7">2</text><text data-t x="414" y="341" style="--i:8">3</text><text data-t x="46" y="275" style="--i:9">4</text><text data-t x="414" y="401" style="--i:10">5</text>
+          </g>
+          <text data-t x="230" y="500" fill="#c9d6ea" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" stroke="none" style="--i:10">FIG. 2 · YOUR SITE ON A PHONE</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="sec" id="how">
+    <span class="sheetno">A-03 · SEQUENCE</span>
+    <div class="seq-head">
+      <h2>Three steps. <span class="m">You pay at the end.</span></h2>
+      <p class="lead">No deposit to start. You see the real thing before any money moves.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="n">STEP 1</span><h3>Book a 15-min call</h3><p>Tell us about your business and what you want your site to do.</p></div>
+      <div class="arrow" aria-hidden="true"><svg viewBox="0 0 64 24" fill="none" stroke="#f1f5fb" stroke-width="2"><path d="M4 12h52M48 5l8 7-8 7"/></svg></div>
+      <div class="step"><span class="n">STEP 2</span><h3>We build your free draft</h3><p>A real first draft of your site, built for your business.</p></div>
+      <div class="arrow" aria-hidden="true"><svg viewBox="0 0 64 24" fill="none" stroke="#f1f5fb" stroke-width="2"><path d="M4 12h52M48 5l8 7-8 7"/></svg></div>
+      <div class="step last"><span class="n">STEP 3</span><h3>Love it? Then you pay.</h3><p>Don't love it? Walk away. You owe $0.</p></div>
+    </div>
+  </section>
+
+  <!-- GUARANTEE -->
+  <section class="sec guar" id="guarantee">
+    <span class="sheetno">A-04 · APPROVAL</span>
+    <div class="body">
+      <h2>Love it <span class="m">or don't pay.</span></h2>
+      <p>We build your first draft before you pay anything. If you don't love the design, you walk away and owe nothing. You never put down a deposit.</p>
+      <p class="mono">Why? Because we'd rather earn it than ask you to trust us.</p>
+    </div>
+    <div class="approval" aria-label="Approval block">
+      <div class="row"><span>Project</span><span>Your new website</span></div>
+      <div class="row"><span>Amount due before approval</span><span></span></div>
+      <div class="big">$0.00</div>
+      <div class="sign" aria-hidden="true"></div>
+      <div class="signlbl">Design approved by: you</div>
+      <div class="stamp" aria-hidden="true">Approved by you<small>Then you pay</small></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="sec" id="faq">
+    <span class="sheetno">A-05 · NOTES</span>
+    <div class="notes">
+      <div class="head">
+        <h2>General <span class="m">notes.</span></h2>
+        <p class="lead">Quick answers. Anything else, ask us on the call.</p>
+      </div>
+      <ol>
+        <li><details open>
+          <summary><span class="mono">Note 1</span>How much does it cost?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></summary>
+          <p class="a">It depends on what your business needs. We give you a straight quote on the call. Either way, you pay nothing until you love the draft.</p>
+        </details></li>
+        <li><details>
+          <summary><span class="mono">Note 2</span>What if I don't love the draft?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></summary>
+          <p class="a">You walk away and owe $0, with no hard feelings.</p>
+        </details></li>
+        <li><details>
+          <summary><span class="mono">Note 3</span>Who will I work with?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></summary>
+          <p class="a">Son and Truong, the two founders. No account managers. You talk to the people building your site.</p>
+        </details></li>
+        <li><details>
+          <summary><span class="mono">Note 4</span>I'm not a tech person. Is that a problem?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></summary>
+          <p class="a">Not at all. We do the design, the words, and the launch. You just tell us about your business and say what you like.</p>
+        </details></li>
+        <li><details>
+          <summary><span class="mono">Note 5</span>What happens on the 15-minute call?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></summary>
+          <p class="a">A quick Google Meet. You tell us about your business, we ask a few questions, and we tell you what we'd build. Zero pressure.</p>
+        </details></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="sec" id="book">
+    <span class="sheetno">A-06 · START</span>
+    <div class="final">
+      <div class="body">
+        <h2>Your new site starts with <span class="m">a 15-minute call.</span></h2>
+        <p class="lead">Pick a time that works for you. We'll take it from there.</p>
+        <div class="cta">
+          <a class="btn js-book" href="#book">Book a 15-min call
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="side">
+        <p><span>Call length</span><span>15 min</span></p>
+        <p><span>Where</span><span>Google Meet</span></p>
+        <p><span>Cost of the call</span><span>$0</span></p>
+        <p><span>Cost to start</span><span>$0</span></p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="tb">
+    <div><b>Studio</b>TruongSon · Websites for small business</div>
+    <div><b>Founders</b>Son + Truong</div>
+    <div><b>Sheet</b>A-06 of A-06</div>
+    <div><b>Year</b>2026</div>
+  </footer>
+</div>
+
+<script>
+  // Paste the Google Calendar booking page link here. Every "Book" button uses it.
+  const BOOKING_URL = "";
+
+  document.documentElement.classList.add('js');
+  if (BOOKING_URL) {
+    document.querySelectorAll('.js-book').forEach(a => {
+      a.href = BOOKING_URL; a.target = '_blank'; a.rel = 'noopener';
+    });
+  }
+
+  // Linework draws itself once when each drawing (and the stamp) scrolls into view.
+  const targets = document.querySelectorAll('.draw, .guar');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.25 });
+    targets.forEach(t => io.observe(t));
+  } else {
+    targets.forEach(t => t.classList.add('in'));
+  }
+</script>
+</body>
+</html>
