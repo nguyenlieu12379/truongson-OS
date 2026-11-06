@@ -75,7 +75,7 @@ Notion (notes, docs). No meeting recorder yet.
 The single biggest time-suck or recurring drudgery. Plus where tasks/projects live (ClickUp / Asana / Linear / Notion / a notebook).
 
 ```
-[Your answer here]
+Top pain: the cold outreach process (finding leads, cold calling, follow-up) and building each website. Work tracking: assumed Notion (not confirmed).
 ```
 
 ---
