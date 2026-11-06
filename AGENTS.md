@@ -18,6 +18,7 @@ Read `references/3ms-framework.md` once. It's how Son and Truong think about AI 
 - `/link`: Link a project, file, folder, or source into the right operating-manual route or index.
 - `/3d-brain`: Choose a brain name and categories, then build a local 3D knowledge globe with Cinema and interactive growth replay. Uses selected local files and the bundled app template.
 - `/level-up` — Weekly 3Ms interview. Find one automation, scope it, ship it. One per week.
+- `/install-kit-pack`: Install a GitHub kit repo as a whole pack (pinned commit, VENDORED.md, mirror, routing). Manual invocation only.
 
 ### Kit packs (whole repos, in `.claude/skills/`)
 
@@ -28,6 +29,7 @@ Each pack is a full copy of one Sunaii kit with its own `VENDORED.md` (source an
 - **taste-skill:** art direction for public web pages. Use when a landing page or portfolio looks generic. Path: `.claude/skills/taste-skill/`. Entry: `.claude/skills/taste-skill/skills/taste-skill/SKILL.md`
 - **video-edit-kit:** talking-head editing, Reels and Shorts, HyperFrames motion graphics. Use for video or Instagram content. Path: `.claude/skills/video-edit-kit/`. Entry: `.claude/skills/video-edit-kit/AGENTS.md`, then `docs/WORKFLOW.md`
 - **sales-agent (Harvey):** cold-outreach agent. Use only when Son or Truong asks to set it up or run it. It sends real email, so confirm the list, copy, and sending account first. Path: `.claude/skills/sales-agent/`. Entry: `.claude/skills/sales-agent/CLAUDE.md`
+- **scrapegraph:** Python web-scraping library (ScrapeGraphAI). Use for scraping prospect or competitor sites into structured data. Path: `.claude/skills/scrapegraph/`. Entry: `.claude/skills/scrapegraph/README.md`
 
 ## Where things live
 
