@@ -1,8 +1,8 @@
 # About the business
 
-**Offer:** AI-generated websites for local businesses.
+**Offer:** Websites for any kind of business.
 
-**ICP:** Independent F&B businesses in the US. Mainly local restaurants and coffee shops.
+**ICP:** Any small business in the US. F&B is the first segment: independent restaurants and coffee shops.
 
 **Sales motion:** Cold calls and Gmail outreach, then sales calls on Google Meet.
 
