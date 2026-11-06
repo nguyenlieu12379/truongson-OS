@@ -76,7 +76,7 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 
 **Alternatives considered:** Keeping F&B as the sole ICP. Rejected per the 2026-11-06 site decision.
 
-**Owner:** To confirm (Son or Truong).
+**Owner:** Son
 
 ## 2026-11-06 - One UI design skill: design-skills (Emil Kowalski)
 
