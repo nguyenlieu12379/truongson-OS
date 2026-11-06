@@ -65,7 +65,7 @@ Gmail (email). Cold calls by phone for outreach. Sales calls on Google Meet. Cal
 Granola? Otter? Fireflies? Google Drive? Notion? Dropbox? A folder on your desktop you keep meaning to organize?
 
 ```
-[Your answer here]
+Notion (notes, docs). No meeting recorder yet.
 ```
 
 ---
