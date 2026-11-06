@@ -45,3 +45,15 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 **Decision:** Adapt Herk-2's grill-me skill for the student kit and ship matching Claude/Codex packages. Save every answer to brainstorms/, preserve resumable Q&A history, and update canonical context only with confirmed facts during requested context-building sessions.
 
 **Why:** Onboarding is an initial snapshot. Ongoing interviews capture changing priorities, decisions, and preferences while keeping tentative ideas distinct from current business facts.
+
+## 2026-11-06 - TruongSon agency website (static v1)
+
+**Decision:** Build the TruongSon agency site as a static single page at `websites/TruongSon/index.html`. Two goals: book free discovery calls and show the portfolio. Booking uses a free Google Calendar appointment schedule, set in one `BOOKING_URL` constant. The offer copy says "websites", not AI-generated websites. No pricing shown yet. Portfolio is a placeholder until demo or client sites exist. Layout follows the taste-skill "type-only" direction (Epilogue, olive on bone). Website projects live under `websites/<owner>/<site-name>/`.
+
+**Why:** Son wants a free, simple booking path and no pricing decision yet. The site has no photos of our own work, so a type-led layout avoids faking imagery.
+
+**Alternatives considered:** Framework site (Next.js or Astro), a website builder (Framer or Webflow), an enquiry form instead of booking, and AI-generated offer copy.
+
+**Owner:** Son
+
+**Open items:** Set the booking link. Choose a hosting target (GitHub Pages or Vercel). Replace the Instagram placeholder. Add demo or client sites to the portfolio. Approve the copy before it goes live.
