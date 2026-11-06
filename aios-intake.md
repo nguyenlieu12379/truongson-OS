@@ -45,7 +45,7 @@ Quarterly priorities. Not yearly aspirations. Things that, if not done by July, 
 Multiple answers OK. Stripe? Skool? GoHighLevel? QuickBooks? A spreadsheet?
 
 ```
-[Your answer here]
+No revenue yet (pre-launch). Plan: collect payments via Stripe. Tracking: Stripe dashboard (not set up yet).
 ```
 
 ---
