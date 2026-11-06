@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Forno Notte · Wood-fired pizza</title>
+  <meta name="description" content="Forno Notte. A virtual wood-fired pizzeria. Scroll from the street, through the door, into the kitchen.">
+  <meta name="theme-color" content="#07080c">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="brand" href="#top" data-jump="0">Forno <span>Notte</span></a>
+    <nav class="chapters" aria-label="Chapters">
+      <button data-jump="0">Street</button>
+      <button data-jump="0.42">Dining room</button>
+      <button data-jump="0.64">Kitchen</button>
+      <button data-jump="0.9">Oven</button>
+    </nav>
+    <a class="pill" href="#reserve" data-jump="1">Reserve</a>
+    <div class="progress" aria-hidden="true"><i></i></div>
+  </header>
+
+  <main id="top">
+    <!-- Text panels. Each one is shown while scroll progress is inside [data-in, data-out]. -->
+    <section class="panel hero" data-in="0" data-out="0.1">
+      <p class="eyebrow">Wood-fired · Open till 2am</p>
+      <h1>Forno Notte.</h1>
+      <p class="lede">Pizza that tastes like the city after dark.</p>
+      <p class="cue"><span></span>Scroll to walk in</p>
+    </section>
+
+    <section class="panel" data-in="0.12" data-out="0.24">
+      <p class="eyebrow">Corner of 4th &amp; Vine</p>
+      <h2>Follow the glow.</h2>
+      <p class="lede">One neon sign. One oven that never cools. You can smell it from across the street.</p>
+    </section>
+
+    <section class="panel" data-in="0.27" data-out="0.38">
+      <p class="eyebrow">Walk-ins welcome</p>
+      <h2>Come on in.</h2>
+      <p class="lede">No dress code. No rush. Just a warm room and a seat with your name on it.</p>
+    </section>
+
+    <section class="panel right" data-in="0.42" data-out="0.57">
+      <p class="eyebrow">The dining room</p>
+      <h2>Twelve tables.<br>One fire.</h2>
+      <dl class="stats">
+        <div><dt>72<small>hr</small></dt><dd>cold-fermented dough</dd></div>
+        <div><dt>900<small>°F</small></dt><dd>live oak fire</dd></div>
+        <div><dt>90<small>sec</small></dt><dd>from peel to plate</dd></div>
+      </dl>
+    </section>
+
+    <section class="panel" data-in="0.61" data-out="0.83">
+      <p class="eyebrow">The kitchen</p>
+      <h2>Made right<br>in front of you.</h2>
+      <ul class="steps" aria-label="How a Margherita is made">
+        <li data-at="0.62">Dough, stretched by hand</li>
+        <li data-at="0.68">San Marzano tomato</li>
+        <li data-at="0.72">Fior di latte</li>
+        <li data-at="0.78">Fresh basil</li>
+      </ul>
+    </section>
+
+    <section class="panel right" data-in="0.86" data-out="0.935">
+      <p class="eyebrow">The oven</p>
+      <h2>Ninety seconds<br>at 900°F.</h2>
+      <p class="lede">Blistered crust. Melted, not cooked. The fire does the rest.</p>
+    </section>
+
+    <section class="panel final" id="reserve" data-in="0.955" data-out="1.01">
+      <p class="eyebrow">Tonight, 5pm to 2am</p>
+      <h2>Your table is warm.</h2>
+      <div class="menu">
+        <div><b>Margherita</b><span>$16</span></div>
+        <div><b>Diavola</b><span>$18</span></div>
+        <div><b>Funghi</b><span>$17</span></div>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="#reserve">Reserve a table</a>
+        <a class="btn" href="#reserve">See full menu</a>
+      </div>
+      <p class="fine">Forno Notte is a virtual restaurant. A concept by TruongSon.</p>
+    </section>
+  </main>
+
+  <div class="spacer" aria-hidden="true"></div>
+
+  <noscript><p class="noscript">This experience needs JavaScript and WebGL.</p></noscript>
+  <script type="module" src="assets/app.js"></script>
+</body>
+</html>
