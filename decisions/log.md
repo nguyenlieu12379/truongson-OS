@@ -86,7 +86,7 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 
 **Alternatives considered:** impeccable as the main skill (broader: layout, type, color, art direction). taste-skill for art direction.
 
-**Owner:** To confirm (Son or Truong).
+**Owner:** Son
 
 ## 2026-11-06 - Remove impeccable and taste-skill completely
 
@@ -94,4 +94,4 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 
 **Why:** User asked to remove them completely, not just retire them.
 
-**Owner:** To confirm (Son or Truong).
+**Owner:** Son
