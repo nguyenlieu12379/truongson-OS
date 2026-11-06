@@ -11,7 +11,9 @@ This is the source-of-truth file for your AIOS. Fill it in by typing, voice-past
 Identity, offer, ICP. One paragraph each is fine.
 
 ```
-[Your answer here]
+Identity: Two co-operators share this AIOS: Son and Truong.
+Offer: AI-generated websites for local businesses.
+ICP: Local F&B businesses in the US, mainly independent restaurants and coffee shops.
 ```
 
 ---
