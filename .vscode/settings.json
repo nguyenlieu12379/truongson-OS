@@ -1,0 +1,9 @@
+{
+  // Hide config the repo needs but you don't edit day to day.
+  // They still exist and still work. Delete a line to show it again.
+  "files.exclude": {
+    ".github": true,
+    ".impeccable": true,
+    ".mcp.json": true
+  }
+}
