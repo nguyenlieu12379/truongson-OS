@@ -15,8 +15,8 @@ websites/
 
 | Owner | Site | Status | Path |
 | --- | --- | --- | --- |
-| TruongSon | TruongSon agency site | Draft, not deployed | `websites/TruongSon/` |
-| TruongSon | TruongSon agency site v2 (blueprint) | Draft, not deployed. Booking link pending. | `websites/TruongSon-v2/` |
+| TruongSon | TruongSon agency site v1 | Live at https://nguyenlieu12379.github.io/truongson-OS/v1/ | `websites/TruongSon/` |
+| TruongSon | TruongSon agency site v2 (blueprint) | Live at https://nguyenlieu12379.github.io/truongson-OS/ . Booking link pending. | `websites/TruongSon-v2/` |
 
 ## Add a site
 

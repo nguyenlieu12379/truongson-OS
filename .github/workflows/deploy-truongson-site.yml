@@ -1,10 +1,14 @@
 name: Deploy TruongSon site to GitHub Pages
 
+# Main link  -> websites/TruongSon-v2 (blueprint site)
+# /v1/       -> websites/TruongSon    (original site, kept for reference)
+
 on:
   push:
-    branches: [main, claude/friendly-hopper-e26myo]
+    branches: [main]
     paths:
       - "websites/TruongSon/**"
+      - "websites/TruongSon-v2/**"
       - ".github/workflows/deploy-truongson-site.yml"
   workflow_dispatch:
 
@@ -25,9 +29,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Assemble site
+        run: |
+          mkdir -p _site/v1
+          cp -R websites/TruongSon-v2/. _site/
+          cp -R websites/TruongSon/. _site/v1/
+          rm -f _site/README.md _site/v1/README.md
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: websites/TruongSon
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4
