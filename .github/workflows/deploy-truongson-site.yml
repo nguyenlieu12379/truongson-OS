@@ -2,7 +2,7 @@ name: Deploy TruongSon site to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, claude/friendly-hopper-e26myo]
     paths:
       - "websites/TruongSon/**"
       - ".github/workflows/deploy-truongson-site.yml"
