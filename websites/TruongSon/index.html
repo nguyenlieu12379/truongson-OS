@@ -61,20 +61,20 @@
 
     /* The one booking control, inside the top line. */
     .book-pin {
-      background: var(--go);
-      color: #ffffff;
+      background: var(--ink);
+      color: var(--bone);
       font-weight: 500;
       font-size: 16px;
       line-height: 1;
-      padding: 14px 20px;
+      padding: 14px 22px;
       text-decoration: none;
-      border-radius: 0;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+      border-radius: 999px;
+      box-shadow: 0 8px 22px rgba(56, 69, 15, 0.28);
       transition: background-color 180ms var(--ease-out), transform 180ms var(--ease-out);
     }
-    .book-pin:hover { background: var(--go-hover); transform: translateY(-1px); }
+    .book-pin:hover { background: #2a3409; transform: translateY(-1px); }
     .book-pin:active { transform: scale(0.97); }
-    .book-pin:focus-visible { outline: 3px solid #ffffff; outline-offset: 3px; }
+    .book-pin:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 
     .wordmark { font-weight: 900; font-size: 20px; letter-spacing: -0.02em; text-decoration: none; }
 
