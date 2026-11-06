@@ -7,7 +7,7 @@ Second, from-scratch take on the TruongSon agency site. The original lives in `w
 - **Proof:** the guarantee: "Love the design or you don't pay."
 - **Sections:** Hero, What you get, How it works, Guarantee, FAQ, Final CTA.
 - **Stack:** one static `index.html` (HTML/CSS + a few lines of JS). Fonts from Google Fonts. Hosted on GitHub Pages at https://nguyenlieu12379.github.io/truongson-OS/ (deployed by `.github/workflows/deploy-truongson-site.yml` on every push to `main`). The old site is at `/v1/`.
-- **Decisions:** `brainstorms/2026-11-06-truongson-site-v2.md` (local), `PRODUCT.md`, `.impeccable/surfaces/`.
+- **Decisions:** `brainstorms/2026-11-06-truongson-site-v2.md` (local), `PRODUCT.md`.
 
 ## Before going live
 
