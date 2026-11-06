@@ -19,6 +19,16 @@ Read `references/3ms-framework.md` once. It's how Son and Truong think about AI 
 - `/3d-brain`: Choose a brain name and categories, then build a local 3D knowledge globe with Cinema and interactive growth replay. Uses selected local files and the bundled app template.
 - `/level-up` — Weekly 3Ms interview. Find one automation, scope it, ship it. One per week.
 
+### Installed kits (in `external/`, read the index first)
+
+Not auto-loaded as `/commands`. Open these when the task fits. Index: `external/README.md`.
+
+- **impeccable** (`external/impeccable/`): design review and AI-slop checks for client sites.
+- **design-skills** (`external/design-skills/`): animation and UI skills.
+- **taste-skill** (`external/taste-skill/`): stronger visual direction for sites.
+- **video-edit-kit** (`external/video-edit-kit/`): video and Instagram editing.
+- **sales-agent** (`external/sales-agent/`): cold outreach agent. Sends real email, so review before running.
+
 ## Where things live
 
 - `context/` — about you, your business, your priorities (filled by `/onboard`)
