@@ -33,7 +33,7 @@ PENDING: no existing writing yet (new business). Paste the first real client ema
 Quarterly priorities. Not yearly aspirations. Things that, if not done by July, would make you say "I wasted Q2."
 
 ```
-1. [Priority 1]
+1. Sign 10 paying clients (US restaurants / coffee shops) by 2027-02-06.
 2. [Priority 2]
 3. [Priority 3]
 ```
