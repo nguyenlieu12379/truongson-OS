@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TruongSon | Websites for restaurants and cafés</title>
   <meta name="description" content="TruongSon builds websites for independent restaurants and cafés. Book a free call.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2338450f'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Arial' font-weight='900' font-size='14' fill='%23ecebe7'%3ETS%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;900&display=swap" rel="stylesheet">
@@ -110,6 +111,10 @@
       .hero-bottom { flex-direction: row; justify-content: space-between; align-items: flex-end; }
     }
     @keyframes fade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    ::selection { background: var(--ink); color: var(--bg); }
+    input, textarea { caret-color: var(--ink); }
 
     /* Reveal on scroll */
     .reveal { opacity: 0; transform: translateY(18px); transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out); }
@@ -272,7 +277,7 @@
       </section>
 
       <section id="how" class="reveal" aria-labelledby="how-title">
-        <h2 id="how-title" class="small muted" style="margin:0 0 24px;font-weight:500">How it works</h2>
+        <h2 id="how-title" class="sr-only">How it works</h2>
         <ol class="steps">
           <li>First, a free call.<span class="step-sub">We learn your place, your menu and what you want guests to do.</span></li>
           <li>Then we build a draft.<span class="step-sub">You see the real site before anything goes live.</span></li>
