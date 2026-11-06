@@ -3,7 +3,6 @@
   // They still exist and still work. Delete a line to show it again.
   "files.exclude": {
     ".github": true,
-    ".impeccable": true,
     ".mcp.json": true
   }
 }
