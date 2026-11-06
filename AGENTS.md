@@ -25,7 +25,7 @@ Read `references/3ms-framework.md` once. It's how Son and Truong think about AI 
 Each pack is a full copy of one Sunaii kit with its own `VENDORED.md` (source and pinned commit). Read the entry point first, then the pack's own files.
 
 - **design-skills (Emil Kowalski): the one UI design skill.** Use it for all UI design work: building, polishing, and reviewing websites and app screens, plus motion and interactions. Path: `.claude/skills/design-skills/`. Entry: `.claude/skills/design-skills/skills/emil-design-eng/SKILL.md`, then the matching sub-skill in `.claude/skills/design-skills/skills/` (`animate`, `choreograph`, `review-animations`, `break-ui`, `mobile-native`, `prototype`, `apple-design`). Cheat sheets: `ui-cheatsheet.md`, `performance-cheatsheet.md`.
-- **impeccable** and **taste-skill:** retired for UI design (decision 2026-11-06). Do not use them for new design work. Packs stay on disk for reference only. `PRODUCT.md` stays as product context.
+- `PRODUCT.md` is product context for the TruongSon site (users, positioning, rules). Read it before design work on that site.
 - **video-edit-kit:** talking-head editing, Reels and Shorts, HyperFrames motion graphics. Use for video or Instagram content. Path: `.claude/skills/video-edit-kit/`. Entry: `.claude/skills/video-edit-kit/AGENTS.md`, then `docs/WORKFLOW.md`
 - **sales-agent (Harvey):** cold-outreach agent. Use only when Son or Truong asks to set it up or run it. It sends real email, so confirm the list, copy, and sending account first. Path: `.claude/skills/sales-agent/`. Entry: `.claude/skills/sales-agent/CLAUDE.md`
 

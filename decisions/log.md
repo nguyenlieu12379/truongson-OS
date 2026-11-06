@@ -87,3 +87,11 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 **Alternatives considered:** impeccable as the main skill (broader: layout, type, color, art direction). taste-skill for art direction.
 
 **Owner:** To confirm (Son or Truong).
+
+## 2026-11-06 - Remove impeccable and taste-skill completely
+
+**Decision:** Delete the impeccable and taste-skill packs (Claude and Codex copies), the `.impeccable/` surface briefs, and their routing. design-skills is the only UI design skill. `PRODUCT.md` stays as plain product context. This overrides the "move to archives" house rule at the user's request. Git history keeps the old files.
+
+**Why:** User asked to remove them completely, not just retire them.
+
+**Owner:** To confirm (Son or Truong).

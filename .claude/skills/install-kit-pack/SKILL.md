@@ -52,8 +52,6 @@ Install scripts, `npx`, `pip install`, `docker compose`, `make`, or any `.sh` fr
 
 | Pack | Source | Entry point |
 |---|---|---|
-| design-skills | Sunaii-agency/design-skills | `.claude/skills/design-skills/README.md` |
-| impeccable | Sunaii-agency/impeccable | `.claude/skills/impeccable/.claude/skills/impeccable/SKILL.md` |
-| taste-skill | Sunaii-agency/taste-skill | `.claude/skills/taste-skill/skills/taste-skill/SKILL.md` |
+| design-skills | Sunaii-agency/design-skills | `.claude/skills/design-skills/skills/emil-design-eng/SKILL.md` |
 | video-edit-kit | Sunaii-agency/video-edit-kit | `.claude/skills/video-edit-kit/AGENTS.md` |
 | sales-agent | Sunaii-agency/sales-agent | `.claude/skills/sales-agent/CLAUDE.md` (sends real email; run only on request) |
