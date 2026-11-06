@@ -37,7 +37,7 @@ Each pack is a full copy of one Sunaii kit with its own `VENDORED.md` (source an
 - `decisions/log.md` — append-only record of decisions and why
 - `brainstorms/` - Dated interview captures and resume points. Read relevant captures on demand; confirmed current context belongs in its canonical page.
 - `audits/` — dated audit reports and finding history; point-in-time evidence, not live business state
-- `websites/` — website projects, one folder per owner (`websites/<owner>/<site-name>/`). Index and rules: `websites/README.md`. TruongSon agency site: `websites/TruongSon/`.
+- `websites/` — website projects, one folder per owner (`websites/<owner>/<site-name>/`). Index and rules: `websites/README.md`. Pizza demo (live on Pages): `websites/TruongSon-demos/forno-notte/`.
 - `archives/` — old stuff. Don't delete. Move here.
 
 See `EXPANSIONS.md` for what to add as you grow.

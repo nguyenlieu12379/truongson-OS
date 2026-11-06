@@ -15,10 +15,10 @@ websites/
 
 | Owner | Site | Status | Path |
 | --- | --- | --- | --- |
-| TruongSon | TruongSon agency site v1 | Live at https://nguyenlieu12379.github.io/truongson-OS/v1/ | `websites/TruongSon/` |
-| TruongSon | TruongSon agency site v2 (blueprint) | Live at https://nguyenlieu12379.github.io/truongson-OS/ . Booking link pending. | `websites/TruongSon-v2/` |
-| TruongSon-demos | Forno Notte, 3D scroll pizzeria demo | Local only | `websites/TruongSon-demos/forno-notte/` |
+| TruongSon-demos | Forno Notte, 3D scroll pizzeria demo | Live at https://nguyenlieu12379.github.io/truongson-OS/forno-notte/ | `websites/TruongSon-demos/forno-notte/` |
 
 ## Add a site
 
 Create `websites/<owner>/<site-name>/`, add a row above, and give the site its own README.
+
+Deploys: `.github/workflows/deploy-pages.yml` builds GitHub Pages from `main`. Add a copy step there to publish another site.

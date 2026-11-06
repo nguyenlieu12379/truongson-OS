@@ -2,6 +2,8 @@
 
 Virtual wood-fired pizzeria. A portfolio piece to show F&B prospects what a scroll-driven 3D site feels like.
 
+Live: https://nguyenlieu12379.github.io/truongson-OS/forno-notte/ (deployed by `.github/workflows/deploy-pages.yml` on push to `main`).
+
 ## The scroll story
 
 1. **Street** at dusk: road, crosswalk, neon sign, a car passing.
