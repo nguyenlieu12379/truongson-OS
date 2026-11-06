@@ -11,7 +11,9 @@ This is the source-of-truth file for your AIOS. Fill it in by typing, voice-past
 Identity, offer, ICP. One paragraph each is fine.
 
 ```
-[Your answer here]
+Identity: Two co-operators share this AIOS: Son and Truong.
+Offer: AI-generated websites for local businesses.
+ICP: Local F&B businesses in the US, mainly independent restaurants and coffee shops.
 ```
 
 ---
@@ -21,11 +23,7 @@ Identity, offer, ICP. One paragraph each is fine.
 An email, a LinkedIn post, a DM, a doc — anything that sounds like you when you're not trying. **Paste verbatim.** Do not type these mid-conversation with Claude — chat-shaped samples are worse than no samples (voice contamination).
 
 ```
-[Sample 1 — paste raw]
-```
-
-```
-[Sample 2 — paste raw]
+PENDING: no existing writing yet (new business). Paste the first real client email or post here, unedited, then re-run /onboard.
 ```
 
 ---
@@ -35,9 +33,9 @@ An email, a LinkedIn post, a DM, a doc — anything that sounds like you when yo
 Quarterly priorities. Not yearly aspirations. Things that, if not done by July, would make you say "I wasted Q2."
 
 ```
-1. [Priority 1]
-2. [Priority 2]
-3. [Priority 3]
+1. Sign 10 paying clients (US restaurants / coffee shops) by 2027-02-06.
+2. Build an Instagram brand as proof/portfolio to drive sales. Target (draft, confirm): post 3x/week and showcase 5+ demo/client sites by 2027-02-06.
+3. (none for now)
 ```
 
 ---
@@ -47,7 +45,7 @@ Quarterly priorities. Not yearly aspirations. Things that, if not done by July, 
 Multiple answers OK. Stripe? Skool? GoHighLevel? QuickBooks? A spreadsheet?
 
 ```
-[Your answer here]
+No revenue yet (pre-launch). Plan: collect payments via Stripe. Tracking: Stripe dashboard (not set up yet).
 ```
 
 ---
@@ -57,7 +55,7 @@ Multiple answers OK. Stripe? Skool? GoHighLevel? QuickBooks? A spreadsheet?
 Email (which one — Gmail / Outlook)? Slack? Teams? DMs (Skool / Discord / iMessage)? Phone?
 
 ```
-[Your answer here]
+Gmail (email). Cold calls by phone for outreach. Sales calls on Google Meet. Calendar inferred: Google Calendar.
 ```
 
 ---
@@ -67,7 +65,7 @@ Email (which one — Gmail / Outlook)? Slack? Teams? DMs (Skool / Discord / iMes
 Granola? Otter? Fireflies? Google Drive? Notion? Dropbox? A folder on your desktop you keep meaning to organize?
 
 ```
-[Your answer here]
+Notion (notes, docs). No meeting recorder yet.
 ```
 
 ---
@@ -77,7 +75,7 @@ Granola? Otter? Fireflies? Google Drive? Notion? Dropbox? A folder on your deskt
 The single biggest time-suck or recurring drudgery. Plus where tasks/projects live (ClickUp / Asana / Linear / Notion / a notebook).
 
 ```
-[Your answer here]
+Top pain: the cold outreach process (finding leads, cold calling, follow-up) and building each website. Work tracking: assumed Notion (not confirmed).
 ```
 
 ---
