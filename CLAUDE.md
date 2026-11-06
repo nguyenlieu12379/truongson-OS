@@ -19,15 +19,6 @@ Read `references/3ms-framework.md` once. It's how Son and Truong think about AI 
 - `/3d-brain`: Choose a brain name and categories, then build a local 3D knowledge globe with Cinema and interactive growth replay. Uses selected local files and the bundled app template.
 - `/level-up` — Weekly 3Ms interview. Find one automation, scope it, ship it. One per week.
 
-### Kit packs (installed, kept whole)
-
-Each kit is one pack under `external/`, with one skill entry in `.claude/skills/` that points to it. Index: `external/README.md`.
-
-- **impeccable** (design review): `external/impeccable/`. Skill: `/impeccable`
-- **taste-skill** (site art direction): `external/taste-skill/`. Skill: `/taste-skill`
-- **video-edit-kit** (video editing): `external/video-edit-kit/`. Skill: `/video-edit-kit`
-- **sales-agent** (Harvey, cold outreach): `external/sales-agent/`. Skill: `/sales-agent`. Sends real email, so it runs only when you ask.
-
 ## Where things live
 
 - `context/` — about you, your business, your priorities (filled by `/onboard`)
@@ -37,7 +28,6 @@ Each kit is one pack under `external/`, with one skill entry in `.claude/skills/
 - `brainstorms/` - Dated interview captures and resume points. Read relevant captures on demand; confirmed current context belongs in its canonical page.
 - `audits/` — dated audit reports and finding history; point-in-time evidence, not live business state
 - `archives/` — old stuff. Don't delete. Move here.
-- `external/` — vendored Sunaii-agency kits (impeccable, design-skills, taste-skill, video-edit-kit, sales-agent). Read-only. Index and routes: `external/README.md`
 
 See `EXPANSIONS.md` for what to add as you grow.
 
@@ -62,7 +52,6 @@ Full registry: `connections.md`. None wired yet.
 - Email + calendar: Gmail, Google Calendar
 - Sales: cold calls (phone), Google Meet
 - Notes, docs, tasks: Notion
-- External kits (design, video, sales outreach): `external/README.md`. Installed but not run.
 
 ## How you work with us
 
