@@ -23,11 +23,7 @@ ICP: Local F&B businesses in the US, mainly independent restaurants and coffee s
 An email, a LinkedIn post, a DM, a doc — anything that sounds like you when you're not trying. **Paste verbatim.** Do not type these mid-conversation with Claude — chat-shaped samples are worse than no samples (voice contamination).
 
 ```
-[Sample 1 — paste raw]
-```
-
-```
-[Sample 2 — paste raw]
+PENDING: no existing writing yet (new business). Paste the first real client email or post here, unedited, then re-run /onboard.
 ```
 
 ---
