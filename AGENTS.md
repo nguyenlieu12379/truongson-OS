@@ -18,7 +18,6 @@ Read `references/3ms-framework.md` once. It's how Son and Truong think about AI 
 - `/link`: Link a project, file, folder, or source into the right operating-manual route or index.
 - `/3d-brain`: Choose a brain name and categories, then build a local 3D knowledge globe with Cinema and interactive growth replay. Uses selected local files and the bundled app template.
 - `/level-up` — Weekly 3Ms interview. Find one automation, scope it, ship it. One per week.
-- `/install-kit-pack`: Install a GitHub kit repo as a whole pack (pinned commit, VENDORED.md, mirror, routing). Manual invocation only.
 
 ### Kit packs (whole repos, in `.claude/skills/`)
 
