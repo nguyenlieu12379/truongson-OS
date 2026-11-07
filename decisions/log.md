@@ -95,3 +95,11 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 **Why:** User asked to remove them completely, not just retire them.
 
 **Owner:** Son
+
+## 2026-11-07 - Remove install-kit-pack skill
+
+**Decision:** Delete the `install-kit-pack` skill (Claude and Codex copies) and drop it from the skill lists in `CLAUDE.md` and `AGENTS.md`. Git history keeps the old files.
+
+**Why:** Son asked to remove it.
+
+**Owner:** Son
