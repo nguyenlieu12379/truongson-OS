@@ -95,3 +95,13 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 **Why:** User asked to remove them completely, not just retire them.
 
 **Owner:** Son
+
+## 2026-11-06 - Forno Notte is the live GitHub Pages site; v1 and v2 retired
+
+**Decision:** GitHub Pages now serves only the Forno Notte 3D scroll pizzeria demo at https://nguyenlieu12379.github.io/truongson-OS/forno-notte/. The root URL redirects there. The TruongSon v1 and v2 agency sites are offline. Deploys run from `.github/workflows/deploy-pages.yml` on push to `main`. Source: `websites/TruongSon-demos/forno-notte/`.
+
+**Why:** v1 and v2 were already deleted from `main`. Forno Notte is the F&B portfolio piece to show prospects and to use for Instagram content.
+
+**Alternatives considered:** Restoring v2 from git history and keeping it at the root next to the demo. Rejected because it would undo the deletions.
+
+**Owner:** Son
