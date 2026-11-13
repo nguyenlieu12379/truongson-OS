@@ -76,6 +76,7 @@ One point light is added per ~30 m² near the ceiling. Add pendants and accent l
 ```
 
 - `p` must increase from 0 to 1. Leave 0.08 to 0.15 between stops.
+- Human eye only. The camera is a normal lens at eye height. To turn the view, add a stop whose `look` points to the new angle. Turn 90 degrees or less between neighbouring stops.
 - The path is a smooth curve through all stops. Look targets are curved too.
 - Stops with `chapter` become nav buttons and reduced-motion shots.
 

@@ -89,6 +89,10 @@ Turn the floor plan, the walkthrough guide and (where they exist) the photos int
 - Walls are segments. Trace the outer walls counter-clockwise seen from above with the street at the bottom. Openings are `door`, `window` or `pass`.
 - Rooms are floor rectangles with finishes and light colour.
 - Camera stops follow the walkthrough guide. Eye height 1.6 to 1.8 m. Pass through door centres. Keep the camera at least 0.6 m from walls.
+- **Human eye view only.** No 360 pictures, no panoramas, no bubble around the camera. The camera is an ordinary lens at eye height, about 52 degrees on desktop and 68 on portrait phones (engine default).
+- **Turning the view.** The camera turns as the visitor scrolls. Each stop has a `look` point, so to turn the head, add a stop where the look point points to the new angle. Keep stops 0.08 to 0.15 of progress apart so the turn stays smooth. Turn 90 degrees or less between neighbouring stops.
+- **Dollhouse opening stays** for real estate. It is an overview, not a human-eye view. Only the room views are human eye.
+- **Realism comes from** real photos on surfaces (`photo:` materials, see step 5) plus furniture built as 3D shapes.
 - The camera moves along the stops only. There is no free walking, so collision only needs to hold along that path.
 - **`dollhouse-open`:** the first one or two stops are a high overview of the whole home, above the roof, then the path descends to the front door.
 - **`street-open`:** the first stops are outside on the street, then the path reaches the front door, then goes in.
