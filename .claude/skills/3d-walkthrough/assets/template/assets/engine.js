@@ -243,11 +243,16 @@ export function createWalkthrough({ canvas, spec, site }) {
   // `upper` = roof and ceilings. In 'dollhouse-open' mode they hide while the camera is above the roof,
   // so the overview can look down into the rooms.
   const upper = [];
+  // `styleable` = walls, floors and ceilings whose materials change with spec.styles (see setStyle).
+  const styleable = [];
   for (const r of spec.rooms) {
     const [x0, z0, x1, z1] = r.rect, w = x1 - x0, d = z1 - z0;
     const fm = material(r.floor || 'wood', [w / 3, d / 3]);
-    plane(w, d, fm, V((x0 + x1) / 2, 0.006, (z0 + z1) / 2), [-Math.PI / 2, 0, 0]);
-    upper.push(plane(w, d, r.ceiling || '#1c1714', V((x0 + x1) / 2, H - 0.001, (z0 + z1) / 2), [Math.PI / 2, 0, 0]));
+    const floor = plane(w, d, fm, V((x0 + x1) / 2, 0.006, (z0 + z1) / 2), [-Math.PI / 2, 0, 0]);
+    styleable.push({ role: 'floor', mesh: floor, w, d });
+    const ceil = plane(w, d, r.ceiling || '#1c1714', V((x0 + x1) / 2, H - 0.001, (z0 + z1) / 2), [Math.PI / 2, 0, 0]);
+    upper.push(ceil);
+    styleable.push({ role: 'ceiling', mesh: ceil });
     const lc = r.light ?? '#ffcf9a';
     const n = Math.max(1, Math.round((w * d) / 30));
     for (let i = 0; i < n; i++) {
@@ -279,6 +284,7 @@ export function createWalkthrough({ canvas, spec, site }) {
       const m = new THREE.Mesh(geo, [mats[0], mats[0], mats[0], mats[0], mats[1], mats[0]]);
       m.position.set((u0 + u1) / 2, (y0 + y1) / 2, 0);
       g.add(m);
+      styleable.push({ role: 'wall', mesh: m });
     };
     const ops = (wall.openings || []).map((o) => ({ ...o, u0: o.at - o.width / 2, u1: o.at + o.width / 2 })).sort((a, b) => a.u0 - b.u0);
     let u = 0;
@@ -319,9 +325,44 @@ export function createWalkthrough({ canvas, spec, site }) {
   }
 
   // ---- site-specific content
-  const ctx = { THREE, scene, camera, spec, box, glow, light, plane, material, TEX, V, H, B, seg, smooth, easeOut, reduceMotion, props: null };
-  ctx.props = makeProps(ctx);
-  const siteUpdate = site?.build?.(ctx) || (() => {});
+  // Furniture lives under one group (`root`) so a style change can drop and rebuild it.
+  // site.build(ctx, style) runs again on every style change. Put furniture on ctx.root (ctx.box,
+  // ctx.glow, ctx.light and props already do). Walls, floors and roof stay outside it.
+  const initialStyle = spec.styles ? Object.keys(spec.styles)[0] : undefined;
+  const ctx = { THREE, scene, camera, spec, V, H, B, seg, smooth, easeOut, reduceMotion, TEX, material, root: null, style: initialStyle, props: null };
+  let furnRoot = null;
+  let siteUpdate = () => {};
+  function furnish(styleName) {
+    if (furnRoot) { scene.remove(furnRoot); furnRoot.traverse((o) => o.geometry?.dispose()); }
+    furnRoot = new THREE.Group(); scene.add(furnRoot);
+    ctx.root = furnRoot; ctx.style = styleName;
+    ctx.box = (x0, x1, y0, y1, z0, z1, mat, parent = furnRoot) => box(x0, x1, y0, y1, z0, z1, mat, parent);
+    ctx.glow = (color, size, pos, opacity = 1, parent = furnRoot) => glow(color, size, pos, opacity, parent);
+    ctx.plane = (w, h, mat, pos, rot = [0, 0, 0], parent = furnRoot) => plane(w, h, mat, pos, rot, parent);
+    ctx.light = (color, intensity, distance, pos) => { const l = new THREE.PointLight(color, intensity, distance, 2); l.position.copy(pos); furnRoot.add(l); return l; };
+    ctx.props = makeProps(ctx);
+    siteUpdate = site?.build?.(ctx, styleName) || (() => {});
+  }
+  furnish(initialStyle);
+
+  // Swap walls, floors and ceilings to the style palette, then rebuild the furniture for it.
+  function applyStyle(name) {
+    const s = spec.styles?.[name];
+    if (!s) return;
+    for (const it of styleable) {
+      if (it.role === 'wall') { const wm = material(s.wall); it.mesh.material = [wm, wm, wm, wm, wm, wm]; }
+      else if (it.role === 'floor') it.mesh.material = material(s.floor, [it.w / 3, it.d / 3]);
+      else if (it.role === 'ceiling') it.mesh.material = material(s.ceiling);
+    }
+    furnish(name);
+  }
+  // Short fade between styles (same .cut class as reduced motion). Instant with reduced motion.
+  function setStyle(name) {
+    if (!spec.styles?.[name] || name === ctx.style) return;
+    if (reduceMotion) { applyStyle(name); return; }
+    canvas.classList.add('cut');
+    setTimeout(() => { applyStyle(name); canvas.classList.remove('cut'); }, 170);
+  }
 
   // ---- camera path from spec.stops
   const stops = spec.stops;
@@ -383,6 +424,14 @@ export function createWalkthrough({ canvas, spec, site }) {
     const max = document.documentElement.scrollHeight - innerHeight;
     scrollTo({ top: +el.dataset.jump * max, behavior: reduceMotion ? 'auto' : 'smooth' });
   }));
+
+  // ---- style switch (only when spec.styles exists; see index.html .styles)
+  const styleBar = document.querySelector('.styles');
+  const styleBtns = [...document.querySelectorAll('[data-style]')];
+  if (styleBar) styleBar.hidden = !spec.styles;
+  const markStyle = (name) => styleBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.style === name)));
+  styleBtns.forEach((b) => b.addEventListener('click', () => { setStyle(b.dataset.style); markStyle(b.dataset.style); }));
+  markStyle(ctx.style);
 
   // ---- resize + loop
   function resize() {
@@ -510,8 +559,8 @@ function buildExterior(ex, B, { box, glow, light, plane, scene, H }) {
 // Prop library. Every prop: (x, z, opts) placed on the floor, rot = rotation around y (radians).
 // ---------------------------------------------------------------------------
 function makeProps(ctx) {
-  const { THREE, scene, glow, light, V } = ctx;
-  const group = (x, z, rot = 0) => { const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = rot; scene.add(g); return g; };
+  const { THREE, glow, light, V } = ctx;
+  const group = (x, z, rot = 0) => { const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = rot; ctx.root.add(g); return g; };
   const b = (g, x0, x1, y0, y1, z0, z1, mat) => ctx.box(x0, x1, y0, y1, z0, z1, mat, g);
   const cyl = (g, r0, r1, h, mat, x, y, z, seg = 20) => { const m = new THREE.Mesh(new THREE.CylinderGeometry(r0, r1, h, seg), material(mat)); m.position.set(x, y, z); g.add(m); return m; };
   const candles = [];
@@ -592,8 +641,40 @@ function makeProps(ctx) {
     wallBoard(x, y, z, { w = 1.2, h = 1.5, normal = 's', tex = null, color = '#2a2a2a' } = {}) {
       const rot = { s: 0, n: Math.PI, e: Math.PI / 2, w: -Math.PI / 2 }[normal];
       const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({ map: tex, color: tex ? 0xffffff : color, roughness: 0.8 }));
-      m.position.set(x, y, z); m.rotation.y = rot; scene.add(m);
+      m.position.set(x, y, z); m.rotation.y = rot; ctx.root.add(m);
       return m;
+    },
+    // framed art on a wall, same facing rule as wallBoard. Place x, y, z just in front of the wall.
+    art(x, y, z, { normal = 's', w = 0.8, h = 0.6, tex = null, color = '#c9b89a', frame = 'black' } = {}) {
+      const g = new THREE.Group(); g.position.set(x, y, z);
+      g.rotation.y = { s: 0, n: Math.PI, e: Math.PI / 2, w: -Math.PI / 2 }[normal];
+      ctx.root.add(g);
+      const f = new THREE.Mesh(new THREE.BoxGeometry(w + 0.06, h + 0.06, 0.03), material(frame)); f.position.z = -0.01; g.add(f);
+      const c = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({ map: tex, color: tex ? 0xffffff : color, roughness: 0.8 }));
+      c.position.z = 0.006; g.add(c);
+      return g;
+    },
+    // table lamp on a side table or sideboard. y = top of the table.
+    tableLamp(x, z, { y = 0.6, shade = '#e8d9b8', base = 'brass', on = true } = {}) {
+      const g = group(x, z);
+      cyl(g, 0.12, 0.12, 0.03, base, 0, y + 0.015, 0, 20);
+      cyl(g, 0.012, 0.012, 0.28, base, 0, y + 0.17, 0, 8);
+      const s = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.2, 0.22, 24, 1, true), new THREE.MeshStandardMaterial({ color: shade, roughness: 0.9, side: THREE.DoubleSide, emissive: 0xffe2b0, emissiveIntensity: on ? 0.35 : 0 }));
+      s.position.set(0, y + 0.36, 0); g.add(s);
+      glow(0xffd9a0, 0.5, V(x, y + 0.36, z), on ? 0.6 : 0);
+      if (on) light(0xffd9a0, 3, 3, V(x, y + 0.34, z));
+      return g;
+    },
+    // sink, hob, cutting board and fruit bowl on a counter. top = counter surface height.
+    kitchenDetails(x, z, { w = 2.4, top = 0.95, rot = 0 } = {}) {
+      const g = group(x, z, rot);
+      b(g, -w * 0.32 - 0.25, -w * 0.32 + 0.25, top, top + 0.005, -0.22, 0.22, 'steel');   // sink
+      b(g, w * 0.08 - 0.25, w * 0.08 + 0.25, top, top + 0.005, -0.22, 0.22, 'black');     // hob
+      for (const dx of [-0.12, 0.12]) for (const dz of [-0.08, 0.08]) cyl(g, 0.04, 0.04, 0.006, 'black', w * 0.08 + dx, top + 0.008, dz, 12);
+      b(g, w * 0.3, w * 0.3 + 0.42, top, top + 0.025, -0.16, 0.16, 'wood:#c79a66');       // cutting board
+      cyl(g, 0.13, 0.1, 0.09, '#e7e1d2', w * 0.42 + 0.25, top + 0.045, 0, 20);            // fruit bowl
+      for (const [dx, dz] of [[-0.03, 0.02], [0.04, -0.03], [0, 0.05]]) cyl(g, 0.035, 0.035, 0.06, '#e0a040', w * 0.42 + 0.25 + dx, top + 0.1, dz, 12);
+      return g;
     },
     espressoMachine(x, z, { y = 0.95, rot = 0, body = '#b8bcc0' } = {}) {
       const g = group(x, z, rot); g.position.y = y;

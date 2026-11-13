@@ -1,6 +1,6 @@
 ---
 name: 3d-walkthrough
-description: Use when someone asks for a scroll-based 3D walkthrough website of a one-floor place. Real estate and rentals open on a dollhouse overview of the whole home, then descend to the front door. Businesses (cafe, shop, restaurant, bar, bnb, salon, studio) open on the street, walk to the front door, then go in. Inputs are a floor plan, photos and footage, building context, and a walkthrough guide (a line drawn on the plan, or text describing the scroll POV). Unbuilt property with no photos is built from the floor plan alone, with interior design. Also runs as /3d-walkthrough.
+description: Use when someone asks for a scroll-based 3D walkthrough website of a one-floor place. Real estate and rentals open on a dollhouse overview of the whole home, then descend to the front door, and get a 3-style switch (modern, Scandinavian, warm luxury). Businesses (cafe, shop, restaurant, bar, bnb, salon, studio) open on the street, walk to the front door, then go in. Inputs are a floor plan, photos and footage, building context, and a walkthrough guide (a line drawn on the plan, or text describing the scroll POV). Unbuilt property with no photos is built from the floor plan alone, with interior design. Also runs as /3d-walkthrough.
 argument-hint: "[place name] [floor plan] [photos/footage + manifest] [context] [walkthrough guide]"
 ---
 
@@ -44,7 +44,7 @@ Also ask, if not obvious: owner folder name for `websites/<owner>/<site>/`, and 
 
 Set `spec.mode` from what the place is.
 
-- **`dollhouse-open`**: real estate, rentals, a home for sale or let. The scroll opens on a high overview of the whole home, then the camera descends to the front door and walks room by room.
+- **`dollhouse-open`**: real estate, rentals, a home for sale or let. The scroll opens on a high overview of the whole home, then the camera descends to the front door and walks room by room. This is the only mode that gets the style switch.
 - **`street-open`**: any one-floor business (cafe, shop, restaurant, bar, bnb, salon, studio). The scroll starts on the street, walks to the front door, then goes in. No dollhouse.
 
 If the place type is unclear, ask.
@@ -89,11 +89,23 @@ Turn the floor plan, the walkthrough guide and (where they exist) the photos int
 - Walls are segments. Trace the outer walls counter-clockwise seen from above with the street at the bottom. Openings are `door`, `window` or `pass`.
 - Rooms are floor rectangles with finishes and light colour.
 - Camera stops follow the walkthrough guide. Eye height 1.6 to 1.8 m. Pass through door centres. Keep the camera at least 0.6 m from walls.
+- **Human eye view only.** No 360 pictures, no panoramas, no bubble around the camera. The camera is an ordinary lens at eye height, about 52 degrees on desktop and 68 on portrait phones (engine default).
+- **Turning the view.** The camera turns as the visitor scrolls. Each stop has a `look` point, so to turn the head, add a stop where the look point points to the new angle. Keep stops 0.08 to 0.15 of progress apart so the turn stays smooth. Turn 90 degrees or less between neighbouring stops.
+- **Dollhouse opening stays** for real estate. It is an overview, not a human-eye view. Only the room views are human eye.
+- **Realism comes from** real photos on surfaces (`photo:` materials, see step 5) plus furniture built as 3D shapes.
 - The camera moves along the stops only. There is no free walking, so collision only needs to hold along that path.
 - **`dollhouse-open`:** the first one or two stops are a high overview of the whole home, above the roof, then the path descends to the front door.
 - **`street-open`:** the first stops are outside on the street, then the path reaches the front door, then goes in.
 
-Interior design for unbuilt property follows step 3 of the original 3d-walkthrough-2 method: furnish each room to fit its size (bed in the bedroom, table and chairs in the dining room, kitchen counter and sink, sofa and TV in the living room). Add rugs, art, plants and lamps. Materials should feel real, drawn in code. The style switch is not part of this skill.
+Interior design follows step 3 of the original 3d-walkthrough-2 method. Furnish each room to fit its size:
+- Bed in the bedroom, made with pillows and a folded throw (`P.bed`).
+- Table and chairs in the dining room, a set dining table (`P.tableSet`).
+- Kitchen counter, sink, hob, cutting board, fruit bowl (`P.counter` and `P.kitchenDetails`).
+- Sofa and TV in the living room, with rugs (`P.sofa`, `P.rug`).
+- Art on walls (`P.art`), table lamps (`P.tableLamp`), plants (`P.plant`), pendants.
+- Materials should feel real, drawn in code.
+
+For real estate, add `styles` to the spec (see [spec reference](references/spec-reference.md#styles)). Each style sets wall, floor, ceiling, accent, fabric and wood. Write the furniture set for each style in `site.js` so the switch changes the whole home, not only the walls.
 
 Show the user a top-down sketch of the plan with the route before building: a small SVG or ASCII plan with walls, doors and numbered stops. Get a yes or corrections. This is the cheapest place to catch a wrong layout.
 
@@ -123,6 +135,7 @@ Work outside in, following the route. For `dollhouse-open`, start at the overvie
 4. **Photos on surfaces.** Where the manifest tags a photo to a surface, set that surface's material to `'photo:assets/photos/<file>.jpg'`. The photo must already be cropped and straightened to the surface. Do not use photos on surfaces they do not show straight on.
 5. Props from the prop library (`ctx.props`: tables, chairs, counters, shelves, sofas, beds, plants, pendants, rugs, wall boards, espresso machine). Build custom pieces with `box`, `cyl`, `glow` when the library lacks one. Aim for the photo's layout and palette, not every object.
 6. One hero moment per major room in `site.js`'s update function, driven by scroll progress `p` (use `seg`, `smooth`, `easeOut`). Small, physical, readable.
+7. **Style switch (real estate only).** `site.build(ctx, style)` runs again on every style change. Read `ctx.spec.styles[style]` for the fabric, wood and accent colours, and put all furniture on `ctx.props` (which already sits under `ctx.root`). Add furniture to `ctx.root`, not to `scene`, or it will duplicate on each switch. The engine swaps walls, floors and ceilings itself. Set the button labels in `index.html` to match the style keys.
 
 Lessons that save time are in [build notes](references/build-notes.md). Read them before step 5.
 
@@ -148,6 +161,7 @@ Read every screenshot. Fix and reshoot until all pass:
 - Photos sit on the right surface and are not stretched or cut wrong
 - Camera never clips through a wall or furniture; doors open before the camera reaches them
 - `dollhouse-open`: the overview shows the rooms from above, and the roof is gone from that view
+- Real estate: each style button changes the walls, floors, ceiling and furniture together. Check all three styles, and that the switch works with no console errors
 - No room is too dark or blown out; text is readable over the scene
 - Panels do not overlap each other or the hero object on phone
 - Run the `review-animations` checklist from design-skills on the motion
