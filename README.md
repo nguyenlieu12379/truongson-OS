@@ -83,6 +83,7 @@ The kit includes setup, ongoing context interviews, routing, verification, a wee
 | `/link` | Routing helper | When adding a project, file, folder, or important source. Adds the smallest useful manual/index route and checks it resolves. |
 | `/level-up` | Recurring thinking skill | Day 14, then weekly. Three Ms interview (Mindset → Method → Machine). One run = one shipped artifact. |
 | `/3d-brain` | Interactive knowledge explorer | Choose your brain's name and categories. Builds a local 3D globe from your selected files, with search, note reading, Cinema, and a branching growth replay. |
+| `/3d-walkthrough` | Scroll-driven 3D walkthrough site | Turn a floor plan, photos or footage, and a walkthrough guide into a one-floor website. Real estate opens on a dollhouse overview, businesses open on the street. Uses design-skills. |
 
 `/audit` checks whether the AI OS can find its information and perform useful work reliably. Rubric v2 awards points for evidence, not folder counts, API keys, or skills named "daily." Missing or unverified layers cap the total; installed skills cannot compensate for absent connections or execution history. The report includes five retrieval probes, stale-cache and source-authority checks, operating-manual differences, skill-package compatibility, and up to three prioritized improvements. It separates confirmed defects, verification gaps, intentional runtime differences, and optional improvements. The score measures verified operational reliability, not overall usefulness. Old rubric scores need a new baseline.
 
@@ -116,7 +117,7 @@ The complete [skill package](.claude/skills/3d-brain/README.md) includes source 
 
 ### Using the kit in Codex
 
-The six skills are also installed under `.agents/skills/`. Use the skill picker (`/skills` in Codex CLI or the IDE extension), or type `$` and select `audit`, `link`, `onboard`, `level-up`, `grill-me`, or `3d-brain`. Codex normally detects skill updates automatically; restart it if the list does not refresh.
+The seven skills are also installed under `.agents/skills/`. Use the skill picker (`/skills` in Codex CLI or the IDE extension), or type `$` and select `audit`, `link`, `onboard`, `level-up`, `grill-me`, `3d-brain`, or `3d-walkthrough`. Codex normally detects skill updates automatically; restart it if the list does not refresh.
 
 `.claude/skills/` remains the authoring source. After editing a skill, run `bash scripts/sync-codex-skills.sh <skill-name>` to regenerate its Codex copy, supporting files, and menu metadata. The onboard intake template and level-up framework travel with their skills; existing projects retain their own canonical context routes.
 
@@ -152,7 +153,7 @@ AIS-OS/
 ├── brainstorms/                     ← Created by /grill-me; saved interviews (gitignored)
 ├── audits/                          ← Created on first audit; dated private reports (gitignored)
 ├── scripts/sync-codex-skills.sh      ← Regenerates the Codex skill copies
-├── .agents/skills/                  ← Codex copies of all six skills and supporting files
+├── .agents/skills/                  ← Codex copies of all seven skills and supporting files
 └── .claude/
     └── skills/
         ├── onboard/SKILL.md
@@ -160,6 +161,7 @@ AIS-OS/
         ├── level-up/SKILL.md
         ├── grill-me/SKILL.md
         ├── 3d-brain/                ← Skill, portable app template, docs, and validation scripts
+        ├── 3d-walkthrough/          ← Skill, site template, and screenshot script
         └── link/SKILL.md
 ```
 
