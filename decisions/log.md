@@ -105,3 +105,13 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 **Alternatives considered:** Restoring v2 from git history and keeping it at the root next to the demo. Rejected because it would undo the deletions.
 
 **Owner:** Son
+
+## 2026-11-13 - Merge the walkthrough skills into /3d-walkthrough
+
+**Decision:** Replace `/scroll-base-walkthrough` and `/3d-walkthrough-2` with one scroll-based skill, `/3d-walkthrough` (`.claude/skills/3d-walkthrough/`). Inputs are a floor plan, photos and footage, building context, and a walkthrough guide (a line drawn on the plan, or text describing the scroll POV). Real estate and rentals open on a dollhouse overview, then descend to the front door. Businesses open on the street, then walk to the front door. Photos are mapped onto surfaces as real textures. Unbuilt property with no photos is built from the floor plan with interior design. The demo's WASD walking, style switch, light slider, music and phone controls are dropped. The demo is archived under `archives/skills/3d-walkthrough-2/`.
+
+**Why:** Two overlapping skills meant two sets of rules. The scroll-base pipeline is the one that produces a client-ready site, so the dollhouse opening and interior design were added to it.
+
+**Alternatives considered:** Keeping both skills with a mode switch. Making the freeroam HTML file the only pipeline. Rejected because it loses the photo-driven scroll story.
+
+**Owner:** Son
