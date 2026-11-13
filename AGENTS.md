@@ -17,8 +17,7 @@ Read `references/3ms-framework.md` once. It's how Son and Truong think about AI 
 - `/grill-me`: Deepen context through one-question interviews. Saves every answer to `brainstorms/`; requested context-building sessions also update relevant context pages with confirmed facts.
 - `/link`: Link a project, file, folder, or source into the right operating-manual route or index.
 - `/3d-brain`: Choose a brain name and categories, then build a local 3D knowledge globe with Cinema and interactive growth replay. Uses selected local files and the bundled app template.
-- `/scroll-base-walkthrough`: Build a scroll-driven 3D walkthrough site of a one-floor place (restaurant, cafe, bnb, house) from photos or footage, an optional floor plan, and a walkthrough route. Always loads design-skills first.
-- `/3d-walkthrough-2` (demo): Turn a floor plan into one HTML file with a first-person 3D walkthrough, dollhouse view, style switch, light slider, and guided tour. Path: `.claude/skills/3d-walkthrough-2/`.
+- `/3d-walkthrough`: Build a scroll-driven 3D walkthrough website of a one-floor place from a floor plan, photos or footage, building context, and a walkthrough guide (a line on the plan or text). Real estate opens on a dollhouse overview, businesses open on the street. Always loads design-skills first. Path: `.claude/skills/3d-walkthrough/`.
 - `/level-up` — Weekly 3Ms interview. Find one automation, scope it, ship it. One per week.
 
 ### Kit packs (whole repos, in `.claude/skills/`)

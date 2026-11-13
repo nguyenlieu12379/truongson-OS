@@ -13,6 +13,7 @@
 | Key | Type | Notes |
 | --- | --- | --- |
 | `name` | string | Business name |
+| `mode` | string | `'street-open'` (default): the scroll starts outside and walks to the front door, then in. `'dollhouse-open'`: the scroll starts on a high overview of the whole home, then descends to the front door. The roof and ceilings hide while the camera is above the roof. Walls stay full height. |
 | `wallHeight` | number | Default 3.2 |
 | `wallThickness` | number | Default 0.2 |
 | `exposure` | number | Tone-mapping exposure, default 1.05 |
@@ -30,6 +31,7 @@ Anywhere a material is taken, pass a string:
 - A colour: `'#e8dcc8'`
 - A procedural texture, optionally with a base colour: `'wood'`, `'wood:#5a3c26'`, `'brick:#8a4a32'`, `'tile:#efece6'`, `'darktile'`, `'plaster:#e8e1d4'`, `'concrete:#8d8b86'`, `'marble'`, `'checker'`, `'grass'`
 - A finish: `'brass'`, `'steel'`, `'black'`
+- A real photo, cropped and straightened to the surface first: `'photo:assets/photos/<file>.jpg'`. Mapped once, no tiling. Use it for the surfaces a photo shows straight on.
 - Or a `THREE.Material` object.
 
 ## exterior
