@@ -19,6 +19,13 @@
     <div class="progress" aria-hidden="true"><i></i></div>
   </header>
 
+  <!-- Style switch. Shown only when spec.styles exists (real estate). Labels must match the style keys in spec.js. -->
+  <div class="styles" role="group" aria-label="Look" hidden>
+    <button type="button" data-style="modern" aria-pressed="true">Modern</button>
+    <button type="button" data-style="scandinavian" aria-pressed="false">Scandinavian</button>
+    <button type="button" data-style="warm luxury" aria-pressed="false">Warm luxury</button>
+  </div>
+
   <!-- Text panels. Each is shown while scroll progress is inside [data-in, data-out].
        Match these ranges to the camera stops in assets/spec.js. -->
   <main id="top">

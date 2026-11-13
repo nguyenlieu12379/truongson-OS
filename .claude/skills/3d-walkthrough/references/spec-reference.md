@@ -21,6 +21,7 @@
 | `exterior` | object | See below |
 | `insideAt` | `[p0, p1]` | Scroll range where fog and ambient shift from outside to inside |
 | `theme` | object | Overrides the sky preset (see `SKY` in engine.js) |
+| `styles` | object | Real estate only. Named looks for the style switch. See [styles](#styles). |
 | `rooms` | array | Floors, ceilings, lights |
 | `walls` | array | Wall segments with openings |
 | `stops` | array | Camera path |
@@ -106,4 +107,34 @@ All take `(x, z, opts)` and sit on the floor. `rot` turns around y in radians.
 - `pendant` (glow, optional real light with `lightOn`)
 - `wallBoard(x, y, z, { normal: 'n'|'s'|'e'|'w', tex })` for menus, art, house rules
 - `espressoMachine`
+- `art(x, y, z, { normal, w, h, tex, color, frame })`: framed art. Place x, y, z just in front of the wall. `normal` as `wallBoard`.
+- `tableLamp(x, z, { y, shade, base, on })`: lamp on a table. `y` is the table top height.
+- `kitchenDetails(x, z, { w, top, rot })`: sink, hob, cutting board and fruit bowl for a counter. `top` is the counter surface height.
+- `bed` already has pillows and a folded throw. Use it for made beds.
 - `candles` (array of glow sprites to flicker in `update`)
+
+## styles
+
+Real estate only (`mode: 'dollhouse-open'`). Each key is a look. The first key is the default. The engine adds three buttons, `[data-style]`, in `index.html`. Their labels must match the keys.
+
+```js
+styles: {
+  modern:        { wall: '#ecebe8', floor: 'concrete:#8d8b86', ceiling: '#f4f3f0', accent: 'black', fabric: '#3c3c3e', wood: 'wood:#6b5440' },
+  scandinavian:  { wall: '#f3efe6', floor: 'wood:#d8c09a',     ceiling: '#fbfaf6', accent: '#8fa3a0', fabric: '#c9c2b4', wood: 'wood:#e0cfb0' },
+  'warm luxury': { wall: '#e9dccb', floor: 'marble',           ceiling: '#f2e9dc', accent: 'brass',   fabric: '#7a3f2a', wood: 'wood:#4a2f1e' },
+}
+```
+
+| Key | Used for |
+| --- | --- |
+| `wall` | Every wall, both faces |
+| `floor` | Every room floor (tiled to room size) |
+| `ceiling` | Every room ceiling |
+| `accent`, `fabric`, `wood` | Passed to `site.build(ctx, style)` through `ctx.spec.styles[style]` |
+
+What the engine does on a switch: the walls, floors and ceilings take the new palette, the furniture is removed, and `site.build(ctx, style)` runs again. The change fades over about 160 ms, or cuts with reduced motion.
+
+`site.js` contract:
+- `build(ctx, style)` gets the style name. It must put all furniture on `ctx.root`, and use `ctx.props`, `ctx.box`, `ctx.glow` and `ctx.light`, which all default to `ctx.root`.
+- `ctx.style` is the current style name.
+- Anything added to `ctx.scene` directly stays on screen after a switch, and is added again each time. Keep it out of `build`.

@@ -361,3 +361,14 @@ h2 {
   :root { --ink-2: #fff; --ink-3: rgba(255, 255, 255, 0.85); }
   .final, .steps li { box-shadow: inset 0 0 0 1px #fff; }
 }
+
+/* Style switch (real estate only). Fixed bottom-left, hidden when spec.styles is absent. */
+.styles { position: fixed; left: 16px; bottom: 16px; z-index: 5; display: flex; gap: 6px; flex-wrap: wrap; max-width: calc(100vw - 32px); }
+.styles[hidden] { display: none; }
+.styles button {
+  font: inherit; font-size: 13px; color: var(--ink-2); background: rgba(10, 12, 16, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 999px; padding: 7px 14px; cursor: pointer;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.styles button[aria-pressed="true"] { color: var(--ink); background: rgba(255, 255, 255, 0.18); }
+.styles button:active { transform: scale(0.97); }
