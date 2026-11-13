@@ -1,6 +1,6 @@
 # <Site name> (scroll walkthrough)
 
-Scroll-driven 3D walkthrough built with the `scroll-base-walkthrough` skill.
+Scroll-driven 3D walkthrough built with the `3d-walkthrough` skill.
 
 ## Route
 

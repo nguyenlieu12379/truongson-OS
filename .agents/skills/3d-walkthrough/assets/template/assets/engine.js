@@ -149,6 +149,15 @@ function makeMaterial(def, repeat) {
     case 'brass': m = std({ color: 0xb08a4a, roughness: 0.35, metalness: 0.8 }); break;
     case 'steel': m = std({ color: 0xc9ced3, roughness: 0.28, metalness: 0.55 }); break;
     case 'black': m = std({ color: 0x1b1b1d, roughness: 0.4, metalness: 0.6 }); break;
+    case 'photo': {
+      // Real photo on a surface. spec string: 'photo:assets/photos/<file>.jpg'. The photo is
+      // cropped and straightened to the surface beforehand, so it is mapped once (no tiling).
+      const tex = new THREE.TextureLoader().load(arg);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = 4;
+      tex.userData.photo = true;
+      return std({ map: tex, roughness: 0.75 });
+    }
     default: m = std({ color: new THREE.Color(kind), roughness: 0.85 });
   }
   if (m.map) m.map.repeat.set(repeat[0], repeat[1]);
@@ -231,11 +240,14 @@ export function createWalkthrough({ canvas, spec, site }) {
   buildExterior(spec.exterior || {}, B, { box, glow, light, plane, scene, H });
 
   // ---- rooms: floor, ceiling, lights
+  // `upper` = roof and ceilings. In 'dollhouse-open' mode they hide while the camera is above the roof,
+  // so the overview can look down into the rooms.
+  const upper = [];
   for (const r of spec.rooms) {
     const [x0, z0, x1, z1] = r.rect, w = x1 - x0, d = z1 - z0;
     const fm = material(r.floor || 'wood', [w / 3, d / 3]);
     plane(w, d, fm, V((x0 + x1) / 2, 0.006, (z0 + z1) / 2), [-Math.PI / 2, 0, 0]);
-    plane(w, d, r.ceiling || '#1c1714', V((x0 + x1) / 2, H - 0.001, (z0 + z1) / 2), [Math.PI / 2, 0, 0]);
+    upper.push(plane(w, d, r.ceiling || '#1c1714', V((x0 + x1) / 2, H - 0.001, (z0 + z1) / 2), [Math.PI / 2, 0, 0]));
     const lc = r.light ?? '#ffcf9a';
     const n = Math.max(1, Math.round((w * d) / 30));
     for (let i = 0; i < n; i++) {
@@ -244,7 +256,7 @@ export function createWalkthrough({ canvas, spec, site }) {
     }
   }
   // roof slab (seen from outside), sits above interior ceilings
-  box(B.x0 - 0.3, B.x1 + 0.3, H, H + 0.35, B.z0 - 0.3, B.z1 + 0.3, spec.roof || '#2a2826');
+  upper.push(box(B.x0 - 0.3, B.x1 + 0.3, H, H + 0.35, B.z0 - 0.3, B.z1 + 0.3, spec.roof || '#2a2826'));
 
   // ---- walls with openings
   const doors = [];
@@ -400,6 +412,7 @@ export function createWalkthrough({ canvas, spec, site }) {
     posCurve.getPoint(u, tmpP); lookCurve.getPoint(u, tmpL);
     if (!reduceMotion) tmpP.y += Math.sin(time * 1.3) * 0.012;
     camera.position.copy(tmpP); camera.lookAt(tmpL);
+    if (spec.mode === 'dollhouse-open') { const above = tmpP.y > H + 0.5; for (const m of upper) m.visible = !above; }
 
     for (const d of doors) if (d.opensAt) d.pivot.rotation.y = d.dir * d.swing * easeOut(seg(p, d.opensAt[0], d.opensAt[1])) * d.angle;
     const inside = smooth(insideFrom[0], insideFrom[1], p);
@@ -481,7 +494,8 @@ function buildExterior(ex, B, { box, glow, light, plane, scene, H }) {
     else box((s.x ?? cx) - (s.width ?? 5) / 2 - 0.1, (s.x ?? cx) + (s.width ?? 5) / 2 + 0.1, (s.y ?? H + 0.9) - (s.width ?? 5) / 8 - 0.1, (s.y ?? H + 0.9) + (s.width ?? 5) / 8 + 0.1, B.z1 + 0.02, B.z1 + 0.1, s.board || '#1d2a24');
   }
   // facade parapet so the sign has a band to sit on
-  box(B.x0 - 0.3, B.x1 + 0.3, H, H + (ex.parapet ?? 1.6), B.z1 - 0.2, B.z1 + 0.05, ex.facade || 'brick:#7a3a28').material.map?.repeat.set((B.x1 - B.x0) / 4, 1);
+  const facadeMat = box(B.x0 - 0.3, B.x1 + 0.3, H, H + (ex.parapet ?? 1.6), B.z1 - 0.2, B.z1 + 0.05, ex.facade || 'brick:#7a3a28').material;
+  if (facadeMat.map && !facadeMat.map.userData.photo) facadeMat.map.repeat.set((B.x1 - B.x0) / 4, 1);
 
   function streetLamp(x, z, facing) {
     const mat = new THREE.MeshStandardMaterial({ color: 0x1c1d20, roughness: 0.5, metalness: 0.6 });

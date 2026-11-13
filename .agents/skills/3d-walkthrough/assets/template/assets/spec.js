@@ -3,6 +3,7 @@
 // Units are metres. x = right, z = toward the street (front of the building is the max z edge), y = up.
 export default {
   name: 'Little Hour Coffee',
+  mode: 'street-open',     // 'street-open' (street, then the front door) | 'dollhouse-open' (overview of the whole home first)
   wallHeight: 3.2,
   exterior: {
     kind: 'street',          // 'street' (city frontage) or 'garden' (house, bnb)
