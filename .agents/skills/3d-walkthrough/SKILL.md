@@ -17,7 +17,10 @@ Before writing any code, read the design-skills pack. It sets the quality bar fo
 1. `.claude/skills/design-skills/skills/emil-design-eng/SKILL.md` (entry point)
 2. `.claude/skills/design-skills/skills/apple-design/SKILL.md` (springs, materials, typography, reduced motion)
 3. `.claude/skills/design-skills/skills/choreograph/SKILL.md` (sequencing panels and scene beats)
-4. `.claude/skills/design-skills/ui-cheatsheet.md` and `performance-cheatsheet.md`
+4. `.claude/skills/design-skills/skills/animate/SKILL.md` (motion for panels, the hero objects, and interactions)
+5. `.claude/skills/design-skills/skills/animation-vocabulary/SKILL.md` (naming and choosing the right motion)
+6. `.claude/skills/design-skills/skills/animation-performance/SKILL.md` (keeping scroll-driven 3D smooth on laptops and phones)
+7. `.claude/skills/design-skills/ui-cheatsheet.md` and `performance-cheatsheet.md`
 
 Use `review-animations` in step 7. Apply what they say over anything in this file that conflicts.
 
