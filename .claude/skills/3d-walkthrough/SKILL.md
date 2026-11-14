@@ -1,12 +1,12 @@
 ---
 name: 3d-walkthrough
-description: Use when someone asks for a scroll-based 3D walkthrough website of a one-floor place. Real estate and rentals open on a dollhouse overview of the whole home, then descend to the front door, and get a 3-style switch (modern, Scandinavian, warm luxury). Businesses (cafe, shop, restaurant, bar, bnb, salon, studio) open on the street, walk to the front door, then go in. Inputs are a floor plan, photos and footage, building context, and a walkthrough guide (a line drawn on the plan, or text describing the scroll POV). Unbuilt property with no photos is built from the floor plan alone, with interior design. Also runs as /3d-walkthrough.
+description: Use when someone asks for a scroll-based 3D walkthrough website of a F&B, or BnBs, rentals, contructions, building, . Get a 3-style switch (modern, Scandinavian, warm luxury). Inputs are a floor plan, photos and footage, building context, and a walkthrough guide (a line drawn on the plan, or text describing the scroll POV). Unbuilt property with no photos is built from the floor plan alone, with interior design. Also runs as /3d-walkthrough.
 argument-hint: "[place name] [floor plan] [photos/footage + manifest] [context] [walkthrough guide]"
 ---
 
 # 3D Walkthrough
 
-Build a scroll-driven 3D website of a one-floor place. As the visitor scrolls, the camera walks them through the building, and each room gets text and one animated moment. The building is modelled in code with three.js. Where the client has real photos, those photos go onto the surfaces they show, so the scene looks like the real place.
+Build a scroll-driven 3D website of a building, house, construction, etc. As the visitor scrolls, the camera walks them through the building, and each room gets text and one animated moment. The building is modelled in code with three.js. Where the client has real photos, those photos go onto the surfaces they show, so the scene looks like the real place.
 
 Reference build: `websites/TruongSon-demos/forno-notte/` (pizzeria, street to oven). The starter template in `assets/template/` is a generalised version of it.
 
@@ -46,6 +46,7 @@ Set `spec.mode` from what the place is.
 
 - **`dollhouse-open`**: real estate, rentals, a home for sale or let. The scroll opens on a high overview of the whole home, then the camera descends to the front door and walks room by room. This is the only mode that gets the style switch.
 - **`street-open`**: any one-floor business (cafe, shop, restaurant, bar, bnb, salon, studio). The scroll starts on the street, walks to the front door, then goes in. No dollhouse.
+- or anything user mention in the walkthrough guide
 
 If the place type is unclear, ask.
 
