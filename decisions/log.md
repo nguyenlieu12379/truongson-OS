@@ -115,3 +115,13 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 **Alternatives considered:** Keeping both skills with a mode switch. Making the freeroam HTML file the only pipeline. Rejected because it loses the photo-driven scroll story.
 
 **Owner:** Son
+
+## 2026-11-14 - Add Muapi video generation as muapi-video
+
+**Decision:** Vendor the video subset of SamurAIGPT/muapi-skills (MIT) into `.claude/skills/muapi-video/` as a kit pack. It covers text-to-video, image-to-video, and 16 motion recipes, all calling the Muapi API. Link it from CLAUDE.md and AGENTS.md, add it to `connections.md` as domain 8, and save the API guide at `references/muapi-api.md`. Auth is `MUAPI_API_KEY`, which is not set yet. The open-generative-ai studio app is referenced for context only and is not installed.
+
+**Why:** Claude needs a video generation path. open-generative-ai is a browser studio on the same Muapi API, and its agent-ready skill and CLI are muapi-skills and muapi-cli.
+
+**Alternatives considered:** Installing the whole open-generative-ai Next.js/Electron app (heavy, and it is a UI for people, not a tool for Claude). Using `npx skills add` at runtime (not reproducible and not pinned). Installing `muapi-cli` globally (not vendored; can be added later).
+
+**Owner:** To confirm (Son or Truong)
