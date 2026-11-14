@@ -189,10 +189,10 @@ Headless rendering uses software GL and is slow; the script waits for the camera
 
 ## 9. Blender film (output `film` or `both`)
 
-Read [Blender film](references/blender-film.md) first. It has an example beat sheet, the setup, the script API, the match cut maths and every mistake already made. Reference build: `3d/coastal-cottage/`.
+Read [Blender film](references/blender-film.md) first. It has an example beat sheet, the setup, the script API, the match cut maths and every mistake already made. Reference build: `projects/coastal-cottage/`.
 
 1. **Set up Blender.** `pip install bpy pillow` in a venv in the scratchpad. Cycles on CPU in the cloud; EEVEE does not run headless there.
-2. **Copy the templates** from `assets/blender/` (`build_model.py`, `build_film.py`) into `3d/<place-name>/`, or `websites/<owner>/<site>/film/` for `both`.
+2. **Copy the templates** from `assets/blender/` (`build_model.py`, `build_film.py`) into `projects/<place-name>/`, or `websites/<owner>/<site>/film/` for `both`.
 3. **Model** in `build_model.py`: dimensions in feet at the top, walls with openings, rooms, furniture, roof, site. Keep the collection names; the film animates by collection. Run it with `--no-render` until it builds clean, then render the four stills and read them. Check the plan cutaway against the floor plan.
 4. **Route** in `build_film.py`: write the `shots` list from the walkthrough guide: its start, every stop in order, and its end shot. Add or drop beats (plan on a table, build-up, dollhouse, roof landing) only as the guide asks. Point the door and slider names at the doors on the route. Show the user the plan with numbered stops before rendering, as in step 3.
 5. **Test** with `--test`: read the stills as one contact sheet. Fix framing, exposure, clipping and anything blocking the end shot. Repeat until clean.

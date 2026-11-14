@@ -2,7 +2,7 @@
 
 How to turn a floor plan into a rendered MP4 walkthrough with Blender. Use it when the output is `film` or `both`.
 
-Reference build: `3d/coastal-cottage/` (elevated beach cottage, 43 s film). The templates in `assets/blender/` are generalised copies of it.
+Reference build: `projects/coastal-cottage/` (elevated beach cottage, 43 s film). The templates in `assets/blender/` are generalised copies of it.
 
 ## Example beat sheet
 
@@ -33,10 +33,10 @@ python3 -m venv <scratchpad>/bl && <scratchpad>/bl/bin/pip install bpy pillow
 
 ## Scripts
 
-Copy both into the project folder (`3d/<place-name>/` for a film on its own, or `websites/<owner>/<site>/film/` next to a site):
+Copy both into the project folder (`projects/<place-name>/` for a film on its own, or `websites/<owner>/<site>/film/` next to a site):
 
 ```bash
-mkdir -p 3d/<place-name> && cp .claude/skills/3d-walkthrough/assets/blender/*.py 3d/<place-name>/
+mkdir -p projects/<place-name> && cp .claude/skills/3d-walkthrough/assets/blender/*.py projects/<place-name>/
 ```
 
 ### `build_model.py`: the house
