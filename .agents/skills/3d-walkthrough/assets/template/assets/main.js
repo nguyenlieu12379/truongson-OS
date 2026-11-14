@@ -11,9 +11,7 @@ for (const s of spec.stops.filter((s) => s.chapter)) {
   nav.append(b);
 }
 
-try {
-  createWalkthrough({ canvas: document.getElementById('scene'), spec, site });
-} catch (e) {
-  document.body.insertAdjacentHTML('beforeend', '<p class="noscript">This experience needs WebGL.</p>');
-  throw e;
-}
+createWalkthrough({ canvas: document.getElementById('scene'), spec, site }).catch((e) => {
+  document.body.insertAdjacentHTML('beforeend', '<p class="noscript">This experience needs WebGL, and the 3D model must load (serve the folder over http).</p>');
+  console.error(e);
+});

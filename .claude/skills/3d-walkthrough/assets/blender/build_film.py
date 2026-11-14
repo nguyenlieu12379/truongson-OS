@@ -323,7 +323,7 @@ for o in [bpy.data.objects["Floor_Beams"]] + objs("Floors"):
 walls = sorted(objs("Exterior") + objs("Walls"), key=lambda o: o.location.x * 0.4 + o.location.y)
 for i, o in enumerate(walls):
     grow(o, 2, 225 + int(i * 55 / len(walls)), 16)
-for o in objs("Glass") + [bpy.data.objects["Ext_Front_door2"]]:
+for o in objs("Glass") + [bpy.data.objects["Door_Front"]]:
     grow(o, 2, 285, 14)
 
 # stairs, rails, columns
@@ -353,7 +353,7 @@ for o in objs("Ceiling"):
 hide_from(decal, ROOF_T0)
 
 # front door swings in, rear slider retracts into its pocket
-door = bpy.data.objects["Ext_Front_door2"]
+door = bpy.data.objects["Door_Front"]
 door.data.transform(Matrix.Translation((0, 0, 0)))
 vx = [v.co.x for v in door.data.vertices]
 hinge = min(vx)
@@ -361,7 +361,7 @@ door.data.transform(Matrix.Translation((-hinge, 0, 0)))
 door.location.x += hinge
 key(door, "rotation_euler", 668, 0.0, 2)
 key(door, "rotation_euler", 706, math.radians(100), 2)
-slider = bpy.data.objects["Ext_Rear_slider2"]
+slider = bpy.data.objects["Door_Rear_Slider"]
 # slider already has a z-grow; add x retract (origin to its min x)
 vxs = [v.co.x for v in slider.data.vertices]
 sx0 = min(vxs)
@@ -374,6 +374,9 @@ key(slider, "scale", 900, 0.06, 0)
 for o in objs("Labels"):
     o.hide_render = True
 
+# the model's point lights are for the website; the film uses soft area lights instead
+for o in list(collections["Lights"].objects):
+    bpy.data.objects.remove(o)
 # soft interior lights (ceiling level), invisible to camera
 for nm, x, y, e in [("Great", 26, 32, 260), ("Kitchen", 22, 15, 160), ("Dining", 32, 15, 120),
                     ("Master", 8, 34, 150), ("Bed2", 43, 35, 130), ("Study", 43, 14, 110),

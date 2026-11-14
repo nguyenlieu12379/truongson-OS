@@ -1,7 +1,18 @@
 """Build a single-story elevated coastal cottage in Blender.
 
-Footprint from a published plan: 50' W x 54'10" D, max ridge 27'8", 2 bed, single story.
-Room layout below is our own interpretation (room sizes weren't published).
+This is the ONE place the building is modelled. The website loads the exported model.glb and
+the film (build_film.py) animates the same scene. Example: elevated coastal cottage, 50' x 54'10".
+
+Web conventions (the site engine relies on them, see references/blender-model.md):
+- Units: everything is built in feet and converted with FT, so Blender units are metres.
+- Axes: x across the front, y from the street (y=0) to the back, z up. glTF/three.js gets
+  (x, z, -y): street side is max z, matching spec.js.
+- Style materials are named exactly: wall, floor, ceiling, fabric, wood, accent.
+- Glass materials start with "Glass". The site swaps them for a cheap transparent glass.
+- obj["role"] = "upper" (roof, ceilings: hidden in dollhouse view), "site" (ground, sea),
+  "door" (origin on the hinge, rotates about its local up axis).
+- obj["style"] = "<style key>" shows an object only in that style (optional).
+- Point lights in the "Lights" collection are exported. Area lights and the sun are not.
 
 Run:  python build_model.py            (needs `pip install bpy`)
   or: blender -b -P build_model.py
@@ -12,6 +23,7 @@ import os
 import sys
 
 import bpy
+from mathutils import Matrix
 
 OUT = os.path.dirname(os.path.abspath(__file__))
 RENDER = "--no-render" not in sys.argv
@@ -62,8 +74,10 @@ def mat(name, color, rough=0.6, metal=0.0, alpha=1.0, transmission=0.0):
 M = {
     "siding": mat("Siding_White", (0.86, 0.87, 0.85), 0.7),
     "trim": mat("Trim_White", (0.95, 0.95, 0.94), 0.5),
-    "int_wall": mat("Interior_Wall", (0.92, 0.90, 0.85), 0.8),
-    "floor": mat("Oak_Floor", (0.55, 0.40, 0.26), 0.45),
+    "int_wall": mat("wall", (0.92, 0.90, 0.85), 0.8),
+    "floor": mat("floor", (0.55, 0.40, 0.26), 0.45),
+    "ceiling": mat("ceiling", (0.95, 0.95, 0.94), 0.8),
+    "wood": mat("wood", (0.42, 0.30, 0.20), 0.5),
     "tile": mat("Bath_Tile", (0.80, 0.84, 0.86), 0.3),
     "deck": mat("Deck_Wood", (0.42, 0.33, 0.25), 0.7),
     "roof": mat("Metal_Roof", (0.30, 0.38, 0.42), 0.35, 0.8),
@@ -74,8 +88,8 @@ M = {
     "water": mat("Ocean", (0.05, 0.30, 0.38), 0.05, transmission=0.3),
     "grass": mat("Dune_Grass", (0.45, 0.50, 0.28), 0.9),
     "counter": mat("Counter", (0.93, 0.93, 0.92), 0.2),
-    "cabinet": mat("Cabinet", (0.35, 0.48, 0.52), 0.5),
-    "fabric": mat("Sofa", (0.78, 0.74, 0.66), 0.9),
+    "cabinet": mat("accent", (0.35, 0.48, 0.52), 0.5),
+    "fabric": mat("fabric", (0.78, 0.74, 0.66), 0.9),
     "bed": mat("Bedding", (0.96, 0.96, 0.96), 0.9),
 }
 
@@ -159,6 +173,36 @@ def slider(c, w=8.0):
     return (c, w, 0.0, 8.0, "slider")
 
 
+def photo(name, image_path, a, b, z0, z1, inset=0.05, collection="Photos"):
+    """A client photo on a wall: a vertical plane from plan point a to b (feet, axis-aligned),
+    z0..z1 feet high, pulled `inset` feet off the wall toward the camera side. The photo must
+    already be cropped and straightened to that rectangle. It is packed into model.glb."""
+    (x0, y0), (x1, y1) = a, b
+    nx, ny = (0, inset) if y0 == y1 else (inset, 0)
+    vs = [(x0 + nx, y0 + ny, z0), (x1 + nx, y1 + ny, z0), (x1 + nx, y1 + ny, z1), (x0 + nx, y0 + ny, z1)]
+    me = bpy.data.meshes.new(name)
+    me.from_pydata([(vx * FT, vy * FT, vz * FT) for vx, vy, vz in vs], [], [(0, 1, 2, 3)])
+    uv = me.uv_layers.new()
+    for i, (u, v) in enumerate([(0, 0), (1, 0), (1, 1), (0, 1)]):
+        uv.data[i].uv = (u, v)
+    m = bpy.data.materials.new(f"Photo_{name}")
+    m.use_nodes = True
+    tex = m.node_tree.nodes.new("ShaderNodeTexImage")
+    tex.image = bpy.data.images.load(image_path)
+    tex.image.pack()
+    bsdf = m.node_tree.nodes["Principled BSDF"]
+    m.node_tree.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
+    bsdf.inputs["Roughness"].default_value = 0.75
+    me.materials.append(m)
+    o = bpy.data.objects.new(name, me)
+    coll(collection).objects.link(o)
+    return o
+
+
+# Example (uncomment with a real, cropped photo):
+# photo("Photo_Kitchen_Backsplash", os.path.join(OUT, "photos/backsplash.jpg"), (16.3, 8.6), (28, 8.6), 3.2, 5)
+
+
 # ---------- foundation: pilings + floor platform ----------
 for x in (1, 13, 25, 37, 49):
     for y in (1, 8, 18, 28, 38, 42, D - 1):
@@ -240,7 +284,7 @@ wall("Int_Bed2_S", (36, 28), (W, 28), WALL_T)
 wall("Int_Bath2_Linen", (44, 20), (44, 28), WALL_T, [door(4, 2.5)])
 
 # Ceiling (hidden in plan render)
-box("Ceiling", 0, BODY_Y0, FLOOR_Z + CEIL, W, BODY_Y1, FLOOR_Z + CEIL + 0.3, M["trim"], "Ceiling")
+box("Ceiling", 0, BODY_Y0, FLOOR_Z + CEIL, W, BODY_Y1, FLOOR_Z + CEIL + 0.3, M["ceiling"], "Ceiling")
 
 # ---------- hip roof over full footprint ----------
 OH = 1.5
@@ -363,6 +407,79 @@ for txt, x, y in rooms:
     coll("Labels").objects.link(o)
 
 
+# ---------- web conventions: furniture wood, roles, doors, room lights ----------
+for o in coll("Furniture").objects:
+    if o.data.materials and o.data.materials[0] == M["deck"]:
+        o.data.materials[0] = M["wood"]
+for cname, role in (("Roof", "upper"), ("Ceiling", "upper"), ("Site", "site")):
+    for o in coll(cname).objects:
+        o["role"] = role
+
+
+def make_door(old, new, hinge="min"):
+    """Rename a door/slider and put its origin on the hinge edge: x min (or max), the centre of
+    its thickness, and its bottom. box() bakes every object's location into the mesh, so without
+    this the door would pivot around the world origin."""
+    o = bpy.data.objects[old]
+    o.name = new
+    w = [o.matrix_world @ v.co for v in o.data.vertices]
+    hx = min(p.x for p in w) if hinge == "min" else max(p.x for p in w)
+    hy = (min(p.y for p in w) + max(p.y for p in w)) / 2
+    hz = min(p.z for p in w)
+    o.data.transform(o.matrix_world.inverted())          # mesh back to world space
+    o.data.transform(Matrix.Translation((-hx, -hy, -hz)))
+    o.matrix_world = Matrix.Translation((hx, hy, hz))
+    o["role"] = "door"
+    return o
+
+
+make_door("Ext_Front_door2", "Door_Front")          # front door, opens inward
+make_door("Ext_Rear_slider2", "Door_Rear_Slider")   # rear slider, slides toward its pocket
+
+for nm, x, y, w in [("Great", 26, 32, 90), ("Kitchen", 22, 15, 60), ("Dining", 32, 15, 45),
+                    ("Master", 8, 34, 55), ("Bed2", 43, 35, 50), ("Study", 43, 14, 40),
+                    ("MBath", 5, 20, 25), ("Bath2", 40, 24, 25), ("Laundry", 8, 11, 15)]:
+    L = bpy.data.objects.new(f"Light_{nm}", bpy.data.lights.new(f"Light_{nm}", "POINT"))
+    L.data.energy = w
+    L.data.color = (1.0, 0.9, 0.78)
+    L.data.shadow_soft_size = 0.5
+    L.location = (x * FT, y * FT, (FLOOR_Z + CEIL - 1.2) * FT)
+    coll("Lights").objects.link(L)
+
+
+def export_web_glb(path):
+    """Export what the website needs: no labels, no sun, no cameras. Static meshes are joined
+    per collection and material so the site draws a few dozen meshes, not hundreds."""
+    keep_separate = lambda o: "role" in o and o["role"] in ("door",) or "style" in o  # noqa: E731
+    for cname in ("Structure", "Floors", "Exterior", "Walls", "Glass", "Furniture", "Site", "House"):
+        if cname not in collections:
+            continue
+        groups = {}
+        for o in list(collections[cname].objects):
+            if o.type != "MESH" or keep_separate(o) or not o.data.materials:
+                continue
+            groups.setdefault(o.data.materials[0].name, []).append(o)
+        for mname, objs in groups.items():
+            if len(objs) < 2:
+                continue
+            role = objs[0].get("role")
+            with bpy.context.temp_override(active_object=objs[0], selected_editable_objects=objs,
+                                           selected_objects=objs):
+                bpy.ops.object.join()
+            objs[0].name = f"{cname}_{mname}"
+            if role:
+                objs[0]["role"] = role
+    bpy.ops.object.select_all(action="DESELECT")
+    for o in scene.objects:
+        skip = any(c.name in ("Labels",) for c in o.users_collection) or o.type in ("CAMERA",) \
+            or (o.type == "LIGHT" and o.data.type != "POINT")
+        o.select_set(not skip)
+    bpy.ops.export_scene.gltf(filepath=path, export_format="GLB", use_selection=True,
+                              export_extras=True, export_lights=True, export_apply=True,
+                              export_import_convert_lighting_mode="COMPAT",
+                              export_yup=True)
+
+
 # ---------- cameras + renders ----------
 def look_at(cam, target):
     from mathutils import Vector
@@ -431,8 +548,6 @@ hide(["Labels"], True)
 scene.camera = cams["front_street"]
 if SAVE:
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, "model.blend"))
-    try:
-        bpy.ops.export_scene.gltf(filepath=os.path.join(OUT, "model.glb"), export_format="GLB")
-    except Exception as e:  # glTF addon may be missing in some bpy builds
-        print("glb export skipped:", e)
+    # joins meshes for the web, so it runs after the .blend is saved (the film needs them separate)
+    export_web_glb(os.path.join(OUT, "model.glb"))
 print("done")

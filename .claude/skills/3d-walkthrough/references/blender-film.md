@@ -2,7 +2,7 @@
 
 How to turn a floor plan into a rendered MP4 walkthrough with Blender. Use it when the output is `film` or `both`.
 
-Reference build: `3d/coastal-cottage/` (elevated beach cottage, 43 s film). The templates in `assets/blender/` are generalised copies of it.
+Reference build: `3d/coastal-cottage/` (elevated beach cottage, 43 s film). The film animates the Blender model from step 5, so build that first.
 
 ## Example beat sheet
 
@@ -21,38 +21,19 @@ The film's start, route and end come from the walkthrough guide, asked for befor
 
 If the guide gives no start or end, ask. Do not fill the gap with this example.
 
-## Setup (cloud or local)
+## Setup
 
-```bash
-python3 -m venv <scratchpad>/bl && <scratchpad>/bl/bin/pip install bpy pillow
-```
+Same venv as the model: see [Blender model](blender-model.md). The film needs Pillow for the plan drawing.
 
-- `bpy` is Blender as a Python module (5.3 at the time of writing, about 400 MB). It must match the Python version (bpy 5.x needs Python 3.13). No Blender app needed.
-- EEVEE does not render headless in the cloud container (no EGL or GPU). Use Cycles on CPU. On the user's own PC with a GPU, EEVEE is fine and much faster.
 - Video output in Blender 5: set `image_settings.media_type = "VIDEO"` before `file_format = "FFMPEG"`. Older versions only need the second line. The template handles both.
 
 ## Scripts
 
-Copy both into the project folder (`3d/<place-name>/` for a film on its own, or `websites/<owner>/<site>/film/` next to a site):
-
-```bash
-mkdir -p 3d/<place-name> && cp .claude/skills/3d-walkthrough/assets/blender/*.py 3d/<place-name>/
-```
-
-### `build_model.py`: the house
-
-Everything is in feet at the top (`W`, `D`, `FLOOR_Z`, `CEIL`, body extents, ridge). Edit these, then the sections in order:
-
-- `box(name, x0, y0, z0, x1, y1, z1, material, collection)`: axis-aligned box in feet. Every part of the house is one of these.
-- `wall(name, a, b, thickness, openings, material, collection)`: straight wall from point a to b. Openings are `win(center, width)`, `door(center, width)`, `slider(center, width)` or `(center, width, sill, head, "front_door")`. The wall is split into segments around each opening, and glass panes go in the window and slider gaps.
-- Plan axes: x across the front, y from the street (y=0) toward the back, z up. Opposite from the website spec, which uses z toward the street.
-- Collections matter. The film script animates by collection: `Structure`, `Floors`, `Exterior`, `Walls`, `Glass`, `House` (front door), `Furniture`, `Roof`, `Ceiling`, `Site`, `Labels`.
-- `rooms` list: label text and position for each room. Used for the 3D labels and the 2D plan drawing.
-- Renders four stills (front, back, plan cutaway, aerial cutaway) and saves `model.blend` plus `model.glb`. The `.glb` can feed a three.js site.
+`build_film.py` sits next to `build_model.py` (the model from step 5) and runs it first. The model script, its building blocks and conventions are in [Blender model](blender-model.md).
 
 ### `build_film.py`: the animation
 
-Runs `build_model.py` first, then adds:
+Runs `build_model.py` first (removing its point lights, which are for the website), then adds:
 
 1. **2D plan drawing** (Pillow), made from the model's own geometry. Walls cut at 4 ft above the floor become solid black, glass becomes thin blue lines, furniture becomes outlines, decks get board lines. Room labels, title block, scale bar. Saved as `floor_plan.png`. It always matches the model, so never draw it by hand.
 2. **Table scene** far from the site (`TX, TY`), with the plan at 1:30 on the desk.
@@ -63,7 +44,7 @@ Runs `build_model.py` first, then adds:
 
 Edit for a new place:
 - `shots`: the camera path from the walkthrough guide. Eye height `F + 5.5` ft. Go through door centres.
-- The front door and slider names (`Ext_Front_door2`, `Ext_Rear_slider2`): names come from the wall name plus opening index, sorted by centre. Change them to the doors on the route.
+- The door names (`Door_Front`, `Door_Rear_Slider` in the example): doors made with `make_door()` in the model. Change them to the doors on the route.
 - Room light positions and power.
 - Site dressing (boardwalk, dunes, street) to fit the place.
 
