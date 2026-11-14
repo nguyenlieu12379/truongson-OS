@@ -6,6 +6,10 @@
 # references/tool-agnostic-setup.md), so the two must stay in sync. Pass one or more
 # skill names to sync only those skills; omit arguments to sync everything.
 #
+# Vendored packs (a VENDORED.md at the pack root) are copied verbatim, with no path
+# transform. Their docs describe the upstream repo's own layout (e.g. video-edit-kit's
+# nested .claude/skills/), so rewriting them would produce wrong text in the mirror.
+#
 # What it does: copies every canonical skill forward (overwrite) and applies the Codex
 # path transform (.claude/skills -> .agents/skills) to markdown files only. Claude
 # agent references stay under .claude/agents and scripts/binary assets copy verbatim.
@@ -21,6 +25,7 @@ SRC=".claude/skills"
 DST=".agents/skills"
 mkdir -p "$DST"
 count=0
+vendored=0
 
 if [ "$#" -gt 0 ]; then
   dirs=()
@@ -38,12 +43,17 @@ fi
 for dir in "${dirs[@]}"; do
   name="$(basename "$dir")"
   cp -rf "$SRC/$name" "$DST/"
+  if [ -f "$SRC/$name/VENDORED.md" ]; then
+    vendored=$((vendored + 1))
+    count=$((count + 1))
+    continue
+  fi
   while IFS= read -r -d '' f; do
     perl -pi -e 's#\.claude/skills/#.agents/skills/#g' "$f"
   done < <(find "$DST/$name" -name '*.md' -type f -print0)
   count=$((count + 1))
 done
-echo "Synced $count skills: $SRC -> $DST (transform: .claude/skills -> .agents/skills on *.md)."
+echo "Synced $count skills: $SRC -> $DST (transform: .claude/skills -> .agents/skills on *.md; $vendored vendored packs copied verbatim)."
 
 # Warn about orphans: skills in the mirror with no canonical source.
 if [ "$#" -eq 0 ]; then
