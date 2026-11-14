@@ -10,7 +10,7 @@ Build a scroll-driven 3D website of a building, house, construction, etc. As the
 
 **One method: Blender.** The building is modelled in Blender from a Python script (`assets/blender/build_model.py`) and exported as `model.glb`. The website loads that model with three.js and walks the camera through it. The same Blender scene renders the film. Where the client has real photos, they go onto the surfaces they show, in Blender, so the scene looks like the real place.
 
-Reference build: the template's example (`assets/template/`, a coastal cottage) and its film, `3d/coastal-cottage/`. `websites/TruongSon-demos/forno-notte/` is an older site built the previous, code-only way. Do not copy its method.
+Reference build: the template's example (`assets/template/`, a coastal cottage) and its film, `projects/coastal-cottage/`. `websites/TruongSon-demos/forno-notte/` is an older site built the previous, code-only way. Do not copy its method.
 
 ## 0. Load the design skill. Every run.
 
@@ -134,7 +134,7 @@ mkdir -p websites/<owner>/<site-name>/blender && cp .agents/skills/3d-walkthroug
 python3 -m venv <scratchpad>/bl && <scratchpad>/bl/bin/pip install bpy pillow
 ```
 
-For a film with no site, use `3d/<place-name>/` for the scripts instead and skip the template.
+For a film with no site, use `projects/<place-name>/` for the scripts instead and skip the template.
 
 Template files:
 - `index.html`: text panels with `data-in` / `data-out` scroll ranges, brand in the nav
@@ -203,7 +203,7 @@ Headless rendering uses software GL and is slow; the script waits for the camera
 
 ## 9. Blender film (output `film` or `both`)
 
-The model from step 5 is the film's set. Read [Blender film](references/blender-film.md) first. It has an example beat sheet, the script API, the match cut maths and every mistake already made. Reference build: `3d/coastal-cottage/`.
+The model from step 5 is the film's set. Read [Blender film](references/blender-film.md) first. It has an example beat sheet, the script API, the match cut maths and every mistake already made. Reference build: `projects/coastal-cottage/`.
 
 1. **Copy** `assets/blender/build_film.py` next to `build_model.py`. It runs the model script first, then animates it.
 2. **Check the model** renders (step 5) if it was built for the film only.

@@ -2,7 +2,7 @@
 
 Every output starts here. The building is modelled once, in Blender, from a Python script (`assets/blender/build_model.py`). The website loads the exported `model.glb`. The film animates the same scene. There is no other way to build the place.
 
-Example: the template ships the coastal cottage (`3d/coastal-cottage/` is the full film build of it).
+Example: the template ships the coastal cottage (`projects/coastal-cottage/` is the full film build of it).
 
 ## Setup
 
@@ -20,7 +20,7 @@ python3 -m venv <scratchpad>/bl && <scratchpad>/bl/bin/pip install bpy pillow
 mkdir -p websites/<owner>/<site>/blender && cp .agents/skills/3d-walkthrough/assets/blender/build_model.py websites/<owner>/<site>/blender/
 ```
 
-For a film add `build_film.py` next to it. For a film with no site, use `3d/<place-name>/` instead.
+For a film add `build_film.py` next to it. For a film with no site, use `projects/<place-name>/` instead.
 
 Run it:
 

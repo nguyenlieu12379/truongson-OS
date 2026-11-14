@@ -2,7 +2,7 @@
 
 How to turn a floor plan into a rendered MP4 walkthrough with Blender. Use it when the output is `film` or `both`.
 
-Reference build: `3d/coastal-cottage/` (elevated beach cottage, 43 s film). The film animates the Blender model from step 5, so build that first.
+Reference build: `projects/coastal-cottage/` (elevated beach cottage, 43 s film). The film animates the Blender model from step 5, so build that first.
 
 ## Example beat sheet
 
