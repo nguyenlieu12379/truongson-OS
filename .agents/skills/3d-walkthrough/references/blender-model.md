@@ -65,6 +65,7 @@ Plan axes: x across the front, y from the street (y = 0) toward the back, z up.
 - **Door pivoting around the world origin.** `box()` bakes the location into the mesh, so every origin is at (0, 0, 0). A door rotated without moving its origin swings in a huge arc. Always use `make_door`.
 - **Ghost walls, roof that never lands, black ground edges**: see [Blender film](blender-film.md).
 - **Lights too bright or too dim on the site.** Export uses the COMPAT lighting mode (watts / 4π). Tune with `spec.lightScale` instead of re-exporting.
+- **Furniture across a doorway.** The cottage kitchen counter ran along the front wall straight across the front door. Check every door on the route is clear in the plan cutaway render, and keep tall furniture at least 2 ft from door openings.
 - **Missing room in the site.** Check the plan cutaway render against the floor plan before exporting.
 
 ## Check before exporting
