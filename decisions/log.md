@@ -125,3 +125,13 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 **Alternatives considered:** Installing the whole open-generative-ai Next.js/Electron app (heavy, and it is a UI for people, not a tool for Claude). Using `npx skills add` at runtime (not reproducible and not pinned). Installing `muapi-cli` globally (not vendored; can be added later).
 
 **Owner:** To confirm (Son or Truong)
+
+## 2026-11-14 - Remove muapi-video from the AIOS
+
+**Decision:** Move `.claude/skills/muapi-video/` to `archives/skills/muapi-video/` and `references/muapi-api.md` to `archives/references/muapi-api.md`. Remove the CLAUDE.md and AGENTS.md entries and the `connections.md` row 8.
+
+**Why:** No way to use it. Muapi needs a key that isn't set, and the local option (Wan2GP) needs an NVIDIA or AMD GPU that isn't available here.
+
+**Alternatives considered:** Deleting the files (rejected: house rule is to archive, and the pack may be reused later). Keeping it in place with a "not active" note (rejected: stale skills mislead routing).
+
+**Owner:** To confirm (Son or Truong)
