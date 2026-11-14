@@ -1,6 +1,6 @@
 ---
 name: 3d-walkthrough
-description: Use when someone asks for a scroll-based 3D walkthrough website of a F&B, or BnBs, rentals, contructions, building, . Get a 3-style switch (modern, Scandinavian, warm luxury). Inputs are a floor plan, photos and footage, building context, and a walkthrough guide (a line drawn on the plan, or text describing the scroll POV). Unbuilt property with no photos is built from the floor plan alone, with interior design. Also runs as /3d-walkthrough.
+description: Use when someone asks for a scroll-based 3D walkthrough website of a F&B, or BnBs, rentals, contructions, building, . Get a 3-style switch (modern, Scandinavian, warm luxury). Inputs are a floor plan, photos and footage, building context, and a walkthrough guide (a line drawn on the plan, or text describing the scroll POV). Unbuilt property with no photos is built from the floor plan alone, with interior design. Can also (or instead) produce a Blender film: an MP4 that starts on the floor plan on a table, builds the house from the ground up, shows a dollhouse, lands the roof, then walks in the front door to the hero view. Use it when someone asks to build a house or place in Blender or wants a walkthrough video. Also runs as /3d-walkthrough.
 argument-hint: "[place name] [floor plan] [photos/footage + manifest] [context] [walkthrough guide]"
 ---
 
@@ -49,6 +49,14 @@ Set `spec.mode` from what the place is.
 - or anything user mention in the walkthrough guide
 
 If the place type is unclear, ask.
+
+### Pick the output
+
+- **`site`** (default): the scroll-driven three.js website. Steps 4 to 8.
+- **`film`**: a Blender scene and a rendered MP4. Skip steps 4 to 7 and go to step 9.
+- **`both`**: build the film from the same plan and route, and use its `model.glb` as a check on the site's layout.
+
+If the user says "Blender", "video", "film", "render" or "animation", the output is `film`. Otherwise ask, with `site` as the recommended option.
 
 ### Unbuilt real estate (no photos)
 
@@ -176,6 +184,18 @@ Headless rendering uses software GL and is slow; the script waits for the camera
 3. Send the user key screenshots and list any placeholders still open, plus every assumption made (wall height, finishes, furniture for unbuilt property).
 4. Ask before publishing. If yes: add a copy step for the site to `.github/workflows/deploy-pages.yml` (`_site/<site-name>/`), keep the existing sites, and go through a PR to `main`. Do not change the root redirect unless asked.
 5. Commit on the working branch. Suggest a `decisions/log.md` entry for any choice worth keeping.
+
+## 9. Blender film (output `film` or `both`)
+
+Read [Blender film](references/blender-film.md) first. It has the beat sheet, the setup, the script API, the match cut maths and every mistake already made. Reference build: `3d/coastal-cottage/`.
+
+1. **Set up Blender.** `pip install bpy pillow` in a venv in the scratchpad. Cycles on CPU in the cloud; EEVEE does not run headless there.
+2. **Copy the templates** from `assets/blender/` (`build_model.py`, `build_film.py`) into `3d/<place-name>/`, or `websites/<owner>/<site>/film/` for `both`.
+3. **Model** in `build_model.py`: dimensions in feet at the top, walls with openings, rooms, furniture, roof, site. Keep the collection names; the film animates by collection. Run it with `--no-render` until it builds clean, then render the four stills and read them. Check the plan cutaway against the floor plan.
+4. **Route** in `build_film.py`: write the `shots` list from the walkthrough guide (table, match cut, build, dollhouse, roof, approach, walk in, end shot). Point the door and slider names at the doors on the route. Show the user the plan with numbered stops before rendering, as in step 3.
+5. **Test** with `--test`: read the stills as one contact sheet. Fix framing, exposure, clipping and anything blocking the end shot. Repeat until clean.
+6. **Render** the full film detached, with a Monitor on progress and errors (1,040 frames take about 3.5 hours at 720p in the cloud). Meanwhile, send the user the `.blend` so they can play it in Blender right away.
+7. **Deliver**: `film.mp4`, `film.blend`, `model.blend`, `model.glb`, `floor_plan.png`, stills, and a `README.md` with the beat sheet and rebuild commands. Commit on the working branch. List every assumption (room layout, finishes, site dressing).
 
 ## Rules
 
