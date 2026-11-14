@@ -15,6 +15,7 @@ import bpy
 
 OUT = os.path.dirname(os.path.abspath(__file__))
 RENDER = "--no-render" not in sys.argv
+SAVE = "--no-save" not in sys.argv
 FT = 0.3048
 
 # ---------- dimensions (feet) ----------
@@ -280,7 +281,7 @@ box("Sofa", 20, 28, Z, 31, 31, Z + 2.6, M["fabric"], F)
 box("Sofa_Back", 20, 27.3, Z, 31, 28, Z + 3.2, M["fabric"], F)
 box("Coffee_Table", 22.5, 32.5, Z, 28.5, 35, Z + 1.4, M["deck"], F)
 box("Rug", 19, 26.5, Z, 32, 38, Z + 0.03, M["sand"], F)
-box("Media_Wall", 17, 23, Z, 33, 24.5, Z + 2.2, M["cabinet"], F)
+box("Media_Wall", 19, 23, Z, 28, 24.5, Z + 2.2, M["cabinet"], F)
 # Master bedroom (x0-16, y26-42), bed against left wall, faces ocean side
 box("Master_Bed", 1, 30, Z, 8, 36.5, Z + 2, M["bed"], F)
 box("Master_Headboard", 0.4, 29.5, Z, 1, 37, Z + 4.2, M["deck"], F)
@@ -314,7 +315,7 @@ for i, (x, y, r) in enumerate([(-20, 80, 10), (10, 90, 12), (45, 85, 9), (75, 95
     bpy.ops.mesh.primitive_uv_sphere_add(radius=r * FT, location=(x * FT, y * FT, -3 * FT))
     d = bpy.context.active_object
     d.name = f"Dune_{i}"
-    d.scale.z = 0.35
+    d.scale.z = 0.22
     d.data.materials.append(M["grass"])
     for c in d.users_collection:
         c.objects.unlink(d)
@@ -428,9 +429,10 @@ if RENDER:
 hide(["Roof", "Ceiling"], False)
 hide(["Labels"], True)
 scene.camera = cams["front_street"]
-bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, "coastal_cottage.blend"))
-try:
-    bpy.ops.export_scene.gltf(filepath=os.path.join(OUT, "coastal_cottage.glb"), export_format="GLB")
-except Exception as e:  # glTF addon may be missing in some bpy builds
-    print("glb export skipped:", e)
+if SAVE:
+    bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, "coastal_cottage.blend"))
+    try:
+        bpy.ops.export_scene.gltf(filepath=os.path.join(OUT, "coastal_cottage.glb"), export_format="GLB")
+    except Exception as e:  # glTF addon may be missing in some bpy builds
+        print("glb export skipped:", e)
 print("done")
