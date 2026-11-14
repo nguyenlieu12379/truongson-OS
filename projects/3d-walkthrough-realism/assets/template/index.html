@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Coastal Cottage · Walkthrough</title>
+  <meta name="description" content="Walk through a raised coastal cottage, from the street to the beach-side lanai.">
+  <meta name="theme-color" content="#07080c">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="brand" href="#top" data-jump="0">Coastal <span>Cottage</span></a>
+    <nav class="chapters" aria-label="Chapters"></nav>
+    <a class="pill" href="#visit" data-jump="1">Book a tour</a>
+    <div class="progress" aria-hidden="true"><i></i></div>
+  </header>
+
+  <!-- Style switch. Shown only when spec.styles exists (real estate). Labels must match the style keys in spec.js. -->
+  <div class="styles" role="group" aria-label="Look" hidden>
+    <button type="button" data-style="modern" aria-pressed="true">Modern</button>
+    <button type="button" data-style="scandinavian" aria-pressed="false">Scandinavian</button>
+    <button type="button" data-style="warm luxury" aria-pressed="false">Warm luxury</button>
+  </div>
+
+  <!-- Text panels. Each is shown while scroll progress is inside [data-in, data-out].
+       Match these ranges to the camera stops in assets/spec.js. -->
+  <main id="top">
+    <section class="panel hero" data-in="0" data-out="0.08">
+      <p class="eyebrow">TODO: address</p>
+      <h1>The beach house.</h1>
+      <p class="lede">Two bedrooms, a study, and a lanai on the sand.</p>
+      <p class="cue"><span></span>Scroll to walk through</p>
+    </section>
+
+    <section class="panel right" data-in="0.1" data-out="0.18">
+      <p class="eyebrow">The whole home</p>
+      <h2>One level.<br>All of it open.</h2>
+      <dl class="stats">
+        <div><dt>1,700<small>sf</small></dt><dd>heated living space</dd></div>
+        <div><dt>2<small>+1</small></dt><dd>bedrooms plus a study</dd></div>
+        <div><dt>8<small>ft</small></dt><dd>up on pilings, above the flood line</dd></div>
+      </dl>
+    </section>
+
+    <section class="panel" data-in="0.22" data-out="0.34">
+      <p class="eyebrow">Arrive</p>
+      <h2>Up the steps.</h2>
+      <p class="lede">A covered front porch, 30 ft wide, before you reach the door.</p>
+    </section>
+
+    <section class="panel right" data-in="0.45" data-out="0.62">
+      <p class="eyebrow">Inside</p>
+      <h2>Kitchen, dining, light.</h2>
+      <ul class="steps" aria-label="What you pass">
+        <li data-at="0.47">Foyer</li>
+        <li data-at="0.52">Kitchen with island</li>
+        <li data-at="0.57">Dining by the window</li>
+      </ul>
+    </section>
+
+    <section class="panel" data-in="0.66" data-out="0.8">
+      <p class="eyebrow">Great room</p>
+      <h2>Twenty by twenty.<br>Glass to the sea.</h2>
+      <p class="lede">The back wall slides open to the lanai.</p>
+    </section>
+
+    <section class="panel final" id="visit" data-in="0.94" data-out="1.01">
+      <p class="eyebrow">Rear lanai, 50 ft x 12 ft 10 in</p>
+      <h2>This is the view.</h2>
+      <div class="menu">
+        <div><b>Price</b><span>TODO</span></div>
+        <div><b>Available</b><span>TODO</span></div>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="#visit">Book a tour</a>
+        <a class="btn" href="#visit">Floor plan</a>
+      </div>
+      <p class="fine">Built by TruongSon.</p>
+    </section>
+  </main>
+
+  <div class="spacer" aria-hidden="true"></div>
+  <noscript><p class="noscript">This experience needs JavaScript and WebGL.</p></noscript>
+  <script type="module" src="assets/main.js"></script>
+</body>
+</html>
