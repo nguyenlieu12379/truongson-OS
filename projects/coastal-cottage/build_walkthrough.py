@@ -355,10 +355,14 @@ hide_from(decal, ROOF_T0)
 # front door swings in, rear slider retracts into its pocket
 door = bpy.data.objects["Ext_Front_door2"]
 door.data.transform(Matrix.Translation((0, 0, 0)))
+# boxes are built with their origin at the world origin: move it onto the hinge edge
+# (min x, centre of the door's thickness) so the leaf swings in place
 vx = [v.co.x for v in door.data.vertices]
-hinge = min(vx)
-door.data.transform(Matrix.Translation((-hinge, 0, 0)))
+vy = [v.co.y for v in door.data.vertices]
+hinge, cy = min(vx), (min(vy) + max(vy)) / 2
+door.data.transform(Matrix.Translation((-hinge, -cy, 0)))
 door.location.x += hinge
+door.location.y += cy
 key(door, "rotation_euler", 668, 0.0, 2)
 key(door, "rotation_euler", 706, math.radians(100), 2)
 slider = bpy.data.objects["Ext_Rear_slider2"]

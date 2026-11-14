@@ -1,9 +1,11 @@
-// Scroll walkthrough engine. Turns a floor-plan spec (spec.js) into a procedural three.js
-// building and a scroll-driven camera walk. Site-specific furniture and animation live in site.js.
+// Scroll walkthrough engine. Loads the building modelled in Blender (spec.model, a .glb from
+// assets/blender/build_model.py) and walks the camera through it as the page scrolls.
+// spec.js holds the route, door timing and styles; site.js holds per-room scroll animation.
 //
 // Coordinates: metres. x = right, y = up, z = toward the street / front of the building.
 // The front facade sits on the building's max z edge. The camera starts outside at +z.
 import * as THREE from './three.module.min.js';
+import { GLTFLoader } from './GLTFLoader.js';
 
 export { THREE };
 export const V = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -167,7 +169,7 @@ function makeMaterial(def, repeat) {
 // ---------------------------------------------------------------------------
 // Engine
 // ---------------------------------------------------------------------------
-export function createWalkthrough({ canvas, spec, site }) {
+export async function createWalkthrough({ canvas, spec, site }) {
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
@@ -176,14 +178,12 @@ export function createWalkthrough({ canvas, spec, site }) {
   renderer.toneMappingExposure = spec.exposure ?? 1.05;
 
   const scene = new THREE.Scene();
-  const theme = { ...SKY[spec.exterior?.sky || 'dusk'], ...(spec.theme || {}) };
+  const theme = { ...SKY[spec.sky || 'day'], ...(spec.theme || {}) };
   const OUT_FOG = new THREE.Color(theme.fogOutside), IN_FOG = new THREE.Color(theme.fogInside);
   scene.fog = new THREE.FogExp2(OUT_FOG.clone(), theme.fogDensity);
-  const camera = new THREE.PerspectiveCamera(52, 1, 0.05, 400);
+  const camera = new THREE.PerspectiveCamera(52, 1, 0.05, 1500);
   const glowTex = TEX.glow();
-  const H = spec.wallHeight ?? 3.2;
-  const T = spec.wallThickness ?? 0.2;
-
+  
   // ---- helpers handed to site.js
   function box(x0, x1, y0, y1, z0, z1, mat, parent = scene) {
     const m = new THREE.Mesh(new THREE.BoxGeometry(Math.abs(x1 - x0), Math.abs(y1 - y0), Math.abs(z1 - z0)), material(mat));
@@ -208,7 +208,7 @@ export function createWalkthrough({ canvas, spec, site }) {
   }
 
   // ---- sky
-  const sky = new THREE.Mesh(new THREE.SphereGeometry(200, 32, 16), new THREE.ShaderMaterial({
+  const sky = new THREE.Mesh(new THREE.SphereGeometry(1000, 32, 16), new THREE.ShaderMaterial({
     side: THREE.BackSide, depthWrite: false, fog: false,
     uniforms: { top: { value: new THREE.Color(theme.skyTop) }, mid: { value: new THREE.Color(theme.skyMid) }, hor: { value: new THREE.Color(theme.skyHorizon) } },
     vertexShader: 'varying vec3 vP; void main(){ vP = normalize(position); gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
@@ -221,9 +221,9 @@ export function createWalkthrough({ canvas, spec, site }) {
   scene.add(sky);
   if (theme.stars) {
     const n = 400, pos = new Float32Array(n * 3);
-    for (let i = 0; i < n; i++) { const th = rand(0, 6.283), ph = rand(0.25, 1.3); pos.set([Math.cos(th) * Math.cos(ph) * 180, Math.sin(ph) * 180, Math.sin(th) * Math.cos(ph) * 180], i * 3); }
+    for (let i = 0; i < n; i++) { const th = rand(0, 6.283), ph = rand(0.25, 1.3); pos.set([Math.cos(th) * Math.cos(ph) * 900, Math.sin(ph) * 900, Math.sin(th) * Math.cos(ph) * 900], i * 3); }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0xffffff, size: 0.6, fog: false, transparent: true, opacity: 0.7 })));
+    scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0xffffff, size: 3, fog: false, transparent: true, opacity: 0.7 })));
   }
   const hemi = new THREE.HemisphereLight(theme.hemiSky, theme.hemiGround, theme.hemiIntensity);
   scene.add(hemi);
@@ -232,130 +232,66 @@ export function createWalkthrough({ canvas, spec, site }) {
     sun.position.set(-20, 30, 25); scene.add(sun);
   }
 
-  // ---- bounds of the building
-  const B = { x0: Infinity, x1: -Infinity, z0: Infinity, z1: -Infinity };
-  for (const r of spec.rooms) { B.x0 = Math.min(B.x0, r.rect[0]); B.z0 = Math.min(B.z0, r.rect[1]); B.x1 = Math.max(B.x1, r.rect[2]); B.z1 = Math.max(B.z1, r.rect[3]); }
-
-  // ---- exterior
-  buildExterior(spec.exterior || {}, B, { box, glow, light, plane, scene, H });
-
-  // ---- rooms: floor, ceiling, lights
-  // `upper` = roof and ceilings. In 'dollhouse-open' mode they hide while the camera is above the roof,
-  // so the overview can look down into the rooms.
-  const upper = [];
-  // `styleable` = walls, floors and ceilings whose materials change with spec.styles (see setStyle).
-  const styleable = [];
-  for (const r of spec.rooms) {
-    const [x0, z0, x1, z1] = r.rect, w = x1 - x0, d = z1 - z0;
-    const fm = material(r.floor || 'wood', [w / 3, d / 3]);
-    const floor = plane(w, d, fm, V((x0 + x1) / 2, 0.006, (z0 + z1) / 2), [-Math.PI / 2, 0, 0]);
-    styleable.push({ role: 'floor', mesh: floor, w, d });
-    const ceil = plane(w, d, r.ceiling || '#1c1714', V((x0 + x1) / 2, H - 0.001, (z0 + z1) / 2), [Math.PI / 2, 0, 0]);
-    upper.push(ceil);
-    styleable.push({ role: 'ceiling', mesh: ceil });
-    const lc = r.light ?? '#ffcf9a';
-    const n = Math.max(1, Math.round((w * d) / 30));
-    for (let i = 0; i < n; i++) {
-      const lx = x0 + (w * (i + 0.5)) / n, lz = (z0 + z1) / 2;
-      light(lc, (r.lightIntensity ?? 14), Math.max(w, d) * 1.2, V(lx, H - 0.6, lz));
-    }
-  }
-  // roof slab (seen from outside), sits above interior ceilings
-  upper.push(box(B.x0 - 0.3, B.x1 + 0.3, H, H + 0.35, B.z0 - 0.3, B.z1 + 0.3, spec.roof || '#2a2826'));
-
-  // ---- walls with openings
-  const doors = [];
+  // ---- the building: one glTF exported from Blender (assets/blender/build_model.py).
+  // Walls, floors, furniture, ground, photos on surfaces and room lights all come from the model.
+  const gltf = await new GLTFLoader().loadAsync(spec.model);
+  const model = gltf.scene;
+  scene.add(model);
+  const byName = new Map();
+  const upper = [];        // role 'upper' (roof, ceilings): hidden while the dollhouse camera is above
+  const styleMats = new Map();  // materials named after a style key (wall, floor, ceiling, fabric, wood, accent)
+  const styleObjs = [];    // objects with a 'style' extra, shown only in that style
   const glass = new THREE.MeshPhysicalMaterial({ color: 0x9fb7c9, roughness: 0.05, transparent: true, opacity: 0.12, depthWrite: false });
-  for (const wall of spec.walls) buildWall(wall);
-  function buildWall(wall) {
-    const [ax, az] = wall.from, [bx, bz] = wall.to;
-    const len = Math.hypot(bx - ax, bz - az);
-    const g = new THREE.Group();
-    g.position.set(ax, 0, az);
-    g.rotation.y = -Math.atan2(bz - az, bx - ax); // local +x runs from `from` to `to`
-    scene.add(g);
-    const th = wall.thickness ?? T, h = wall.height ?? H;
-    // Two faces can have different finishes: inner/outer. Local -z side = "left" of the direction of travel.
-    const mats = [material(wall.material || wall.inside || '#e8e1d4', [len / 3, h / 3]), material(wall.outside || wall.material || wall.inside || '#e8e1d4', [len / 3, h / 3])];
-    const piece = (u0, u1, y0, y1) => {
-      if (u1 - u0 < 0.001 || y1 - y0 < 0.001) return;
-      const geo = new THREE.BoxGeometry(u1 - u0, y1 - y0, th);
-      // box material order: +x, -x, +y, -y, +z, -z
-      const m = new THREE.Mesh(geo, [mats[0], mats[0], mats[0], mats[0], mats[1], mats[0]]);
-      m.position.set((u0 + u1) / 2, (y0 + y1) / 2, 0);
-      g.add(m);
-      styleable.push({ role: 'wall', mesh: m });
-    };
-    const ops = (wall.openings || []).map((o) => ({ ...o, u0: o.at - o.width / 2, u1: o.at + o.width / 2 })).sort((a, b) => a.u0 - b.u0);
-    let u = 0;
-    for (const o of ops) {
-      piece(u, o.u0, 0, h);
-      const top = o.height ?? (o.type === 'window' ? 2.4 : 2.2);
-      const sill = o.type === 'window' ? (o.sill ?? 0.9) : 0;
-      piece(o.u0, o.u1, top, h);
-      if (sill > 0) piece(o.u0, o.u1, 0, sill);
-      if (o.type === 'window') {
-        const gl = new THREE.Mesh(new THREE.PlaneGeometry(o.width, top - sill), glass);
-        gl.position.set(o.at, (sill + top) / 2, 0); g.add(gl);
-        const frame = material(o.frame || 'black');
-        const f = (x0, x1, y0, y1) => { const m = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, y1 - y0, th + 0.04), frame); m.position.set((x0 + x1) / 2, (y0 + y1) / 2, 0); g.add(m); };
-        f(o.u0, o.u1, sill - 0.04, sill); f(o.u0, o.u1, top, top + 0.04); f(o.at - 0.025, o.at + 0.025, sill, top);
-      }
-      if (o.type === 'door') {
-        // hinged leaf; opens over [opensAt[0], opensAt[1]] of scroll progress (or stays open)
-        const pivot = new THREE.Group();
-        pivot.position.set(o.hinge === 'right' ? o.u1 : o.u0, 0, 0);
-        g.add(pivot);
-        const leafW = o.width - 0.04;
-        const dir = o.hinge === 'right' ? -1 : 1;
-        const leafMat = material(o.material || '#2a221c');
-        const leaf = new THREE.Group();
-        pivot.add(leaf);
-        const lb = (x0, x1, y0, y1, mat = leafMat) => { const m = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, y1 - y0, 0.05), mat); m.position.set(dir * (x0 + x1) / 2, (y0 + y1) / 2, 0); leaf.add(m); };
-        if (o.glass) {
-          lb(0, 0.1, 0, top); lb(leafW - 0.1, leafW, 0, top); lb(0, leafW, 0, 0.3); lb(0, leafW, top - 0.12, top);
-          const dg = new THREE.Mesh(new THREE.PlaneGeometry(leafW - 0.2, top - 0.42), glass); dg.position.set(dir * leafW / 2, 0.3 + (top - 0.42) / 2, 0); leaf.add(dg);
-        } else lb(0, leafW, 0, top);
-        lb(leafW - 0.2, leafW - 0.14, 0.95, 1.1, material('brass'));
-        doors.push({ pivot, dir, swing: o.swing ?? 1, opensAt: o.opensAt, angle: o.openAngle ?? 1.5 });
-      }
-      u = o.u1;
-    }
-    piece(u, len, 0, h);
+  const roleOf = (o) => { for (let n = o; n; n = n.parent) if (n.userData?.role) return n.userData.role; return undefined; };
+  model.traverse((o) => {
+    if (o.name) byName.set(o.name, o);
+    if (o.userData.role === 'upper') upper.push(o);
+    if (o.userData.style) styleObjs.push(o);
+    if (o.isLight) { o.intensity *= spec.lightScale ?? 1; o.castShadow = false; if (!o.distance) o.distance = spec.lightDistance ?? 9; }
+    if (!o.isMesh) return;
+    const mats = Array.isArray(o.material) ? o.material : [o.material];
+    const swapped = mats.map((m) => {
+      const key = (m.name || '').toLowerCase();
+      if (key.startsWith('glass')) return glass;
+      if (STYLE_KEYS.includes(key) && !styleMats.has(key)) styleMats.set(key, m);
+      return m;
+    });
+    o.material = Array.isArray(o.material) ? swapped : swapped[0];
+  });
+
+  // ---- bounds of the building (everything except the site ground and sea), and ceiling height
+  const box3 = new THREE.Box3(), tmpBox = new THREE.Box3();
+  model.updateMatrixWorld(true);
+  model.traverse((o) => { if (o.isMesh && roleOf(o) !== 'site') box3.union(tmpBox.setFromObject(o)); });
+  const B = { x0: box3.min.x, x1: box3.max.x, z0: box3.min.z, z1: box3.max.z, y0: box3.min.y, y1: box3.max.y };
+  let H = spec.ceilingY;
+  if (H === undefined) { H = Infinity; for (const u of upper) H = Math.min(H, tmpBox.setFromObject(u).min.y); if (!isFinite(H)) H = box3.max.y; }
+
+  // ---- doors: model objects with role 'door' (origin on the hinge). Timing lives in spec.doors.
+  // { Door_Front: { opensAt: [0.22, 0.31], angle: 1.6 } } swings about the hinge (+angle opens inward);
+  // { Door_Rear_Slider: { opensAt: [...], slide: -2.3 } } slides along x by that many metres.
+  const doors = [];
+  for (const [name, d] of Object.entries(spec.doors || {})) {
+    const o = byName.get(name);
+    if (!o) { console.warn(`spec.doors: no object named ${name} in the model`); continue; }
+    doors.push({ o, ...d, rot0: o.rotation.y, x0: o.position.x });
   }
 
-  // ---- site-specific content
-  // Furniture lives under one group (`root`) so a style change can drop and rebuild it.
-  // site.build(ctx, style) runs again on every style change. Put furniture on ctx.root (ctx.box,
-  // ctx.glow, ctx.light and props already do). Walls, floors and roof stay outside it.
+  // ---- site-specific animation (site.js). The model is already built, so site.js only animates it.
   const initialStyle = spec.styles ? Object.keys(spec.styles)[0] : undefined;
-  const ctx = { THREE, scene, camera, spec, V, H, B, seg, smooth, easeOut, reduceMotion, TEX, material, root: null, style: initialStyle, props: null };
-  let furnRoot = null;
-  let siteUpdate = () => {};
-  function furnish(styleName) {
-    if (furnRoot) { scene.remove(furnRoot); furnRoot.traverse((o) => o.geometry?.dispose()); }
-    furnRoot = new THREE.Group(); scene.add(furnRoot);
-    ctx.root = furnRoot; ctx.style = styleName;
-    ctx.box = (x0, x1, y0, y1, z0, z1, mat, parent = furnRoot) => box(x0, x1, y0, y1, z0, z1, mat, parent);
-    ctx.glow = (color, size, pos, opacity = 1, parent = furnRoot) => glow(color, size, pos, opacity, parent);
-    ctx.plane = (w, h, mat, pos, rot = [0, 0, 0], parent = furnRoot) => plane(w, h, mat, pos, rot, parent);
-    ctx.light = (color, intensity, distance, pos) => { const l = new THREE.PointLight(color, intensity, distance, 2); l.position.copy(pos); furnRoot.add(l); return l; };
-    ctx.props = makeProps(ctx);
-    siteUpdate = site?.build?.(ctx, styleName) || (() => {});
-  }
-  furnish(initialStyle);
+  const ctx = { THREE, scene, camera, spec, model, get: (n) => byName.get(n), V, H, B, seg, smooth, easeOut, reduceMotion, TEX, material, box, glow, light, plane, style: initialStyle };
+  const siteUpdate = site?.build?.(ctx) || (() => {});
 
-  // Swap walls, floors and ceilings to the style palette, then rebuild the furniture for it.
+  // Style switch: recolour the style materials and show only that style's objects.
   function applyStyle(name) {
     const s = spec.styles?.[name];
     if (!s) return;
-    for (const it of styleable) {
-      if (it.role === 'wall') { const wm = material(s.wall); it.mesh.material = [wm, wm, wm, wm, wm, wm]; }
-      else if (it.role === 'floor') it.mesh.material = material(s.floor, [it.w / 3, it.d / 3]);
-      else if (it.role === 'ceiling') it.mesh.material = material(s.ceiling);
-    }
-    furnish(name);
+    for (const [key, m] of styleMats) if (s[key]) m.color.set(s[key]);
+    for (const o of styleObjs) o.visible = o.userData.style === name;
+    ctx.style = name;
+    site?.style?.(ctx, name);
   }
+  applyStyle(initialStyle);
   // Short fade between styles (same .cut class as reduced motion). Instant with reduced motion.
   function setStyle(name) {
     if (!spec.styles?.[name] || name === ctx.style) return;
@@ -463,7 +399,11 @@ export function createWalkthrough({ canvas, spec, site }) {
     camera.position.copy(tmpP); camera.lookAt(tmpL);
     if (spec.mode === 'dollhouse-open') { const above = tmpP.y > H + 0.5; for (const m of upper) m.visible = !above; }
 
-    for (const d of doors) if (d.opensAt) d.pivot.rotation.y = d.dir * d.swing * easeOut(seg(p, d.opensAt[0], d.opensAt[1])) * d.angle;
+    for (const d of doors) {
+      const t = d.opensAt ? easeOut(seg(p, d.opensAt[0], d.opensAt[1])) : 1;
+      if (d.slide !== undefined) d.o.position.x = d.x0 + d.slide * t;
+      else d.o.rotation.y = d.rot0 + (d.angle ?? 1.5) * t;
+    }
     const inside = smooth(insideFrom[0], insideFrom[1], p);
     scene.fog.color.copy(OUT_FOG).lerp(IN_FOG, inside);
     scene.fog.density = theme.fogDensity * (1 - inside * 0.6);
@@ -483,214 +423,10 @@ export function createWalkthrough({ canvas, spec, site }) {
 // Sky presets
 // ---------------------------------------------------------------------------
 const SKY = {
-  dusk: { skyTop: '#05070f', skyMid: '#2e2152', skyHorizon: '#f26b38', fogOutside: '#0b1020', fogInside: '#1a0f08', fogDensity: 0.02, hemiSky: '#5a6aa8', hemiGround: '#1a120c', hemiIntensity: 0.9, stars: true, streetLights: true },
-  night: { skyTop: '#02030a', skyMid: '#0b1030', skyHorizon: '#2a2a50', fogOutside: '#06080f', fogInside: '#140d08', fogDensity: 0.022, hemiSky: '#3a4470', hemiGround: '#0e0a08', hemiIntensity: 0.6, stars: true, streetLights: true },
-  day: { skyTop: '#3d7fd6', skyMid: '#8fc1f0', skyHorizon: '#f3efe6', fogOutside: '#cfe0ee', fogInside: '#efe6d8', fogDensity: 0.008, hemiSky: '#cfe6ff', hemiGround: '#8a7a64', hemiIntensity: 1.6, sun: 2.4, stars: false, streetLights: false },
-  golden: { skyTop: '#2c4f8a', skyMid: '#c98a6a', skyHorizon: '#ffc27a', fogOutside: '#c99a7a', fogInside: '#3a2414', fogDensity: 0.012, hemiSky: '#ffd6a8', hemiGround: '#3a2a1a', hemiIntensity: 1.2, sun: 1.6, stars: false, streetLights: false },
+  dusk: { skyTop: '#05070f', skyMid: '#2e2152', skyHorizon: '#f26b38', fogOutside: '#0b1020', fogInside: '#1a0f08', fogDensity: 0.02, hemiSky: '#5a6aa8', hemiGround: '#1a120c', hemiIntensity: 0.9, stars: true },
+  night: { skyTop: '#02030a', skyMid: '#0b1030', skyHorizon: '#2a2a50', fogOutside: '#06080f', fogInside: '#140d08', fogDensity: 0.022, hemiSky: '#3a4470', hemiGround: '#0e0a08', hemiIntensity: 0.6, stars: true },
+  day: { skyTop: '#3d7fd6', skyMid: '#8fc1f0', skyHorizon: '#f3efe6', fogOutside: '#cfe0ee', fogInside: '#efe6d8', fogDensity: 0.008, hemiSky: '#cfe6ff', hemiGround: '#8a7a64', hemiIntensity: 1.6, sun: 2.4, stars: false },
+  golden: { skyTop: '#2c4f8a', skyMid: '#c98a6a', skyHorizon: '#ffc27a', fogOutside: '#c99a7a', fogInside: '#3a2414', fogDensity: 0.012, hemiSky: '#ffd6a8', hemiGround: '#3a2a1a', hemiIntensity: 1.2, sun: 1.6, stars: false },
 };
 
-// ---------------------------------------------------------------------------
-// Exterior: 'street' (city frontage) or 'garden' (house / bnb with a lawn and path)
-// ---------------------------------------------------------------------------
-function buildExterior(ex, B, { box, glow, light, plane, scene, H }) {
-  const kind = ex.kind || 'street';
-  const cx = (B.x0 + B.x1) / 2;
-  plane(400, 400, kind === 'garden' ? 'grass' : '#15161a', V(0, -0.02, 0), [-Math.PI / 2, 0, 0]).material.map?.repeat.set(60, 60);
-  const lamps = ex.streetLights ?? !!(SKY[ex.sky || 'dusk'] || {}).streetLights;
-  if (kind === 'street') {
-    const front = B.z1;
-    box(-60, 60, 0, 0.15, front, front + 6, 'concrete:#6a6a6e');
-    const road = plane(120, 10, new THREE.MeshStandardMaterial({ map: TEX.asphalt(), color: 0x9a9aa2, roughness: 0.38, metalness: 0.1 }), V(0, 0.01, front + 11), [-Math.PI / 2, 0, 0]);
-    road.material.map.repeat.set(16, 3);
-    const dash = new THREE.MeshBasicMaterial({ color: 0xd8c27a });
-    for (let x = -58; x < 58; x += 5) plane(2.4, 0.14, dash, V(x, 0.02, front + 11), [-Math.PI / 2, 0, 0]);
-    box(-60, 60, 0, 0.15, front + 16, front + 22, 'concrete:#6a6a6e');
-    if (ex.crosswalk !== false) for (let i = -3; i <= 3; i++) plane(0.55, 9, '#cfd0d4', V(cx + i, 0.02, front + 11), [-Math.PI / 2, 0, 0]);
-    if (lamps) for (const lx of [B.x0 - 3, B.x1 + 3]) streetLamp(lx, front + 5.5, -1);
-    if (ex.neighbours !== false) {
-      const nb = (x0, x1, h, col) => {
-        const em = new THREE.MeshStandardMaterial({ color: col, roughness: 0.85, emissive: 0xffffff, emissiveMap: TEX.windows(5, Math.round(h / 1.4)), emissiveIntensity: lamps ? 0.8 : 0.05 });
-        const plain = new THREE.MeshStandardMaterial({ color: col, roughness: 0.85 });
-        const m = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, h, 14), [plain, plain, plain, plain, em, plain]);
-        m.position.set((x0 + x1) / 2, h / 2, front - 7); scene.add(m);
-      };
-      nb(B.x0 - 18.4, B.x0 - 0.4, 12, 0x3a3236); nb(B.x0 - 34, B.x0 - 18.8, 9, 0x2c2f38);
-      nb(B.x1 + 0.4, B.x1 + 16, 11, 0x34363c); nb(B.x1 + 16.4, B.x1 + 34, 15, 0x2f2a2e);
-    }
-  } else {
-    // garden: path to the door, hedges, a few trees, a fence line
-    plane(1.4, 12, 'concrete:#b9b2a5', V(ex.pathX ?? cx, 0.01, B.z1 + 6), [-Math.PI / 2, 0, 0]);
-    for (const s of [-1, 1]) for (let i = 0; i < 4; i++) {
-      const t = new THREE.Mesh(new THREE.IcosahedronGeometry(rand(1, 1.6), 1), new THREE.MeshStandardMaterial({ color: 0x2c4a26, roughness: 0.9, flatShading: true }));
-      t.position.set(cx + s * ((B.x1 - B.x0) / 2 + rand(3, 9)), rand(2, 3), B.z1 + rand(2, 14)); scene.add(t);
-      box(t.position.x - 0.12, t.position.x + 0.12, 0, t.position.y - 0.8, t.position.z - 0.12, t.position.z + 0.12, '#4a3626');
-    }
-    for (let x = -20; x <= 20; x += 0.6) if (Math.abs(x - (ex.pathX ?? cx)) > 1.2) box(x - 0.04, x + 0.04, 0, 1, B.z1 + 12, B.z1 + 12.08, '#e8e2d6');
-    if (lamps) for (const lx of [(ex.pathX ?? cx) - 1.2, (ex.pathX ?? cx) + 1.2]) {
-      box(lx - 0.05, lx + 0.05, 0, 0.7, B.z1 + 3, B.z1 + 3.1, 'black');
-      glow(0xffc27a, 0.8, V(lx, 0.75, B.z1 + 3.05), 0.9);
-      light(0xffc98a, 3, 6, V(lx, 0.8, B.z1 + 3.05));
-    }
-  }
-  // warm spill at the entrance
-  light(0xffb070, 8, 9, V(ex.doorX ?? cx, 2.6, B.z1 + 1.2));
-  if (ex.sign) {
-    const s = ex.sign;
-    const tex = TEX.sign(s.text, s);
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(s.width ?? 5, (s.width ?? 5) / 4), new THREE.MeshBasicMaterial({ map: tex, transparent: true, toneMapped: false, depthWrite: false }));
-    m.position.set(s.x ?? cx, s.y ?? H + 0.9, B.z1 + 0.14); scene.add(m);
-    if ((s.style ?? 'neon') === 'neon') { glow(new THREE.Color(s.glowColor || '#ff7a3a'), (s.width ?? 5) * 1.4, V(s.x ?? cx, s.y ?? H + 0.9, B.z1 + 0.6), 0.4); light(new THREE.Color(s.glowColor || '#ff8a4a'), 10, 10, V(s.x ?? cx, (s.y ?? H + 0.9) - 0.2, B.z1 + 1.4)); }
-    else box((s.x ?? cx) - (s.width ?? 5) / 2 - 0.1, (s.x ?? cx) + (s.width ?? 5) / 2 + 0.1, (s.y ?? H + 0.9) - (s.width ?? 5) / 8 - 0.1, (s.y ?? H + 0.9) + (s.width ?? 5) / 8 + 0.1, B.z1 + 0.02, B.z1 + 0.1, s.board || '#1d2a24');
-  }
-  // facade parapet so the sign has a band to sit on
-  const facadeMat = box(B.x0 - 0.3, B.x1 + 0.3, H, H + (ex.parapet ?? 1.6), B.z1 - 0.2, B.z1 + 0.05, ex.facade || 'brick:#7a3a28').material;
-  if (facadeMat.map && !facadeMat.map.userData.photo) facadeMat.map.repeat.set((B.x1 - B.x0) / 4, 1);
-
-  function streetLamp(x, z, facing) {
-    const mat = new THREE.MeshStandardMaterial({ color: 0x1c1d20, roughness: 0.5, metalness: 0.6 });
-    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.1, 5.2, 10), mat); pole.position.set(x, 2.6, z); scene.add(pole);
-    const head = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.35, 0.25, 16), mat); head.position.set(x, 5.0, z + facing * 0.4); scene.add(head);
-    glow(0xffc27a, 3, V(x, 4.85, z + facing * 0.4), 0.8);
-    light(0xffc98a, 26, 16, V(x, 4.7, z + facing * 0.4));
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Prop library. Every prop: (x, z, opts) placed on the floor, rot = rotation around y (radians).
-// ---------------------------------------------------------------------------
-function makeProps(ctx) {
-  const { THREE, glow, light, V } = ctx;
-  const group = (x, z, rot = 0) => { const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = rot; ctx.root.add(g); return g; };
-  const b = (g, x0, x1, y0, y1, z0, z1, mat) => ctx.box(x0, x1, y0, y1, z0, z1, mat, g);
-  const cyl = (g, r0, r1, h, mat, x, y, z, seg = 20) => { const m = new THREE.Mesh(new THREE.CylinderGeometry(r0, r1, h, seg), material(mat)); m.position.set(x, y, z); g.add(m); return m; };
-  const candles = [];
-
-  const P = {
-    // round café/restaurant table with cloth or wood top
-    table(x, z, { r = 0.6, top = 'checker', h = 0.76, candle = true, rot = 0 } = {}) {
-      const g = group(x, z, rot);
-      cyl(g, r, r, 0.05, top, 0, h, 0, 28); cyl(g, 0.05, 0.05, h - 0.02, 'black', 0, h / 2, 0, 8); cyl(g, 0.3, 0.3, 0.03, 'black', 0, 0.015, 0);
-      if (candle) { cyl(g, 0.035, 0.035, 0.12, '#f2ead8', 0, h + 0.08, 0, 10); candles.push(glow(0xffb45a, 0.5, V(x, h + 0.2, z), 0.9)); }
-      return g;
-    },
-    rectTable(x, z, { w = 1.4, d = 0.8, h = 0.76, top = 'wood', rot = 0 } = {}) {
-      const g = group(x, z, rot);
-      b(g, -w / 2, w / 2, h - 0.05, h, -d / 2, d / 2, top);
-      for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) b(g, sx * (w / 2 - 0.08) - 0.03, sx * (w / 2 - 0.08) + 0.03, 0, h - 0.05, sz * (d / 2 - 0.08) - 0.03, sz * (d / 2 - 0.08) + 0.03, 'black');
-      return g;
-    },
-    chair(x, z, { rot = 0, mat = '#3a2416' } = {}) {
-      const g = group(x, z, rot);
-      b(g, -0.22, 0.22, 0.44, 0.48, -0.22, 0.22, mat); b(g, -0.2, 0.2, 0.48, 1.0, 0.17, 0.23, mat);
-      for (const [dx, dz] of [[-0.18, -0.18], [0.18, -0.18], [-0.18, 0.18], [0.18, 0.18]]) b(g, dx - 0.02, dx + 0.02, 0, 0.44, dz - 0.02, dz + 0.02, mat);
-      return g;
-    },
-    // table with chairs on two sides (rot turns the whole set)
-    tableSet(x, z, opts = {}) { const rot = opts.rot || 0; P.table(x, z, opts); for (const a of [0, Math.PI]) P.chair(x + Math.cos(a + rot) * 0.9, z - Math.sin(a + rot) * 0.9, { rot: a + rot + Math.PI / 2, mat: opts.chair }); },
-    stool(x, z, { h = 0.75, mat = '#3a2416' } = {}) { const g = group(x, z); cyl(g, 0.18, 0.18, 0.05, mat, 0, h, 0); cyl(g, 0.025, 0.03, h, 'black', 0, h / 2, 0, 8); cyl(g, 0.2, 0.2, 0.02, 'black', 0, 0.01, 0); return g; },
-    // counter / bar / kitchen island. length along local x
-    counter(x, z, { w = 3, d = 0.7, h = 0.95, body = '#2a221c', top = 'marble', rot = 0 } = {}) {
-      const g = group(x, z, rot); b(g, -w / 2, w / 2, 0, h - 0.05, -d / 2, d / 2, body); b(g, -w / 2 - 0.05, w / 2 + 0.05, h - 0.05, h, -d / 2 - 0.05, d / 2 + 0.05, top); return g;
-    },
-    shelf(x, z, { w = 2, levels = [1.4, 1.9, 2.4], rot = 0, items = 'bottles' } = {}) {
-      const g = group(x, z, rot);
-      const cols = items === 'bottles' ? [0x2c4a2a, 0x4a1a22, 0x1e2a3a] : items === 'jars' ? [0xc23a1a, 0xe6d6a0, 0x3d6b2f, 0xd9a441] : [0x8a5a3a, 0x2f4a6a, 0xd9c7a0, 0x6a2a2a];
-      for (const y of levels) {
-        b(g, -w / 2, w / 2, y - 0.03, y, -0.15, 0.15, '#3b2618');
-        for (let u = -w / 2 + 0.12; u < w / 2 - 0.1; u += items === 'books' ? 0.07 : 0.22) {
-          const c = new THREE.MeshStandardMaterial({ color: cols[(Math.random() * cols.length) | 0], roughness: items === 'bottles' ? 0.15 : 0.6 });
-          if (items === 'books') { const hgt = rand(0.2, 0.3); b(g, u, u + 0.05, y, y + hgt, -0.1, 0.1, c); }
-          else cyl(g, 0.07, 0.07, items === 'bottles' ? 0.36 : 0.26, c, u, y + (items === 'bottles' ? 0.18 : 0.13), 0, 10);
-        }
-      }
-      return g;
-    },
-    pendant(x, z, { y = 2.5, color = 0xffc27a, ceiling = ctx.H, lightOn = false } = {}) {
-      const g = group(x, z);
-      cyl(g, 0.008, 0.008, ceiling - y - 0.15, 'black', 0, (ceiling + y + 0.15) / 2, 0, 4);
-      const shade = new THREE.Mesh(new THREE.ConeGeometry(0.3, 0.28, 24, 1, true), new THREE.MeshStandardMaterial({ color: 0x2a2018, roughness: 0.35, metalness: 0.85, side: THREE.DoubleSide }));
-      shade.position.set(0, y + 0.12, 0); g.add(shade);
-      const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.07, 12, 8), new THREE.MeshBasicMaterial({ color: 0xffe0a8, toneMapped: false })); bulb.position.set(0, y, 0); g.add(bulb);
-      glow(color, 1.3, V(x, y - 0.05, z), 0.75);
-      if (lightOn) light(color, 6, 5, V(x, y - 0.2, z));
-      return g;
-    },
-    plant(x, z, { size = 1, pot = '#c8b49a' } = {}) {
-      const g = group(x, z);
-      cyl(g, 0.22 * size, 0.17 * size, 0.4 * size, pot, 0, 0.2 * size, 0);
-      const f = new THREE.Mesh(new THREE.IcosahedronGeometry(0.45 * size, 1), new THREE.MeshStandardMaterial({ color: 0x2f5a2a, roughness: 0.9, flatShading: true }));
-      f.position.y = 0.85 * size; f.scale.y = 1.3; g.add(f);
-      return g;
-    },
-    sofa(x, z, { w = 2.2, mat = '#6b6a5e', rot = 0 } = {}) {
-      const g = group(x, z, rot);
-      b(g, -w / 2, w / 2, 0.1, 0.45, -0.45, 0.45, mat); b(g, -w / 2, w / 2, 0.45, 0.9, 0.25, 0.45, mat);
-      b(g, -w / 2, -w / 2 + 0.2, 0.45, 0.65, -0.45, 0.45, mat); b(g, w / 2 - 0.2, w / 2, 0.45, 0.65, -0.45, 0.45, mat);
-      return g;
-    },
-    bed(x, z, { w = 1.6, l = 2.0, sheet = '#f1ede4', frame = '#5a3e28', throw: thr = '#a8643a', rot = 0 } = {}) {
-      const g = group(x, z, rot);
-      b(g, -w / 2, w / 2, 0, 0.3, -l / 2, l / 2, frame); b(g, -w / 2 + 0.03, w / 2 - 0.03, 0.3, 0.55, -l / 2 + 0.03, l / 2 - 0.03, sheet);
-      b(g, -w / 2, w / 2, 0, 1.1, -l / 2 - 0.06, -l / 2, frame); // headboard at local -z
-      b(g, -w / 2 + 0.1, -0.05, 0.55, 0.68, -l / 2 + 0.1, -l / 2 + 0.45, '#ffffff'); b(g, 0.05, w / 2 - 0.1, 0.55, 0.68, -l / 2 + 0.1, -l / 2 + 0.45, '#ffffff');
-      b(g, -w / 2 - 0.01, w / 2 + 0.01, 0.4, 0.57, l / 2 - 0.6, l / 2 - 0.1, thr);
-      return g;
-    },
-    rug(x, z, { w = 2.4, d = 1.6, color = '#8a5a3a', rot = 0 } = {}) { const g = group(x, z, rot); b(g, -w / 2, w / 2, 0.006, 0.016, -d / 2, d / 2, color); return g; },
-    // framed board or art on a wall. normal = which way it faces: 'n','s','e','w'
-    wallBoard(x, y, z, { w = 1.2, h = 1.5, normal = 's', tex = null, color = '#2a2a2a' } = {}) {
-      const rot = { s: 0, n: Math.PI, e: Math.PI / 2, w: -Math.PI / 2 }[normal];
-      const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({ map: tex, color: tex ? 0xffffff : color, roughness: 0.8 }));
-      m.position.set(x, y, z); m.rotation.y = rot; ctx.root.add(m);
-      return m;
-    },
-    // framed art on a wall, same facing rule as wallBoard. Place x, y, z just in front of the wall.
-    art(x, y, z, { normal = 's', w = 0.8, h = 0.6, tex = null, color = '#c9b89a', frame = 'black' } = {}) {
-      const g = new THREE.Group(); g.position.set(x, y, z);
-      g.rotation.y = { s: 0, n: Math.PI, e: Math.PI / 2, w: -Math.PI / 2 }[normal];
-      ctx.root.add(g);
-      const f = new THREE.Mesh(new THREE.BoxGeometry(w + 0.06, h + 0.06, 0.03), material(frame)); f.position.z = -0.01; g.add(f);
-      const c = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({ map: tex, color: tex ? 0xffffff : color, roughness: 0.8 }));
-      c.position.z = 0.006; g.add(c);
-      return g;
-    },
-    // table lamp on a side table or sideboard. y = top of the table.
-    tableLamp(x, z, { y = 0.6, shade = '#e8d9b8', base = 'brass', on = true } = {}) {
-      const g = group(x, z);
-      cyl(g, 0.12, 0.12, 0.03, base, 0, y + 0.015, 0, 20);
-      cyl(g, 0.012, 0.012, 0.28, base, 0, y + 0.17, 0, 8);
-      const s = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.2, 0.22, 24, 1, true), new THREE.MeshStandardMaterial({ color: shade, roughness: 0.9, side: THREE.DoubleSide, emissive: 0xffe2b0, emissiveIntensity: on ? 0.35 : 0 }));
-      s.position.set(0, y + 0.36, 0); g.add(s);
-      glow(0xffd9a0, 0.5, V(x, y + 0.36, z), on ? 0.6 : 0);
-      if (on) light(0xffd9a0, 3, 3, V(x, y + 0.34, z));
-      return g;
-    },
-    // sink, hob, cutting board and fruit bowl on a counter. top = counter surface height.
-    kitchenDetails(x, z, { w = 2.4, top = 0.95, rot = 0 } = {}) {
-      const g = group(x, z, rot);
-      b(g, -w * 0.32 - 0.25, -w * 0.32 + 0.25, top, top + 0.005, -0.22, 0.22, 'steel');   // sink
-      b(g, w * 0.08 - 0.25, w * 0.08 + 0.25, top, top + 0.005, -0.22, 0.22, 'black');     // hob
-      for (const dx of [-0.12, 0.12]) for (const dz of [-0.08, 0.08]) cyl(g, 0.04, 0.04, 0.006, 'black', w * 0.08 + dx, top + 0.008, dz, 12);
-      b(g, w * 0.3, w * 0.3 + 0.42, top, top + 0.025, -0.16, 0.16, 'wood:#c79a66');       // cutting board
-      cyl(g, 0.13, 0.1, 0.09, '#e7e1d2', w * 0.42 + 0.25, top + 0.045, 0, 20);            // fruit bowl
-      for (const [dx, dz] of [[-0.03, 0.02], [0.04, -0.03], [0, 0.05]]) cyl(g, 0.035, 0.035, 0.06, '#e0a040', w * 0.42 + 0.25 + dx, top + 0.1, dz, 12);
-      return g;
-    },
-    espressoMachine(x, z, { y = 0.95, rot = 0, body = '#b8bcc0' } = {}) {
-      const g = group(x, z, rot); g.position.y = y;
-      b(g, -0.38, 0.38, 0.02, 0.44, -0.24, 0.2, body);            // body
-      b(g, -0.4, 0.4, 0, 0.03, -0.24, 0.3, 'black');               // drip tray
-      b(g, -0.39, 0.39, 0.44, 0.47, -0.25, 0.21, 'black');         // cup warmer
-      for (let i = 0; i < 4; i++) cyl(g, 0.035, 0.03, 0.06, '#f4f1ea', -0.27 + i * 0.18, 0.5, -0.05, 12);
-      for (const sx of [-0.16, 0.16]) {
-        cyl(g, 0.05, 0.05, 0.05, 'steel', sx, 0.3, 0.24, 16);      // group head
-        const h = cyl(g, 0.015, 0.015, 0.22, 'black', sx, 0.26, 0.36, 8); h.rotation.x = Math.PI / 2; // portafilter handle
-      }
-      const wand = cyl(g, 0.008, 0.008, 0.3, 'steel', 0.34, 0.22, 0.24, 6); wand.rotation.z = 0.25;
-      b(g, -0.36, 0.36, 0.12, 0.2, 0.2, 0.205, 'brass');           // badge strip
-      return g;
-    },
-    candles,
-  };
-  return P;
-}
+const STYLE_KEYS = ['wall', 'floor', 'ceiling', 'fabric', 'wood', 'accent'];

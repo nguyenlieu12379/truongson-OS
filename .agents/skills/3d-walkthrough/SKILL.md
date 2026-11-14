@@ -1,14 +1,16 @@
 ---
 name: 3d-walkthrough
-description: Use when someone asks for a scroll-based 3D walkthrough website of a F&B, or BnBs, rentals, contructions, building, . Get a 3-style switch (modern, Scandinavian, warm luxury). Inputs are a floor plan, photos and footage, building context, and a walkthrough guide (a line drawn on the plan, or text describing the scroll POV). Unbuilt property with no photos is built from the floor plan alone, with interior design. Can also (or instead) build the place in Blender and render a walkthrough film (MP4). The film's start, route and end come from the walkthrough guide, asked for before building. Use it when someone asks to build a house or place in Blender or wants a walkthrough video. Also runs as /3d-walkthrough.
+description: Use when someone asks for a scroll-based 3D walkthrough website of a F&B, or BnBs, rentals, contructions, building, . Get a 3-style switch (modern, Scandinavian, warm luxury). Inputs are a floor plan, photos and footage, building context, and a walkthrough guide (a line drawn on the plan, or text describing the scroll POV). Unbuilt property with no photos is built from the floor plan alone, with interior design. The place is always modelled in Blender. The site loads the exported model, and the same Blender scene can render a walkthrough film (MP4) whose start, route and end come from the walkthrough guide. Use it when someone asks for a 3D walkthrough site, to build a house or place in Blender, or for a walkthrough video. Also runs as /3d-walkthrough.
 argument-hint: "[place name] [floor plan] [photos/footage + manifest] [context] [walkthrough guide]"
 ---
 
 # 3D Walkthrough
 
-Build a scroll-driven 3D website of a building, house, construction, etc. As the visitor scrolls, the camera walks them through the building, and each room gets text and one animated moment. The building is modelled in code with three.js. Where the client has real photos, those photos go onto the surfaces they show, so the scene looks like the real place.
+Build a scroll-driven 3D website of a building, house, construction, etc. As the visitor scrolls, the camera walks them through the building, and each room gets text and one animated moment.
 
-Reference build: `websites/TruongSon-demos/forno-notte/` (pizzeria, street to oven). The starter template in `assets/template/` is a generalised version of it.
+**One method: Blender.** The building is modelled in Blender from a Python script (`assets/blender/build_model.py`) and exported as `model.glb`. The website loads that model with three.js and walks the camera through it. The same Blender scene renders the film. Where the client has real photos, they go onto the surfaces they show, in Blender, so the scene looks like the real place.
+
+Reference build: the template's example (`assets/template/`, a coastal cottage) and its film, `projects/coastal-cottage/`. `websites/TruongSon-demos/forno-notte/` is an older site built the previous, code-only way. Do not copy its method.
 
 ## 0. Load the design skill. Every run.
 
@@ -52,9 +54,11 @@ If the place type is unclear, ask.
 
 ### Pick the output
 
-- **`site`** (default): the scroll-driven three.js website. Steps 4 to 8.
-- **`film`**: a Blender scene and a rendered MP4. Skip steps 4 to 7 and go to step 9.
-- **`both`**: build the film from the same plan and route, and use its `model.glb` as a check on the site's layout.
+Every output starts with the Blender model (steps 4 and 5).
+
+- **`site`** (default): the scroll-driven website that loads the model. Steps 4 to 8.
+- **`film`**: an MP4 rendered from the model. Steps 4, 5 and 9.
+- **`both`**: one model, both outputs. Steps 4 to 9.
 
 If the user says "Blender", "video", "film", "render" or "animation", the output is `film`. Otherwise ask, with `site` as the recommended option.
 
@@ -95,58 +99,67 @@ Stop here only if the plan cannot be read at all.
 
 ## 3. Plan and route, confirmed before building
 
-Turn the floor plan, the walkthrough guide and (where they exist) the photos into `assets/spec.js`. Read [spec reference](references/spec-reference.md) for the format. Key rules:
-- Units are metres. x right, z toward the street, y up. The front facade is the max z edge.
-- Walls are segments. Trace the outer walls counter-clockwise seen from above with the street at the bottom. Openings are `door`, `window` or `pass`.
-- Rooms are floor rectangles with finishes and light colour.
-- Camera stops follow the walkthrough guide. Eye height 1.6 to 1.8 m. Pass through door centres. Keep the camera at least 0.6 m from walls.
+Turn the floor plan, the walkthrough guide and (where they exist) the photos into a build plan: what goes in the Blender model, and the route.
+
+- **Model (Blender):** every wall and opening, rooms and finishes, furniture, lights, photos on surfaces, the site around the building. See [Blender model](references/blender-model.md).
+- **Route (`assets/spec.js`):** camera stops, door timing, styles, sky. See [spec reference](references/spec-reference.md).
+
+Route rules:
+- Coordinates are the model's, in metres: x right, y up, z toward the street. Blender (x, y, z) becomes (x, z, -y). The front is the max z edge.
+- Camera stops follow the walkthrough guide. Eye height 1.6 to 1.8 m above the floor. Pass through door centres. Keep the camera at least 0.6 m from walls.
 - **Human eye view only.** No 360 pictures, no panoramas, no bubble around the camera. The camera is an ordinary lens at eye height, about 52 degrees on desktop and 68 on portrait phones (engine default).
-- **Turning the view.** The camera turns as the visitor scrolls. Each stop has a `look` point, so to turn the head, add a stop where the look point points to the new angle. Keep stops 0.08 to 0.15 of progress apart so the turn stays smooth. Turn 90 degrees or less between neighbouring stops.
+- **Turning the view.** Each stop has a `look` point, so to turn the head, add a stop where the look point points to the new angle. Keep stops 0.08 to 0.15 of progress apart so the turn stays smooth. Turn 90 degrees or less between neighbouring stops.
 - **Dollhouse opening stays** for real estate. It is an overview, not a human-eye view. Only the room views are human eye.
-- **Realism comes from** real photos on surfaces (`photo:` materials, see step 5) plus furniture built as 3D shapes.
 - The camera moves along the stops only. There is no free walking, so collision only needs to hold along that path.
 - **`dollhouse-open`:** the first one or two stops are a high overview of the whole home, above the roof, then the path descends to the front door.
 - **`street-open`:** the first stops are outside on the street, then the path reaches the front door, then goes in.
 
-Interior design follows step 3 of the original 3d-walkthrough-2 method. Furnish each room to fit its size:
-- Bed in the bedroom, made with pillows and a folded throw (`P.bed`).
-- Table and chairs in the dining room, a set dining table (`P.tableSet`).
-- Kitchen counter, sink, hob, cutting board, fruit bowl (`P.counter` and `P.kitchenDetails`).
-- Sofa and TV in the living room, with rugs (`P.sofa`, `P.rug`).
-- Art on walls (`P.art`), table lamps (`P.tableLamp`), plants (`P.plant`), pendants.
-- Materials should feel real, drawn in code.
+Interior design (in Blender). Furnish each room to fit its size:
+- Bed in the bedroom, made with pillows and a folded throw.
+- Table and chairs in the dining room, set.
+- Kitchen counter, sink, hob, island.
+- Sofa and TV in the living room, with rugs.
+- Art on walls, lamps, plants, pendants.
+- Realism comes from real photos on surfaces plus furniture that matches their layout and palette.
 
-For real estate, add `styles` to the spec (see [spec reference](references/spec-reference.md#styles)). Each style sets wall, floor, ceiling, accent, fabric and wood. Write the furniture set for each style in `site.js` so the switch changes the whole home, not only the walls.
+For real estate, plan three `styles`. Each recolours the materials named `wall`, `floor`, `ceiling`, `fabric`, `wood` and `accent`. Furniture that should change per style gets a `style` extra in Blender.
 
 Show the user a top-down sketch of the plan with the route before building: a small SVG or ASCII plan with walls, doors and numbered stops. Get a yes or corrections. This is the cheapest place to catch a wrong layout.
 
-## 4. Scaffold
+## 4. Scaffold and set up Blender
 
 ```bash
 cp -R .agents/skills/3d-walkthrough/assets/template websites/<owner>/<site-name>
+mkdir -p websites/<owner>/<site-name>/blender && cp .agents/skills/3d-walkthrough/assets/blender/build_model.py websites/<owner>/<site-name>/blender/
+python3 -m venv <scratchpad>/bl && <scratchpad>/bl/bin/pip install bpy pillow
 ```
+
+For a film with no site, use `projects/<place-name>/` for the scripts instead and skip the template.
 
 Template files:
 - `index.html`: text panels with `data-in` / `data-out` scroll ranges, brand in the nav
-- `assets/spec.js`: floor plan, rooms, exterior, `mode`, camera stops (chapters in the nav come from stops with `chapter`)
-- `assets/site.js`: furniture, props and per-room scroll animations
-- `assets/engine.js`: builds the building, camera spring, panels, photo textures, dollhouse opening, reduced motion. Do not fork per site unless a feature is missing; if it is, add it to the template engine too so the next build gets it.
+- `assets/model.glb`: the building, exported from Blender. Replace with the client's
+- `assets/spec.js`: `mode`, model path, sky, camera stops (chapters come from stops with `chapter`), doors, styles
+- `assets/site.js`: per-room scroll animations on the loaded model
+- `assets/engine.js`: loads the model, camera spring, panels, dollhouse opening, doors, style switch, reduced motion. Do not fork per site unless a feature is missing; if it is, add it to the template engine too so the next build gets it.
 - `assets/style.css`: set `--accent` and `--accent-2` from the brand
-- `assets/three.module.min.js`: vendored three.js r169 (MIT)
+- `assets/three.module.min.js`, `GLTFLoader.js`, `BufferGeometryUtils.js`: vendored three.js r169 (MIT)
 
-Replace the example cafe completely. Nothing from "Little Hour Coffee" should survive. Put the client's photos in `assets/photos/`.
+Replace the example cottage completely: model, spec, copy. Put the client's photos (cropped and straightened) in `blender/photos/`.
 
-## 5. Build the scene
+## 5. Build the scene in Blender
 
-Work outside in, following the route. For `dollhouse-open`, start at the overview and work down to the door.
+Edit `blender/build_model.py`. Work outside in, following the route. Read [Blender model](references/blender-model.md) first.
 
-1. Exterior (`street-open`): kind, sky, facade, sign text. Match the frontage photo. For `dollhouse-open`, use the garden or street kind that fits the property.
-2. Walls and openings from the plan. Check the doors open at the right scroll range.
-3. Rooms: finishes and lights from `brief.md`.
-4. **Photos on surfaces.** Where the manifest tags a photo to a surface, set that surface's material to `'photo:assets/photos/<file>.jpg'`. The photo must already be cropped and straightened to the surface. Do not use photos on surfaces they do not show straight on.
-5. Props from the prop library (`ctx.props`: tables, chairs, counters, shelves, sofas, beds, plants, pendants, rugs, wall boards, espresso machine). Build custom pieces with `box`, `cyl`, `glow` when the library lacks one. Aim for the photo's layout and palette, not every object.
-6. One hero moment per major room in `site.js`'s update function, driven by scroll progress `p` (use `seg`, `smooth`, `easeOut`). Small, physical, readable.
-7. **Style switch (real estate only).** `site.build(ctx, style)` runs again on every style change. Read `ctx.spec.styles[style]` for the fabric, wood and accent colours, and put all furniture on `ctx.props` (which already sits under `ctx.root`). Add furniture to `ctx.root`, not to `scene`, or it will duplicate on each switch. The engine swaps walls, floors and ceilings itself. Set the button labels in `index.html` to match the style keys.
+1. Dimensions at the top (feet), then the site: ground, street or garden, sea, whatever the frontage photo shows.
+2. Walls and openings from the plan with `wall()`. Doors and sliders on the route get `make_door()`.
+3. Floors, ceilings and finishes from `brief.md`. Use the role material names so the style switch works.
+4. **Photos on surfaces** with `photo()`. Only on surfaces the photo shows straight on.
+5. Furniture per room (boxes in the `Furniture` collection), to the photo's layout and palette, not every object.
+6. Room point lights in the `Lights` collection.
+7. Run it, read the four renders, fix, repeat. Then copy `model.glb` to the site's `assets/`.
+8. In `spec.js`: stops, `doors` timing, `styles`, `sky`, `lightScale`.
+9. One hero moment per major room in `site.js`'s update function, driven by scroll progress `p` (use `seg`, `smooth`, `easeOut`). Animate model objects with `ctx.get('Name')` (keep them separate in Blender), or add small extras with `glow` and `light`. Small, physical, readable.
 
 Lessons that save time are in [build notes](references/build-notes.md). Read them before step 5.
 
@@ -170,9 +183,10 @@ Read every screenshot. Fix and reshoot until all pass:
 - No console errors
 - Each stop matches the plan and, where there are photos, the photo (layout, palette, hero object visible)
 - Photos sit on the right surface and are not stretched or cut wrong
+- `model.glb` loads (no 404, no loader error) and stays under about 5 MB
 - Camera never clips through a wall or furniture; doors open before the camera reaches them
 - `dollhouse-open`: the overview shows the rooms from above, and the roof is gone from that view
-- Real estate: each style button changes the walls, floors, ceiling and furniture together. Check all three styles, and that the switch works with no console errors
+- Real estate: each style button recolours walls, floors, ceiling, fabric and wood, and swaps per-style furniture. Check all three styles, and that the switch works with no console errors
 - No room is too dark or blown out; text is readable over the scene
 - Panels do not overlap each other or the hero object on phone
 - Run the `review-animations` checklist from design-skills on the motion
@@ -189,15 +203,15 @@ Headless rendering uses software GL and is slow; the script waits for the camera
 
 ## 9. Blender film (output `film` or `both`)
 
-Read [Blender film](references/blender-film.md) first. It has an example beat sheet, the setup, the script API, the match cut maths and every mistake already made. Reference build: `projects/coastal-cottage/`.
+The model from step 5 is the film's set. Read [Blender film](references/blender-film.md) first. It has an example beat sheet, the script API, the match cut maths and every mistake already made. Reference build: `projects/coastal-cottage/`.
 
-1. **Set up Blender.** `pip install bpy pillow` in a venv in the scratchpad. Cycles on CPU in the cloud; EEVEE does not run headless there.
-2. **Copy the templates** from `assets/blender/` (`build_model.py`, `build_film.py`) into `projects/<place-name>/`, or `websites/<owner>/<site>/film/` for `both`.
-3. **Model** in `build_model.py`: dimensions in feet at the top, walls with openings, rooms, furniture, roof, site. Keep the collection names; the film animates by collection. Run it with `--no-render` until it builds clean, then render the four stills and read them. Check the plan cutaway against the floor plan.
-4. **Route** in `build_film.py`: write the `shots` list from the walkthrough guide: its start, every stop in order, and its end shot. Add or drop beats (plan on a table, build-up, dollhouse, roof landing) only as the guide asks. Point the door and slider names at the doors on the route. Show the user the plan with numbered stops before rendering, as in step 3.
+1. **Copy** `assets/blender/build_film.py` next to `build_model.py`. It runs the model script first, then animates it.
+2. **Check the model** renders (step 5) if it was built for the film only.
+3. **Doors**: the film opens the doors made with `make_door()` (`Door_Front`, `Door_Rear_Slider` in the example). Point it at the doors on the route.
+4. **Route** in `build_film.py`: write the `shots` list from the walkthrough guide: its start, every stop in order, and its end shot. Add or drop beats (plan on a table, build-up, dollhouse, roof landing) only as the guide asks. Show the user the plan with numbered stops before rendering, as in step 3.
 5. **Test** with `--test`: read the stills as one contact sheet. Fix framing, exposure, clipping and anything blocking the end shot. Repeat until clean.
 6. **Render** the full film detached, with a Monitor on progress and errors (1,040 frames take about 3.5 hours at 720p in the cloud). Meanwhile, send the user the `.blend` so they can play it in Blender right away.
-7. **Deliver**: `film.mp4`, `film.blend`, `model.blend`, `model.glb`, `floor_plan.png`, stills, and a `README.md` with this film's beats and rebuild commands. Commit on the working branch. List every assumption (room layout, finishes, site dressing).
+7. **Deliver**: `film.mp4`, `film.blend`, `model.blend`, `floor_plan.png`, stills, and a `README.md` with this film's beats and rebuild commands. Commit on the working branch. List every assumption (room layout, finishes, site dressing).
 
 ## Rules
 

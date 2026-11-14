@@ -1,6 +1,6 @@
 # Build notes
 
-What worked on Forno Notte and the template cafe. Read before building a scene.
+What worked on Forno Notte, the old template cafe and the Blender-built coastal cottage. Read before building a scene. Modelling rules are in [Blender model](blender-model.md).
 
 ## Camera and pacing
 
@@ -14,7 +14,8 @@ What worked on Forno Notte and the template cafe. Read before building a scene.
 
 ## Light
 
-- Physical point lights (decay 2). Useful intensities: room fill 8 to 16, pendant accent 6, street lamp 26, oven or fire 20 to 30.
+- Point lights come from the model with decay 2. In Blender: room fill 40 to 90 W, small rooms 15 to 25 W, then `spec.lightScale` about 3.
+- Room lights are point lights in the Blender `Lights` collection. Tune them all at once with `spec.lightScale`.
 - Keep total point lights under about 14. Each one costs every pixel.
 - Glow sprites (`glow`) fake bloom for bulbs, candles, neon and fire. They are cheap; use them generously.
 - Colour carries mood: warm interior (`#ffd2a0`) against a cool dusk exterior is the strongest contrast.
@@ -25,7 +26,7 @@ What worked on Forno Notte and the template cafe. Read before building a scene.
 - Get the palette right first (floor, walls, main furniture). It sells the place more than object count.
 - Then the hero object. Model it with the most care: it is where the camera ends up.
 - Skip clutter. Two or three props per zone that match the photo beat twenty that do not.
-- Signage and menu boards (`TEX.sign`, `TEX.board`) make it feel like the real business fast.
+- Signage and menu boards make it feel like the real business fast. Put a photo of the real sign on its surface with `photo()` in Blender.
 
 ## Hero moments
 
@@ -42,12 +43,14 @@ What worked on Forno Notte and the template cafe. Read before building a scene.
 
 ## Performance
 
-- Pixel ratio capped at 1.75. Canvas textures are cached per material string, so reuse strings.
+- Pixel ratio capped at 1.75.
+- Static meshes are joined per material on export, so the site draws a few dozen meshes. Keep `model.glb` under about 5 MB; photos are most of it.
 - Avoid real-time shadows. Contact darkness comes from fog, vignette and light falloff.
-- Keep geometry simple. The template cafe renders at 60 fps on a laptop.
+- Keep geometry simple: boxes and planes. Glass is swapped for a cheap transparent material on load.
 
 ## Testing
 
 - `scripts/shoot.cjs` uses software GL (SwiftShader). It is slow, so it waits 4 s per stop.
 - Check phone size (390 x 844): wider FOV kicks in under 0.8 aspect, and panels stack at the bottom.
-- Common bugs: a wall face showing the wrong finish (wall traced the wrong direction), the camera clipping a wall at a turn, a door opening outward (flip `swing`), a dark room (missing room light or a light outside the rect).
+- Headless WebGL shares the CPU. If a Cycles render is running, screenshots can time out; use a smaller window and longer waits, or shoot after the render.
+- Common bugs: the camera clipping a wall at a turn, a door swinging the wrong way (flip the sign of `angle`), a door pivoting far from its frame (origin not on the hinge, use `make_door`), a dark room (missing light in the `Lights` collection, or `lightScale` too low).
