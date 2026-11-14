@@ -135,3 +135,13 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 **Alternatives considered:** Deleting the files (rejected: house rule is to archive, and the pack may be reused later). Keeping it in place with a "not active" note (rejected: stale skills mislead routing).
 
 **Owner:** To confirm (Son or Truong)
+
+## 2026-11-14 - Use Dreamina's free web tier for video, no MCP
+
+**Decision:** Do not connect a Dreamina or Seedance MCP server. Use Dreamina's web app and its free daily credits for video. Claude does not drive Dreamina from this AIOS.
+
+**Why:** The MCP servers found (AceDataCloud SeedanceMCP, jing7ao/seedance-mcp) call paid APIs with their own balance, not the free web credits. AceDataCloud's README says generation is metered on the account. Adding one would also mean signing in to a paid account and editing the shared `.mcp.json`.
+
+**Alternatives considered:** AceDataCloud SeedanceMCP on a paid balance (rejected for now: cost per clip unverified). Muapi (archived, needs a key). Local Wan2GP (needs a GPU not available here).
+
+**Owner:** To confirm (Son or Truong)
