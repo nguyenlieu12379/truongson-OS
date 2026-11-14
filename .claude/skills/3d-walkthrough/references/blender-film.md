@@ -4,9 +4,9 @@ How to turn a floor plan into a rendered MP4 walkthrough with Blender. Use it wh
 
 Reference build: `3d/coastal-cottage/` (elevated beach cottage, 43 s film). The templates in `assets/blender/` are generalised copies of it.
 
-## The film, beat by beat
+## Example beat sheet
 
-The default story. Change the beats to suit the place, but keep the order.
+The film's start, route and end come from the walkthrough guide, asked for before building. This is not a fixed story. Below is what the coastal cottage guide asked for, to show pacing and the techniques the template already has. Use only the beats the guide calls for, in the guide's order.
 
 | Beat | Frames @24fps | What happens |
 | --- | --- | --- |
@@ -19,7 +19,7 @@ The default story. Change the beats to suit the place, but keep the order.
 | 7. Walk in | 710-905 | Eye height, through the rooms in the walkthrough guide's order. Doors and sliders open before the camera reaches them. |
 | 8. End shot | 905-1040 | Hold on the hero view (for a beach house, the lanai and the ocean). Hold at least 2 s. |
 
-For `street-open` businesses, skip beats 4 and 5 or keep them short, and spend the time inside.
+If the guide gives no start or end, ask. Do not fill the gap with this example.
 
 ## Setup (cloud or local)
 
