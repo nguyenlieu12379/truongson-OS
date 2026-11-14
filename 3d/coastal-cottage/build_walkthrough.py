@@ -492,6 +492,8 @@ scene.cycles.glossy_bounces = 2
 scene.cycles.transmission_bounces = 4
 scene.render.use_persistent_data = True
 # Saved file renders straight to MP4 with Ctrl+F12 (output next to the .blend)
+if hasattr(scene.render.image_settings, "media_type"):   # Blender 5.x
+    scene.render.image_settings.media_type = "VIDEO"
 scene.render.image_settings.file_format = "FFMPEG"
 scene.render.ffmpeg.format = "MPEG4"
 scene.render.ffmpeg.codec = "H264"
@@ -511,6 +513,8 @@ def arg(name, default=None):
 
 if "--test" in ARGS:
     scene.render.resolution_percentage = int(arg("--pct", "50"))
+    if hasattr(scene.render.image_settings, "media_type"):
+        scene.render.image_settings.media_type = "IMAGE"
     scene.render.image_settings.file_format = "PNG"
     out = arg("--out", os.path.join(HERE, "test"))
     os.makedirs(out, exist_ok=True)
@@ -523,6 +527,8 @@ if "--test" in ARGS:
 if "--render" in ARGS:
     a, b = (int(x) for x in arg("--frames", f"1-{END}").split("-"))
     scene.frame_start, scene.frame_end = a, b
+    if hasattr(scene.render.image_settings, "media_type"):
+        scene.render.image_settings.media_type = "IMAGE"
     scene.render.image_settings.file_format = "PNG"
     scene.render.filepath = os.path.join(arg("--out", os.path.join(HERE, "frames")), "")
     bpy.ops.render.render(animation=True)
