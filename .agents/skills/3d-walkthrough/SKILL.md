@@ -166,7 +166,7 @@ The site needs it, so every output renders it. Read [Blender film](references/bl
 Read [Film site](references/film-site.md) first. Template: `assets/film-site/`.
 
 1. Copy the template into the site folder: `cp -R .agents/skills/3d-walkthrough/assets/film-site/. websites/<owner>/<site-name>/`
-2. Turn the film's frames into web images with `scripts/make_frames.sh`: every 2nd frame, WebP, a desktop set (1280 wide) and a phone set (854 wide). About 25 KB a frame, so 520 frames is about 13 MB on desktop.
+2. Turn the film's frames into web images with `scripts/make_frames.sh`: every frame, WebP, a desktop set (1280 wide) and a phone set (854 wide). About 28 KB a frame, so a 1,040-frame film is about 29 MB on desktop and 17 MB on phone. Every frame matters: with every 2nd frame, slow scrolling looks like a slideshow.
 3. In `assets/beats.js`: the frame count and one entry per beat (start and end as a share of the film, from the beat sheet).
 4. The film stays pinned full screen and plays as you scroll, with a soft blend between frames. Text panels fade in over their beat.
 
@@ -188,6 +188,7 @@ node .agents/skills/3d-walkthrough/scripts/shoot.cjs http://localhost:8000/ <scr
 
 Read every screenshot. Fix and reshoot until all pass:
 - No console errors, no missing frames (404)
+- Slow scroll holds 60 fps on a high-DPI screen (1920x1080 at 2x): see the perf check in [Film site](references/film-site.md)
 - The film shows the right frame for each scroll point, forward and back
 - Text is readable over every frame; panels never cover the hero view
 - Panels do not overlap each other on phone
