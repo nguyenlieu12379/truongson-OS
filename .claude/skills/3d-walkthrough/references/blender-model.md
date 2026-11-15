@@ -38,7 +38,7 @@ Everything is in feet at the top (`W`, `D`, `FLOOR_Z`, `CEIL`, body extents, rid
 - `wall(name, a, b, thickness, openings, material, collection)`: straight wall from plan point a to b. Openings are `win(center, width)`, `door(center, width)`, `slider(center, width)` or `(center, width, sill, head, "front_door")`. The wall is split around each opening and glass goes in window and slider gaps.
 - `photo(name, image_path, a, b, z0, z1)`: a client photo on a wall, from plan point a to b, z0 to z1 feet high. Crop and straighten the photo to that rectangle first. It is packed into the `.glb`.
 - `rooms`: label text and position per room. Used for the plan drawing and the 3D labels.
-- Furniture: boxes in the `Furniture` collection, sized to the room (bed with pillows, dining table and chairs, kitchen counter and island, sofa and TV wall, rugs). Read the photos for layout and palette.
+- Furniture: in the `Furniture` collection, sized to the room (bed with pillows, dining table and chairs, kitchen counter and island, sofa and TV wall, rugs). Read the photos for layout and palette. With no photos (self-design), design real furniture shapes, decor and materials from the design guide. Example: `projects/coastal-cottage/design_pass.py` (procedural materials, furniture builders, golden-hour sky and grade).
 - `make_door(old_name, new_name)`: renames a door or slider and moves its origin onto the hinge.
 - Point lights in the `Lights` collection, one or more per room, near the ceiling.
 
@@ -61,6 +61,8 @@ Plan axes: x across the front, y from the street (y = 0) toward the back, z up.
 `export_web_glb()` joins static meshes per collection and material (hundreds of boxes become a few dozen meshes), then exports with extras and lights. It runs after `model.blend` is saved, because the film needs the objects separate.
 
 ## Mistakes we already made
+
+- **Procedural materials on the website.** Node-built textures (wood planks, tile, siding) don't survive the `.glb` export; the site gets the material's plain base colour. Set a sensible base colour on every designed material, or bake textures for the site.
 
 - **Door pivoting around the world origin.** `box()` bakes the location into the mesh, so every origin is at (0, 0, 0). A door rotated without moving its origin swings in a huge arc. Always use `make_door`.
 - **Ghost walls, roof that never lands, black ground edges**: see [Blender film](blender-film.md).

@@ -1,14 +1,14 @@
 ---
 name: 3d-walkthrough
-description: Use when someone asks for a scroll-based 3D walkthrough website of a F&B, or BnBs, rentals, contructions, building, . Get a 3-style switch (modern, Scandinavian, warm luxury). Inputs are a floor plan, photos and footage, building context, and a walkthrough guide (a line drawn on the plan, or text describing the scroll POV). Unbuilt property with no photos is built from the floor plan alone, with interior design. The place is always modelled in Blender. The site loads the exported model, and the same Blender scene can render a walkthrough film (MP4) whose start, route and end come from the walkthrough guide. Use it when someone asks for a 3D walkthrough site, to build a house or place in Blender, or for a walkthrough video. Also runs as /3d-walkthrough.
-argument-hint: "[place name] [floor plan] [photos/footage + manifest] [context] [walkthrough guide]"
+description: Use when someone asks for a scroll-based 3D walkthrough website of a F&B, or BnBs, rentals, contructions, building, . Get a 3-style switch (modern, Scandinavian, warm luxury). Inputs are a floor plan, photos and footage, building context, a walkthrough guide (a line drawn on the plan, or a prompt describing the scroll POV) and a design guide. With no photos or footage, or for an unbuilt place, everything is self-designed in Blender from the design guide (materials, furniture, items, surroundings, sky, terrain). With a floor plan, it opens on the plan lying on a surface, then the house is built from the ground up. The place is always modelled in Blender. The site loads the exported model, and the same Blender scene can render a walkthrough film (MP4) whose start, route and end come from the walkthrough guide. Use it when someone asks for a 3D walkthrough site, to build a house or place in Blender, or for a walkthrough video. Also runs as /3d-walkthrough.
+argument-hint: "[place name] [floor plan] [photos/footage + manifest] [context] [walkthrough guide] [design guide]"
 ---
 
 # 3D Walkthrough
 
 Build a scroll-driven 3D website of a building, house, construction, etc. As the visitor scrolls, the camera walks them through the building, and each room gets text and one animated moment.
 
-**One method: Blender.** The building is modelled in Blender from a Python script (`assets/blender/build_model.py`) and exported as `model.glb`. The website loads that model with three.js and walks the camera through it. The same Blender scene renders the film. Where the client has real photos, they go onto the surfaces they show, in Blender, so the scene looks like the real place.
+**One method: Blender.** The building is modelled in Blender from a Python script (`assets/blender/build_model.py`) and exported as `model.glb`. The website loads that model with three.js and walks the camera through it. The same Blender scene renders the film. **Design:** where the client has real photos, they go onto the surfaces they show, in Blender, so the scene looks like the real place. With no footage or images, or for an unbuilt structure, design everything in Blender from the design guide: materials, furniture, items, surrounding environment, sky and terrain.
 
 Reference build: the template's example (`assets/template/`, a coastal cottage) and its film, `projects/coastal-cottage/`. `websites/TruongSon-demos/forno-notte/` is an older site built the previous, code-only way. Do not copy its method.
 
@@ -31,12 +31,13 @@ Use `review-animations` in step 7. Apply what they say over anything in this fil
 | Input | Required | Notes |
 | --- | --- | --- |
 | **Floor plan** | Yes | Image or PDF. Any sketch works. If it has no scale, ask for one known measurement (door width, room length). |
-| **Walkthrough guide** | Yes | Either a line drawn on the floor plan, or text describing how the scroll POV should move ("enter, turn left to the bar, then the patio"). It sets the camera stops. |
+| **Walkthrough guide** | Yes | Either a line drawn on the floor plan, or a prompt describing how the scroll POV should move ("enter, turn left to the bar, then the patio"). It sets the camera stops, the start and the end. |
 | **Photos and footage** | Yes for a built place. Optional for unbuilt real estate. | Outside frontage, entrance, each room, the hero spot (oven, bar, bed, chair). |
+| **Design guide** (self-design) | When no photos or footage exist, or for an unbuilt place | A prompt for the look. Follow it to design the materials, furniture, items, surrounding environment, sky and terrain. Ask for it if missing. |
 | **Photo manifest** | When photos exist | One line per photo: which file, which surface it goes on (for example `front-wall`, `counter-left`, `floor-cafe`). Tagged by the user. |
 | **Building context** | No | Name, type, hours, address, price, booking link, 3 facts worth bragging about. Used for the copy and the sign. |
 | **Brand** | No | Logo, colours, fonts. |
-| **Mood** | No | Time of day (`dusk`, `night`, `day`, `golden`) and street or garden frontage. |
+| **Mood** | No | Time of day (`dusk`, `night`, `day`, `golden`) and street or garden frontage. Can be part of the design guide. |
 
 Ask for what is missing with the host's question tool, a few questions at a time. Never invent facts like prices, hours or addresses. Use clearly marked placeholders (`TODO: hours`) and list them at the end.
 
@@ -47,6 +48,7 @@ Also ask, if not obvious: owner folder name for `websites/<owner>/<site>/`, and 
 Set `spec.mode` from what the place is.
 
 - **`dollhouse-open`**: real estate, rentals, a home for sale or let. The scroll opens on a high overview of the whole home, then the camera descends to the front door and walks room by room. This is the only mode that gets the style switch.
+  - **With a floor plan (or plans):** start the frame on the floor plan lying on a surface, then the house is built brick by brick from the ground up, then the overview and the walk as above. The film template already has this (plan on the table, match cut, build-up). For the site, play it at the start of the scroll; if the engine lacks it, add it to the template engine.
 - **`street-open`**: any one-floor business (cafe, shop, restaurant, bar, bnb, salon, studio). The scroll starts on the street, walks to the front door, then goes in. No dollhouse.
 - or anything user mention in the walkthrough guide
 
@@ -64,9 +66,9 @@ If the user says "Blender", "video", "film", "render" or "animation", the output
 
 For `film`, the walkthrough guide sets where the film starts, the route, and where it ends. Ask for it before building if it is missing. Do not assume the reference build's story.
 
-### Unbuilt real estate (no photos)
+### Self-design (no photos, or unbuilt)
 
-When the property is not built yet and there are no photos, build from the floor plan alone. Rooms are furnished and styled using step 3 (interior design). The photo manifest is not needed. Say so in the final message, and list which finishes and furniture are assumptions.
+When there are no photos or footage, or the property is not built yet, build from the floor plan and design everything from the design guide (step 5, Design). The photo manifest is not needed. Say so in the final message, and list every finish, furniture and site choice as an assumption.
 
 ## 2. Study the place
 
@@ -78,7 +80,7 @@ mkdir -p <scratchpad>/frames && ffmpeg -i <video> -vf "fps=1/2,scale=1280:-1" <s
 
 Then write `brief.md` in the site folder, one section per place:
 - Rough size (metres) and ceiling height
-- Floor, wall and ceiling finishes, with hex colours sampled from the photos (or chosen for unbuilt property)
+- Floor, wall and ceiling finishes, with hex colours sampled from the photos (or chosen from the design guide when there are no photos)
 - Furniture and fixtures with rough positions (left wall, centre, by the window)
 - Light sources and their colour (warm pendants, daylight windows, neon)
 - The **hero object** of the room and the scroll moment for it (pizza built and baked, cup filling, bed turned down, door opening to the patio)
@@ -114,13 +116,13 @@ Route rules:
 - **`dollhouse-open`:** the first one or two stops are a high overview of the whole home, above the roof, then the path descends to the front door.
 - **`street-open`:** the first stops are outside on the street, then the path reaches the front door, then goes in.
 
-Interior design (in Blender). Furnish each room to fit its size:
+Interior design (in Blender). Furnish each room to fit its size, in the look the photos or the design guide set:
 - Bed in the bedroom, made with pillows and a folded throw.
 - Table and chairs in the dining room, set.
 - Kitchen counter, sink, hob, island.
 - Sofa and TV in the living room, with rugs.
 - Art on walls, lamps, plants, pendants.
-- Realism comes from real photos on surfaces plus furniture that matches their layout and palette.
+- Realism comes from real photos on surfaces plus furniture that matches their layout and palette. With no photos, it comes from real materials, decor and the light the design guide asks for.
 
 For real estate, plan three `styles`. Each recolours the materials named `wall`, `floor`, `ceiling`, `fabric`, `wood` and `accent`. Furniture that should change per style gets a `style` extra in Blender.
 
@@ -151,15 +153,19 @@ Replace the example cottage completely: model, spec, copy. Put the client's phot
 
 Edit `blender/build_model.py`. Work outside in, following the route. Read [Blender model](references/blender-model.md) first.
 
-1. Dimensions at the top (feet), then the site: ground, street or garden, sea, whatever the frontage photo shows.
+1. Dimensions at the top (feet), then the site and terrain: ground, street or garden, sea, whatever the frontage photo or the design guide shows.
 2. Walls and openings from the plan with `wall()`. Doors and sliders on the route get `make_door()`.
 3. Floors, ceilings and finishes from `brief.md`. Use the role material names so the style switch works.
-4. **Photos on surfaces** with `photo()`. Only on surfaces the photo shows straight on.
-5. Furniture per room (boxes in the `Furniture` collection), to the photo's layout and palette, not every object.
-6. Room point lights in the `Lights` collection.
-7. Run it, read the four renders, fix, repeat. Then copy `model.glb` to the site's `assets/`.
-8. In `spec.js`: stops, `doors` timing, `styles`, `sky`, `lightScale`.
-9. One hero moment per major room in `site.js`'s update function, driven by scroll progress `p` (use `seg`, `smooth`, `easeOut`). Animate model objects with `ctx.get('Name')` (keep them separate in Blender), or add small extras with `glow` and `light`. Small, physical, readable.
+4. **Photos on surfaces** with `photo()`, when photos exist. Only on surfaces the photo shows straight on.
+5. **Design**, picked by what the client gave:
+   - **With photos or footage:** finishes, furniture and palette matched to the photos (layout and palette, not every object).
+   - **Self-design** (no photos or footage, or an unbuilt place): follow the design guide and design everything in Blender. Real materials (siding, wood floors, tile, stone, metal roof, fabrics), real furniture shapes, decor items, plants, the surrounding environment and terrain, and the sky. Reference: `projects/coastal-cottage/design_pass.py`.
+   - Either way, keep the role material names so the style switch works. Furniture goes in the `Furniture` collection.
+6. **Lighting and mood** from the design guide (day, golden hour, dusk, night): sun, sky, warm room lights (point lights in the `Lights` collection), colour grade. Reference: `golden_hour()` in `projects/coastal-cottage/design_pass.py`.
+7. **Opening** (floor plan given): the plan on a surface, then the house built brick by brick from the ground up, before the walkthrough. See [Blender film](references/blender-film.md) for the build-up keyframes.
+8. Run it, read the four check renders (front, back, plan cutaway, aerial), fix, repeat. Then copy `model.glb` to the site's `assets/`.
+9. In `spec.js`: stops, `doors` timing, `styles`, `sky`, `lightScale`.
+10. One hero moment per major room in `site.js`'s update function, driven by scroll progress `p` (use `seg`, `smooth`, `easeOut`). Animate model objects with `ctx.get('Name')` (keep them separate in Blender), or add small extras with `glow` and `light`. Small, physical, readable.
 
 Lessons that save time are in [build notes](references/build-notes.md). Read them before step 5.
 
@@ -208,7 +214,7 @@ The model from step 5 is the film's set. Read [Blender film](references/blender-
 1. **Copy** `assets/blender/build_film.py` next to `build_model.py`. It runs the model script first, then animates it.
 2. **Check the model** renders (step 5) if it was built for the film only.
 3. **Doors**: the film opens the doors made with `make_door()` (`Door_Front`, `Door_Rear_Slider` in the example). Point it at the doors on the route.
-4. **Route** in `build_film.py`: write the `shots` list from the walkthrough guide: its start, every stop in order, and its end shot. Add or drop beats (plan on a table, build-up, dollhouse, roof landing) only as the guide asks. Show the user the plan with numbered stops before rendering, as in step 3.
+4. **Route** in `build_film.py`: write the `shots` list from the walkthrough guide: its start, every stop in order, and its end shot. With a floor plan, open on the plan on a surface and the build-up from the ground (step 1, opening mode). Add or drop other beats (dollhouse, roof landing) only as the guide asks. Show the user the plan with numbered stops before rendering, as in step 3.
 5. **Test** with `--test`: read the stills as one contact sheet. Fix framing, exposure, clipping and anything blocking the end shot. Repeat until clean.
 6. **Render** the full film detached, with a Monitor on progress and errors (1,040 frames take about 3.5 hours at 720p in the cloud). Meanwhile, send the user the `.blend` so they can play it in Blender right away.
 7. **Deliver**: `film.mp4`, `film.blend`, `model.blend`, `floor_plan.png`, stills, and a `README.md` with this film's beats and rebuild commands. Commit on the working branch. List every assumption (room layout, finishes, site dressing).
