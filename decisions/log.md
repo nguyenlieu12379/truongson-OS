@@ -125,3 +125,18 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 **Alternatives considered:** Installing the whole open-generative-ai Next.js/Electron app (heavy, and it is a UI for people, not a tool for Claude). Using `npx skills add` at runtime (not reproducible and not pinned). Installing `muapi-cli` globally (not vendored; can be added later).
 
 **Owner:** To confirm (Son or Truong)
+
+## 2026-11-15 - Baked live 3D for walkthrough websites
+
+**Decision:** The `/3d-walkthrough` website is live 3D (three.js) with Blender's lighting and materials baked into the model's textures. The film is an optional output, not the site's background. The film-playback site template is archived in `archives/3d-walkthrough-film-site/`. The coastal cottage gets rebuilt this way next. The film version stays live at `/coastal-cottage/` until then.
+
+**Why:** It's smooth at any scroll speed, about 5 to 15 MB, and close to the Blender render. Re-baking one room is quicker than re-rendering a whole film.
+
+**Alternatives considered:**
+- 24 fps film played by scroll: built and live. 17 to 29 MB, and very slow scrolls show steps.
+- 90 fps film: simplest pipeline with the fewest bugs, but about 110 MB and a 13 to 18 hour render.
+- Plain live 3D (Forno Notte style): lightest and fastest, but looks flat.
+
+Risk: the bake hasn't been run in this setup yet. The cottage is the first test.
+
+**Owner:** Son
