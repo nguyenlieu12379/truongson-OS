@@ -244,6 +244,35 @@ bpy.ops.object.make_single_user(type="SELECTED_OBJECTS", object=True, obdata=Tru
 bpy.ops.object.convert(target="MESH")
 log("converted", len(allg))
 
+# Join each group into ONE object with an identity transform before baking. Cycles bakes
+# selected objects one at a time (about 4 s each), so 337 pilings took 21 min; joined, seconds.
+# Most pieces have their origin at the world origin already, so object-space textures don't move.
+FIXED_NAMES = {"G_SandNear", "G_Hill"}
+joined = []
+for name, objs, dens, lmdiv, role in GROUPS:
+    if name in FIXED_NAMES or role == "door" or len(objs) == 1 and objs[0].name == name:
+        joined.append((name, objs, dens, lmdiv, role))
+        continue
+    me = bpy.data.meshes.new(name)
+    host = bpy.data.objects.new(name, me)
+    objs[0].users_collection[0].objects.link(host)
+    select_only(objs + [host], active=host)
+    bpy.ops.object.join()
+    host = bpy.context.view_layer.objects.active
+    host.name = name
+    # thin out the heavy organic geometry before baking (the bake then matches it exactly)
+    ratio = {"G_Site": 0.35, "G_EnvTrees": 0.35, "G_FurnOut": 0.5, "G_FurnIn": 0.6}.get(name)
+    if ratio:
+        before = len(host.data.polygons)
+        dm = host.modifiers.new("Decimate", "DECIMATE")
+        dm.ratio = ratio
+        select_only([host])
+        bpy.ops.object.modifier_apply(modifier=dm.name)
+        log(f"decimated {name}: {before} -> {len(host.data.polygons)} faces")
+    joined.append((name, [host], dens, lmdiv, role))
+GROUPS = joined
+log("joined into", len(GROUPS), "objects")
+
 # ------------------------------------------------------------------
 # 4. Bake UVs (one atlas per group, islands packed across all its objects)
 # ------------------------------------------------------------------
@@ -278,16 +307,18 @@ for name, objs, dens, lmdiv, role in GROUPS:
         continue
     area = surface_area(objs)
     side = math.sqrt(area / 0.55) * dens * DENS_SCALE
-    s = pow2(side, 256 if not QUICK else 64)
+    foliage = name in ("G_Site", "G_EnvTrees", "G_FurnOut")
+    # foliage = thousands of tiny islands; they need room or the gaps eat the atlas
+    s = pow2(side, (2048 if foliage else 256) if not QUICK else (512 if foliage else 64))
     sizes[name] = (s, s)
     select_only(objs)
     bpy.ops.object.mode_set(mode="EDIT")
     bpy.ops.mesh.select_all(action="SELECT")
-    bpy.ops.uv.smart_project(angle_limit=math.radians(60), island_margin=0.0, area_weight=0.0,
-                             correct_aspect=True, scale_to_bounds=False)
+    bpy.ops.uv.smart_project(angle_limit=math.radians(80 if foliage else 60), island_margin=0.0,
+                             area_weight=0.0, correct_aspect=True, scale_to_bounds=False)
     bpy.ops.uv.select_all(action="SELECT")
     bpy.ops.uv.pack_islands(udim_source="CLOSEST_UDIM", rotate=True, margin_method="FRACTION",
-                            margin=4.0 / s)
+                            margin=(2.0 if foliage else 4.0) / s)
     bpy.ops.object.mode_set(mode="OBJECT")
     log(f"uv {name}: {len(objs)} objs, {area:.0f} m2 -> {s}px")
 
@@ -403,13 +434,14 @@ for name, objs, dens, lmdiv, role in GROUPS:
     lm = bpy.data.images.new(f"{name}_light", lw, lh, alpha=True, float_buffer=True)
     lm.colorspace_settings.name = "Linear Rec.709"
     lm.generated_color = (0, 0, 0, 0)
-    bake(objs, lm, "light", L_SAMPLES)
+    bake(objs, lm, "light", L_SAMPLES if role not in ("site",) else max(8, L_SAMPLES // 2))
     px = img_np(lm)
     mask = px[..., 3] > 0.5
     rgb = blur_masked(px[..., :3], mask, radius=1 if QUICK else 2)
     lum = (rgb * np.array([0.2126, 0.7152, 0.0722])).sum(-1)
-    scale = float(np.percentile(lum[mask], 99.5)) if mask.any() else 1.0
-    scale = max(scale, 1e-3) * 1.15
+    # 98th percentile: lamp and lantern hot spots clip, the rest keeps its 8-bit precision
+    scale = float(np.percentile(lum[mask], 98.0)) if mask.any() else 1.0
+    scale = max(scale, 1e-3) * 1.25
     enc = srgb_oetf(rgb / scale)
     lm_path = os.path.join(WORK, f"{name}_light.png")
     save_png(enc, lm_path)
@@ -443,6 +475,7 @@ scene.view_settings.view_transform = "Standard"
 scene.view_settings.look = "None"
 scene.view_settings.exposure = 0.0
 scene.view_settings.use_curve_mapping = False
+scene.render.image_settings.media_type = "IMAGE"        # Blender 5: the film left it on VIDEO
 scene.render.image_settings.file_format = "OPEN_EXR"
 scene.render.image_settings.color_depth = "32"
 exr = os.path.join(WORK, "sky.exr")
@@ -451,7 +484,7 @@ bpy.ops.render.render(write_still=True)
 sky = bpy.data.images.load(exr)
 px = img_np(sky)[..., :3]
 lum = (px * np.array([0.2126, 0.7152, 0.0722])).sum(-1)
-sky_scale = float(np.percentile(lum, 99.7)) * 1.1
+sky_scale = float(np.percentile(lum, 99.995)) * 1.05      # headroom so the sun disc survives
 # which way round is the panorama? The sun sits a little toward +x (SUN_AZ) from the view (+y).
 sun_row, sun_col = np.unravel_index(np.argmax(np.where(np.arange(px.shape[0])[:, None] > px.shape[0] * 0.45,
                                                        lum, 0)), lum.shape)
@@ -531,6 +564,23 @@ for name, objs, dens, lmdiv, role in GROUPS:
     o["baked"] = 1
     export.append(o)
 
+# window glass: one object (rises with the walls), except the rear slider, which the site animates
+SLIDER = "Ext_Rear_slider2"
+panes = [o for o in glass if o.name != SLIDER]
+slider_obj = {o for o in glass if o.name == SLIDER}
+if panes:
+    select_only(panes)
+    bpy.ops.object.make_single_user(type="SELECTED_OBJECTS", object=True, obdata=True)
+    bpy.ops.object.convert(target="MESH")
+    me = bpy.data.meshes.new("G_Glass")
+    host = bpy.data.objects.new("G_Glass", me)
+    panes[0].users_collection[0].objects.link(host)
+    select_only(panes + [host], active=host)
+    bpy.ops.object.join()
+    host = bpy.context.view_layer.objects.active
+    host.name = "G_Glass"
+    origin_to_bottom(host)
+    glass = {host} | slider_obj
 for o in list(glass) + [bpy.data.objects.get("Ocean"), plan]:
     if o:
         export.append(o)
@@ -552,7 +602,7 @@ glb = os.path.join(SITE, "assets", "model.glb")
 bpy.ops.export_scene.gltf(filepath=glb, export_format="GLB", use_selection=True, export_extras=True,
                           export_image_format="WEBP", export_image_quality=82, export_apply=True,
                           export_lights=False, export_cameras=False, export_yup=True,
-                          export_animations=False)
+                          export_animations=False, export_normals=False)
 log(f"exported {glb}: {os.path.getsize(glb) / 1e6:.1f} MB, {len(export)} objects")
 with open(os.path.join(SITE, "assets", "bake.json"), "w") as f:
     import json

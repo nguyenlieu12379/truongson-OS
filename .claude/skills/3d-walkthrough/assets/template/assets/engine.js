@@ -181,7 +181,7 @@ export async function createWalkthrough({ canvas, spec, site }) {
   const baked = !!spec.baked;
   const bakeInfo = baked && spec.bakeInfo ? await fetch(spec.bakeInfo).then((r) => r.json()).catch(() => ({})) : {};
   if (baked) {
-    installAgxPunchy(spec.grade?.tint ?? [1, 1, 1]);
+    installAgxPunchy(spec.grade ?? {});
     renderer.toneMapping = THREE.CustomToneMapping;
   }
 
@@ -227,8 +227,6 @@ export async function createWalkthrough({ canvas, spec, site }) {
       // three (x, y, z) is Blender (x, -z, y). The panorama is centred on Blender +y (three -z).
       fragmentShader: `uniform sampler2D map; uniform float scale, dir; varying vec3 vD;
         #include <common>
-        #include <tonemapping_pars_fragment>
-        #include <colorspace_pars_fragment>
         void main(){ vec3 d = normalize(vD);
           float lon = atan(d.x, -d.z); float lat = asin(clamp(d.y, -1.0, 1.0));
           vec2 uv = vec2(0.5 + dir * lon / (2.0 * PI), 0.5 + lat / PI);
@@ -310,6 +308,7 @@ export async function createWalkthrough({ canvas, spec, site }) {
     if (o.userData.style) styleObjs.push(o);
     if (o.isLight) { o.intensity *= spec.lightScale ?? 1; o.castShadow = false; if (!o.distance) o.distance = spec.lightDistance ?? 9; }
     if (!o.isMesh) return;
+    if (baked && !o.geometry.attributes.normal) o.geometry.computeVertexNormals();   // exported without normals
     const mats = Array.isArray(o.material) ? o.material : [o.material];
     const swapped = mats.map((m) => {
       const key = (m.name || '').toLowerCase();
@@ -317,7 +316,10 @@ export async function createWalkthrough({ canvas, spec, site }) {
         if (key.startsWith('glass')) return glass;
         if (key === 'ocean') return water;
         if (m.userData?.baked) return bakedMaterial(m);
-        if (o.name.startsWith('Plan_On_Site')) { planMats.push(m); m.transparent = true; m.depthWrite = false; return m; }
+        if (o.name.startsWith('Plan_On_Site')) {
+          const pm = new THREE.MeshBasicMaterial({ map: m.map, transparent: true, depthWrite: false, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -2 });
+          planMats.push(pm); return pm;
+        }
         return m;
       }
       if (key.startsWith('glass')) return glass;
@@ -356,6 +358,7 @@ export async function createWalkthrough({ canvas, spec, site }) {
   function updateBuild(p) {
     for (const b of build) {
       const t = easeOut(seg(p, b.at[0], b.at[1]));
+      if (b.how === 'show') { b.o.visible = p >= b.at[0] && (b.o.userData.role !== 'upper' || b.o.visible); continue; }
       b.o.visible = t > 0.001 && (b.o.userData.role !== 'upper' || b.o.visible);
       if (b.how === 'drop') b.o.position.y = b.y0 + (1 - t) * 14;
       else if (b.how === 'pop') b.o.scale.copy(b.s0).multiplyScalar(Math.max(t, 0.001));
@@ -491,7 +494,8 @@ export async function createWalkthrough({ canvas, spec, site }) {
 
     for (const d of doors) {
       const t = d.opensAt ? easeOut(seg(p, d.opensAt[0], d.opensAt[1])) : 1;
-      if (d.slide !== undefined) d.o.position.x = d.x0 + d.slide * t;
+      if (d.shrink !== undefined) d.o.scale.x = 1 - (1 - d.shrink) * t;
+      else if (d.slide !== undefined) d.o.position.x = d.x0 + d.slide * t;
       else d.o.rotation.y = d.rot0 + (d.angle ?? 1.5) * t;
     }
     const inside = smooth(insideFrom[0], insideFrom[1], p);
@@ -525,7 +529,7 @@ const STYLE_KEYS = ['wall', 'floor', 'ceiling', 'fabric', 'wood', 'accent'];
 // Blender's AgX view transform with the 'Punchy' look, as three's CustomToneMapping, so baked
 // textures and the sky panorama come out graded like the Cycles render. tint = white balance.
 let agxInstalled = false;
-function installAgxPunchy(tint) {
+function installAgxPunchy({ tint = [1, 1, 1], power = 1.35, sat = 1.4 } = {}) {
   if (agxInstalled) return;
   agxInstalled = true;
   const P = THREE.ShaderChunk.tonemapping_pars_fragment;
@@ -534,6 +538,6 @@ function installAgxPunchy(tint) {
   const custom = P.slice(a, b)
     .replace('vec3 AgXToneMapping( vec3 color ) {', `vec3 CustomToneMapping( vec3 color ) {\n\tcolor *= vec3( ${t} );`)
     .replace('color = agxDefaultContrastApprox( color );',
-      'color = agxDefaultContrastApprox( color );\n\t{ float luma = dot( color, vec3( 0.2126, 0.7152, 0.0722 ) ); color = pow( max( color, vec3( 0.0 ) ), vec3( 1.35 ) ); color = luma + 1.4 * ( color - luma ); }');
+      `color = agxDefaultContrastApprox( color );\n\t{ float luma = dot( color, vec3( 0.2126, 0.7152, 0.0722 ) ); color = pow( max( color, vec3( 0.0 ) ), vec3( ${Number(power).toFixed(3)} ) ); color = luma + ${Number(sat).toFixed(3)} * ( color - luma ); }`);
   THREE.ShaderChunk.tonemapping_pars_fragment = P.replace('vec3 CustomToneMapping( vec3 color ) { return color; }', custom);
 }
