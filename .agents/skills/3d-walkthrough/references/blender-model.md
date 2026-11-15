@@ -1,6 +1,6 @@
 # Blender model
 
-Every output starts here. The building is modelled once, in Blender, from a Python script (`assets/blender/build_model.py`). The website loads the exported `model.glb`. The film animates the same scene. There is no other way to build the place.
+Every output starts here. The building is modelled once, in Blender, from a Python script (`assets/blender/build_model.py`). The film animates it, and the website is built from the film's frames. There is no other way to build the place.
 
 Example: the template ships the coastal cottage (`projects/coastal-cottage/` is the full film build of it).
 
@@ -28,7 +28,7 @@ Run it:
 cd websites/<owner>/<site>/blender && <scratchpad>/bl/bin/python build_model.py
 ```
 
-It writes four check renders, `model.blend` and `model.glb`. Copy `model.glb` to the site's `assets/`. Use `--no-render` while iterating.
+It writes four check renders, `model.blend` and `model.glb` (the `.glb` is only used by the archived live-3D site). Use `--no-render` while iterating.
 
 ## Building blocks
 
@@ -44,31 +44,21 @@ Everything is in feet at the top (`W`, `D`, `FLOOR_Z`, `CEIL`, body extents, rid
 
 Plan axes: x across the front, y from the street (y = 0) toward the back, z up.
 
-## Conventions the website relies on
+## Conventions
 
-| Thing | Rule | Why |
-| --- | --- | --- |
-| Axes | Blender (x, y, z) becomes (x, z, -y) in the site | The street side ends up at max z, matching spec.js |
-| Style materials | Name them exactly `wall`, `floor`, `ceiling`, `fabric`, `wood`, `accent` | The style switch recolours materials by these names |
-| Glass | Material name starts with `Glass` | The site swaps it for a cheap transparent glass |
-| Roof and ceilings | `obj["role"] = "upper"` | Hidden while the dollhouse camera is above the roof |
-| Ground, sea, street | `obj["role"] = "site"` | Left out of the building bounds |
-| Doors and sliders | `obj["role"] = "door"`, origin on the hinge (use `make_door`) | spec.doors swings or slides them by name |
-| Per-style furniture | `obj["style"] = "modern"` (a style key) | Shown only in that style |
-| Anything site.js animates | Keep it a separate object with a clear name | Static meshes are joined on export |
-| Lights | Point lights only | Area lights and the sun are not exported. The site adds sky light |
-
-`export_web_glb()` joins static meshes per collection and material (hundreds of boxes become a few dozen meshes), then exports with extras and lights. It runs after `model.blend` is saved, because the film needs the objects separate.
+- Doors and sliders: origin on the hinge (use `make_door`) so the film can swing or slide them.
+- Roof and ceilings: `obj["role"] = "upper"`, so the dollhouse shots can hide them.
+- Anything the film animates: keep it a separate object with a clear name.
+- Furniture in the `Furniture` collection, room lights in `Lights`.
 
 ## Mistakes we already made
 
-- **Procedural materials on the website.** Node-built textures (wood planks, tile, siding) don't survive the `.glb` export; the site gets the material's plain base colour. Set a sensible base colour on every designed material, or bake textures for the site.
+- **Procedural materials in a `.glb`.** Node-built textures (wood planks, tile, siding) don't survive a `.glb` export, only the plain base colour does. This is why the website is built from the film, not the model.
 
 - **Door pivoting around the world origin.** `box()` bakes the location into the mesh, so every origin is at (0, 0, 0). A door rotated without moving its origin swings in a huge arc. Always use `make_door`.
 - **Ghost walls, roof that never lands, black ground edges**: see [Blender film](blender-film.md).
-- **Lights too bright or too dim on the site.** Export uses the COMPAT lighting mode (watts / 4π). Tune with `spec.lightScale` instead of re-exporting.
 - **Furniture across a doorway.** The cottage kitchen counter ran along the front wall straight across the front door. Check every door on the route is clear in the plan cutaway render, and keep tall furniture at least 2 ft from door openings.
-- **Missing room in the site.** Check the plan cutaway render against the floor plan before exporting.
+- **Missing room.** Check the plan cutaway render against the floor plan before exporting.
 
 ## Check before exporting
 
@@ -76,4 +66,4 @@ Read the four renders (front, back, plan cutaway, aerial cutaway):
 - Every room, door, window and stair from the plan is there, in the right place.
 - Furniture fits each room and leaves the walk path clear (tall pieces off the route).
 - Photos sit on the right surfaces, not stretched.
-- The `.glb` stays under about 5 MB (photos are most of it; resize them to about 2048 px).
+- Photos are resized to about 2048 px.
