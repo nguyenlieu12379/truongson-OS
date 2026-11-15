@@ -339,12 +339,19 @@ h2 {
 
 .noscript { position: fixed; inset: auto 0 40px; text-align: center; z-index: 20; }
 
+/* Final card at the side, for end shots where the hero view (a sunset, a counter) is centred */
+.final.side { left: var(--gutter); right: auto; top: auto; bottom: clamp(32px, 9vh, 110px); translate: none;
+  text-align: left; width: min(560px, calc(100% - 2 * var(--gutter))); }
+.final.side h2 { font-size: clamp(30px, 3.6vw, 46px); }
+.final.side .actions { justify-content: flex-start; }
+
 /* ---------- Small screens ---------- */
 @media (max-width: 760px) {
   .chapters { display: none; }
   .nav { justify-content: space-between; }
   .panel, .panel.right { left: var(--gutter); right: var(--gutter); width: auto; bottom: 40px; }
   .hero, .final { left: 50%; right: auto; width: calc(100% - 2 * var(--gutter)); bottom: auto; }
+  .final.side { left: var(--gutter); right: var(--gutter); width: auto; top: auto; bottom: 32px; translate: none; }
   .stats dd { font-size: 0.75rem; }
   .stats div { padding: 14px 12px; }
 }

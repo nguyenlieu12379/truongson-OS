@@ -176,12 +176,20 @@ export async function createWalkthrough({ canvas, spec, site }) {
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = spec.exposure ?? 1.05;
+  // Baked mode: the light comes from textures baked in Blender (see references/baking.md),
+  // shown through Blender's own view transform (AgX + Punchy look) so it matches the render.
+  const baked = !!spec.baked;
+  const bakeInfo = baked && spec.bakeInfo ? await fetch(spec.bakeInfo).then((r) => r.json()).catch(() => ({})) : {};
+  if (baked) {
+    installAgxPunchy(spec.grade ?? {});
+    renderer.toneMapping = THREE.CustomToneMapping;
+  }
 
   const scene = new THREE.Scene();
   const theme = { ...SKY[spec.sky || 'day'], ...(spec.theme || {}) };
   const OUT_FOG = new THREE.Color(theme.fogOutside), IN_FOG = new THREE.Color(theme.fogInside);
   scene.fog = new THREE.FogExp2(OUT_FOG.clone(), theme.fogDensity);
-  const camera = new THREE.PerspectiveCamera(52, 1, 0.05, 1500);
+  const camera = new THREE.PerspectiveCamera(52, 1, 0.05, 3000);
   const glowTex = TEX.glow();
   
   // ---- helpers handed to site.js
@@ -207,7 +215,30 @@ export async function createWalkthrough({ canvas, spec, site }) {
     return m;
   }
 
-  // ---- sky
+  // ---- sky. Baked mode: the Blender world rendered as a panorama (spec.skyImage).
+  let skyDome = null;
+  if (baked && spec.skyImage) {
+    const tex = await new THREE.TextureLoader().loadAsync(spec.skyImage);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    skyDome = new THREE.Mesh(new THREE.SphereGeometry(1200, 64, 32), new THREE.ShaderMaterial({
+      side: THREE.BackSide, depthWrite: false, fog: false, toneMapped: true,
+      uniforms: { map: { value: tex }, scale: { value: bakeInfo.sky_scale ?? 1 }, dir: { value: bakeInfo.sky_dir ?? 1 } },
+      vertexShader: 'varying vec3 vD; void main(){ vD = position; vec4 p = projectionMatrix*modelViewMatrix*vec4(position,1.0); gl_Position = p.xyww; }',
+      // three (x, y, z) is Blender (x, -z, y). The panorama is centred on Blender +y (three -z).
+      fragmentShader: `uniform sampler2D map; uniform float scale, dir; varying vec3 vD;
+        #include <common>
+        void main(){ vec3 d = normalize(vD);
+          float lon = atan(d.x, -d.z); float lat = asin(clamp(d.y, -1.0, 1.0));
+          vec2 uv = vec2(0.5 + dir * lon / (2.0 * PI), 0.5 + lat / PI);
+          gl_FragColor = vec4(texture2D(map, uv).rgb * scale, 1.0);
+          #include <tonemapping_fragment>
+          #include <colorspace_fragment>
+        }`,
+    }));
+    skyDome.renderOrder = -1;
+    skyDome.frustumCulled = false;
+    scene.add(skyDome);
+  }
   const sky = new THREE.Mesh(new THREE.SphereGeometry(1000, 32, 16), new THREE.ShaderMaterial({
     side: THREE.BackSide, depthWrite: false, fog: false,
     uniforms: { top: { value: new THREE.Color(theme.skyTop) }, mid: { value: new THREE.Color(theme.skyMid) }, hor: { value: new THREE.Color(theme.skyHorizon) } },
@@ -218,16 +249,16 @@ export async function createWalkthrough({ canvas, spec, site }) {
         c = mix(vec3(0.03,0.03,0.05), c, smoothstep(-0.06,0.01,h));
         gl_FragColor = vec4(c,1.0); }`,
   }));
-  scene.add(sky);
-  if (theme.stars) {
+  if (!skyDome) scene.add(sky);
+  if (theme.stars && !baked) {
     const n = 400, pos = new Float32Array(n * 3);
     for (let i = 0; i < n; i++) { const th = rand(0, 6.283), ph = rand(0.25, 1.3); pos.set([Math.cos(th) * Math.cos(ph) * 900, Math.sin(ph) * 900, Math.sin(th) * Math.cos(ph) * 900], i * 3); }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0xffffff, size: 3, fog: false, transparent: true, opacity: 0.7 })));
   }
   const hemi = new THREE.HemisphereLight(theme.hemiSky, theme.hemiGround, theme.hemiIntensity);
-  scene.add(hemi);
-  if (theme.sun) {
+  if (!baked) scene.add(hemi);
+  if (theme.sun && !baked) {
     const sun = new THREE.DirectionalLight(0xfff1d8, theme.sun);
     sun.position.set(-20, 30, 25); scene.add(sun);
   }
@@ -242,6 +273,45 @@ export async function createWalkthrough({ canvas, spec, site }) {
   const styleMats = new Map();  // materials named after a style key (wall, floor, ceiling, fabric, wood, accent)
   const styleObjs = [];    // objects with a 'style' extra, shown only in that style
   const glass = new THREE.MeshPhysicalMaterial({ color: 0x9fb7c9, roughness: 0.05, transparent: true, opacity: 0.12, depthWrite: false });
+  // Baked mode: albedo map x lightmap (stored as L / lm_scale in sRGB). Unlit: the light is in the textures.
+  const bakedCache = new Map();
+  const planMats = [];
+  // spec.lightUp = [a, b]: before a, baked surfaces show flat light (a plain model, so the build-up
+  // has no dark spots from the finished house's shadows); between a and b the baked light comes on.
+  const bakeMix = { value: spec.lightUp ? 0 : 1 };
+  const flatLight = { value: spec.flatLight ?? 0.8 };
+  function bakedMaterial(m) {
+    if (bakedCache.has(m)) return bakedCache.get(m);
+    const lm = m.emissiveMap;
+    const b = new THREE.MeshBasicMaterial({ map: m.map, lightMap: lm, lightMapIntensity: (m.userData.lm_scale ?? 1) * Math.PI });
+    if (lm) lm.channel = m.map?.channel ?? 0;
+    for (const t of [m.map, lm]) if (t) { t.anisotropy = renderer.capabilities.getMaxAnisotropy(); t.generateMipmaps = true; }
+    b.name = m.name;
+    b.onBeforeCompile = (sh) => {
+      sh.uniforms.bakeMix = bakeMix;
+      sh.uniforms.flatLight = flatLight;
+      sh.fragmentShader = 'uniform float bakeMix;\nuniform float flatLight;\n' + sh.fragmentShader.replace(
+        'reflectedLight.indirectDiffuse += lightMapTexel.rgb * lightMapIntensity * RECIPROCAL_PI;',
+        'reflectedLight.indirectDiffuse += mix( vec3( flatLight ), lightMapTexel.rgb * lightMapIntensity * RECIPROCAL_PI, bakeMix );');
+    };
+    bakedCache.set(m, b);
+    return b;
+  }
+  // Water: a dark, glossy surface that reflects the baked sky (moves with the camera, like the film).
+  const water = new THREE.MeshStandardMaterial({ color: 0x0a1c26, roughness: 0.07, metalness: 0.0, envMapIntensity: 1 });
+  if (baked && skyDome) {
+    const pm = new THREE.PMREMGenerator(renderer);
+    const envScene = new THREE.Scene();
+    const dome = skyDome.clone();
+    dome.material = skyDome.material.clone();
+    dome.material.toneMapped = false;
+    dome.material.uniforms.map.value = skyDome.material.uniforms.map.value;
+    envScene.add(dome);
+    const env = pm.fromScene(envScene, 0, 0.1, 2000).texture;
+    water.envMap = env;
+    glass.envMap = env;
+    glass.envMapIntensity = 0.6;
+  }
   const roleOf = (o) => { for (let n = o; n; n = n.parent) if (n.userData?.role) return n.userData.role; return undefined; };
   model.traverse((o) => {
     if (o.name) byName.set(o.name, o);
@@ -249,9 +319,20 @@ export async function createWalkthrough({ canvas, spec, site }) {
     if (o.userData.style) styleObjs.push(o);
     if (o.isLight) { o.intensity *= spec.lightScale ?? 1; o.castShadow = false; if (!o.distance) o.distance = spec.lightDistance ?? 9; }
     if (!o.isMesh) return;
+    if (baked && !o.geometry.attributes.normal) o.geometry.computeVertexNormals();   // exported without normals
     const mats = Array.isArray(o.material) ? o.material : [o.material];
     const swapped = mats.map((m) => {
       const key = (m.name || '').toLowerCase();
+      if (baked) {
+        if (key.startsWith('glass')) return glass;
+        if (key === 'ocean') return water;
+        if (m.userData?.baked) return bakedMaterial(m);
+        if (o.name.startsWith('Plan_On_Site')) {
+          const pm = new THREE.MeshBasicMaterial({ map: m.map, transparent: true, depthWrite: false, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -2 });
+          planMats.push(pm); return pm;
+        }
+        return m;
+      }
       if (key.startsWith('glass')) return glass;
       if (STYLE_KEYS.includes(key) && !styleMats.has(key)) styleMats.set(key, m);
       return m;
@@ -275,6 +356,28 @@ export async function createWalkthrough({ canvas, spec, site }) {
     const o = byName.get(name);
     if (!o) { console.warn(`spec.doors: no object named ${name} in the model`); continue; }
     doors.push({ o, ...d, rot0: o.rotation.y, x0: o.position.x });
+  }
+
+  // ---- build-up opening (baked mode): spec.build = [{ name, at: [a, b], how: 'grow' | 'drop' | 'pop' }]
+  // grow: rises from the ground (origin at the bottom). drop: lands from above. pop: scales up.
+  const build = [];
+  for (const b of spec.build || []) {
+    const o = byName.get(b.name);
+    if (!o) { console.warn(`spec.build: no object named ${b.name}`); continue; }
+    build.push({ o, ...b, y0: o.position.y, s0: o.scale.clone() });
+  }
+  function updateBuild(p) {
+    for (const b of build) {
+      const t = easeOut(seg(p, b.at[0], b.at[1]));
+      if (b.how === 'show') { b.o.visible = p >= b.at[0] && (b.o.userData.role !== 'upper' || b.o.visible); continue; }
+      b.o.visible = t > 0.001 && (b.o.userData.role !== 'upper' || b.o.visible);
+      if (b.how === 'drop') b.o.position.y = b.y0 + (1 - t) * 14;
+      else if (b.how === 'pop') b.o.scale.copy(b.s0).multiplyScalar(Math.max(t, 0.001));
+      else b.o.scale.set(b.s0.x, b.s0.y * Math.max(t, 0.001), b.s0.z);
+    }
+    if (spec.lightUp) bakeMix.value = smooth(spec.lightUp[0], spec.lightUp[1], p);
+    const planFade = spec.planUntil ? 1 - smooth(spec.planUntil[0], spec.planUntil[1], p) : 0;
+    for (const m of planMats) { m.opacity = planFade; m.visible = planFade > 0.001; }
   }
 
   // ---- site-specific animation (site.js). The model is already built, so site.js only animates it.
@@ -398,16 +501,20 @@ export async function createWalkthrough({ canvas, spec, site }) {
     if (!reduceMotion) tmpP.y += Math.sin(time * 1.3) * 0.012;
     camera.position.copy(tmpP); camera.lookAt(tmpL);
     if (spec.mode === 'dollhouse-open') { const above = tmpP.y > H + 0.5; for (const m of upper) m.visible = !above; }
+    updateBuild(p);
+    if (skyDome) skyDome.position.copy(camera.position);
 
     for (const d of doors) {
       const t = d.opensAt ? easeOut(seg(p, d.opensAt[0], d.opensAt[1])) : 1;
-      if (d.slide !== undefined) d.o.position.x = d.x0 + d.slide * t;
+      if (d.shrink !== undefined) d.o.scale.x = 1 - (1 - d.shrink) * t;
+      else if (d.slide !== undefined) d.o.position.x = d.x0 + d.slide * t;
       else d.o.rotation.y = d.rot0 + (d.angle ?? 1.5) * t;
     }
     const inside = smooth(insideFrom[0], insideFrom[1], p);
     scene.fog.color.copy(OUT_FOG).lerp(IN_FOG, inside);
     scene.fog.density = theme.fogDensity * (1 - inside * 0.6);
     hemi.intensity = theme.hemiIntensity * (1 - inside * 0.55);
+    if (baked) renderer.toneMappingExposure = (spec.exposure ?? 1) * (1 + inside * ((spec.insideBoost ?? 1) - 1));
 
     siteUpdate(p, time, dt);
     updateUI(p);
@@ -430,3 +537,19 @@ const SKY = {
 };
 
 const STYLE_KEYS = ['wall', 'floor', 'ceiling', 'fabric', 'wood', 'accent'];
+
+// Blender's AgX view transform with the 'Punchy' look, as three's CustomToneMapping, so baked
+// textures and the sky panorama come out graded like the Cycles render. tint = white balance.
+let agxInstalled = false;
+function installAgxPunchy({ tint = [1, 1, 1], power = 1.35, sat = 1.4 } = {}) {
+  if (agxInstalled) return;
+  agxInstalled = true;
+  const P = THREE.ShaderChunk.tonemapping_pars_fragment;
+  const a = P.indexOf('vec3 AgXToneMapping( vec3 color ) {'), b = P.indexOf('vec3 NeutralToneMapping');
+  const t = tint.map((v) => Number(v).toFixed(4)).join(', ');
+  const custom = P.slice(a, b)
+    .replace('vec3 AgXToneMapping( vec3 color ) {', `vec3 CustomToneMapping( vec3 color ) {\n\tcolor *= vec3( ${t} );`)
+    .replace('color = agxDefaultContrastApprox( color );',
+      `color = agxDefaultContrastApprox( color );\n\t{ float luma = dot( color, vec3( 0.2126, 0.7152, 0.0722 ) ); color = pow( max( color, vec3( 0.0 ) ), vec3( ${Number(power).toFixed(3)} ) ); color = luma + ${Number(sat).toFixed(3)} * ( color - luma ); }`);
+  THREE.ShaderChunk.tonemapping_pars_fragment = P.replace('vec3 CustomToneMapping( vec3 color ) { return color; }', custom);
+}

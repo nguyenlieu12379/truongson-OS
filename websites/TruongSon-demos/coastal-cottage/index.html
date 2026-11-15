@@ -2,80 +2,85 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Coastal Cottage | Scroll Walkthrough</title>
-  <meta name="description" content="Scroll to walk through a raised two-bedroom beach cottage, from the floor plan to golden hour on the lanai.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="frames/d/000.webp" media="(min-width: 820px)">
-  <link rel="preload" as="image" href="frames/m/000.webp" media="(max-width: 819px)">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Coastal Cottage · Walkthrough</title>
+  <meta name="description" content="Walk through a raised coastal cottage at golden hour, from the floor plan to the beach-side lanai.">
+  <meta name="theme-color" content="#07080c">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-  <canvas id="film" aria-label="Walkthrough film of the coastal cottage, played by scrolling" role="img"></canvas>
-  <div class="shade"></div>
-  <div class="progress"><div id="progress-bar"></div></div>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
 
   <header class="nav">
-    <b>Coastal Cottage</b>
-    <span>A TruongSon demo</span>
+    <a class="brand" href="#top" data-jump="0">Coastal <span>Cottage</span></a>
+    <nav class="chapters" aria-label="Chapters"></nav>
+    <a class="pill" href="#visit" data-jump="1">Get one</a>
+    <div class="progress" aria-hidden="true"><i></i></div>
   </header>
 
-  <div id="loader">
-    <div class="loader-inner">
-      <span>Loading the walkthrough</span>
-      <div class="loader-track"><div id="loader-bar"></div></div>
-    </div>
+  <!-- Style switch. Shown only when spec.styles exists (real estate). Labels must match the style keys in spec.js. -->
+  <div class="styles" role="group" aria-label="Look" hidden>
+    <button type="button" data-style="modern" aria-pressed="true">Modern</button>
+    <button type="button" data-style="scandinavian" aria-pressed="false">Scandinavian</button>
+    <button type="button" data-style="warm luxury" aria-pressed="false">Warm luxury</button>
   </div>
 
-  <!-- Panels. data-in / data-out = where in the film (0 to 1) each one shows. -->
-  <section class="panel center" data-in="0" data-out="0.05">
-    <div class="eyebrow">Coastal Cottage</div>
-    <h1>A beach house, before it's built.</h1>
-    <p>Scroll to walk through it, from the floor plan to the lanai.</p>
-    <div class="hint">Scroll</div>
-  </section>
+  <!-- Text panels. Each is shown while scroll progress is inside [data-in, data-out].
+       Match these ranges to the camera stops in assets/spec.js. -->
+  <main id="top">
+    <section class="panel hero" data-in="0" data-out="0.06">
+      <p class="eyebrow">Coastal Cottage</p>
+      <h1>A beach house, before it's built.</h1>
+      <p class="lede">Scroll to walk through it, from the floor plan to the lanai.</p>
+      <p class="cue"><span></span>Scroll to walk through</p>
+    </section>
 
-  <section class="panel left" data-in="0.065" data-out="0.115">
-    <div class="eyebrow">01 · The plan</div>
-    <h2>It starts on paper.</h2>
-    <p>One floor, 50 by 55 feet. Two bedrooms and a study.</p>
-  </section>
+    <section class="panel right" data-in="0.09" data-out="0.21">
+      <p class="eyebrow">01 · The build</p>
+      <h2>It starts on paper.<br>Then it rises.</h2>
+      <dl class="stats">
+        <div><dt>50<small>x55 ft</small></dt><dd>one floor</dd></div>
+        <div><dt>2<small>+1</small></dt><dd>bedrooms plus a study</dd></div>
+        <div><dt>8<small>ft</small></dt><dd>up on pilings, above the sand</dd></div>
+      </dl>
+    </section>
 
-  <section class="panel right" data-in="0.17" data-out="0.33">
-    <div class="eyebrow">02 · The build</div>
-    <h2>Then it rises.</h2>
-    <p>Pilings, floor, walls and glass, raised 8 feet above the sand.</p>
-  </section>
+    <section class="panel" data-in="0.29" data-out="0.37">
+      <p class="eyebrow">02 · Every room</p>
+      <h2>Seen from above.</h2>
+      <p class="lede">Living in the middle, a bedroom suite at each side, a 50-foot lanai on the beach side.</p>
+    </section>
 
-  <section class="panel left" data-in="0.37" data-out="0.45">
-    <div class="eyebrow">03 · Every room</div>
-    <h2>Seen from above.</h2>
-    <p>Living in the middle, a bedroom suite at each side, a 50-foot lanai on the beach side.</p>
-  </section>
+    <section class="panel right" data-in="0.5" data-out="0.6">
+      <p class="eyebrow">03 · Arrival</p>
+      <h2>Up the stairs, through the front door.</h2>
+      <p class="lede">A deep front porch, shutters and a navy door.</p>
+    </section>
 
-  <section class="panel right" data-in="0.53" data-out="0.66">
-    <div class="eyebrow">04 · Arrival</div>
-    <h2>Up the stairs, through the front door.</h2>
-    <p>A deep front porch, shutters and a navy door.</p>
-  </section>
+    <section class="panel" data-in="0.68" data-out="0.84">
+      <p class="eyebrow">04 · Inside</p>
+      <h2>Open, end to end.</h2>
+      <ul class="steps" aria-label="What you pass">
+        <li data-at="0.69">Kitchen with an island</li>
+        <li data-at="0.74">Dining for four</li>
+        <li data-at="0.8">A 20-foot great room, 10-foot ceilings</li>
+      </ul>
+    </section>
 
-  <section class="panel left" data-in="0.71" data-out="0.85">
-    <div class="eyebrow">05 · Inside</div>
-    <h2>Open, end to end.</h2>
-    <p>Kitchen with an island, dining, and a 20-foot great room under 10-foot ceilings.</p>
-  </section>
+    <section class="panel final side" id="visit" data-in="0.93" data-out="1.01">
+      <p class="eyebrow">05 · The lanai</p>
+      <h2>Golden hour, right on the beach.</h2>
+      <p class="lede">We build walkthroughs like this for homes and businesses.</p>
+      <div class="actions">
+        <a class="btn primary" href="#TODO-contact">Get one for your place</a>
+      </div>
+      <p class="fine">A TruongSon demo.</p>
+    </section>
+  </main>
 
-  <section class="panel left cta" data-in="0.9" data-out="1.05">
-    <div class="eyebrow">06 · The lanai</div>
-    <h2>Golden hour, right on the beach.</h2>
-    <p>We build walkthroughs like this for homes and businesses.</p>
-    <a class="button" href="#TODO-contact">Get one for your place</a>
-  </section>
-
-  <div id="track"></div>
-
-  <script type="module" src="assets/film.js"></script>
+  <div class="spacer" aria-hidden="true"></div>
+  <noscript><p class="noscript">This experience needs JavaScript and WebGL.</p></noscript>
+  <script type="module" src="assets/main.js"></script>
 </body>
 </html>

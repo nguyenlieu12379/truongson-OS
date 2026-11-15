@@ -1,20 +1,17 @@
-# Coastal Cottage: scroll walkthrough
+# Coastal Cottage: baked live-3D walkthrough
 
-A scroll-driven walkthrough of the golden-hour coastal cottage film. The background is the rendered Blender film, not live 3D: scrolling down plays it forward, scrolling up plays it back. Six text panels fade in over the film's beats.
+A scroll walkthrough of the golden-hour coastal cottage in live 3D (three.js), with Blender's lighting and materials baked into the model. Smooth at any scroll speed.
 
-Film and Blender scene: `projects/coastal-cottage/` (`coastal_cottage_walkthrough_golden.mp4`, built by `build_walkthrough.py` + `design_pass.py`).
-
-## Beats
-
-| Panel | Film range | Shows |
-| --- | --- | --- |
-| Hero | 0 to 0.05 | The floor plan on the table |
-| 01 The plan | 0.065 to 0.115 | Close on the plan |
-| 02 The build | 0.17 to 0.33 | The house rising from the ground |
-| 03 Every room | 0.37 to 0.45 | Dollhouse view, roof off |
-| 04 Arrival | 0.53 to 0.66 | Up the stairs, front door opens |
-| 05 Inside | 0.71 to 0.85 | Foyer, dining, great room |
-| 06 The lanai | 0.9 to 1 | Golden hour on the beach, call to action |
+- **Model:** `assets/model.glb` (6.2 MB), sky `assets/sky.webp`, bake info `assets/bake.json`. Made by `projects/coastal-cottage/bake_web.py` from the golden-hour film scene plus the surroundings in `environment.py`: the street, a hill behind it, neighbour houses on the beach and up the hill, and trees.
+- **Route** (`assets/spec.js`), the film's camera path:
+  1. the floor plan on the sand
+  2. the house rises as a plain model, then the golden-hour light comes on
+  3. dollhouse orbit
+  4. the roof lands
+  5. up the stairs and through the front door
+  6. dining, then the great room
+  7. the rear slider opens to the lanai and the sunset
+- **Engine:** `assets/engine.js` is the skill template's engine in baked mode. See `.claude/skills/3d-walkthrough/references/baking.md`.
 
 ## Run
 
@@ -22,22 +19,15 @@ Film and Blender scene: `projects/coastal-cottage/` (`coastal_cottage_walkthroug
 python3 -m http.server 8000 --directory websites/TruongSon-demos/coastal-cottage
 ```
 
-Open http://localhost:8000. It needs a server (ES modules), not a file:// open.
+Open http://localhost:8000. It needs a server, not a file:// open.
 
 ## Edit
 
-- **Copy:** the `<section class="panel">` blocks in `index.html`. `data-in` / `data-out` set where each shows (0 to 1 of the film). `left`, `right` or `center` sets the side.
-- **Settings:** `assets/beats.js` (frame count, scroll length, background colour).
-- **New render:** re-make the frames from the PNG frames Blender wrote:
-  `.claude/skills/3d-walkthrough/scripts/make_frames.sh <png_dir> websites/TruongSon-demos/coastal-cottage 1`
-- `assets/film.js` is the shared engine from the skill template. Don't fork it per site.
-
-## Weight
-
-1,040 frames (every film frame), WebP. Desktop set 1280 wide, about 29 MB. Phone set 854 wide, about 17 MB. A coarse pass (1 in 16) loads first, then the rest fills in while you scroll.
+- **Copy:** the `.panel` sections in `index.html`. `data-in` / `data-out` set where each one shows, from 0 to 1 of the scroll.
+- **Camera, build-up, doors, grade:** `assets/spec.js`.
+- **Re-bake after a design change:** `python projects/coastal-cottage/bake_web.py` (about 20 minutes; add `--quick` for a 2-minute low-quality check). Needs `pip install bpy pillow`.
 
 ## Open items
 
-- `TODO: contact link` on the "Get one for your place" button.
-- Live: https://nguyenlieu12379.github.io/truongson-OS/coastal-cottage/
-- Tested headless in Chromium at 1280x760 and 390x844. Not tested on real phones or Safari.
+- The "Get one for your place" button links to `#TODO-contact`.
+- Tested in headless Chromium at 1280x720 and 390x844. Not tested on real phones or Safari.
