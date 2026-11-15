@@ -3,11 +3,19 @@
 // drawn to a pinned canvas, with a soft blend between neighbouring frames.
 // Panels fade in over their beat (data-in / data-out, 0 to 1 of the film).
 // Shared by every film site: copy it as is. Per-site settings are in beats.js.
+//
+// Smoothness rules (what fixed slow-scroll stutter):
+// 1. The canvas never holds more pixels than the film frames have. A 1280-wide
+//    frame drawn into a 3840-wide canvas costs 9x the fill for no extra detail.
+// 2. Frames near the playhead are decoded ahead into ImageBitmaps, so a draw
+//    never waits on a WebP decode. Only a window around the playhead is kept,
+//    so memory stays flat.
+// 3. Redraw only when the picture would change: the blend is stepped in 1/24ths.
 import cfg from './beats.js';
 
 const N = cfg.frames;
 const canvas = document.getElementById('film');
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d', { alpha: false });
 const loader = document.getElementById('loader');
 const loaderBar = document.getElementById('loader-bar');
 const progressBar = document.getElementById('progress-bar');
@@ -25,6 +33,7 @@ document.getElementById('track').style.height = `${cfg.scrollScreens * 100}vh`;
 const conn = navigator.connection || {};
 const small = innerWidth < 820 || conn.saveData || /2g/.test(conn.effectiveType || '');
 const base = small ? cfg.phone : cfg.desktop;
+const SRC_W = small ? 854 : 1280;
 const src = (i) => `${base}${String(i).padStart(cfg.pad, '0')}.webp`;
 
 // ---------- loading: coarse pass first, then fill in ----------
@@ -66,6 +75,39 @@ function loadOne() {
 }
 for (let k = 0; k < 6; k++) loadOne();
 
+// ---------- decode-ahead window of ImageBitmaps ----------
+const AHEAD = small ? 14 : 20;           // frames each side of the playhead
+const bitmaps = new Map();               // frame -> ImageBitmap
+const decoding = new Set();
+const canBitmap = typeof createImageBitmap === 'function';
+let lastCenter = -1;
+
+function warm(center) {
+  if (!canBitmap) return;
+  center = Math.round(center);
+  if (center === lastCenter && decoding.size) return;
+  lastCenter = center;
+  // drop bitmaps that left the window
+  for (const [i, bm] of bitmaps) {
+    if (Math.abs(i - center) > AHEAD + 4) { bm.close(); bitmaps.delete(i); }
+  }
+  // decode nearest first, a few at a time
+  for (let d = 0; d <= AHEAD && decoding.size < 4; d++) {
+    for (const i of d ? [center + d, center - d] : [center]) {
+      if (i < 0 || i >= N || !ready[i] || bitmaps.has(i) || decoding.has(i)) continue;
+      decoding.add(i);
+      createImageBitmap(imgs[i]).then((bm) => {
+        decoding.delete(i);
+        if (Math.abs(i - lastCenter) > AHEAD + 4) { bm.close(); return; }
+        bitmaps.set(i, bm);
+        dirty = true;
+      }, () => decoding.delete(i));
+      if (decoding.size >= 4) break;
+    }
+  }
+}
+const pic = (i) => bitmaps.get(i) || imgs[i];
+
 // nearest frame that has loaded (searching outward)
 function nearest(i) {
   if (ready[i]) return i;
@@ -77,12 +119,18 @@ function nearest(i) {
 }
 
 // ---------- canvas sizing and drawing ----------
-let W = 0, H = 0, dpr = 1;
+let W = 0, H = 0, scale = 1;
 function resize() {
-  dpr = Math.min(devicePixelRatio || 1, 2);
   W = innerWidth; H = innerHeight;
-  canvas.width = Math.round(W * dpr);
-  canvas.height = Math.round(H * dpr);
+  const portrait = H / W > 1.15;
+  // width the film is shown at, in CSS px (cover on landscape, 62% height on portrait)
+  const shownW = portrait ? Math.max(W, ((H * 0.62) * 16) / 9) : Math.max(W, (H * 16) / 9);
+  // backing pixels per CSS px: up to the screen's density, but never past the frames' own detail
+  scale = Math.max(0.5, Math.min(devicePixelRatio || 1, 2, SRC_W / shownW));
+  canvas.width = Math.round(W * scale);
+  canvas.height = Math.round(H * scale);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
   dirty = true;
 }
 addEventListener('resize', resize);
@@ -100,22 +148,28 @@ function frameRect(iw, ih) {
   return [x, y, w, h];
 }
 
+let shownKey = '';
 function draw(pos) {
   const i0 = Math.floor(pos);
-  const t = pos - i0;
   const a = nearest(i0);
   if (a < 0) return;
+  // blend amount, stepped so tiny scroll moves don't redraw identical pictures
+  const blendNext = a === i0 && i0 + 1 < N && ready[i0 + 1];
+  const t = blendNext ? Math.round((pos - i0) * 24) / 24 : 0;
+  const key = `${a}|${t}|${bitmaps.has(a)}|${blendNext && bitmaps.has(i0 + 1)}|${W}x${H}`;
+  if (key === shownKey) return;
+  shownKey = key;
+
   const A = imgs[a];
   const [x, y, w, h] = frameRect(A.naturalWidth, A.naturalHeight);
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.setTransform(scale, 0, 0, scale, 0, 0);
   ctx.globalAlpha = 1;
   ctx.fillStyle = cfg.background;
   ctx.fillRect(0, 0, W, H);
-  ctx.drawImage(A, x, y, w, h);
-  // soft blend into the next frame, only when both real neighbours are here
-  if (t > 0.02 && a === i0 && i0 + 1 < N && ready[i0 + 1]) {
+  ctx.drawImage(pic(a), x, y, w, h);
+  if (t > 0) {
     ctx.globalAlpha = t;
-    ctx.drawImage(imgs[i0 + 1], x, y, w, h);
+    ctx.drawImage(pic(i0 + 1), x, y, w, h);
     ctx.globalAlpha = 1;
   }
 }
@@ -133,10 +187,10 @@ function updatePanels(p) {
     if (p >= P.a - fade && p <= P.b + fade) {
       o = Math.min(1, (p - (P.a - fade)) / fade, ((P.b + fade) - p) / fade);
     }
-    o = Math.max(0, o);
+    o = Math.round(Math.max(0, o) * 100) / 100;
     if (o !== P.o) {
       P.o = o;
-      P.el.style.opacity = o.toFixed(3);
+      P.el.style.opacity = o;
       P.el.style.transform = reduceMotion ? 'none' : `translate3d(0, ${((1 - o) * 14).toFixed(1)}px, 0)`;
       P.el.style.visibility = o > 0 ? 'visible' : 'hidden';
     }
@@ -145,23 +199,22 @@ function updatePanels(p) {
 
 let pos = progress() * (N - 1);
 let last = performance.now();
-let lastDrawn = -1;
+let lastBar = -1;
 
 function tick(now) {
   const dt = Math.min(0.1, (now - last) / 1000);
   last = now;
-  const p = progress();
-  const target = p * (N - 1);
+  const target = progress() * (N - 1);
   // critically damped follow: smooth on wheel steps, still exact when it settles
   pos = reduceMotion ? target : pos + (target - pos) * (1 - Math.exp(-dt / 0.085));
   if (Math.abs(target - pos) < 0.01) pos = target;
-  if (dirty || Math.abs(pos - lastDrawn) > 0.004) {
-    draw(pos);
-    lastDrawn = pos;
-    dirty = false;
-  }
-  updatePanels(pos / (N - 1));
-  progressBar.style.transform = `scaleX(${(pos / (N - 1)).toFixed(4)})`;
+  warm(pos + Math.sign(target - pos) * 2); // lean the decode window the way we're heading
+  if (dirty) { shownKey = ''; dirty = false; }
+  draw(pos);
+  const p = pos / (N - 1);
+  updatePanels(p);
+  const bar = Math.round(p * 1000);
+  if (bar !== lastBar) { lastBar = bar; progressBar.style.transform = `scaleX(${bar / 1000})`; }
   requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);

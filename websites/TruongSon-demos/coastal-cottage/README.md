@@ -29,12 +29,12 @@ Open http://localhost:8000. It needs a server (ES modules), not a file:// open.
 - **Copy:** the `<section class="panel">` blocks in `index.html`. `data-in` / `data-out` set where each shows (0 to 1 of the film). `left`, `right` or `center` sets the side.
 - **Settings:** `assets/beats.js` (frame count, scroll length, background colour).
 - **New render:** re-make the frames from the PNG frames Blender wrote:
-  `.claude/skills/3d-walkthrough/scripts/make_frames.sh <png_dir> websites/TruongSon-demos/coastal-cottage 2`
+  `.claude/skills/3d-walkthrough/scripts/make_frames.sh <png_dir> websites/TruongSon-demos/coastal-cottage 1`
 - `assets/film.js` is the shared engine from the skill template. Don't fork it per site.
 
 ## Weight
 
-520 frames (every 2nd film frame), WebP. Desktop set 1280 wide, about 15 MB. Phone set 854 wide, about 8 MB. A coarse pass (1 in 16) loads first, then the rest fills in while you scroll.
+1,040 frames (every film frame), WebP. Desktop set 1280 wide, about 29 MB. Phone set 854 wide, about 17 MB. A coarse pass (1 in 16) loads first, then the rest fills in while you scroll.
 
 ## Open items
 
