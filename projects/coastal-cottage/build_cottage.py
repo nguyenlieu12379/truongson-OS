@@ -267,8 +267,8 @@ box("Fascia_R", x1 - 0.3, y0, zb - 0.8, x1, y1, zb, M["trim"], "Roof")
 # ---------- furniture blocks ----------
 F, Z = "Furniture", FLOOR_Z
 # Kitchen (x16-28, y8-22): back counter on front wall + island
-box("Kitchen_Counter", 16.3, 8.3, Z, 28, 10.5, Z + 3, M["cabinet"], F)
-box("Kitchen_Counter_Top", 16.3, 8.3, Z + 3, 28, 10.7, Z + 3.15, M["counter"], F)
+box("Kitchen_Counter", 16.3, 8.3, Z, 23.5, 10.5, Z + 3, M["cabinet"], F)  # stops before the front door (24.25-27.75)
+box("Kitchen_Counter_Top", 16.3, 8.3, Z + 3, 23.5, 10.7, Z + 3.15, M["counter"], F)
 box("Kitchen_Upper", 16.3, 8.3, Z + 5, 19, 9.6, Z + 8, M["cabinet"], F)
 box("Fridge", 16.3, 10.7, Z, 19, 13.5, Z + 7, M["counter"], F)
 box("Island", 19.5, 15, Z, 27, 18.5, Z + 3, M["cabinet"], F)

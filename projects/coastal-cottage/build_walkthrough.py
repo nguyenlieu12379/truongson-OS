@@ -249,6 +249,12 @@ for i, (cx, cy) in enumerate([(30.5, 12.2), (33.5, 12.2), (30.5, 18.8), (33.5, 1
     box(f"ChairBack_{i}", cx - 0.8, by, F, cx + 0.8, by + 0.2, F + 3.0, M["fabric"], "Furniture")
 box("Pendant", 31.7, 15.2, F + 6.5, 32.3, 15.8, F + 7.2, M["door"], "Furniture")
 
+# Design pass: real materials, furnished rooms, landscaping, golden-hour sky and grade
+sys.path.insert(0, HERE)
+import design_pass  # noqa: E402
+if "--plain" not in ARGS:
+    design_pass.apply(G)
+
 # ------------------------------------------------------------------
 # 3. Construction animation
 # ------------------------------------------------------------------
@@ -389,6 +395,8 @@ for nm, x, y, e in [("Great", 26, 32, 260), ("Kitchen", 22, 15, 160), ("Dining",
     L.location = (x * FT, y * FT, (F + 9.4) * FT)
     L.visible_camera = False
     coll("Lights").objects.link(L)
+if "--plain" not in ARGS:
+    design_pass.warm_lights()
 
 # ------------------------------------------------------------------
 # 4. Camera
@@ -397,7 +405,7 @@ cam = bpy.data.objects.new("Cam_Film", bpy.data.cameras.new("Cam_Film"))
 scene.collection.objects.link(cam)
 cam.data.lens = 35
 cam.data.clip_start = 0.03
-cam.data.clip_end = 3000
+cam.data.clip_end = 40000
 tgt = bpy.data.objects.new("Cam_Target", None)
 scene.collection.objects.link(tgt)
 tc = cam.constraints.new("TRACK_TO")
@@ -471,8 +479,12 @@ cam.data.lens = 35
 
 # exposure: bright beach outside, opened up indoors
 vs = scene.view_settings
-for f, e in [(1, -2.6), (CUT - 1, -2.6), (CUT, -2.2), (680, -2.2), (730, -0.9), (890, -0.9),
-             (950, -2.0), (END, -2.0)]:
+EXPOSURE = [(1, -2.6), (CUT - 1, -2.6), (CUT, -2.2), (680, -2.2), (730, -0.9), (890, -0.9),
+            (950, -2.0), (END, -2.0)]
+if "--plain" not in ARGS:   # golden hour: much less light outside than the midday version
+    EXPOSURE = [(1, -0.5), (CUT - 1, -0.5), (CUT, -0.3), (240, -0.1), (420, -0.6), (600, -0.6),
+                (680, -0.6), (730, -0.9), (890, -0.9), (950, -0.8), (END, -0.8)]
+for f, e in EXPOSURE:
     vs.exposure = e
     vs.keyframe_insert("exposure", frame=f)
 for fc in (scene.animation_data.action and all_fcurves(scene)) or []:
