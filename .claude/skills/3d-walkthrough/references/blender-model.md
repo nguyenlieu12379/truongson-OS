@@ -1,6 +1,6 @@
 # Blender model
 
-Every output starts here. The building is modelled once, in Blender, from a Python script (`assets/blender/build_model.py`). The film animates it, and the website is built from the film's frames. There is no other way to build the place.
+Every output starts here. The building is modelled once, in Blender, from a Python script (`assets/blender/build_model.py`). The website loads the baked, exported `model.glb` (see [Baking](baking.md)). The film animates the same scene. There is no other way to build the place.
 
 Example: the template ships the coastal cottage (`projects/coastal-cottage/` is the full film build of it).
 
@@ -28,7 +28,7 @@ Run it:
 cd websites/<owner>/<site>/blender && <scratchpad>/bl/bin/python build_model.py
 ```
 
-It writes four check renders, `model.blend` and `model.glb` (the `.glb` is only used by the archived live-3D site). Use `--no-render` while iterating.
+It writes four check renders, `model.blend` and a plain `model.glb`. The site's final `model.glb` comes from the bake step (`bake_web.py`). Use `--no-render` while iterating.
 
 ## Building blocks
 
@@ -44,16 +44,24 @@ Everything is in feet at the top (`W`, `D`, `FLOOR_Z`, `CEIL`, body extents, rid
 
 Plan axes: x across the front, y from the street (y = 0) toward the back, z up.
 
-## Conventions
+## Conventions the website relies on
 
-- Doors and sliders: origin on the hinge (use `make_door`) so the film can swing or slide them.
-- Roof and ceilings: `obj["role"] = "upper"`, so the dollhouse shots can hide them.
-- Anything the film animates: keep it a separate object with a clear name.
-- Furniture in the `Furniture` collection, room lights in `Lights`.
+| Thing | Rule | Why |
+| --- | --- | --- |
+| Axes | Blender (x, y, z) becomes (x, z, -y) in the site | The street side ends up at max z, matching spec.js |
+| Glass | Material name starts with `Glass` | Not baked. The site swaps it for a cheap transparent glass |
+| Roof and ceilings | `obj["role"] = "upper"` | Hidden while the dollhouse camera is above the roof |
+| Ground, sea, street | `obj["role"] = "site"` | Left out of the building bounds |
+| Doors and sliders | `obj["role"] = "door"`, origin on the hinge (use `make_door`) | spec.doors swings or slides them by name. Baked as their own group |
+| Construction phases | One group per phase (pilings, floor, walls, roof, furniture per room) | The site animates the build-up opening by group |
+| Anything site.js animates | Keep it a separate object with a clear name | Static meshes are joined into bake groups |
+| Walls | Real thickness, closed ends | Thin or open walls leak light in the bake |
+
+The film needs the objects separate, so the bake runs on a copy after `model.blend` is saved.
 
 ## Mistakes we already made
 
-- **Procedural materials in a `.glb`.** Node-built textures (wood planks, tile, siding) don't survive a `.glb` export, only the plain base colour does. This is why the website is built from the film, not the model.
+- **Procedural materials in a `.glb`.** Node-built textures (wood planks, tile, siding) don't survive a plain `.glb` export, only the base colour does. That's why the site's model is baked: the bake turns them into images.
 
 - **Door pivoting around the world origin.** `box()` bakes the location into the mesh, so every origin is at (0, 0, 0). A door rotated without moving its origin swings in a huge arc. Always use `make_door`.
 - **Ghost walls, roof that never lands, black ground edges**: see [Blender film](blender-film.md).
