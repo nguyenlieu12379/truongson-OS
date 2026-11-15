@@ -39,4 +39,5 @@ Open http://localhost:8000. It needs a server (ES modules), not a file:// open.
 ## Open items
 
 - `TODO: contact link` on the "Get one for your place" button.
+- Live: https://nguyenlieu12379.github.io/truongson-OS/coastal-cottage/
 - Tested headless in Chromium at 1280x760 and 390x844. Not tested on real phones or Safari.
