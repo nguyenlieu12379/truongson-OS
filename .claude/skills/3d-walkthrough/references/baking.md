@@ -46,14 +46,23 @@ skyImage: 'assets/sky.webp',
 bakeInfo: 'assets/bake.json',            // sky_scale and sky_dir from the bake
 exposure: 0.85, insideBoost: 0.82,       // the film's exposure outside, and inside relative to it
 grade: { tint: [1.08, 1.0, 0.86], power: 1.08, sat: 1.05 },   // white balance + a light 'Punchy' look
-build: [{ name: 'G_Walls', at: [0.11, 0.2], how: 'grow' }, ...],   // grow | drop | pop | show
+build: [{ name: 'G_Walls', at: [0.08, 0.17], how: 'grow' }, ...],   // grow | drop | pop | show
+lightUp: [0.15, 0.24],                   // flat light during the build-up, then the baked light comes on
 planUntil: [0.34, 0.42],                 // the floor plan on the sand fades out
 doors: { Ext_Front_door2: { opensAt: [...], angle: 1.75 }, Ext_Rear_slider2: { opensAt: [...], shrink: 0.06 } },
 ```
 
 The engine's tone mapping is Blender's AgX with an adjustable 'Punchy' look (three's `CustomToneMapping`). Full Punchy (power 1.35, saturation 1.4) came out far redder and more contrasty than Blender's; power 1.08 and saturation 1.05 with a warm tint matched the film best. Compare a site screenshot with a film still from the same camera before settling it.
 
+## The build-up and baked light
+
+The bake is of the finished house, so surfaces hidden in it (the deck under the floors, the floor under walls and furniture, the sand under the house) are dark. During a build-up opening they show as black patches. `spec.lightUp` fixes it: baked surfaces show flat light (a plain model) until the house is up, then the baked light fades in. It reads as the golden hour switching on.
+
+For end shots with the hero view centred (a sunset), put the final card at the side: `class="panel final side"`.
+
 ## Mistakes we already made
+
+- **Black patches during the build-up**: see above. Use `lightUp`.
 
 - **Baking objects one by one** (21 min for one group). Join first.
 - **Black plants and palms**: the foliage atlas was 90% empty margin. Bigger atlas, looser unwrap angle, smaller margin.

@@ -22,17 +22,20 @@ export default {
 
   // The house builds itself on scroll, like the film. how: grow (from the ground), drop, pop, show.
   build: [
-    { name: 'G_Structure', at: [0.01, 0.1], how: 'grow' },
-    { name: 'G_Floors', at: [0.08, 0.12], how: 'grow' },
-    { name: 'G_Walls', at: [0.11, 0.2], how: 'grow' },
-    { name: 'G_Glass', at: [0.17, 0.22], how: 'grow' },
-    { name: 'Ext_Front_door2', at: [0.2, 0.21], how: 'show' },
-    { name: 'Ext_Rear_slider2', at: [0.17, 0.22], how: 'grow' },
-    { name: 'G_FurnIn', at: [0.21, 0.29], how: 'pop' },
-    { name: 'G_FurnOut', at: [0.24, 0.31], how: 'pop' },
+    // Baked light is the finished house: tops hidden under floors, walls and furniture are dark.
+    // So floors, walls and furniture rise close together, and the dark spots only flash by.
+    { name: 'G_Structure', at: [0.01, 0.08], how: 'grow' },
+    { name: 'G_Floors', at: [0.06, 0.09], how: 'grow' },
+    { name: 'G_Walls', at: [0.08, 0.17], how: 'grow' },
+    { name: 'G_Glass', at: [0.14, 0.19], how: 'grow' },
+    { name: 'Ext_Front_door2', at: [0.17, 0.18], how: 'show' },
+    { name: 'Ext_Rear_slider2', at: [0.14, 0.19], how: 'grow' },
+    { name: 'G_FurnIn', at: [0.09, 0.16], how: 'pop' },
+    { name: 'G_FurnOut', at: [0.1, 0.17], how: 'pop' },
     { name: 'G_Ceiling', at: [0.43, 0.44], how: 'show' },
     { name: 'G_Roof', at: [0.38, 0.44], how: 'drop' },
   ],
+  lightUp: [0.15, 0.24],     // the house rises as a plain model; the golden-hour light comes on as it's finished
   planUntil: [0.34, 0.42],    // the floor plan painted on the sand fades as the roof lands
 
   doors: {

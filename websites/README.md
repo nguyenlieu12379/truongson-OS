@@ -16,7 +16,7 @@ websites/
 | Owner | Site | Status | Path |
 | --- | --- | --- | --- |
 | TruongSon-demos | Forno Notte, 3D scroll pizzeria demo | Live at https://nguyenlieu12379.github.io/truongson-OS/forno-notte/ | `websites/TruongSon-demos/forno-notte/` |
-| TruongSon-demos | Coastal Cottage, scroll walkthrough built from the Blender film | Live at https://nguyenlieu12379.github.io/truongson-OS/coastal-cottage/ (after merge) | `websites/TruongSon-demos/coastal-cottage/` |
+| TruongSon-demos | Coastal Cottage, baked live-3D walkthrough (golden hour) | Live at https://nguyenlieu12379.github.io/truongson-OS/coastal-cottage/ (after merge) | `websites/TruongSon-demos/coastal-cottage/` |
 
 ## Add a site
 

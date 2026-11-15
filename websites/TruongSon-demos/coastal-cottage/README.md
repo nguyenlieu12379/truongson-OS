@@ -1,26 +1,33 @@
-# <Site name> (scroll walkthrough)
+# Coastal Cottage: baked live-3D walkthrough
 
-Scroll-driven 3D walkthrough built with the `3d-walkthrough` skill. The building is modelled in Blender and loaded as `assets/model.glb`.
+A scroll walkthrough of the golden-hour coastal cottage in live 3D (three.js), with Blender's lighting and materials baked into the model. Smooth at any scroll speed.
 
-## Route
+- **Model:** `assets/model.glb` (6.2 MB), sky `assets/sky.webp`, bake info `assets/bake.json`. Made by `projects/coastal-cottage/bake_web.py` from the golden-hour film scene plus the surroundings in `environment.py`: the street, a hill behind it, neighbour houses on the beach and up the hill, and trees.
+- **Route** (`assets/spec.js`), the film's camera path:
+  1. the floor plan on the sand
+  2. the house rises as a plain model, then the golden-hour light comes on
+  3. dollhouse orbit
+  4. the roof lands
+  5. up the stairs and through the front door
+  6. dining, then the great room
+  7. the rear slider opens to the lanai and the sunset
+- **Engine:** `assets/engine.js` is the skill template's engine in baked mode. See `.claude/skills/3d-walkthrough/references/baking.md`.
 
-1. Overview (real estate) or street (business)
-2. Front door
-3. <rooms...>
-
-## Run locally
+## Run
 
 ```bash
-python3 -m http.server 8000
+python3 -m http.server 8000 --directory websites/TruongSon-demos/coastal-cottage
 ```
 
-Open http://localhost:8000 (ES modules and the .glb need a server, not `file://`).
+Open http://localhost:8000. It needs a server, not a file:// open.
 
 ## Edit
 
-- The building: edit `blender/build_model.py`, run it, copy the new `model.glb` into `assets/`.
-- Copy: `index.html` panels. Keep `data-in` / `data-out` ranges from overlapping.
-- Camera stops, door timing, styles: `assets/spec.js`.
-- Scroll animations: `assets/site.js`.
-- Brand colour: `--accent` in `assets/style.css`.
-- Engine (shared across sites): `assets/engine.js`. Fix bugs in the skill template too.
+- **Copy:** the `.panel` sections in `index.html`. `data-in` / `data-out` set where each one shows, from 0 to 1 of the scroll.
+- **Camera, build-up, doors, grade:** `assets/spec.js`.
+- **Re-bake after a design change:** `python projects/coastal-cottage/bake_web.py` (about 20 minutes; add `--quick` for a 2-minute low-quality check). Needs `pip install bpy pillow`.
+
+## Open items
+
+- The "Get one for your place" button links to `#TODO-contact`.
+- Tested in headless Chromium at 1280x720 and 390x844. Not tested on real phones or Safari.

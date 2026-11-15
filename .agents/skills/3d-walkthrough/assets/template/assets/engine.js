@@ -276,6 +276,10 @@ export async function createWalkthrough({ canvas, spec, site }) {
   // Baked mode: albedo map x lightmap (stored as L / lm_scale in sRGB). Unlit: the light is in the textures.
   const bakedCache = new Map();
   const planMats = [];
+  // spec.lightUp = [a, b]: before a, baked surfaces show flat light (a plain model, so the build-up
+  // has no dark spots from the finished house's shadows); between a and b the baked light comes on.
+  const bakeMix = { value: spec.lightUp ? 0 : 1 };
+  const flatLight = { value: spec.flatLight ?? 0.8 };
   function bakedMaterial(m) {
     if (bakedCache.has(m)) return bakedCache.get(m);
     const lm = m.emissiveMap;
@@ -283,6 +287,13 @@ export async function createWalkthrough({ canvas, spec, site }) {
     if (lm) lm.channel = m.map?.channel ?? 0;
     for (const t of [m.map, lm]) if (t) { t.anisotropy = renderer.capabilities.getMaxAnisotropy(); t.generateMipmaps = true; }
     b.name = m.name;
+    b.onBeforeCompile = (sh) => {
+      sh.uniforms.bakeMix = bakeMix;
+      sh.uniforms.flatLight = flatLight;
+      sh.fragmentShader = 'uniform float bakeMix;\nuniform float flatLight;\n' + sh.fragmentShader.replace(
+        'reflectedLight.indirectDiffuse += lightMapTexel.rgb * lightMapIntensity * RECIPROCAL_PI;',
+        'reflectedLight.indirectDiffuse += mix( vec3( flatLight ), lightMapTexel.rgb * lightMapIntensity * RECIPROCAL_PI, bakeMix );');
+    };
     bakedCache.set(m, b);
     return b;
   }
@@ -364,6 +375,7 @@ export async function createWalkthrough({ canvas, spec, site }) {
       else if (b.how === 'pop') b.o.scale.copy(b.s0).multiplyScalar(Math.max(t, 0.001));
       else b.o.scale.set(b.s0.x, b.s0.y * Math.max(t, 0.001), b.s0.z);
     }
+    if (spec.lightUp) bakeMix.value = smooth(spec.lightUp[0], spec.lightUp[1], p);
     const planFade = spec.planUntil ? 1 - smooth(spec.planUntil[0], spec.planUntil[1], p) : 0;
     for (const m of planMats) { m.opacity = planFade; m.visible = planFade > 0.001; }
   }
