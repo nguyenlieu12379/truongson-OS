@@ -1,5 +1,7 @@
 # Coastal Cottage: baked live-3D walkthrough
 
+Written as a vacation rental listing, as if for a rental business client (a demo; the client details are placeholders).
+
 A scroll walkthrough of the golden-hour coastal cottage in live 3D (three.js), with Blender's lighting and materials baked into the model. Smooth at any scroll speed.
 
 - **Model:** `assets/model.glb` (6.2 MB), sky `assets/sky.webp`, bake info `assets/bake.json`. Made by `projects/coastal-cottage/bake_web.py` from the golden-hour film scene plus the surroundings in `environment.py`: the street, a hill behind it, neighbour houses on the beach and up the hill, and trees.
@@ -29,5 +31,5 @@ Open http://localhost:8000. It needs a server, not a file:// open.
 
 ## Open items
 
-- The "Get one for your place" button links to `#TODO-contact`.
+- Placeholders: the town, guests / sleeps, nightly price, booking link (`#TODO-booking`) and the rental company name.
 - Tested in headless Chromium at 1280x720 and 390x844. Not tested on real phones or Safari.
