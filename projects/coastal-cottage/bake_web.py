@@ -190,7 +190,7 @@ GROUPS = [
     ("G_Hill", [o for o in envs if o.name == "Env_Hill"], None, 2, "site"),
     ("G_EnvHouses", [o for o in envs if o.name.startswith("Env_House")], 9, 2, "site"),
     ("G_EnvTrees", [o for o in envs if o.name.startswith(("Env_Tree", "Env_Palm", "Env_BeachPalm",
-                                                          "Env_Street"))], 9, 2, "site"),
+                                                          "Env_Street"))], 13, 2, "site"),
 ] + [(d, [bpy.data.objects[d]], 56, 3, "door") for d in DOORS]
 GROUPS = [g for g in GROUPS if g[1]]
 seen = set()
@@ -272,7 +272,7 @@ for name, objs, dens, lmdiv, role in GROUPS:
     host = bpy.context.view_layer.objects.active
     host.name = name
     # thin out the heavy organic geometry before baking (the bake then matches it exactly)
-    ratio = {"G_Site": 0.35, "G_EnvTrees": 0.35, "G_FurnOut": 0.5, "G_FurnIn": 0.6}.get(name)
+    ratio = {"G_Site": 0.5, "G_EnvTrees": 0.5, "G_FurnOut": 0.5, "G_FurnIn": 0.6}.get(name)
     if ratio:
         before = len(host.data.polygons)
         dm = host.modifiers.new("Decimate", "DECIMATE")
