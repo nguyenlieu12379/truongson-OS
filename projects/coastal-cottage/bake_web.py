@@ -248,6 +248,17 @@ log("converted", len(allg))
 # selected objects one at a time (about 4 s each), so 337 pilings took 21 min; joined, seconds.
 # Most pieces have their origin at the world origin already, so object-space textures don't move.
 FIXED_NAMES = {"G_SandNear", "G_Hill"}
+# Furniture is baked joined (fast), then split back into its pieces for export, so the site can
+# pop each piece in on its own like the film. Tag every face with the index of the piece it came from.
+PIECED = {"G_FurnIn", "G_FurnOut"}
+PIECES = {}
+for name, objs, *_ in GROUPS:
+    if name in PIECED:
+        PIECES[name] = []
+        for i, o in enumerate(objs):
+            at = o.data.attributes.get("piece") or o.data.attributes.new("piece", "INT", "FACE")
+            at.data.foreach_set("value", [i] * len(o.data.polygons))
+            PIECES[name].append((i, o.name))
 joined = []
 for name, objs, dens, lmdiv, role in GROUPS:
     if name in FIXED_NAMES or role == "door" or len(objs) == 1 and objs[0].name == name:
@@ -449,6 +460,70 @@ for name, objs, dens, lmdiv, role in GROUPS:
     log(f"baked {name}: albedo {w}x{h}, light {lw}x{lh}, scale {scale:.3f}, {time.time() - t:.0f}s")
 
 # ------------------------------------------------------------------
+# 5b. Floor order map: one value per board (or tile), so the site lays the floor board by board.
+#     Same board maths as design_pass.planks(): front boards low, back boards high, a little random.
+# ------------------------------------------------------------------
+Y_SPAN = D_FT * FT                                      # street (0) to the back of the lanai
+
+
+def order_material(kind, width=0.19, length=1.6, cell=0.05):
+    m = bpy.data.materials.new(f"Order_{kind}_{width}_{length}")
+    n, bsdf = dp.fresh(m)
+    bsdf.inputs["Base Color"].default_value = (0, 0, 0, 1)
+    co = n.xyz(dp.objcoord(n))
+    u, v = co[0], co[1]
+    if kind == "planks":
+        row = n.math("FLOOR", n.math("DIVIDE", u, width))
+        wn = n.new("ShaderNodeTexWhiteNoise")
+        wn.noise_dimensions = "1D"
+        n.link(row, wn.inputs["W"])
+        rnd = wn.outputs["Value"]
+        col = n.math("FLOOR", n.math("DIVIDE", n.math("ADD", v, n.math("MULTIPLY", rnd, length)), length))
+        wn2 = n.new("ShaderNodeTexWhiteNoise")
+        wn2.noise_dimensions = "2D"
+        n.link(n.combine(row, col, 0), wn2.inputs["Vector"])
+        jit = wn2.outputs["Value"]
+        # board centre along y
+        y = n.math("SUBTRACT", n.math("MULTIPLY", n.math("ADD", col, 0.5), length), n.math("MULTIPLY", rnd, length))
+    else:                                               # tiles: one cell per tile
+        cx = n.math("FLOOR", n.math("DIVIDE", u, cell))
+        cy = n.math("FLOOR", n.math("DIVIDE", v, cell))
+        wn2 = n.new("ShaderNodeTexWhiteNoise")
+        wn2.noise_dimensions = "2D"
+        n.link(n.combine(cx, cy, 0), wn2.inputs["Vector"])
+        jit = wn2.outputs["Value"]
+        y = n.math("MULTIPLY", n.math("ADD", cy, 0.5), cell)
+    t = n.math("DIVIDE", y, Y_SPAN)
+    order = n.math("ADD", n.math("MULTIPLY", t, 0.82), n.math("MULTIPLY", jit, 0.16), clamp=True)
+    oc = n.new("ShaderNodeCombineColor")
+    for i in range(3):
+        n.link(order, oc.inputs[i])
+    n.link(oc.outputs[0], bsdf.inputs["Emission Color"])
+    bsdf.inputs["Emission Strength"].default_value = 1.0
+    return m
+
+
+ORDER_FOR = {"Oak_Floor": ("planks", 0.19, 1.6), "Deck_Wood": ("planks", 0.14, 2.4), "Bath_Tile": ("tiles",)}
+fl = bpy.data.objects.get("G_Floors")
+if fl:
+    w, h = sizes["G_Floors"]
+    saved = [sl.material for sl in fl.material_slots]
+    for sl in fl.material_slots:
+        k = ORDER_FOR.get(sl.material.name if sl.material else "", ("planks", 0.19, 1.6))
+        sl.material = order_material(*k)
+    om = bpy.data.images.new("G_Floors_order", w, h, alpha=False, float_buffer=False)
+    om.colorspace_settings.name = "Non-Color"
+    bake_target([fl], om)
+    select_only([fl])
+    scene.cycles.samples = 1
+    bpy.ops.object.bake(type="EMIT", margin=2, use_clear=True)
+    a = img_np(om)[..., 0]
+    save_png(np.repeat(a[..., None], 3, -1), os.path.join(SITE, "assets", "floor_order.png"))
+    for sl, mt in zip(fl.material_slots, saved):
+        sl.material = mt
+    log(f"floor order map {w}x{h}")
+
+# ------------------------------------------------------------------
 # 6. Sky panorama (world only), stored like the lightmaps
 # ------------------------------------------------------------------
 cam_data = bpy.data.cameras.new("PanoCam")
@@ -538,6 +613,37 @@ def origin_to_bottom(o):
     o.location = org
 
 
+def split_pieces(o, pieces):
+    """Split a baked, joined group back into its original pieces (face attribute 'piece').
+    Each piece keeps the shared baked material and UVs, gets its own name and a bottom-centre
+    origin, so it can pop up from where it stands."""
+    out = []
+    for idx, nm in pieces:
+        me = o.data.copy()
+        bm = bmesh.new()
+        bm.from_mesh(me)
+        layer = bm.faces.layers.int.get("piece")
+        bmesh.ops.delete(bm, geom=[f for f in bm.faces if f[layer] != idx], context="FACES")
+        bmesh.ops.delete(bm, geom=[v for v in bm.verts if not v.link_faces], context="VERTS")
+        if not bm.faces:
+            bm.free()
+            bpy.data.meshes.remove(me)
+            continue
+        bm.to_mesh(me)
+        bm.free()
+        if "piece" in me.attributes:
+            me.attributes.remove(me.attributes["piece"])
+        p = bpy.data.objects.new("Furn_" + nm, me)
+        p.matrix_world = o.matrix_world.copy()
+        o.users_collection[0].objects.link(p)
+        origin_to_bottom(p)
+        p["baked"] = 1
+        out.append(p)
+    bpy.data.objects.remove(o, do_unlink=True)
+    log(f"split into {len(out)} pieces")
+    return out
+
+
 export = []
 for name, objs, dens, lmdiv, role in GROUPS:
     alb_path, lm_path, scale = results[name]
@@ -562,6 +668,9 @@ for name, objs, dens, lmdiv, role in GROUPS:
     if role:
         o["role"] = role
     o["baked"] = 1
+    if name in PIECES:
+        export += split_pieces(o, PIECES[name])
+        continue
     export.append(o)
 
 # window glass: one object (rises with the walls), except the rear slider, which the site animates
