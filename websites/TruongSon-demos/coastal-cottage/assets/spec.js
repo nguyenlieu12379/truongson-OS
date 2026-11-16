@@ -9,6 +9,8 @@ export default {
   name: 'Coastal Cottage',
   mode: 'dollhouse-open',
   model: 'assets/model.glb',
+  modelMobile: 'assets/model_mobile.glb',   // same model, half-size textures, for phones
+  skyImageMobile: 'assets/sky_mobile.webp',
   baked: true,
   skyImage: 'assets/sky.webp',
   bakeInfo: 'assets/bake.json',

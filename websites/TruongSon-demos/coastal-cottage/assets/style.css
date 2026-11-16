@@ -47,7 +47,7 @@ body {
     linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent 40%);
 }
 
-.spacer { height: 1000vh; }
+.spacer { height: 1000vh; height: 1000lvh; }   /* lvh: steady while the phone address bar hides */
 
 /* ---------- Nav: translucent material, content scrolls under ---------- */
 .nav {

@@ -715,6 +715,23 @@ bpy.ops.export_scene.gltf(filepath=glb, export_format="GLB", use_selection=True,
                           export_lights=False, export_cameras=False, export_yup=True,
                           export_animations=False, export_normals=False)
 log(f"exported {glb}: {os.path.getsize(glb) / 1e6:.1f} MB, {len(export)} objects")
+
+# Phone version: the same model with every baked texture at half size (a quarter of the GPU memory;
+# a phone screen can't show more detail anyway), and a half-size sky.
+for img in bpy.data.images:
+    if img.filepath and os.path.abspath(bpy.path.abspath(img.filepath)).startswith(WORK) \
+            and img.size[0] > 64:
+        img.scale(max(32, img.size[0] // 2), max(32, img.size[1] // 2))
+glb_m = os.path.join(SITE, "assets", "model_mobile.glb")
+select_only(export)
+bpy.ops.export_scene.gltf(filepath=glb_m, export_format="GLB", use_selection=True, export_extras=True,
+                          export_image_format="WEBP", export_image_quality=80, export_apply=True,
+                          export_lights=False, export_cameras=False, export_yup=True,
+                          export_animations=False, export_normals=False)
+from PIL import Image as _I  # noqa: E402
+_I.open(os.path.join(SITE, "assets", "sky.webp")).resize((2048, 1024), _I.LANCZOS).save(
+    os.path.join(SITE, "assets", "sky_mobile.webp"), quality=86, method=6)
+log(f"exported {glb_m}: {os.path.getsize(glb_m) / 1e6:.1f} MB (phone)")
 with open(os.path.join(SITE, "assets", "bake.json"), "w") as f:
     import json
     json.dump({"sky_scale": sky_scale, "sky_dir": sky_dir, "groups": {k: v[2] for k, v in results.items()},

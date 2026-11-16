@@ -171,8 +171,11 @@ function makeMaterial(def, repeat) {
 // ---------------------------------------------------------------------------
 export async function createWalkthrough({ canvas, spec, site }) {
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+  // Phones: the lighter model and sky (spec.modelMobile / spec.skyImageMobile, half-size textures)
+  // and a lower pixel ratio, so it stays smooth and inside a phone's GPU memory.
+  const phone = matchMedia('(pointer: coarse)').matches || Math.min(innerWidth, innerHeight) < 600;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !phone, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, phone ? 1.5 : 1.75));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = spec.exposure ?? 1.05;
@@ -218,7 +221,7 @@ export async function createWalkthrough({ canvas, spec, site }) {
   // ---- sky. Baked mode: the Blender world rendered as a panorama (spec.skyImage).
   let skyDome = null;
   if (baked && spec.skyImage) {
-    const tex = await new THREE.TextureLoader().loadAsync(spec.skyImage);
+    const tex = await new THREE.TextureLoader().loadAsync(phone && spec.skyImageMobile ? spec.skyImageMobile : spec.skyImage);
     tex.colorSpace = THREE.SRGBColorSpace;
     skyDome = new THREE.Mesh(new THREE.SphereGeometry(1200, 64, 32), new THREE.ShaderMaterial({
       side: THREE.BackSide, depthWrite: false, fog: false, toneMapped: true,
@@ -265,7 +268,7 @@ export async function createWalkthrough({ canvas, spec, site }) {
 
   // ---- the building: one glTF exported from Blender (assets/blender/build_model.py).
   // Walls, floors, furniture, ground, photos on surfaces and room lights all come from the model.
-  const gltf = await new GLTFLoader().loadAsync(spec.model);
+  const gltf = await new GLTFLoader().loadAsync(phone && spec.modelMobile ? spec.modelMobile : spec.model);
   const model = gltf.scene;
   scene.add(model);
   const byName = new Map();
