@@ -535,7 +535,9 @@ export async function createWalkthrough({ canvas, spec, site }) {
     posCurve.getPoint(u, tmpP); lookCurve.getPoint(u, tmpL);
     if (!reduceMotion) tmpP.y += Math.sin(time * 1.3) * 0.012;
     camera.position.copy(tmpP); camera.lookAt(tmpL);
-    if (spec.mode === 'dollhouse-open') { const above = tmpP.y > H + 0.5; for (const m of upper) m.visible = !above; }
+    // dollhouse: roof and ceilings hidden while the camera is above them, until spec.dollhouseUntil
+    // (then the roof's own build entry, e.g. a drop, plays in full view, like the film)
+    if (spec.mode === 'dollhouse-open') { const above = tmpP.y > H + 0.5 && p < (spec.dollhouseUntil ?? 1); for (const m of upper) m.visible = !above; }
     updateBuild(p);
     if (skyDome) skyDome.position.copy(camera.position);
 

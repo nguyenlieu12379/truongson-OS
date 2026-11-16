@@ -18,6 +18,7 @@ export default {
   insideBoost: 0.82,          // and -0.9 EV inside
   grade: { tint: [1.08, 1.0, 0.86], power: 1.08, sat: 1.05 },   // white balance, then a light 'Punchy' look
   insideAt: [0.6, 0.66],
+  dollhouseUntil: 0.38,       // from here the roof drops in from above (in view), as in the film
   ceilingY: 5.4,              // ceiling sits at 2.44 + 3.05 m: hide roof and ceilings above this
 
   // The house builds itself on scroll, like the film. how: grow (from the ground), drop, pop, show.
@@ -32,8 +33,8 @@ export default {
     { name: 'Ext_Front_door2', at: [0.19, 0.2], how: 'show' },
     { name: 'Ext_Rear_slider2', at: [0.16, 0.2], how: 'grow' },
     { prefix: 'Furn_', at: [0.18, 0.27], how: 'pop', each: 0.2 },
-    { name: 'G_Ceiling', at: [0.43, 0.44], how: 'show' },
-    { name: 'G_Roof', at: [0.38, 0.44], how: 'drop' },
+    { name: 'G_Ceiling', at: [0.445, 0.45], how: 'show' },   // switches in as the roof lands
+    { name: 'G_Roof', at: [0.38, 0.445], how: 'drop' },   // lands 14 m down, like the film's 45 ft
   ],
   lightUp: [0.25, 0.32],     // the house rises as a plain model; the golden-hour light comes on as it's finished
   planUntil: [0.34, 0.42],    // the floor plan painted on the sand fades as the roof lands
