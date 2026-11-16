@@ -13,7 +13,7 @@ import random
 
 import bmesh
 import bpy
-from mathutils import Matrix, Vector
+from mathutils import Euler, Matrix, Vector
 
 FT = 0.3048
 GROUND = -3.0
@@ -95,17 +95,113 @@ def house(dp, name, cx, cy, w, d, base_z, stilts, body_m, roof_m, trim_m, win_m,
     return p.build(0.0)
 
 
+def leaf_material(dp, name, dark, light):
+    """Foliage: clumps of leaves in varied greens (Voronoi cells), darker gaps between them."""
+    m = dp.get_mat(name)
+    n, b = dp.fresh(m)
+    co = dp.objcoord(n)
+    vo = n.new("ShaderNodeTexVoronoi", Scale=9.0)
+    n.link(co, vo.inputs["Vector"])
+    nz = n.new("ShaderNodeTexNoise", Scale=3.0, Detail=6.0)
+    n.link(co, nz.inputs["Vector"])
+    mix = n.math("ADD", n.math("MULTIPLY", vo.outputs["Distance"], 0.9),
+                 n.math("MULTIPLY", nz.outputs["Fac"], 0.6))
+    ramp = n.new("ShaderNodeValToRGB")
+    ramp.color_ramp.elements[0].position = 0.15
+    ramp.color_ramp.elements[0].color = (*light, 1)
+    ramp.color_ramp.elements[1].position = 0.95
+    ramp.color_ramp.elements[1].color = (*dark, 1)
+    n.link(mix, ramp.inputs["Fac"])
+    n.link(ramp.outputs["Color"], b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.7
+    dp.bump(n, b, vo.outputs["Distance"], 0.6, 0.03)
+    return m
+
+
+def lumpy(p, c, r, mat, squash=0.8):
+    """A leaf clump: an icosphere with its surface jittered, so the canopy isn't smooth balls."""
+    mx = Matrix.Translation(Vector(c) * FT) @ Matrix.Diagonal((r * FT, r * FT, r * squash * FT, 1))
+    res = bmesh.ops.create_icosphere(p.bm, subdivisions=2, radius=1.0, matrix=mx)
+    cen = Vector(c) * FT
+    for v in res["verts"]:
+        d = v.co - cen
+        v.co = cen + d * R.uniform(0.82, 1.18)
+    p._tag(res, mat, True)
+
+
 def tree(dp, name, x, y, z, h, crown, trunk_m, leaf_m):
-    """Round-crowned shade tree (live oak / sea grape look): trunk + 4 to 6 overlapping blobs."""
+    """Shade tree (live oak / sea grape): trunk, a few branches, and a dense crown of 15-20 lumpy
+    leaf clumps, so light and shadow break up between them like a real canopy."""
     p = dp.Piece(name, "Env")
-    p.cyl(x, y, z - 0.5, z + h * 0.55, 0.9, trunk_m, 0.55, seg=8)
-    for k in range(R.randint(4, 6)):
+    top = z + h * 0.5
+    p.cyl(x, y, z - 0.5, top, 0.95, trunk_m, 0.6, seg=8)
+    base = z + h * 0.62
+    for k in range(R.randint(3, 4)):                    # branches fanning up into the crown
         a = R.uniform(0, 2 * math.pi)
-        r = R.uniform(0.2, 0.5) * crown
-        c = (x + math.cos(a) * r, y + math.sin(a) * r, z + h * R.uniform(0.6, 0.85))
-        s = crown * R.uniform(0.45, 0.65)
-        p.ell(c, (s, s, s * 0.75), leaf_m, rot=(0, 0, R.uniform(0, 360)), seg=10)
+        ex = x + math.cos(a) * crown * 0.45
+        ey = y + math.sin(a) * crown * 0.45
+        d = Vector((ex - x, ey - y, base - top + h * 0.12))
+        q = d.normalized().to_track_quat("Z", "Y")
+        mx = Matrix.Translation((Vector((x, y, top)) + d / 2) * FT) @ q.to_matrix().to_4x4()
+        res = bmesh.ops.create_cone(p.bm, cap_ends=True, segments=6, radius1=0.45 * FT, radius2=0.25 * FT,
+                                    depth=d.length * FT, matrix=mx)
+        p._tag(res, trunk_m, True)
+    n = R.randint(15, 20)
+    for k in range(n):
+        # points in an oblate dome: wider than tall, fuller at the bottom edge
+        a = R.uniform(0, 2 * math.pi)
+        rr = crown * math.sqrt(R.uniform(0.0, 1.0)) * 0.85
+        zz = base + h * R.uniform(-0.05, 0.42) * (1 - 0.5 * rr / crown)
+        lumpy(p, (x + math.cos(a) * rr, y + math.sin(a) * rr, zz), crown * R.uniform(0.32, 0.46), leaf_m)
     return p.build(0.0)
+
+
+def palm(dp, name, x, y, z, height, lean, trunk, frond):
+    """Fuller palm than design_pass.palm: ~22 drooping fronds plus a tuft of young upright ones."""
+    p = dp.Piece(name, "Env" if name.startswith("Env_") else "Site")
+    segs = 10
+    lx, ly = math.cos(lean[1]) * lean[0], math.sin(lean[1]) * lean[0]
+    pts = [(x + lx * (i / segs) ** 2, y + ly * (i / segs) ** 2, z + height * i / segs) for i in range(segs + 1)]
+    for i in range(segs):
+        a_, b_ = Vector(pts[i]), Vector(pts[i + 1])
+        d = b_ - a_
+        q = d.normalized().to_track_quat("Z", "Y")
+        r0 = 0.62 - 0.26 * i / segs
+        mx = Matrix.Translation((a_ + b_) / 2 * FT) @ q.to_matrix().to_4x4()
+        res = bmesh.ops.create_cone(p.bm, cap_ends=True, segments=10, radius1=r0 * FT, radius2=r0 * 0.88 * FT,
+                                    depth=(d.length + 0.1) * FT, matrix=mx)
+        p._tag(res, trunk, True)
+    top = Vector(pts[-1])
+
+    def frond_(az, L, droop, rise, width):
+        pos = top.copy()
+        dirv = Vector((math.cos(az), math.sin(az), rise))
+        for k in range(8):
+            dirv.z -= 0.12 + droop / 320
+            step = dirv.normalized() * (L / 8)
+            c = pos + step / 2
+            qq = step.to_track_quat("X", "Z") @ Euler((R.uniform(-0.3, 0.3), 0, 0)).to_quaternion()
+            w = width * math.sin(math.pi * (k + 0.7) / 8.6)
+            mm = Matrix.Translation(c * FT) @ qq.to_matrix().to_4x4() @ Matrix.Diagonal(
+                (L / 15 * FT * 1.2, w * FT, 0.06 * FT, 1))
+            res = bmesh.ops.create_uvsphere(p.bm, u_segments=8, v_segments=4, radius=1.0, matrix=mm)
+            p._tag(res, frond, True)
+            pos = pos + step
+    n = 22
+    for i in range(n):
+        frond_(i * 2 * math.pi / n + R.uniform(-0.12, 0.12), R.uniform(7.0, 9.5), R.uniform(25, 70),
+               math.tan(math.radians(R.uniform(10, 30))), R.uniform(1.4, 1.8))
+    for i in range(7):                                  # young fronds in the centre, pointing up
+        frond_(i * 2 * math.pi / 7 + R.uniform(-0.2, 0.2), R.uniform(4.0, 5.5), R.uniform(0, 10),
+               math.tan(math.radians(R.uniform(55, 70))), 1.1)
+    p.ell(tuple(top), (0.8, 0.8, 0.7), trunk, seg=10)
+    return p.build(0.0)
+
+
+# the cottage's own palms (design_pass.apply), rebuilt fuller in the same spots
+SITE_PALMS = [(-22, 18, 30, (3, 2.6)), (-18, 46, 36, (5, 2.2)), (-26, 64, 26, (4, 1.6)), (74, 14, 32, (4, 0.4)),
+              (70, 50, 38, (6, 0.9)), (78, 70, 28, (3, 0.5)), (5, -23, 24, (2, 3.6)), (46, -25, 27, (3, -0.4)),
+              (-35, 120, 34, (6, 2.0)), (88, 128, 30, (5, 1.0))]
 
 
 def add(dp):
@@ -139,10 +235,15 @@ def add(dp):
                                                     ("Siding_Coral", (0.86, 0.62, 0.52)),
                                                     ("Siding_Grey", (0.70, 0.71, 0.70)))]
     bark = dp.plain("Bark", (0.20, 0.15, 0.11), 0.9)
-    leaf_dark = dp.plain("Leaf_Oak", (0.10, 0.17, 0.07), 0.8, sss=0.05)
-    leaf_light = dp.plain("Leaf_Grape", (0.20, 0.30, 0.10), 0.8, sss=0.05)
+    leaf_dark = leaf_material(dp, "Leaf_Oak", (0.05, 0.09, 0.03), (0.16, 0.24, 0.07))
+    leaf_light = leaf_material(dp, "Leaf_Grape", (0.09, 0.14, 0.04), (0.26, 0.34, 0.10))
     palm_trunk = bpy.data.materials.get("Palm_Trunk") or bark
-    frond = bpy.data.materials.get("Palm_Frond") or leaf_light
+    frond = leaf_material(dp, "Palm_Frond_Full", (0.06, 0.13, 0.04), (0.22, 0.33, 0.09))
+    for i, (x, y, hh, lean) in enumerate(SITE_PALMS):  # replace the cottage's thinner palms
+        o = bpy.data.objects.get(f"Palm_{i}")
+        if o:
+            bpy.data.objects.remove(o, do_unlink=True)
+        palm(dp, f"Palm_{i}", x, y, -3, hh, lean, palm_trunk, frond)
 
     # the hill behind the street, and the street itself
     hill_mesh("Env_Hill", grass)
@@ -182,8 +283,8 @@ def add(dp):
         tree(dp, f"Env_Tree_{i}", x, y, hill_z(x, y), R.uniform(18, 30), R.uniform(9, 14), bark,
              leaf_dark if i % 3 else leaf_light)
     for i, x in enumerate((-60, -12, 66, 104, 150)):
-        dp.palm(f"Env_Palm_{i}", x, -52, hill_z(x, -52), R.uniform(24, 34),
-                (R.uniform(2, 5), R.uniform(0, 6.28)), palm_trunk, frond, coll="Env")
+        palm(dp, f"Env_Palm_{i}", x, -52, hill_z(x, -52), R.uniform(24, 34),
+             (R.uniform(2, 5), R.uniform(0, 6.28)), palm_trunk, frond)
     for i, (x, y) in enumerate(((-110, 70), (-185, 60), (95, 72), (170, 68), (240, 40))):
-        dp.palm(f"Env_BeachPalm_{i}", x, y, GROUND, R.uniform(26, 36),
-                (R.uniform(3, 6), R.uniform(0, 6.28)), palm_trunk, frond, coll="Env")
+        palm(dp, f"Env_BeachPalm_{i}", x, y, GROUND, R.uniform(26, 36),
+             (R.uniform(3, 6), R.uniform(0, 6.28)), palm_trunk, frond)
