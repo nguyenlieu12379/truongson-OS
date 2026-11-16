@@ -15,7 +15,7 @@ export default {
   skyImage: 'assets/sky.webp',
   bakeInfo: 'assets/bake.json',
   sky: 'golden',              // fog colours only; the sky itself is the baked panorama
-  theme: { fogOutside: '#c9927a', fogInside: '#2a1a10', fogDensity: 0.0016 },
+  theme: { fogOutside: '#c9927a', fogInside: '#2a1a10', fogDensity: 0.0009 },
   exposure: 0.85,
   insideBoost: 0.82,          // and -0.9 EV inside
   grade: { tint: [1.08, 1.0, 0.86], power: 1.08, sat: 1.05 },   // white balance, then a light 'Punchy' look

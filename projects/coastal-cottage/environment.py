@@ -1,7 +1,6 @@
-"""Surroundings for the coastal cottage: a street behind the house, a hill rising on the
-side away from the beach, neighbour houses (two each side on the beach, a few up the hill),
-and trees. Kept to what the walkthrough camera actually sees, so it stays light to bake
-and to load on the web.
+"""Surroundings for the coastal cottage: a Miami-style beach town behind the house (the road,
+shops, street furniture, cars and the beach dressing are in town.py), a hill rising behind the
+town, neighbour houses along the beach and up the hill, shade trees and palms.
 
 Plan axes (feet): x across the front, y from the street (y = 0) toward the beach (+y),
 z up. The ground is at z = -3. The beach and ocean are at +y, so the hill is at -y.
@@ -15,6 +14,8 @@ import bmesh
 import bpy
 from mathutils import Euler, Matrix, Vector
 
+import town
+
 FT = 0.3048
 GROUND = -3.0
 R = random.Random(11)
@@ -22,13 +23,13 @@ R = random.Random(11)
 
 def hill_z(x, y):
     """Ground height (ft) at plan point x, y. Flat near the house, rising behind the street."""
-    t = min(1.0, max(0.0, (-y - 55.0) / 260.0))      # 0 at y=-55, 1 at y=-315
+    t = min(1.0, max(0.0, (-y - 165.0) / 260.0))     # 0 at y=-165 (behind the town), 1 at y=-425
     rise = 95.0 * t * t * (3 - 2 * t)                 # smoothstep up to +95 ft
     swell = 6.0 * math.sin(x * 0.021) * math.sin(y * 0.017) * t
     return GROUND + rise + swell
 
 
-def hill_mesh(name, mat, x0=-420, x1=470, y0=-520, y1=-40, step=14.0):
+def hill_mesh(name, mat, x0=-700, x1=760, y0=-640, y1=-150, step=16.0):
     bm = bmesh.new()
     nx, ny = int((x1 - x0) / step) + 1, int((y1 - y0) / step) + 1
     verts = []
@@ -52,8 +53,9 @@ def hill_mesh(name, mat, x0=-420, x1=470, y0=-520, y1=-40, step=14.0):
 
 
 def house(dp, name, cx, cy, w, d, base_z, stilts, body_m, roof_m, trim_m, win_m, door_m, deck_m,
-          facing=1, stories=1):
-    """A simple neighbour house. facing=+1 front faces -y (street), -1 faces +y."""
+          facing=1, stories=1, shutter_m=None, skirt_m=None):
+    """A neighbour house: stilts with a lattice skirt, lap siding, hip roof, windows with trim and
+    shutters, a porch with railings. facing=+1 front faces -y (street), -1 faces +y."""
     p = dp.Piece(name, "Env")
     floor = base_z + stilts
     h = 10.0 * stories
@@ -83,6 +85,11 @@ def house(dp, name, cx, cy, w, d, base_z, stilts, body_m, roof_m, trim_m, win_m,
                 off = -facing * 0.15 if yy == fy else facing * 0.15
                 p.box(x - 1.6, yy + off - 0.15, z0, x + 1.6, yy + off + 0.15, z0 + 4.2, win_m)
                 p.box(x - 1.9, yy + off - 0.2, z0 - 0.3, x + 1.9, yy + off + 0.2, z0, trim_m)
+                p.box(x - 1.9, yy + off - 0.2, z0 + 4.2, x + 1.9, yy + off + 0.2, z0 + 4.6, trim_m)
+                if shutter_m:
+                    for sd in (-1, 1):
+                        p.box(x + sd * 2.6 - 0.7, yy + off - 0.2, z0, x + sd * 2.6 + 0.7, yy + off + 0.2,
+                              z0 + 4.2, shutter_m)
     p.box(cx - 1.6, fy - facing * 0.2 - 0.15, floor, cx + 1.6, fy - facing * 0.2 + 0.15, floor + 7, door_m)
     p.box(cx - w / 2 - 0.3, cy - d / 2 - 0.3, floor + h - 0.8, cx + w / 2 + 0.3, cy + d / 2 + 0.3,
           floor + h, trim_m)
@@ -92,6 +99,20 @@ def house(dp, name, cx, cy, w, d, base_z, stilts, body_m, roof_m, trim_m, win_m,
     if stilts:
         for sx in (-w / 3 + 0.5, w / 3 - 0.5):
             p.box(cx + sx - 0.4, py - 0.4, base_z, cx + sx + 0.4, py + 0.4, floor, deck_m)
+        if skirt_m:                                       # lattice skirt between the stilts
+            for yy in (cy - d / 2 + 1, cy + d / 2 - 1):
+                p.box(cx - w / 2 + 1, yy - 0.15, base_z, cx + w / 2 - 1, yy + 0.15, floor - 1.2, skirt_m)
+    # porch railing: posts, top rail, a roof over the porch on two more posts
+    for sx in (-w / 3, w / 3):
+        p.box(cx + sx - 0.3, py - 0.3, floor, cx + sx + 0.3, py + 0.3, floor + 9.0, trim_m)
+    for sx0, sx1 in ((-w / 3, -2.2), (2.2, w / 3)):
+        p.box(cx + sx0, py - 0.2, floor + 3.0, cx + sx1, py + 0.2, floor + 3.3, trim_m)
+        k = sx0
+        while k < sx1:
+            p.box(cx + k - 0.08, py - 0.08, floor, cx + k + 0.08, py + 0.08, floor + 3.0, trim_m)
+            k += 1.1
+    p.obox((cx, (py + fy) / 2, floor + 9.3), (w * 2 / 3 + 1.5, abs(fy - py) + 1.5, 0.35), roof_m,
+           rot=(facing * 8, 0, 0))
     return p.build(0.0)
 
 
@@ -231,6 +252,15 @@ def palm(dp, name, x, y, z, height, lean, trunk, frond):
     return p.build(0.0)
 
 
+BEACH_HOUSES = [(-80, 42, 46, 1), (-150, 46, 40, 2), (130, 44, 44, 1), (200, 40, 48, 2), (-228, 40, 44, 2),
+                (-300, 44, 42, 1), (270, 42, 44, 1), (340, 46, 40, 2), (410, 40, 46, 1), (-372, 42, 44, 2),
+                (480, 44, 42, 2)]
+HILL_HOUSES = [(-120, -205, 36, 30), (-30, -230, 40, 32), (70, -210, 38, 30), (160, -235, 36, 34),
+               (-220, -250, 34, 30), (20, -300, 40, 32), (120, -310, 36, 30), (-330, -230, 38, 30),
+               (260, -220, 40, 32), (360, -260, 36, 30), (-420, -280, 36, 32), (450, -230, 38, 30),
+               (-140, -320, 36, 30), (240, -330, 38, 32)]
+
+
 # the cottage's own palms (design_pass.apply), rebuilt fuller in the same spots
 SITE_PALMS = [(-22, 18, 30, (3, 2.6)), (-18, 46, 36, (5, 2.2)), (-26, 64, 26, (4, 1.6)), (74, 14, 32, (4, 0.4)),
               (70, 50, 38, (6, 0.9)), (78, 70, 28, (3, 0.5)), (5, -23, 24, (2, 3.6)), (46, -25, 27, (3, -0.4)),
@@ -254,19 +284,18 @@ def add(dp):
     n.link(nz.outputs["Fac"], ramp.inputs["Fac"])
     n.link(ramp.outputs["Color"], b.inputs["Base Color"])
     b.inputs["Roughness"].default_value = 0.95
-    asphalt = dp.plain("Asphalt", (0.07, 0.07, 0.075), 0.85, noise_bump=0.1)
-    curb = dp.plain("Curb", (0.62, 0.61, 0.58), 0.8)
     roof_grey = dp.standing_seam("Roof_Grey", (0.38, 0.40, 0.41))
     roof_dark = dp.standing_seam("Roof_Dark", (0.20, 0.22, 0.25))
     trim = bpy.data.materials["Trim_White"]
     win = dp.plain("Window_Dark", (0.05, 0.07, 0.09), 0.1)
     door = bpy.data.materials["Door_Blue"]
     deck = bpy.data.materials["Deck_Wood"]
-    bodies = [dp.lap_siding(nm, c) for nm, c in (("Siding_Sky", (0.55, 0.70, 0.78)),
-                                                    ("Siding_Sage", (0.60, 0.68, 0.58)),
-                                                    ("Siding_Sand", (0.86, 0.78, 0.62)),
-                                                    ("Siding_Coral", (0.86, 0.62, 0.52)),
-                                                    ("Siding_Grey", (0.70, 0.71, 0.70)))]
+    bodies = [dp.lap_siding(nm, c) for nm, c in (("Siding_Sky", (0.52, 0.62, 0.66)),
+                                                    ("Siding_Sage", (0.55, 0.60, 0.52)),
+                                                    ("Siding_Sand", (0.76, 0.69, 0.56)),
+                                                    ("Siding_Coral", (0.76, 0.56, 0.48)),
+                                                    ("Siding_Grey", (0.64, 0.65, 0.64)),
+                                                    ("Siding_White", (0.80, 0.79, 0.76)))]
     bark = dp.plain("Bark", (0.20, 0.15, 0.11), 0.9)
     leaf_dark = leaf_material(dp, "Leaf_Oak", (0.05, 0.09, 0.03), (0.16, 0.24, 0.07))
     leaf_light = leaf_material(dp, "Leaf_Grape", (0.09, 0.14, 0.04), (0.26, 0.34, 0.10))
@@ -278,46 +307,46 @@ def add(dp):
             bpy.data.objects.remove(o, do_unlink=True)
         palm(dp, f"Palm_{i}", x, y, -3, hh, lean, palm_trunk, frond)
 
-    # the hill behind the street, and the street itself
+    # the hill behind the town; the street, the shops, street furniture, cars and the beach
+    # dressing come from town.py
     hill_mesh("Env_Hill", grass)
-    p = dp.Piece("Env_Street", "Env")
-    p.box(-420, -46, GROUND - 0.1, 470, -30, GROUND + 0.04, asphalt)
-    p.box(-420, -30, GROUND - 0.1, 470, -29, GROUND + 0.35, curb)
-    p.box(-420, -47, GROUND - 0.1, 470, -46, GROUND + 0.35, curb)
-    for k in range(-420, 470, 22):                                  # centre line dashes
-        p.box(k, -38.3, GROUND + 0.04, k + 10, -37.7, GROUND + 0.06, curb)
-    p.box(22, -29, GROUND - 0.1, 30, -6, GROUND + 0.05, curb)        # path to the stairs
-    p.build(0)
+    town.add(dp, drives=[(cx, 25 - d / 2) for cx, w, d, st in BEACH_HOUSES])
+    shutter = dp.plain("Shutter_Dark", (0.10, 0.16, 0.18), 0.6)
+    skirt = dp.plain("Lattice_White", (0.70, 0.69, 0.66), 0.8)
 
-    # beach neighbours, on stilts, facing the street like the cottage
-    for i, (cx, w, d, st) in enumerate(((-80, 42, 46, 1), (-150, 46, 40, 2), (130, 44, 44, 1),
-                                        (200, 40, 48, 2))):
+    # beach neighbours, on stilts, facing the street like the cottage, both ways along the beach
+    for i, (cx, w, d, st) in enumerate(BEACH_HOUSES):
         house(dp, f"Env_House_Beach_{i}", cx, 25, w, d, GROUND, 8.0, bodies[i % len(bodies)],
-              roof_grey if i % 2 else roof_dark, trim, win, door, deck, facing=1, stories=st)
-    # houses up the hill, facing down toward the beach
-    for i, (cx, cy, w, d) in enumerate(((-120, -95, 36, 30), (-30, -120, 40, 32), (70, -100, 38, 30),
-                                        (160, -125, 36, 34), (-200, -150, 34, 30), (20, -205, 40, 32),
-                                        (120, -215, 36, 30))):
+              roof_grey if i % 2 else roof_dark, trim, win, door, deck, facing=1, stories=st,
+              shutter_m=shutter if i % 3 else None, skirt_m=skirt)
+    # houses up the hill behind the town, facing down toward the beach
+    for i, (cx, cy, w, d) in enumerate(HILL_HOUSES):
         z = min(hill_z(cx + sx, cy + sy) for sx in (-w / 2, w / 2) for sy in (-d / 2, d / 2))
         house(dp, f"Env_House_Hill_{i}", cx, cy, w, d, z - 1.0, 1.0, bodies[(i + 2) % len(bodies)],
-              roof_dark if i % 2 else roof_grey, trim, win, door, deck, facing=-1, stories=1 + (i % 2))
+              roof_dark if i % 2 else roof_grey, trim, win, door, deck, facing=-1, stories=1 + (i % 2),
+              shutter_m=shutter if i % 2 else None)
 
-    # trees: shade trees on the hill and along the street, a few palms by the street
+    # shade trees on the hill, royal palms down both sidewalks
     spots = []
-    while len(spots) < 34:
-        x, y = R.uniform(-380, 430), R.uniform(-330, -50)
-        if any(abs(x - hx) < 30 and abs(y - hy) < 28 for hx, hy, *_ in
-               ((-120, -95), (-30, -120), (70, -100), (160, -125), (-200, -150), (20, -205), (120, -215))):
-            continue
-        if -30 < x < 80 and y > -60:                                # keep the approach view open
+    while len(spots) < 46:
+        x, y = R.uniform(-640, 700), R.uniform(-420, -172)
+        if any(abs(x - hx) < 30 and abs(y - hy) < 28 for hx, hy, *_ in HILL_HOUSES):
             continue
         spots.append((x, y))
     for i, (x, y) in enumerate(spots):
         tree(dp, f"Env_Tree_{i}", x, y, hill_z(x, y), R.uniform(18, 30), R.uniform(9, 14), bark,
              leaf_dark if i % 3 else leaf_light)
-    for i, x in enumerate((-60, -12, 66, 104, 150)):
-        palm(dp, f"Env_Palm_{i}", x, -52, hill_z(x, -52), R.uniform(24, 34),
+    k = 0
+    for x in range(-590, 680, 62):                                  # town side, between the lights
+        if any(abs(x - c) < 30 for c in town.CROSS):
+            continue
+        palm(dp, f"Env_Palm_T{k}", x, -84, GROUND + 0.45, R.uniform(30, 40),
+             (R.uniform(1, 3), R.uniform(0, 6.28)), palm_trunk, frond)
+        k += 1
+    for i, x in enumerate((-560, -470, -380, -290, -200, -112, -12, 66, 160, 300, 390, 520, 610)):
+        palm(dp, f"Env_Palm_{i}", x, -27, GROUND + 0.45, R.uniform(26, 36),
              (R.uniform(2, 5), R.uniform(0, 6.28)), palm_trunk, frond)
-    for i, (x, y) in enumerate(((-110, 70), (-185, 60), (95, 72), (170, 68), (240, 40))):
+    for i, (x, y) in enumerate(((-110, 70), (-185, 60), (95, 72), (170, 68), (240, 40), (-265, 66),
+                                (-345, 58), (305, 64), (375, 70), (445, 60))):
         palm(dp, f"Env_BeachPalm_{i}", x, y, GROUND, R.uniform(26, 36),
              (R.uniform(3, 6), R.uniform(0, 6.28)), palm_trunk, frond)

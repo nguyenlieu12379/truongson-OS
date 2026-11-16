@@ -132,16 +132,16 @@ surf_m = bpy.data.objects["Surf"].data.materials[0]
 for nm in ("Sand", "Wet_Sand", "Surf"):
     bpy.data.objects.remove(bpy.data.objects[nm], do_unlink=True)
 # near sand: around the house, from the street to the water line, baked sharp
-NX0, NX1, NY0, NY1 = -230.0, 290.0, -50.0, 150.0
+NX0, NX1, NY0, NY1 = -230.0, 290.0, -20.0, 150.0
 quad_obj("Sand_Near", NX0, NY0, NX1, NY1, -3.0, sand_m)
 quad_obj("Wet_Sand_Near", NX0, 150, NX1, 175, -3.05, wet_m)
 quad_obj("Surf_Near", NX0, 172, NX1, 180, -3.02, surf_m)
 # far beach either side, and the strip the hill doesn't cover: baked soft
-quad_obj("Sand_Far_L", -1500, -50, NX0, 150, -3.0, sand_m)
-quad_obj("Sand_Far_R", NX1, -50, 1500, 150, -3.0, sand_m)
+quad_obj("Sand_Far_L", -1500, -20, NX0, 150, -3.0, sand_m)
+quad_obj("Sand_Far_R", NX1, -20, 1500, 150, -3.0, sand_m)
 quad_obj("Wet_Far_L", -1500, 150, NX0, 175, -3.05, wet_m)
 quad_obj("Wet_Far_R", NX1, 150, 1500, 175, -3.05, wet_m)
-quad_obj("Sand_Back", -1500, -700, 1500, -50, -3.4, sand_m)   # under the hill, past its edges
+quad_obj("Sand_Back", -1500, -700, 1500, -20, -3.4, sand_m)   # under the hill, past its edges
 log("environment added")
 
 # ------------------------------------------------------------------
@@ -189,8 +189,12 @@ GROUPS = [
     ("G_SandFar", far_ground, 1.5, 1, "site"),
     ("G_Hill", [o for o in envs if o.name == "Env_Hill"], None, 2, "site"),
     ("G_EnvHouses", [o for o in envs if o.name.startswith("Env_House")], 9, 2, "site"),
-    ("G_EnvTrees", [o for o in envs if o.name.startswith(("Env_Tree", "Env_Palm", "Env_BeachPalm",
-                                                          "Env_Street"))], 13, 2, "site"),
+    ("G_EnvTown", [o for o in envs if o.name.startswith("Env_Shop")], 11, 2, "site"),
+    ("G_EnvStreet", [o for o in envs if o.name == "Env_Street"], 20, 2, "site"),
+    ("G_EnvProps", [o for o in envs if o.name.startswith(("Env_Prop", "Env_Car"))], 26, 2, "site"),
+    ("G_EnvBeach", [o for o in envs if o.name.startswith("Env_Beach_")], 44, 3, "site"),
+    ("G_EnvTrees", [o for o in envs if o.name.startswith(("Env_Tree", "Env_Palm", "Env_BeachPalm"))], 13, 2,
+     "site"),
 ] + [(d, [bpy.data.objects[d]], 56, 3, "door") for d in DOORS]
 GROUPS = [g for g in GROUPS if g[1]]
 seen = set()
@@ -736,6 +740,23 @@ bpy.ops.export_scene.gltf(filepath=glb_m, export_format="GLB", use_selection=Tru
                           export_image_format="WEBP", export_image_quality=80, export_apply=True,
                           export_lights=False, export_cameras=False, export_yup=True,
                           export_animations=False, export_normals=False)
+
+
+def draco(path):
+    """Draco-compress the meshes (the town is mostly geometry: 9 MB raw, about 1 MB compressed).
+    Blender's pip bpy has no Draco library, so this runs gltf-transform (npm). UVs at 14 bits,
+    so a 4096 atlas is still addressed to a quarter pixel. The site loads it with DRACOLoader."""
+    import subprocess
+    before = os.path.getsize(path)
+    tmp = path + ".draco.glb"
+    subprocess.run(["npx", "--yes", "@gltf-transform/cli@4.1.1", "draco", path, tmp, "--quantize-position", "14",
+                    "--quantize-texcoord", "14"], check=True, capture_output=True)
+    os.replace(tmp, path)
+    log(f"draco {os.path.basename(path)}: {before / 1e6:.1f} -> {os.path.getsize(path) / 1e6:.1f} MB")
+
+
+draco(glb)
+draco(glb_m)
 from PIL import Image as _I  # noqa: E402
 _I.open(os.path.join(SITE, "assets", "sky.webp")).resize((2048, 1024), _I.LANCZOS).save(
     os.path.join(SITE, "assets", "sky_mobile.webp"), quality=86, method=6)
