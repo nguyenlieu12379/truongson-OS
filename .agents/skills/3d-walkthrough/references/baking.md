@@ -60,7 +60,26 @@ The bake is of the finished house, so surfaces hidden in it (the deck under the 
 
 For end shots with the hero view centred (a sunset), put the final card at the side: `class="panel final side"`.
 
+## Film-style build-up (what the cottage does)
+
+- **Floor board by board:** the bake renders a floor order map (`floor_order.png`): one grey value per board or tile, from the same plank maths as the material (`order_material` in `bake_web.py`), front boards dark, back boards light, a little random. `build: [{ name: 'G_Floors', how: 'reveal', map: 'assets/floor_order.png', at: [...] }]` discards every pixel whose value is above the scroll position, so boards appear one by one with exact edges.
+- **Furniture piece by piece:** furniture is baked joined (fast), then split back into its pieces for export (a `piece` face attribute set before the join), each named `Furn_<name>` with its origin at its base. `{ prefix: 'Furn_', how: 'pop', at: [...], each: 0.2 }` pops them front to back, staggered, like the film.
+- **Roof drop in view:** `dollhouseUntil` stops the dollhouse from hiding the roof, so its `drop` plays while the camera orbits. Show the ceiling as it lands.
+- **Opening at about 45 degrees,** not straight down: from above, the build-up reads flat.
+
+## Phones
+
+The bake also writes `model_mobile.glb` (every baked texture at half size: a quarter of the GPU memory) and `sky_mobile.webp`. The engine loads them on touch screens or screens under 600 px (`spec.modelMobile`, `spec.skyImageMobile`), with a pixel ratio of 1.5 and no MSAA. The page's scroll length uses `lvh`, so it doesn't jump while the iPhone address bar hides. Check at 440 x 956 (iPhone Pro Max size).
+
+## Foliage that looks real
+
+- **Shade trees:** a trunk, 3 or 4 branches, and 15 to 20 lumpy leaf clumps (jittered icospheres) in an oblate crown, with a Voronoi leaf material. The light breaking up between clumps is what sells it.
+- **Palms:** each frond is one long, tapering, V-folded leaf with UVs along and across it, and a material with diagonal leaflet stripes. A chain of round blobs looks like a mushroom, and it was 6 times the faces.
+- Thin foliage before the bake at 0.5. At 0.35 the crowns turned to lollipops.
+
 ## Mistakes we already made
+
+- **Furniture exported off to the side of the house:** `matrix_world` is only refreshed on a depsgraph update, so reading it right after changing a location returns the old one. Use `matrix_basis` for objects without parents. The bake now checks every split piece against where it stood in the scene, and stops if one moved.
 
 - **Black patches during the build-up**: see above. Use `lightUp`.
 

@@ -252,6 +252,7 @@ FIXED_NAMES = {"G_SandNear", "G_Hill"}
 # pop each piece in on its own like the film. Tag every face with the index of the piece it came from.
 PIECED = {"G_FurnIn", "G_FurnOut"}
 PIECES = {}
+ORIG_CENTER = {}          # where each furniture piece stood, to check the split put it back there
 for name, objs, *_ in GROUPS:
     if name in PIECED:
         PIECES[name] = []
@@ -259,6 +260,7 @@ for name, objs, *_ in GROUPS:
             at = o.data.attributes.get("piece") or o.data.attributes.new("piece", "INT", "FACE")
             at.data.foreach_set("value", [i] * len(o.data.polygons))
             PIECES[name].append((i, o.name))
+            ORIG_CENTER[o.name] = sum((o.matrix_world @ Vector(c) for c in o.bound_box), Vector()) / 8
 joined = []
 for name, objs, dens, lmdiv, role in GROUPS:
     if name in FIXED_NAMES or role == "door" or len(objs) == 1 and objs[0].name == name:
@@ -640,6 +642,12 @@ def split_pieces(o, pieces):
         o.users_collection[0].objects.link(p)
         origin_to_bottom(p)
         p["baked"] = 1
+        vs = [p.matrix_basis @ v.co for v in me.vertices]
+        c = Vector((sum(v.x for v in vs), sum(v.y for v in vs), sum(v.z for v in vs))) / len(vs)
+        lo = Vector((min(v.x for v in vs), min(v.y for v in vs), min(v.z for v in vs)))
+        hi = Vector((max(v.x for v in vs), max(v.y for v in vs), max(v.z for v in vs)))
+        if (((lo + hi) / 2) - ORIG_CENTER[nm]).length > 0.15:
+            raise RuntimeError(f"split piece {nm} moved {(((lo + hi) / 2) - ORIG_CENTER[nm]).length:.2f} m")
         out.append(p)
     bpy.data.objects.remove(o, do_unlink=True)
     log(f"split into {len(out)} pieces")
