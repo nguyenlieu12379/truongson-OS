@@ -118,6 +118,26 @@ def leaf_material(dp, name, dark, light):
     return m
 
 
+def frond_material(dp, name, dark, light):
+    """Palm frond: pinnate leaflets as diagonal stripes from the midrib out (UV: u along, v across),
+    with dark gaps between them and lighter tips."""
+    m = dp.get_mat(name)
+    n, b = dp.fresh(m)
+    uv = n.new("ShaderNodeTexCoord").outputs["UV"]
+    u, v = n.xyz(uv)[0], n.xyz(uv)[1]
+    across = n.math("ABSOLUTE", n.math("SUBTRACT", v, 0.5))
+    stripe = n.math("FRACT", n.math("ADD", n.math("MULTIPLY", u, 46.0), n.math("MULTIPLY", across, 7.0)))
+    gap = n.math("GREATER_THAN", stripe, 0.8)            # thin dark gap between leaflets
+    ramp = n.new("ShaderNodeValToRGB")
+    ramp.color_ramp.elements[0].color = (*light, 1)
+    ramp.color_ramp.elements[1].color = (*dark, 1)
+    tipish = n.math("MULTIPLY", n.math("SUBTRACT", 1.0, n.math("MULTIPLY", across, 2.0)), 0.6)
+    n.link(n.math("ADD", n.math("MULTIPLY", gap, 0.8), n.math("MULTIPLY", tipish, 0.4)), ramp.inputs["Fac"])
+    n.link(ramp.outputs["Color"], b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.6
+    return m
+
+
 def lumpy(p, c, r, mat, squash=0.8):
     """A leaf clump: an icosphere with its surface jittered, so the canopy isn't smooth balls."""
     mx = Matrix.Translation(Vector(c) * FT) @ Matrix.Diagonal((r * FT, r * FT, r * squash * FT, 1))
@@ -173,27 +193,40 @@ def palm(dp, name, x, y, z, height, lean, trunk, frond):
         p._tag(res, trunk, True)
     top = Vector(pts[-1])
 
+    uvl = p.bm.loops.layers.uv.verify()
+
     def frond_(az, L, droop, rise, width):
+        """One frond: a long tapering leaf, folded into a shallow V along its midrib, arching
+        down. UVs run along (u) and across (v) it, for the leaflet stripes in the material."""
         pos = top.copy()
         dirv = Vector((math.cos(az), math.sin(az), rise))
-        for k in range(8):
-            dirv.z -= 0.12 + droop / 320
-            step = dirv.normalized() * (L / 8)
-            c = pos + step / 2
-            qq = step.to_track_quat("X", "Z") @ Euler((R.uniform(-0.3, 0.3), 0, 0)).to_quaternion()
-            w = width * math.sin(math.pi * (k + 0.7) / 8.6)
-            mm = Matrix.Translation(c * FT) @ qq.to_matrix().to_4x4() @ Matrix.Diagonal(
-                (L / 15 * FT * 1.2, w * FT, 0.06 * FT, 1))
-            res = bmesh.ops.create_uvsphere(p.bm, u_segments=8, v_segments=4, radius=1.0, matrix=mm)
-            p._tag(res, frond, True)
-            pos = pos + step
+        side = Vector((-math.sin(az), math.cos(az), 0))
+        st = 10
+        rows = []
+        for k in range(st + 1):
+            t = k / st
+            w = width * (math.sin(math.pi * min(1.0, t * 1.15 + 0.05)) ** 0.7) * (1 - 0.15 * t)
+            down = Vector((0, 0, -w * 0.45))
+            rows.append([p.bm.verts.new((pos + side * w + down) * FT), p.bm.verts.new(pos * FT),
+                         p.bm.verts.new((pos - side * w + down) * FT)])
+            dirv.z -= 0.1 + droop / 380
+            pos = pos + dirv.normalized() * (L / st)
+        for k in range(st):
+            for j in range(2):
+                f = p.bm.faces.new((rows[k][j], rows[k][j + 1], rows[k + 1][j + 1], rows[k + 1][j]))
+                f.material_index = p._mi(frond)
+                f.smooth = True
+                for loop in f.loops:
+                    kk = next(i for i in (k, k + 1) if loop.vert in rows[i])
+                    jj = rows[kk].index(loop.vert)
+                    loop[uvl].uv = (kk / st, jj / 2)
     n = 22
     for i in range(n):
-        frond_(i * 2 * math.pi / n + R.uniform(-0.12, 0.12), R.uniform(7.0, 9.5), R.uniform(25, 70),
-               math.tan(math.radians(R.uniform(10, 30))), R.uniform(1.4, 1.8))
+        frond_(i * 2 * math.pi / n + R.uniform(-0.12, 0.12), R.uniform(8.0, 10.5), R.uniform(25, 70),
+               math.tan(math.radians(R.uniform(10, 30))), R.uniform(1.2, 1.6))
     for i in range(7):                                  # young fronds in the centre, pointing up
-        frond_(i * 2 * math.pi / 7 + R.uniform(-0.2, 0.2), R.uniform(4.0, 5.5), R.uniform(0, 10),
-               math.tan(math.radians(R.uniform(55, 70))), 1.1)
+        frond_(i * 2 * math.pi / 7 + R.uniform(-0.2, 0.2), R.uniform(4.5, 6.0), R.uniform(0, 10),
+               math.tan(math.radians(R.uniform(55, 70))), 0.9)
     p.ell(tuple(top), (0.8, 0.8, 0.7), trunk, seg=10)
     return p.build(0.0)
 
@@ -238,7 +271,7 @@ def add(dp):
     leaf_dark = leaf_material(dp, "Leaf_Oak", (0.05, 0.09, 0.03), (0.16, 0.24, 0.07))
     leaf_light = leaf_material(dp, "Leaf_Grape", (0.09, 0.14, 0.04), (0.26, 0.34, 0.10))
     palm_trunk = bpy.data.materials.get("Palm_Trunk") or bark
-    frond = leaf_material(dp, "Palm_Frond_Full", (0.06, 0.13, 0.04), (0.22, 0.33, 0.09))
+    frond = frond_material(dp, "Palm_Frond_Full", (0.05, 0.11, 0.03), (0.20, 0.32, 0.08))
     for i, (x, y, hh, lean) in enumerate(SITE_PALMS):  # replace the cottage's thinner palms
         o = bpy.data.objects.get(f"Palm_{i}")
         if o:
