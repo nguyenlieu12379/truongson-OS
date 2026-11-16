@@ -287,7 +287,7 @@ def add(dp):
     roof_grey = dp.standing_seam("Roof_Grey", (0.38, 0.40, 0.41))
     roof_dark = dp.standing_seam("Roof_Dark", (0.20, 0.22, 0.25))
     trim = bpy.data.materials["Trim_White"]
-    win = dp.plain("Window_Dark", (0.05, 0.07, 0.09), 0.1)
+    win = town.window_glass(dp, "Window_Reflect_House")
     door = bpy.data.materials["Door_Blue"]
     deck = bpy.data.materials["Deck_Wood"]
     bodies = [dp.lap_siding(nm, c) for nm, c in (("Siding_Sky", (0.52, 0.62, 0.66)),
@@ -344,7 +344,7 @@ def add(dp):
              (R.uniform(1, 3), R.uniform(0, 6.28)), palm_trunk, frond)
         k += 1
     for i, x in enumerate((-560, -470, -380, -290, -200, -112, -12, 66, 160, 300, 390, 520, 610)):
-        palm(dp, f"Env_Palm_{i}", x, -27, GROUND + 0.45, R.uniform(26, 36),
+        palm(dp, f"Env_Palm_{i}", x, -24.5, GROUND + 0.6, R.uniform(26, 36),
              (R.uniform(2, 5), R.uniform(0, 6.28)), palm_trunk, frond)
     for i, (x, y) in enumerate(((-110, 70), (-185, 60), (95, 72), (170, 68), (240, 40), (-265, 66),
                                 (-345, 58), (305, 64), (375, 70), (445, 60))):
