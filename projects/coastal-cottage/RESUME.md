@@ -16,3 +16,9 @@ Workflow: edit -> quick bake (--quick --site <scratch>/site --work <scratch>/wor
 (about 22 min, writes into the site) -> shoot.cjs at 1280x720 and 440x956 -> commit, push to
 claude/serene-pasteur-hr1jid, PR + merge to main (the user asked for that) -> send the user screenshots
 and https://nguyenlieu12379.github.io/truongson-OS/coastal-cottage/
+
+## Status (2026-11-16, 11:00 UTC)
+
+- Done in code: `town.py` (road, shops, street furniture, cars, beach items), `environment.py` (hill moved behind the town, more and better beach houses, palms on both sidewalks), new bake groups, Draco compression (gltf-transform) and DRACOLoader in the engine, fog 0.0009.
+- Quick bake checked. Full bake started 11:00 UTC into the site folder (log in the session scratchpad).
+- Next: screenshots (desktop 1280x720, phone 440x956), commit, PR to main and merge, send the user screenshots and the live link.

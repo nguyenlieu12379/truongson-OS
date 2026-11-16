@@ -6,6 +6,7 @@
 // The front facade sits on the building's max z edge. The camera starts outside at +z.
 import * as THREE from './three.module.min.js';
 import { GLTFLoader } from './GLTFLoader.js';
+import { DRACOLoader } from './DRACOLoader.js';
 
 export { THREE };
 export const V = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -268,7 +269,9 @@ export async function createWalkthrough({ canvas, spec, site }) {
 
   // ---- the building: one glTF exported from Blender (assets/blender/build_model.py).
   // Walls, floors, furniture, ground, photos on surfaces and room lights all come from the model.
-  const gltf = await new GLTFLoader().loadAsync(phone && spec.modelMobile ? spec.modelMobile : spec.model);
+  // Models can be Draco-compressed (bake_web.py does it): the decoder lives in assets/draco/.
+  const loader = new GLTFLoader().setDRACOLoader(new DRACOLoader().setDecoderPath(new URL('./draco/', import.meta.url).href));
+  const gltf = await loader.loadAsync(phone && spec.modelMobile ? spec.modelMobile : spec.model);
   const model = gltf.scene;
   scene.add(model);
   const byName = new Map();

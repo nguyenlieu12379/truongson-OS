@@ -2,7 +2,7 @@
 
 The site is live 3D (three.js): smooth at any scroll speed and light to load. On its own, a browser can only do simple lighting, so the Blender look is **baked**: Cycles computes the light once (sun, sky, bounce, lamp glow, soft shadows) and stores it, together with the materials (wood, tile, siding, fabric), in textures on the model. The browser shows those textures.
 
-Reference build: the coastal cottage. Script: `projects/coastal-cottage/bake_web.py` (copy and adapt it). Surroundings: `projects/coastal-cottage/environment.py`. Site: `websites/TruongSon-demos/coastal-cottage/`.
+Reference build: the coastal cottage. Script: `projects/coastal-cottage/bake_web.py` (copy and adapt it). Surroundings: `projects/coastal-cottage/environment.py` (hill, neighbour houses, trees, palms) and `town.py` (the Miami-style road, shops, street furniture, parked cars and the beach dressing). Site: `websites/TruongSon-demos/coastal-cottage/`.
 
 ## What carries over, what doesn't
 
@@ -35,6 +35,7 @@ Why two textures and not one: one fully lit texture needs high resolution and lo
 9. **Swap materials** to one baked material per group (albedo as base colour, lightmap as emission), remove the other UV maps, join, set the origin to the bottom centre (for the grow animation), tag roles (`upper`, `site`, `door`).
 10. **Glass**: join all panes into `G_Glass` (it rises with the walls). Keep the slider separate (the site animates it).
 11. **Export** `model.glb` without normals (unlit materials don't need them; the engine rebuilds them for water and glass), WebP textures at quality 82, plus `sky.webp` and `bake.json`.
+12. **Draco-compress** both models with gltf-transform (`npx @gltf-transform/cli@4.1.1 draco`, positions and UVs at 14 bits). Blender's pip `bpy` has no Draco library, so its own Draco option silently does nothing. The engine loads Draco models with `DRACOLoader`; the decoder is vendored in `assets/draco/`. A town is mostly geometry: 9 MB raw, about 1 MB compressed.
 
 `--quick` runs the whole thing at low resolution in about 2 minutes. Use it to check UVs, coverage and the site before the full bake.
 
@@ -71,6 +72,17 @@ For end shots with the hero view centred (a sunset), put the final card at the s
 
 The bake also writes `model_mobile.glb` (every baked texture at half size: a quarter of the GPU memory) and `sky_mobile.webp`. The engine loads them on touch screens or screens under 600 px (`spec.modelMobile`, `spec.skyImageMobile`), with a pixel ratio of 1.5 and no MSAA. The page's scroll length uses `lvh`, so it doesn't jump while the iPhone address bar hides. Check at 440 x 956 (iPhone Pro Max size).
 
+## A town around the house
+
+What makes surroundings read as a real place, cheaply (all boxes, cylinders and spheres):
+
+- **Layout first, in plan feet:** beach sidewalk, road with parking lanes both sides and a double yellow, town sidewalk, a shoulder-to-shoulder shop row, cross streets with crosswalks, then the hill behind. Keep the approach camera's line of sight clear of cars and poles.
+- **Shops:** a stucco box per shop, muted pastels (not toy colours), storefront glass with mullions, a kickplate, a door, a striped awning, a sign band with blocks that read as lettering, roof AC units. Three styles mixed: Art Deco (eyebrows over the windows, a vertical fin, a stepped parapet), Mediterranean (shutters, a barrel-tile pent roof) and convenience stores (one storey, wide lit glass, a big sign band, a flat canopy, an ice chest).
+- **Street furniture:** cobra-head street lights, traffic lights with mast arms at the crossings, a bus shelter, benches, bins, hydrants, parking meters, café tables with parasols, planters. Palms down both sidewalks.
+- **Beach dressing:** large umbrellas with mats and towels, and things on them (bags, hats, sandals, books, bottles, coolers), folding chairs, surfboards flat and stuck upright, lifeguard towers, a volleyball net. Put a deliberate cluster in the final view: random placement over a long beach left it empty on camera.
+- **Shadows and shade** come from the bake for free. Give each kind its own group so the density fits: street 20 px/m, props 26, beach items 44, shops 11.
+- **Fog:** lower it (0.0009) when the town runs a long way, or the far end turns to haze.
+
 ## Foliage that looks real
 
 - **Shade trees:** a trunk, 3 or 4 branches, and 15 to 20 lumpy leaf clumps (jittered icospheres) in an oblate crown, with a Voronoi leaf material. The light breaking up between clumps is what sells it.
@@ -81,6 +93,7 @@ The bake also writes `model_mobile.glb` (every baked texture at half size: a qua
 
 - **Furniture exported off to the side of the house:** `matrix_world` is only refreshed on a depsgraph update, so reading it right after changing a location returns the old one. Use `matrix_basis` for objects without parents. The bake now checks every split piece against where it stood in the scene, and stops if one moved.
 
+- **Blender's Draco option did nothing**: the pip `bpy` build lacks the Draco library and only logs an error. Compress with gltf-transform after the export.
 - **Black patches during the build-up**: see above. Use `lightUp`.
 
 - **Baking objects one by one** (21 min for one group). Join first.
