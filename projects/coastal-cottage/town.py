@@ -17,6 +17,8 @@ import random
 import bpy
 from mathutils import Vector
 
+import cars
+
 FT = 0.3048
 G = -3.0
 R = random.Random(23)
@@ -76,11 +78,100 @@ def stucco(dp, name, color):
     n.link(co, nz.inputs["Vector"])
     z = n.xyz(dp.objcoord(n))[2]
     grime = n.maprange(z, -0.9, 0.2, 1.0, 0.0)          # darker near the pavement
-    col = n.mix(n.math("ADD", n.math("MULTIPLY", nz.outputs["Fac"], 0.25), n.math("MULTIPLY", grime, 0.35)),
-                color, tuple(c * 0.72 for c in color))
+    # rain streaks: noise stretched tall, so dirt runs down from sills and the parapet
+    st = n.vmath("MULTIPLY", dp.objcoord(n), (5.0, 5.0, 0.35))
+    sn = n.new("ShaderNodeTexNoise", Scale=2.5, Detail=4.0)
+    n.link(st.outputs[0], sn.inputs["Vector"])
+    streak = n.maprange(sn.outputs["Fac"], 0.55, 0.75, 0.0, 0.3)
+    col = n.mix(n.math("ADD", n.math("ADD", n.math("MULTIPLY", nz.outputs["Fac"], 0.25),
+                                     n.math("MULTIPLY", grime, 0.35)), streak),
+                color, tuple(c * 0.68 for c in color))
     n.link(col, b.inputs["Base Color"])
     b.inputs["Roughness"].default_value = 0.85
     dp.bump(n, b, nz.outputs["Fac"], 0.25, 0.003)
+    return m
+
+
+def window_glass(dp, name, warm=False):
+    """Windows as Google 3D shows them: each pane different. Some reflect the bright sky, some show
+    a dark room, some have curtains or blinds drawn. Voronoi cells about a window wide pick the
+    tone; a vertical gradient fakes the sky reflection (lighter at the top)."""
+    m = dp.get_mat(name)
+    n, b = dp.fresh(m)
+    co = dp.objcoord(n)
+    vo = n.new("ShaderNodeTexVoronoi", Scale=0.9)
+    vo.feature = "F1"
+    n.link(co, vo.inputs["Vector"])
+    cell = n.new("ShaderNodeSeparateColor")
+    n.link(vo.outputs["Color"], cell.inputs[0])
+    if warm:
+        stops = [(0.0, (0.10, 0.08, 0.06)), (0.35, (0.30, 0.24, 0.16)), (0.6, (0.52, 0.42, 0.28)),
+                 (0.8, (0.18, 0.20, 0.22)), (1.0, (0.40, 0.44, 0.48))]
+    else:
+        stops = [(0.0, (0.03, 0.04, 0.05)), (0.3, (0.09, 0.12, 0.15)), (0.5, (0.34, 0.42, 0.50)),
+                 (0.68, (0.58, 0.54, 0.46)), (0.8, (0.70, 0.66, 0.58)), (1.0, (0.20, 0.24, 0.28))]
+    base = n.ramp(cell.outputs[0], stops, "CONSTANT")
+    z = n.xyz(dp.objcoord(n))[2]
+    band = n.math("FRACT", n.math("DIVIDE", z, 3.2))           # about a storey: lighter toward the top
+    col = n.mix(n.math("MULTIPLY", band, 0.35), base, (0.62, 0.70, 0.78), "SCREEN")
+    n.link(col, b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.08
+    return m
+
+
+def roof_membrane(dp, name):
+    """Flat commercial roof: pale grey membrane / gravel with dark water stains and patches."""
+    m = dp.get_mat(name)
+    n, b = dp.fresh(m)
+    nz = n.new("ShaderNodeTexNoise", Scale=0.35, Detail=8.0, Roughness=0.7)
+    n.link(dp.objcoord(n), nz.inputs["Vector"])
+    gr = n.new("ShaderNodeTexNoise", Scale=90.0, Detail=2.0)
+    n.link(dp.objcoord(n), gr.inputs["Vector"])
+    stain = n.maprange(nz.outputs["Fac"], 0.48, 0.62)
+    col = n.mix(stain, (0.62, 0.61, 0.58), (0.30, 0.29, 0.27))
+    col = n.mix(n.math("MULTIPLY", gr.outputs["Fac"], 0.4), col, (0.75, 0.74, 0.71))
+    n.link(col, b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.95
+    dp.bump(n, b, gr.outputs["Fac"], 0.5, 0.004)
+    return m
+
+
+def solar(dp, name):
+    m = dp.get_mat(name)
+    n, b = dp.fresh(m)
+    co = n.xyz(dp.objcoord(n))
+    gx = n.math("LESS_THAN", n.math("FRACT", n.math("DIVIDE", co[0], 0.17)), 0.06)
+    gy = n.math("LESS_THAN", n.math("FRACT", n.math("DIVIDE", co[1], 0.17)), 0.06)
+    col = n.mix(n.math("MAXIMUM", gx, gy), (0.03, 0.05, 0.12), (0.45, 0.47, 0.50))
+    n.link(col, b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.2
+    return m
+
+
+def worn_paint(dp, name, color, road=(0.10, 0.10, 0.105)):
+    """Road paint, worn by tyres: patches where the asphalt shows through."""
+    m = dp.get_mat(name)
+    n, b = dp.fresh(m)
+    nz = n.new("ShaderNodeTexNoise", Scale=6.0, Detail=6.0)
+    n.link(dp.objcoord(n), nz.inputs["Vector"])
+    col = n.mix(n.maprange(nz.outputs["Fac"], 0.5, 0.68), color, road)
+    n.link(col, b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.75
+    return m
+
+
+def grass(dp, name):
+    m = dp.get_mat(name)
+    n, b = dp.fresh(m)
+    nz = n.new("ShaderNodeTexNoise", Scale=1.5, Detail=8.0)
+    n.link(dp.objcoord(n), nz.inputs["Vector"])
+    fine = n.new("ShaderNodeTexNoise", Scale=60.0, Detail=3.0)
+    n.link(dp.objcoord(n), fine.inputs["Vector"])
+    col = n.mix(nz.outputs["Fac"], (0.10, 0.17, 0.05), (0.30, 0.32, 0.12))
+    col = n.mix(n.math("MULTIPLY", fine.outputs["Fac"], 0.5), col, (0.05, 0.09, 0.03))
+    n.link(col, b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.95
+    dp.bump(n, b, fine.outputs["Fac"], 0.6, 0.01)
     return m
 
 
@@ -110,16 +201,25 @@ class M:
         self.plaza = slabs(dp, "Town_Paving", (0.44, 0.42, 0.38), size_ft=10.0, var=0.2)
         self.road = asphalt(dp, "Road_Asphalt", (0.10, 0.10, 0.105))
         self.curb = p("Curb_Concrete", (0.58, 0.57, 0.53), 0.85)
-        self.white = p("Paint_White", (0.70, 0.70, 0.67), 0.7)
-        self.yellow = p("Paint_Yellow", (0.62, 0.44, 0.10), 0.7)
+        self.white = worn_paint(dp, "Paint_White", (0.70, 0.70, 0.67))
+        self.yellow = worn_paint(dp, "Paint_Yellow", (0.62, 0.44, 0.10))
         self.red_curb = p("Paint_Red", (0.45, 0.10, 0.08), 0.7)
         self.pole = p("Pole_Grey", (0.30, 0.31, 0.31), 0.5)
         self.dark = p("Metal_Dark", (0.05, 0.05, 0.055), 0.5)
         self.signal = p("Signal_Yellow", (0.55, 0.42, 0.06), 0.5)
         self.lamp = p("Lamp_Lens", (0.85, 0.80, 0.66), 0.3)
         self.green = p("Sign_Green", (0.03, 0.22, 0.10), 0.5)
-        self.glass = p("Shop_Glass", (0.035, 0.045, 0.05), 0.15)
-        self.glass_lit = p("Shop_Glass_Lit", (0.20, 0.17, 0.12), 0.2)   # shelves and lights behind it
+        self.glass = window_glass(dp, "Window_Reflect")
+        self.glass_lit = window_glass(dp, "Shop_Glass_Lit", warm=True)   # shelves and lights behind it
+        self.roof = roof_membrane(dp, "Roof_Membrane")
+        self.solar = solar(dp, "Solar_Panel")
+        self.grass = grass(dp, "Verge_Grass")
+        self.manhole = p("Manhole", (0.06, 0.06, 0.06), 0.6)
+        self.patch = p("Asphalt_Patch", (0.05, 0.05, 0.055), 0.85)
+        self.patch_lt = p("Asphalt_Patch_Light", (0.16, 0.16, 0.16), 0.9)
+        self.oil = p("Oil_Stain", (0.045, 0.045, 0.05), 0.5)
+        self.tank = p("Water_Tank", (0.70, 0.70, 0.68), 0.5)
+        self.vent = p("Vent_Metal", (0.45, 0.46, 0.46), 0.4)
         self.frame = p("Storefront_Frame", (0.62, 0.62, 0.60), 0.4)
         self.frame_dk = p("Storefront_Dark", (0.10, 0.10, 0.10), 0.4)
         self.trim = p("Deco_Trim", (0.86, 0.85, 0.81), 0.7)
@@ -207,6 +307,30 @@ def street(dp, m, drives=()):
             x = cx + side * CW
             p.box(x - 0.3, BACK, G - 0.2, x + 0.3, TOWN_WALK[1], G + 0.5, m.curb)
         p.box(cx - 0.2, BACK, G + 0.04, cx + 0.2, ROAD[0] - 10, G + 0.07, m.yellow)
+    # a grass verge along the beach walk (the palms stand in it), like Ocean Drive's park strip
+    p.box(rx0, -29.0, G + 0.45, rx1, BEACH_WALK[1], G + 0.62, m.grass)
+    # wear and tear: patches, manholes, storm drains, oil stains in the stalls
+    for k in range(70):
+        x, y = R.uniform(rx0, rx1), R.uniform(ROAD[0] + 1, ROAD[1] - 1)
+        mat = m.patch if R.random() < 0.6 else m.patch_lt
+        w, d = R.uniform(3, 16), R.uniform(2, 7)
+        p.box(x, y, G + 0.04, x + w, y + d, G + 0.055, mat)
+    for x in range(int(rx0) + 40, int(rx1), 120):
+        for y in (-61.5, -48.5):
+            p.cyl(x + R.uniform(-10, 10), y, G + 0.04, G + 0.07, 1.25, m.manhole, seg=14)
+    for x in range(int(rx0) + 20, int(rx1), 60):
+        for y0 in (ROAD[1] - 1.2, ROAD[0] + 0.1):
+            p.box(x, y0, G + 0.04, x + 3, y0 + 1.1, G + 0.06, m.manhole)
+    for x in range(int(rx0), int(rx1), 22):
+        for yc in (-38.0, -72.0):
+            if R.random() < 0.6:
+                p.cyl(x - 11 + R.uniform(-3, 3), yc + R.uniform(-1, 1), G + 0.04, G + 0.05, R.uniform(0.8, 1.8),
+                      m.oil, seg=10)
+    # tree grates under the town-side palms
+    for x in range(-590, 680, 62):
+        if any(abs(x - c) < 30 for c in CROSS):
+            continue
+        p.box(x - 2.5, -86.5, G + 0.45, x + 2.5, -81.5, G + 0.5, m.manhole)
     # the cottage path and a driveway for each beach neighbour
     p.box(22, BEACH_WALK[1] + 0.8, G - 0.1, 30, -6, G + 0.08, m.walk)
     for cx, y_house in drives:
@@ -244,6 +368,45 @@ def _lettering(p, m, x0, x1, y, z0, z1, mat):
         x += total / n
 
 
+def roof_top(p, m, x0, x1, y0, y1, z, wall):
+    """What an aerial view sees: a membrane roof inside a parapet, AC units with fan grilles,
+    vents, a stair or lift bulkhead, sometimes a water tank, solar panels or a satellite dish."""
+    p.box(x0 + 0.6, y0 + 0.6, z, x1 - 0.6, y1 - 0.6, z + 0.08, m.roof)
+    for a in ((x0, y0, x1, y0 + 0.6), (x0, y1 - 0.6, x1, y1), (x0, y0, x0 + 0.6, y1), (x1 - 0.6, y0, x1, y1)):
+        p.box(a[0], a[1], z, a[2], a[3], z + 2.4, wall)
+    p.box(x0 - 0.25, y1 - 0.9, z + 2.4, x1 + 0.25, y1 + 0.3, z + 2.8, m.trim)          # front coping
+    p.box(x0 - 0.1, y0 - 0.1, z + 2.4, x1 + 0.1, y0 + 0.7, z + 2.6, m.curb)
+    w, d = x1 - x0, y1 - y0
+    for k in range(R.randint(2, 4)):                                                   # AC condensers
+        ax, ay = R.uniform(x0 + 3, x1 - 7), R.uniform(y0 + 3, y1 - 8)
+        p.box(ax, ay, z + 0.08, ax + 4.2, ay + 3.6, z + 3.0, m.ac)
+        p.cyl(ax + 2.1, ay + 1.8, z + 3.0, z + 3.08, 1.3, m.dark, seg=12)
+        p.box(ax + 0.5, ay - 1.0, z + 0.3, ax + 0.9, ay, z + 0.7, m.vent)             # duct
+    for k in range(R.randint(2, 5)):                                                   # vent pipes
+        p.cyl(R.uniform(x0 + 2, x1 - 2), R.uniform(y0 + 2, y1 - 3), z, z + R.uniform(1.0, 2.6), 0.35, m.vent, seg=8)
+    if w > 30:                                                                         # stair bulkhead
+        bx, by = R.uniform(x0 + 4, x1 - 12), y0 + R.uniform(3, 8)
+        p.box(bx, by, z, bx + 8, by + 10, z + 8.0, wall)
+        p.box(bx - 0.3, by - 0.3, z + 8.0, bx + 8.3, by + 10.3, z + 8.4, m.trim)
+        p.box(bx + 3, by + 10, z, bx + 6, by + 10.15, z + 7, m.frame_dk)
+    r = R.random()
+    if r < 0.3 and w > 26:                                                             # solar array
+        for i in range(int((w - 10) / 7)):
+            for j in range(2):
+                p.obox((x0 + 6 + i * 7, y0 + 6 + j * 6, z + 1.4), (6.4, 5.0, 0.15), m.solar, rot=(-15, 0, 0))
+    elif r < 0.5:                                                                      # water tank on legs
+        tx, ty = R.uniform(x0 + 5, x1 - 5), R.uniform(y0 + 5, y1 - 10)
+        for sx in (-1.6, 1.6):
+            for sy in (-1.6, 1.6):
+                p.box(tx + sx - 0.15, ty + sy - 0.15, z, tx + sx + 0.15, ty + sy + 0.15, z + 4, m.dark)
+        p.cyl(tx, ty, z + 4, z + 9, 2.6, m.tank, seg=14)
+        p.cyl(tx, ty, z + 9, z + 10, 2.6, m.tank, 0.3, seg=14)
+    elif r < 0.65:                                                                     # satellite dish
+        sx, sy = R.uniform(x0 + 3, x1 - 3), y1 - 3
+        p.cyl(sx, sy, z, z + 2.0, 0.08, m.vent, seg=6)
+        p.cyl(sx, sy + 0.3, z + 2.0, z + 2.4, 1.1, m.trim, 0.2, seg=12, rot=(-60, 0, 0))
+
+
 def shop(dp, m, name, x0, x1, depth, stories, style):
     p = dp.Piece(name, "Env")
     fy = FRONT
@@ -254,12 +417,7 @@ def shop(dp, m, name, x0, x1, depth, stories, style):
     h1 = 15.0 if style == "conv" else 13.5
     H = h1 + 10.5 * (stories - 1) + 2.5
     p.box(x0, fy - depth, G, x1, fy, G + H, wall)
-    # roof: parapet cap all round, AC units and a stair hut on top
-    p.box(x0 - 0.3, fy - 0.9, G + H, x1 + 0.3, fy + 0.35, G + H + 0.5, m.trim)
-    for k in range(R.randint(1, 3)):
-        ax = R.uniform(x0 + 5, x1 - 9)
-        ay = R.uniform(fy - depth + 6, fy - 10)
-        p.box(ax, ay, G + H, ax + 4, ay + 3.5, G + H + 3, m.ac)
+    roof_top(p, m, x0, x1, fy - depth, fy, G + H, wall)
     # ground floor: kickplate, glass, mullions, door, sign band
     gl = m.glass_lit if style == "conv" or R.random() < 0.5 else m.glass
     fr = m.frame if style != "med" else m.frame_dk
@@ -304,8 +462,19 @@ def shop(dp, m, name, x0, x1, depth, stories, style):
         for i in range(nwin):
             x = x0 + 3 + step * (i + 0.5)
             ww = 3.8 if style != "med" else 3.0
-            p.box(x - ww / 2, fy, z0, x + ww / 2, fy + 0.15, z0 + 5.2, m.glass)
-            p.box(x - ww / 2 - 0.3, fy, z0 - 0.4, x + ww / 2 + 0.3, fy + 0.6, z0, m.trim)
+            p.box(x - ww / 2, fy - 0.3, z0, x + ww / 2, fy + 0.05, z0 + 5.2, m.glass)    # set into the wall
+            fm = m.frame if style == "deco" else m.trim
+            for a0, a1 in ((x - ww / 2 - 0.25, x - ww / 2), (x + ww / 2, x + ww / 2 + 0.25), (x - 0.08, x + 0.08)):
+                p.box(a0, fy, z0, a1, fy + 0.18, z0 + 5.2, fm)
+            p.box(x - ww / 2 - 0.25, fy, z0 + 5.2, x + ww / 2 + 0.25, fy + 0.25, z0 + 5.5, fm)
+            p.box(x - ww / 2 - 0.4, fy, z0 - 0.4, x + ww / 2 + 0.4, fy + 0.6, z0, m.trim)
+            if style == "med" and s == 1 and i % 2 == 0:              # little iron balconies
+                p.box(x - ww / 2 - 0.8, fy, z0 - 0.5, x + ww / 2 + 0.8, fy + 2.2, z0 - 0.2, m.trim)
+                p.box(x - ww / 2 - 0.8, fy + 2.0, z0 + 2.6, x + ww / 2 + 0.8, fy + 2.2, z0 + 2.8, m.dark)
+                k2 = x - ww / 2 - 0.8
+                while k2 <= x + ww / 2 + 0.8:
+                    p.box(k2 - 0.05, fy + 2.05, z0 - 0.2, k2 + 0.05, fy + 2.15, z0 + 2.6, m.dark)
+                    k2 += 0.45
             if style == "med":
                 for sd in (-1, 1):                              # shutters
                     p.box(x + sd * (ww / 2 + 0.2) - 0.9, fy, z0, x + sd * (ww / 2 + 0.2) + 0.9, fy + 0.3,
@@ -321,7 +490,7 @@ def shop(dp, m, name, x0, x1, depth, stories, style):
             p.box(x0 + 0.6, fy, G + H - zz - 0.25, x1 - 0.6, fy + 0.2, G + H - zz, acc)
     elif style == "med":
         # a pent roof of barrel tiles across the front, on little corbels
-        p.obox((xc, fy + 0.6, G + H + 0.9), (w + 1.0, 4.4, 0.4), m.tile, rot=(-24, 0, 0))
+        p.obox((xc, fy + 0.6, G + H + 3.2), (w + 1.0, 4.4, 0.4), m.tile, rot=(-24, 0, 0))
         for k in range(int(w / 5)):
             x = x0 + 2.5 + k * 5
             p.box(x - 0.3, fy, G + H - 0.6, x + 0.3, fy + 1.4, G + H, m.trim)
@@ -419,13 +588,13 @@ def street_props(dp, m):
         traffic_light(p, m, cx + CW + 3, ROAD[1] + 3, -1)
     # benches facing the sea along the beach walk, bins, hydrants
     for x in (-430, -330, -230, -95, 110, 240, 360, 480, 590):
-        bench(p, m, x, -24.5, 0)
-        p.cyl(x + 5.5, -24.5, G + 0.45, G + 3.6, 1.0, m.bin, seg=10)
+        bench(p, m, x, -30.5, 0)
+        p.cyl(x + 5.5, -30.5, G + 0.45, G + 3.6, 1.0, m.bin, seg=10)
     for x in (-500, -260, -40, 150, 330, 560):
         p.cyl(x, ROAD[0] - 1.6, G + 0.45, G + 2.6, 0.5, m.hydrant, seg=10)
         p.ell((x, ROAD[0] - 1.6, G + 2.7), (0.5, 0.5, 0.35), m.hydrant)
         p.cyl(x, ROAD[0] - 1.6, G + 1.9, G + 2.1, 0.75, m.hydrant, seg=8, rot=(90, 0, 0))
-    bus_shelter(p, m, -60, -27.5)
+    bus_shelter(p, m, -60, -30.0)
     # parking meters along the town kerb
     for x in range(int(X0) + 40, int(X1), 44):
         if any(abs(x - cx) < CW + 14 for cx in CROSS):
@@ -454,46 +623,21 @@ def cafes(dp, m, shop_objs):
 
 
 # ------------------------------------------------------------------ cars
-def car(p, m, x, y, along_x=True, kind="sedan", paint=None):
-    paint = paint or R.choice(m.cars)
-    L, W = {"sedan": (15.5, 6.1), "suv": (16.0, 6.5), "van": (17.5, 6.6)}[kind]
-    zb = G + 1.0
-    bodyh = {"sedan": 2.4, "suv": 3.0, "van": 3.4}[kind]
-    rot = 0 if along_x else 90
-    d = 1 if R.random() < 0.5 else -1
-
-    def at(lx, ly):                                             # car-local to plan
-        if along_x:
-            return x + lx * d, y + ly
-        return x + ly, y + lx * d
-
-    def b(c, size, mat):
-        cx, cy = at(c[0], c[1])
-        p.obox((cx, cy, c[2]), size, mat, rot=(0, 0, rot))
-
-    b((0, 0, zb + bodyh / 2), (L, W, bodyh), paint)
-    cab_l = {"sedan": 8.2, "suv": 10.5, "van": 13.0}[kind]
-    cab_h = {"sedan": 1.9, "suv": 2.5, "van": 2.8}[kind]
-    off = {"sedan": -0.6, "suv": -1.6, "van": -1.8}[kind]
-    b((off, 0, zb + bodyh + cab_h / 2), (cab_l, W - 0.5, cab_h), m.car_glass)
-    b((off, 0, zb + bodyh + cab_h + 0.12), (cab_l - 0.8, W - 0.7, 0.25), paint)
-    for s in (-1, 1):
-        b((L / 2 - 0.05, s * (W / 2 - 0.9), zb + bodyh - 0.6), (0.2, 1.2, 0.5), m.lamp)
-        b((-L / 2 + 0.05, s * (W / 2 - 0.9), zb + bodyh - 0.6), (0.2, 1.2, 0.5), m.tail)
-    for lx in (L / 2 - 3.0, -L / 2 + 3.0):
-        for s in (-1, 1):
-            cx, cy = at(lx, s * (W / 2 - 0.4))
-            p.cyl(cx, cy, G + 1.15 - 0.4, G + 1.15 + 0.4, 1.15, m.tyre, seg=8,
-                  rot=(90, 0, 0) if along_x else (0, 90, 0))
-            cx, cy = at(lx, s * (W / 2 - 0.3))
-            p.cyl(cx, cy, G + 1.15 - 0.45, G + 1.15 + 0.45, 0.6, m.rim, seg=6,
-                  rot=(90, 0, 0) if along_x else (0, 90, 0))
-
-
 def parked_cars(dp, m):
+    """Parked both sides, facing the way traffic runs on that side; a few nose-in on the side streets.
+    Real cars from cars.py, in the colours cars really come in (mostly white, silver, grey, black)."""
     p = dp.Piece("Env_Car_Parked", "Env")
-    n = 0
-    for yc, keep_clear in ((-38.0, True), (-72.0, False)):
+    cm = cars.materials(dp)
+    weights = [5, 4, 3, 3, 1, 1, 1, 1]                             # white, silver, black, grey ... teal, sand
+    order = [0, 1, 2, 5, 3, 4, 6, 7]
+
+    def paint():
+        return m.cars[R.choices(order, weights)[0]]
+
+    def kind():
+        return R.choices(("sedan", "hatch", "suv", "pickup"), (4, 2, 4, 2))[0]
+
+    for yc, heading, keep_clear in ((-38.0, 0, True), (-72.0, 180, False)):
         x = X0 + 10
         while x < X1 - 20:
             x += 22
@@ -501,15 +645,13 @@ def parked_cars(dp, m):
                 continue
             if keep_clear and -40 < x < 95:                      # the approach view to the cottage
                 continue
-            if R.random() < 0.28:                               # empty stall
+            if R.random() < 0.25:                               # empty stall
                 continue
-            kind = R.choice(("sedan", "sedan", "sedan", "suv", "suv", "van"))
-            car(p, m, x - 11 + R.uniform(-0.6, 0.6), yc + R.uniform(-0.3, 0.3), True, kind)
-            n += 1
-    # a few in the side streets, nose to kerb
+            cars.car(p, cm, x - 11 + R.uniform(-0.8, 0.8), yc + R.uniform(-0.3, 0.3),
+                     heading + R.uniform(-1.5, 1.5), kind(), paint())
     for cx in CROSS:
-        for k in range(3):
-            car(p, m, cx - CW + 4.5, -110 - k * 18, False, R.choice(("sedan", "suv")))
+        for k in range(4):
+            cars.car(p, cm, cx - CW + 9.5, -104 - k * 9.5, 180 + R.uniform(-3, 3), kind(), paint())
     return p.build(0)
 
 

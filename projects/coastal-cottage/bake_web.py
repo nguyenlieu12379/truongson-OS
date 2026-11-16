@@ -189,9 +189,9 @@ GROUPS = [
     ("G_SandFar", far_ground, 1.5, 1, "site"),
     ("G_Hill", [o for o in envs if o.name == "Env_Hill"], None, 2, "site"),
     ("G_EnvHouses", [o for o in envs if o.name.startswith("Env_House")], 9, 2, "site"),
-    ("G_EnvTown", [o for o in envs if o.name.startswith("Env_Shop")], 11, 2, "site"),
+    ("G_EnvTown", [o for o in envs if o.name.startswith("Env_Shop")], 15, 2, "site"),
     ("G_EnvStreet", [o for o in envs if o.name == "Env_Street"], 20, 2, "site"),
-    ("G_EnvProps", [o for o in envs if o.name.startswith(("Env_Prop", "Env_Car"))], 26, 2, "site"),
+    ("G_EnvProps", [o for o in envs if o.name.startswith(("Env_Prop", "Env_Car"))], 30, 2, "site"),
     ("G_EnvBeach", [o for o in envs if o.name.startswith("Env_Beach_")], 44, 3, "site"),
     ("G_EnvTrees", [o for o in envs if o.name.startswith(("Env_Tree", "Env_Palm", "Env_BeachPalm"))], 13, 2,
      "site"),
@@ -325,8 +325,11 @@ for name, objs, dens, lmdiv, role in GROUPS:
     area = surface_area(objs)
     side = math.sqrt(area / 0.55) * dens * DENS_SCALE
     foliage = name in ("G_Site", "G_EnvTrees", "G_FurnOut")
+    # the town is tens of thousands of little box faces (window frames, cars, props): pack them as
+    # rectangles with a 1 px margin, or the margins eat the atlas and it comes out mostly empty
+    boxy = name in ("G_EnvTown", "G_EnvProps", "G_EnvHouses", "G_EnvBeach", "G_EnvStreet")
     # foliage = thousands of tiny islands; they need room or the gaps eat the atlas
-    s = pow2(side, (2048 if foliage else 256) if not QUICK else (512 if foliage else 64))
+    s = pow2(side, (2048 if foliage or boxy else 256) if not QUICK else (512 if foliage or boxy else 64))
     sizes[name] = (s, s)
     select_only(objs)
     bpy.ops.object.mode_set(mode="EDIT")
@@ -335,8 +338,16 @@ for name, objs, dens, lmdiv, role in GROUPS:
                              area_weight=0.0, correct_aspect=True, scale_to_bounds=False)
     bpy.ops.uv.select_all(action="SELECT")
     bpy.ops.uv.pack_islands(udim_source="CLOSEST_UDIM", rotate=True, margin_method="FRACTION",
-                            margin=(2.0 if foliage else 4.0) / s)
+                            shape_method="AABB" if boxy else "CONCAVE",
+                            margin=(1.0 if boxy else 2.0 if foliage else 4.0) / s)
     bpy.ops.object.mode_set(mode="OBJECT")
+    cov = 0.0
+    for o in objs:
+        uvl = o.data.uv_layers["Bake"].data
+        for poly in o.data.polygons:
+            pts = [uvl[i].uv for i in poly.loop_indices]
+            cov += abs(sum(pts[i].x * pts[i - 1].y - pts[i - 1].x * pts[i].y for i in range(len(pts)))) / 2
+    log(f"uv {name}: atlas coverage {cov * 100:.0f}%")
     log(f"uv {name}: {len(objs)} objs, {area:.0f} m2 -> {s}px")
 
 # ------------------------------------------------------------------
