@@ -603,12 +603,14 @@ def baked_material(name, alb_path, lm_path, scale):
 
 
 def origin_to_bottom(o):
-    vs = [o.matrix_world @ v.co for v in o.data.vertices]
+    # matrix_basis, not matrix_world: matrix_world is only refreshed on a depsgraph update, so right
+    # after setting a location it is stale (that put every furniture piece off by the group origin)
+    mw = o.matrix_basis.copy()
+    vs = [mw @ v.co for v in o.data.vertices]
     org = Vector(((min(v.x for v in vs) + max(v.x for v in vs)) / 2,
                   (min(v.y for v in vs) + max(v.y for v in vs)) / 2, min(v.z for v in vs)))
-    mw = o.matrix_world.copy()
     o.data.transform(mw)
-    o.matrix_world = Matrix.Identity(4)
+    o.matrix_basis = Matrix.Identity(4)
     o.data.transform(Matrix.Translation(-org))
     o.location = org
 
@@ -634,7 +636,7 @@ def split_pieces(o, pieces):
         if "piece" in me.attributes:
             me.attributes.remove(me.attributes["piece"])
         p = bpy.data.objects.new("Furn_" + nm, me)
-        p.matrix_world = o.matrix_world.copy()
+        p.matrix_basis = o.matrix_basis.copy()
         o.users_collection[0].objects.link(p)
         origin_to_bottom(p)
         p["baked"] = 1
