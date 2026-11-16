@@ -189,6 +189,11 @@ h2 {
   max-width: 34ch;
 }
 .hero .lede { margin-inline: auto; }
+/* Hero at the side, for openings where the centre of the frame is the subject (a floor plan) */
+.hero.side { left: var(--gutter); right: auto; translate: 0 -50%; text-align: left;
+  width: min(460px, calc(50% - 220px)); min-width: 300px; }
+.hero.side h1 { font-size: clamp(2.6rem, 4.4vw, 4.4rem); line-height: 1; }
+.hero.side .lede { margin-inline: 0; }
 
 .cue {
   margin-top: 56px;
@@ -352,6 +357,8 @@ h2 {
   .panel, .panel.right { left: var(--gutter); right: var(--gutter); width: auto; bottom: 40px; }
   .hero, .final { left: 50%; right: auto; width: calc(100% - 2 * var(--gutter)); bottom: auto; }
   .final.side { left: var(--gutter); right: var(--gutter); width: auto; top: auto; bottom: 32px; translate: none; }
+  .hero.side { left: var(--gutter); right: var(--gutter); width: auto; min-width: 0; top: auto; bottom: 40px; translate: none; }
+  .hero.side h1 { font-size: 2.4rem; }
   .stats dd { font-size: 0.75rem; }
   .stats div { padding: 14px 12px; }
 }

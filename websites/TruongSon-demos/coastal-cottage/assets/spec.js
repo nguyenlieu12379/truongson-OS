@@ -22,20 +22,20 @@ export default {
 
   // The house builds itself on scroll, like the film. how: grow (from the ground), drop, pop, show.
   build: [
-    // Baked light is the finished house: tops hidden under floors, walls and furniture are dark.
-    // So floors, walls and furniture rise close together, and the dark spots only flash by.
-    { name: 'G_Structure', at: [0.01, 0.08], how: 'grow' },
-    { name: 'G_Floors', at: [0.06, 0.09], how: 'grow' },
-    { name: 'G_Walls', at: [0.08, 0.17], how: 'grow' },
-    { name: 'G_Glass', at: [0.14, 0.19], how: 'grow' },
-    { name: 'Ext_Front_door2', at: [0.17, 0.18], how: 'show' },
-    { name: 'Ext_Rear_slider2', at: [0.14, 0.19], how: 'grow' },
-    { name: 'G_FurnIn', at: [0.09, 0.16], how: 'pop' },
-    { name: 'G_FurnOut', at: [0.1, 0.17], how: 'pop' },
+    // Like the film: the platform rises, the floor is laid board by board (street to beach), walls
+    // rise, then each piece of furniture pops up where it stands, front to back. Baked light is the
+    // finished house, so everything shows flat light until the house is done (lightUp).
+    { name: 'G_Structure', at: [0.01, 0.07], how: 'grow' },
+    { name: 'G_Floors', at: [0.05, 0.13], how: 'reveal', map: 'assets/floor_order.png' },
+    { name: 'G_Walls', at: [0.11, 0.19], how: 'grow' },
+    { name: 'G_Glass', at: [0.16, 0.2], how: 'grow' },
+    { name: 'Ext_Front_door2', at: [0.19, 0.2], how: 'show' },
+    { name: 'Ext_Rear_slider2', at: [0.16, 0.2], how: 'grow' },
+    { prefix: 'Furn_', at: [0.18, 0.27], how: 'pop', each: 0.2 },
     { name: 'G_Ceiling', at: [0.43, 0.44], how: 'show' },
     { name: 'G_Roof', at: [0.38, 0.44], how: 'drop' },
   ],
-  lightUp: [0.15, 0.24],     // the house rises as a plain model; the golden-hour light comes on as it's finished
+  lightUp: [0.25, 0.32],     // the house rises as a plain model; the golden-hour light comes on as it's finished
   planUntil: [0.34, 0.42],    // the floor plan painted on the sand fades as the roof lands
 
   doors: {
@@ -45,7 +45,9 @@ export default {
 
   // Camera route from the film's shot list (build_walkthrough.py), p = (frame - 120) / 920.
   stops: [
-    { p: 0.0, pos: [7.62, 38.4, -7.1], look: [7.62, -0.91, -7.28], chapter: 'The plan' },
+    // opening: about 45 degrees down onto the plan from the street side, slightly to the right,
+    // so the build-up reads in depth (straight down, it looks flat)
+    { p: 0.0, pos: [17.5, 26.5, 19.5], look: [7.62, 0.2, -7.28], chapter: 'The plan' },
     { p: 0.13, pos: [24.38, 21.34, 12.19], look: [7.62, 2.44, -8.23], chapter: 'The build' },
     { p: 0.23, pos: [29.87, 20.73, -13.72], look: [7.62, 2.44, -8.23] },
     { p: 0.3, pos: [13.72, 21.95, -32.0], look: [7.62, 2.44, -8.23], chapter: 'Every room' },

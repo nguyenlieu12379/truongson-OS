@@ -362,13 +362,48 @@ export async function createWalkthrough({ canvas, spec, site }) {
   // grow: rises from the ground (origin at the bottom). drop: lands from above. pop: scales up.
   const build = [];
   for (const b of spec.build || []) {
+    // prefix: every object whose name starts with it pops on its own, street side first, staggered
+    // over [a, b] (the film's furniture: each piece grows from where it stands).
+    if (b.prefix) {
+      const objs = [...new Set(byName.values())].filter((o) => o.isMesh && o.name.startsWith(b.prefix))
+        .sort((x, y) => y.position.z - x.position.z);
+      const dur = (b.at[1] - b.at[0]) * (b.each ?? 0.25), span = b.at[1] - b.at[0] - dur;
+      objs.forEach((o, i) => {
+        const a = b.at[0] + span * (objs.length > 1 ? i / (objs.length - 1) : 0);
+        build.push({ o, how: b.how ?? 'pop', at: [a, a + dur], y0: o.position.y, s0: o.scale.clone() });
+      });
+      continue;
+    }
     const o = byName.get(b.name);
     if (!o) { console.warn(`spec.build: no object named ${b.name}`); continue; }
-    build.push({ o, ...b, y0: o.position.y, s0: o.scale.clone() });
+    const entry = { o, ...b, y0: o.position.y, s0: o.scale.clone() };
+    // reveal: a grey map of one value per board / tile (baked in Blender). Each board appears
+    // when the scroll passes its value, so the floor is laid board by board.
+    if (b.how === 'reveal' && b.map && o.isMesh) {
+      const tex = await new THREE.TextureLoader().loadAsync(b.map);
+      tex.flipY = false;                                   // glTF UV convention
+      tex.magFilter = tex.minFilter = THREE.NearestFilter;  // crisp board edges
+      tex.generateMipmaps = false;
+      entry.reveal = { value: 0 };
+      const prev = o.material.onBeforeCompile;           // clone() drops the hook, keep it (bakeMix)
+      const m = o.material.clone();
+      m.onBeforeCompile = (sh, r) => {
+        prev?.call(m, sh, r);
+        sh.uniforms.revealMap = { value: tex };
+        sh.uniforms.reveal = entry.reveal;
+        sh.fragmentShader = 'uniform sampler2D revealMap;\nuniform float reveal;\n' + sh.fragmentShader.replace(
+          '#include <clipping_planes_fragment>',
+          '#include <clipping_planes_fragment>\n\tif ( texture2D( revealMap, vMapUv ).r > reveal ) discard;');
+      };
+      m.customProgramCacheKey = () => 'reveal';
+      o.material = m;
+    }
+    build.push(entry);
   }
   function updateBuild(p) {
     for (const b of build) {
       const t = easeOut(seg(p, b.at[0], b.at[1]));
+      if (b.how === 'reveal' && b.reveal) { b.reveal.value = seg(p, b.at[0], b.at[1]) * 1.02 - 0.01; b.o.visible = b.reveal.value > 0; continue; }
       if (b.how === 'show') { b.o.visible = p >= b.at[0] && (b.o.userData.role !== 'upper' || b.o.visible); continue; }
       b.o.visible = t > 0.001 && (b.o.userData.role !== 'upper' || b.o.visible);
       if (b.how === 'drop') b.o.position.y = b.y0 + (1 - t) * 14;
