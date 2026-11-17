@@ -152,3 +152,15 @@ Risk: the bake hasn't been run in this setup yet. The cottage is the first test.
 Limit: the pack expects Blender MCP and a desktop Blender app. Cloud sessions apply it through headless `bpy` scripts instead.
 
 **Owner:** Son
+
+## 2026-11-17 - Plug in claude-mem for session memory
+
+**Decision:** Use thedotmack/claude-mem (Apache-2.0, v15.19.0) as a Claude Code plugin. The repo registers its marketplace in `.claude/settings.json`. Each of us installs it on our own computer (`npx claude-mem install`). Default provider: our Anthropic plan. Telemetry off, cloud sync off. Guide: `references/claude-mem.md`.
+
+**Why:** Sessions lose context between runs. claude-mem starts each new session with a summary of past work in this repo.
+
+**Alternatives considered:** Vendoring it like the skill packs (it is a worker service with hooks, not a skill, so it has to be installed per machine). Enabling it for everyone in project settings (its hooks would fail in cloud sessions, where it can't keep memory anyway). Its paid observer trial (asks for a card; not needed).
+
+Limit: memory is per person and per computer, and lost in cloud sessions. Shared facts still go in the repo files.
+
+**Owner:** Son
