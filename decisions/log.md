@@ -140,3 +140,15 @@ Keep it terse. Future-you will thank present-you for capturing the *why*, not ju
 Risk: the bake hasn't been run in this setup yet. The cottage is the first test.
 
 **Owner:** Son
+
+## 2026-11-17 - Add Blender craft skills as blender-skills
+
+**Decision:** Vendor arjun988/blender-skills (MIT, commit 904f095) as a whole kit pack in `.claude/skills/blender-skills/`, with `VENDORED.md`. It has 95 Blender skills (modeling, vehicles, vegetation, materials, lighting, archviz, set dressing, realism, rendering). Link it from CLAUDE.md, AGENTS.md, README.md and `/3d-walkthrough`, and sync it to the Codex copy. Leave out the pack's docs site and its Cursor copy.
+
+**Why:** The walkthrough sites need more realism (cars, towns, materials), and the pack is a ready craft reference for that, with `blender-director` to pick the right specialist.
+
+**Alternatives considered:** Writing our own Blender references piece by piece (slower). Installing it as a Claude Code plugin (not pinned in the repo, and not shared with Codex).
+
+Limit: the pack expects Blender MCP and a desktop Blender app. Cloud sessions apply it through headless `bpy` scripts instead.
+
+**Owner:** Son
