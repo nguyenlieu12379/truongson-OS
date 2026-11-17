@@ -135,6 +135,8 @@ for name, objs, dens, lmdiv, role, kind in GROUPS:
     bpy.ops.mesh.select_all(action="SELECT")
     bpy.ops.mesh.normals_make_consistent(inside=False)
     bpy.ops.object.mode_set(mode="OBJECT")
+    if name == "G_Far" and host.data.polygons[0].normal.z < 0:   # a lone quad has no inside: keep it up
+        host.data.flip_normals()
     joined.append((name, [host], dens, lmdiv, role, kind))
 GROUPS = joined
 log("joined", [(g[0], len(g[1][0].data.polygons)) for g in GROUPS])
