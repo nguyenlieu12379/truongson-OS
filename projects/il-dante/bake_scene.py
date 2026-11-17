@@ -284,7 +284,6 @@ for name, objs, dens, lmdiv, role, kind in GROUPS:
     log(f"baked {name}: {s}px, light {lw}px, scale {scale:.3f}, {time.time() - t:.0f}s")
 
 # ---------------------------------------------------------------- sky panorama (world + ocean only)
-sun = next(o for o in bpy.data.objects if o.type == "LIGHT" and o.data.type == "SUN")
 want = Vector(scene["sun_dir"])
 cam = bpy.data.objects.new("Pano", bpy.data.cameras.new("Pano"))
 cam.data.type = "PANO"
@@ -308,7 +307,7 @@ vs.view_transform, vs.look, vs.exposure = "Standard", "None", 0.0
 scene.render.image_settings.media_type = "IMAGE"
 scene.render.image_settings.file_format = "OPEN_EXR"
 scene.render.image_settings.color_depth = "32"
-skynode = next(n_ for n_ in scene.world.node_tree.nodes if n_.type == "TEX_SKY")
+skynode = next((n_ for n_ in scene.world.node_tree.nodes if n_.type == "TEX_SKY"), None)   # None: an HDRI sky
 
 
 def render_sky():
@@ -337,7 +336,7 @@ err_pos, err_neg = (lon - target + math.pi) % (2 * math.pi) - math.pi, (-lon - t
 handed = 1 if abs(err_pos) < abs(err_neg) else -1
 log(f"panorama sun at lon {math.degrees(lon):.0f}, lat {math.degrees(lat):.0f}; lamp at {math.degrees(target):.0f}")
 off = (handed * lon) - target
-if abs(off) > math.radians(3):
+if skynode and abs(off) > math.radians(3):
     skynode.sun_rotation = skynode.sun_rotation - handed * off
     px = render_sky()
     lon, lat, lum = sun_in(px)

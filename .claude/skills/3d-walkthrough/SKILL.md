@@ -30,6 +30,8 @@ Before writing any code, read the design-skills pack. It sets the quality bar fo
 
 Use `review-animations` in step 10. Apply what they say over anything in this file that conflicts.
 
+Read `references/realism.md` before modelling: photo-scanned CC0 textures, a real HDRI sky, bevels and real-looking glass are what keep a scene from looking plastic.
+
 For the Blender craft (modeling, materials, lighting, surroundings, realism), use the blender-skills pack as the reference: `.claude/skills/blender-skills/.claude/skills/` (start at `blender-director/SKILL.md`). The most useful here: `archviz`, `environment-artist`, `set-dressing`, `vehicle-artist`, `vegetation-artist`, `materials`, `lighting`, `realistic-style`. The pack drives Blender through MCP; we run the same ideas as headless `bpy` scripts.
 
 ## 1. Collect the inputs
