@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Il Dante Caffe · Walkthrough (concept)</title>
+  <meta name="description" content="Concept demo: walk from Ocean Drive into Il Dante Caffe, a coffee shop on 8th Street in South Beach.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#07080c">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="brand" href="#top" data-jump="0">Il Dante <span>Caffe</span></a>
+    <nav class="chapters" aria-label="Chapters"></nav>
+    <a class="pill" href="#visit" data-jump="1">Find us</a>
+    <div class="progress" aria-hidden="true"><i></i></div>
+  </header>
+
+  <!-- Concept demo for a pitch, not the cafe's own site. Unconfirmed facts stay TODO. -->
+  <p class="concept">Concept demo by TruongSon. Not affiliated with Il Dante Caffe.</p>
+
+  <main id="top">
+    <section class="panel hero side" data-in="0" data-out="0.1">
+      <p class="eyebrow">760 Ocean Dr · South Beach</p>
+      <h1>Coffee on<br>Ocean Drive.</h1>
+      <p class="lede">A small, bright cafe on 8th Street, a minute from the sand.</p>
+      <p class="cue"><span></span>Scroll to walk in</p>
+    </section>
+
+    <section class="panel right" data-in="0.18" data-out="0.32">
+      <p class="eyebrow">Find the door</p>
+      <h2>Corner of Ocean Drive<br>and 8th Street.</h2>
+      <p class="lede">Turn off the beach side of Ocean Drive. The glass front on 8th, under the balcony.</p>
+    </section>
+
+    <section class="panel" data-in="0.44" data-out="0.58">
+      <p class="eyebrow">Inside</p>
+      <h2>White walls,<br>warm wood, plants.</h2>
+      <p class="lede">A long bar under the big mirror. Grab a stool.</p>
+    </section>
+
+    <section class="panel right" data-in="0.6" data-out="0.8">
+      <p class="eyebrow">The counter</p>
+      <h2>Espresso and pastries.</h2>
+      <ul class="steps" aria-label="At the counter">
+        <li data-at="0.62">Pastry case</li>
+        <li data-at="0.68">Espresso bar</li>
+        <li data-at="0.74">Cold drinks fridge</li>
+      </ul>
+    </section>
+
+    <section class="panel final side" id="visit" data-in="0.92" data-out="1.01">
+      <p class="eyebrow">Then the beach</p>
+      <h2>Take it across<br>to Lummus Park.</h2>
+      <div class="menu">
+        <div><b>Address</b><span>760 Ocean Dr, Miami Beach</span></div>
+        <div><b>Hours</b><span>TODO: confirm with the owner</span></div>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Il+Dante+Caffe+760+Ocean+Dr+Miami+Beach" rel="noopener">Directions</a>
+      </div>
+      <p class="fine">TODO: menu, phone and socials, confirmed by the owner.</p>
+    </section>
+  </main>
+
+  <div class="spacer" aria-hidden="true"></div>
+  <noscript><p class="noscript">This experience needs JavaScript and WebGL.</p></noscript>
+  <script type="module" src="assets/main.js"></script>
+</body>
+</html>
