@@ -12,7 +12,6 @@ Registry of every system your AIOS can reach. Filled by `/onboard` from Q4-Q7 an
 | 6 | Meeting intelligence | Google Meet (no recorder yet) | not yet connected | — | — |
 | 7 | Knowledge / files | Notion | not yet connected | — | — |
 | 8 | Video generation | Muapi (api.muapi.ai) via `.claude/skills/muapi-video/` | key+ref (`references/muapi-api.md`) | `MUAPI_API_KEY` not set yet | 2026-11-14 |
-| 9 | Session memory | claude-mem plugin (thedotmack marketplace in `.claude/settings.json`) | plugin, per computer (`references/claude-mem.md`) | install on each computer; provider: Anthropic plan | 2026-11-17 |
 
 **Mechanism options:** `mcp` (MCP server), `script` (Python/Bash hitting an API, in `scripts/`), `export` (CSV/JSON dump pipeline), `key+ref` (`.env` key + `references/{tool}-api.md` guide), `not yet connected`.
 
