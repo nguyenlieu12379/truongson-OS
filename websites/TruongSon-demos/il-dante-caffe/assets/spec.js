@@ -15,8 +15,8 @@ export default {
   bakeInfo: 'assets/bake.json',
   sky: 'day',
   theme: { fogOutside: '#c9d6df', fogInside: '#efe9df', fogDensity: 0.0009 },
-  exposure: 0.09,             // physical daylight is bright: the Blender sun and sky, scaled down
-  insideBoost: 3.2,           // the room is lit by its own lamps and the doorway, much dimmer than the street
+  exposure: 0.8,              // the HDRI sky's light, about what a camera would expose for
+  insideBoost: 1.25,          // a touch brighter inside, as a camera adjusts walking in
   grade: { tint: [1.02, 1.0, 0.97], power: 1.04, sat: 1.05 },
   insideAt: [0.37, 0.44],
   outsideAt: [0.84, 0.9],

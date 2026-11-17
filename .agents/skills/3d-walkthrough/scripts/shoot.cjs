@@ -15,7 +15,7 @@ const { chromium } = require('playwright');
   for (const p of stops) {
     await pg.evaluate((p) => scrollTo(0, p * (document.documentElement.scrollHeight - innerHeight)), p);
     await pg.waitForTimeout(4000);
-    await pg.screenshot({ path: `${out}/shot_${w}x${h}_${p}.png` });
+    await pg.screenshot({ path: `${out}/shot_${w}x${h}_${p}.png`, timeout: 180000 });   // software GL is slow on big scenes
   }
   console.log(errs.length ? 'ERRORS:\n' + errs.join('\n') : 'No console errors');
   await b.close();

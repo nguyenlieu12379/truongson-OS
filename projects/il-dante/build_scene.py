@@ -86,10 +86,62 @@ def tube_along(p, pts, z, r, mat, seg=6):
 
 
 # ======================================================================= materials
+TEXD = os.path.join(HERE, "textures")          # fetch_assets.py: CC0 photo textures and sky from Poly Haven
+
+
+def pbr(name, key, size_m, tint=(1, 1, 1), nor=1.0, rough_mul=1.0, sat=1.0):
+    """A photo-scanned material (Poly Haven, CC0): colour, roughness and normal maps, box-projected in
+    object space every size_m metres and tinted to the colour in the reference photos. Real texture
+    detail and roughness variation are what stop surfaces looking like plastic."""
+    m = dp.get_mat(name)
+    n, b = dp.fresh(m)
+    co = n.new("ShaderNodeTexCoord").outputs["Object"]
+    mp = n.new("ShaderNodeMapping")
+    mp.inputs["Scale"].default_value = (1 / size_m, 1 / size_m, 1 / size_m)
+    n.link(co, mp.inputs["Vector"])
+
+    def img(kind, color):
+        t = n.new("ShaderNodeTexImage")
+        t.image = bpy.data.images.load(os.path.join(TEXD, f"{key}_{kind}.jpg"), check_existing=True)
+        t.image.colorspace_settings.name = "sRGB" if color else "Non-Color"
+        t.projection = "BOX"
+        t.projection_blend = 0.25
+        n.link(mp.outputs[0], t.inputs["Vector"])
+        return t.outputs["Color"]
+    col = img("diff", True)
+    if sat != 1.0:
+        hs = n.new("ShaderNodeHueSaturation")
+        hs.inputs["Saturation"].default_value = sat
+        n.link(col, hs.inputs["Color"])
+        col = hs.outputs[0]
+    n.link(n.mix(1.0, col, tint, "MULTIPLY"), b.inputs["Base Color"])
+    n.link(n.math("MULTIPLY", n.xyz(img("rough", False))[0], rough_mul, clamp=True), b.inputs["Roughness"])
+    nm = n.new("ShaderNodeNormalMap")
+    nm.inputs["Strength"].default_value = nor
+    n.link(img("nor", False), nm.inputs["Color"])
+    n.link(nm.outputs[0], b.inputs["Normal"])
+    return m
+
+
+def pane(name, top, bottom, noise=0.25):
+    """Window glass as a photo shows it from outside: the sky reflected light at the top, darker toward
+    the bottom, with soft unevenness (no hard blotches)."""
+    m = dp.get_mat(name)
+    n, b = dp.fresh(m)
+    z = n.xyz(n.new("ShaderNodeTexCoord").outputs["Object"])[2]
+    f = n.math("FRACT", n.math("DIVIDE", z, 3.2))               # per storey
+    nz = n.new("ShaderNodeTexNoise", Scale=0.7, Detail=3.0)
+    n.link(n.new("ShaderNodeTexCoord").outputs["Object"], nz.inputs["Vector"])
+    t = n.math("ADD", f, n.math("MULTIPLY", n.math("SUBTRACT", nz.outputs["Fac"], 0.5), noise), clamp=True)
+    n.link(n.ramp(t, [(0.0, bottom), (0.55, tuple((a + c) / 2 for a, c in zip(top, bottom))), (1.0, top)]), b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.05
+    return m
+
+
 M = {}
-M["white"] = town.stucco(dp, "Stucco_Bright", (0.86, 0.86, 0.84))
-M["white_in"] = dp.plain("Wall_White_In", (0.86, 0.86, 0.84), 0.85)
-M["ceiling"] = dp.plain("Ceiling_White", (0.88, 0.88, 0.87), 0.9)
+M["white"] = pbr("Stucco_Bright", "stucco", 2.5, (1.08, 1.08, 1.06), sat=0.3)
+M["white_in"] = pbr("Wall_White_In", "plaster_in", 2.0, (1.28, 1.28, 1.26), nor=0.5, sat=0.0)
+M["ceiling"] = pbr("Ceiling_White", "plaster_in", 2.5, (1.32, 1.32, 1.30), nor=0.3, sat=0.0)
 M["trim"] = dp.plain("Trim_White", (0.90, 0.90, 0.88), 0.5)
 M["teal"] = dp.plain("Deco_Teal", (0.36, 0.68, 0.66), 0.6)
 M["pink"] = dp.plain("Deco_Pink", (0.86, 0.62, 0.64), 0.6)
@@ -102,20 +154,19 @@ M["bronze"] = dp.plain("Sculpture_Bronze", (0.38, 0.27, 0.16), 0.35)
 M["umb_blue"] = dp.fabric("Umb_Royal", (0.10, 0.22, 0.62))
 M["umb_yellow"] = dp.fabric("Umb_Gold", (0.86, 0.66, 0.16))
 M["umb_cream"] = dp.fabric("Umb_Cream", (0.88, 0.84, 0.72))
-M["shopglass"] = town.window_glass(dp, "Glass_Shopfront")      # name starts with Glass -> clear engine glass
-M["shopwin"] = town.window_glass(dp, "Shop_Window", warm=True)  # other shops: baked, reflective-looking
-M["window"] = town.window_glass(dp, "Window_Upper")
+M["shopglass"] = pane("Glass_Shopfront", (0.55, 0.62, 0.68), (0.10, 0.12, 0.13))  # Glass_ -> clear engine glass
+M["shopwin"] = pane("Shop_Window", (0.46, 0.54, 0.60), (0.06, 0.07, 0.08))      # other shops: baked reflection look
+M["window"] = pane("Window_Upper", (0.52, 0.62, 0.70), (0.10, 0.13, 0.16))
 M["roof"] = town.roof_membrane(dp, "Roof_Membrane")
 M["ac"] = dp.plain("AC_Unit", (0.62, 0.63, 0.62), 0.6)
 # interior
-M["floor"] = dp.planks("Floor_WoodTile", 0, 1, 0.20, 1.2, (0.58, 0.47, 0.36), (0.40, 0.31, 0.23), rough=0.4, var=0.18)
-M["butcher"] = dp.planks("Butcher_Block", 1, 0, 0.06, 1.6, (0.80, 0.62, 0.42), (0.66, 0.48, 0.30), rough=0.45, var=0.12)
-M["stool"] = dp.planks("Stool_Wood", 0, 2, 0.05, 0.6, (0.78, 0.60, 0.40), (0.64, 0.46, 0.29), rough=0.5)
-M["frame_wood"] = dp.plain("Mirror_Frame_Oak", (0.66, 0.46, 0.28), 0.45)
+M["floor"] = pbr("Floor_WoodTile", "floor", 2.4, (0.95, 0.9, 0.86))
+M["butcher"] = pbr("Butcher_Block", "oak", 1.2, (1.15, 1.02, 0.86))
+M["stool"] = pbr("Stool_Wood", "oak", 0.8, (1.18, 1.04, 0.88))
+M["frame_wood"] = pbr("Mirror_Frame_Oak", "oak", 0.8, (1.0, 0.82, 0.62))
 M["mirror"] = dp.plain("Mirror_Silver", (0.62, 0.66, 0.66), 0.05)
-M["subway"] = dp.tiles("Subway_White", (0.88, 0.88, 0.86), (0.84, 0.85, 0.83), (0.62, 0.62, 0.60), scale=9.0, rough=0.12)
-M["greentile"] = dp.tiles("Tile_Green", (0.07, 0.24, 0.17), (0.09, 0.28, 0.20), (0.04, 0.10, 0.07), scale=14.0,
-                          rough=0.1, w=0.25, h=1.0)
+M["subway"] = pbr("Subway_White", "subway", 1.8, (1.12, 1.12, 1.10), sat=0.1)
+M["greentile"] = pbr("Tile_Green", "subway", 1.2, (0.16, 0.42, 0.30), sat=0.0)
 M["steel"] = dp.plain("Steel", (0.62, 0.62, 0.63), 0.3)
 M["black"] = dp.plain("Matte_Black", (0.025, 0.025, 0.028), 0.6)
 M["menuboard"] = dp.plain("Letterboard", (0.03, 0.03, 0.035), 0.7)
@@ -137,9 +188,9 @@ M["bottle_clear"] = dp.plain("Bottle_Water", (0.62, 0.72, 0.76), 0.2)
 M["bottle_green"] = dp.plain("Bottle_Green", (0.06, 0.30, 0.10), 0.2)
 M["bottle_orange"] = dp.plain("Bottle_Orange", (0.80, 0.40, 0.06), 0.3)
 # street
-M["paver"] = town.slabs(dp, "Paver_Pink", (0.62, 0.42, 0.40), size_ft=2.0, var=0.18)
-M["paver_grey"] = town.slabs(dp, "Paver_Grey", (0.55, 0.53, 0.50), size_ft=4.0)
-M["asphalt"] = town.asphalt(dp, "Road_Asphalt", (0.16, 0.16, 0.165))
+M["paver"] = pbr("Paver_Pink", "pavers", 1.6, (1.15, 0.80, 0.76), sat=0.4)
+M["paver_grey"] = pbr("Paver_Grey", "concrete", 2.5)
+M["asphalt"] = pbr("Road_Asphalt", "asphalt", 4.0, (0.9, 0.9, 0.92))
 M["kerb_yellow"] = dp.plain("Kerb_Yellow", (0.80, 0.58, 0.10), 0.7)
 M["kerb"] = dp.plain("Kerb_Concrete", (0.66, 0.65, 0.62), 0.8)
 M["bike_green"] = town.worn_paint(dp, "Bike_Lane_Green", (0.10, 0.42, 0.22), road=(0.16, 0.16, 0.165))
@@ -154,14 +205,14 @@ M["wicker"] = dp.planks("Wicker", 0, 2, 0.02, 0.2, (0.62, 0.44, 0.24), (0.44, 0.
 M["table_red"] = dp.plain("Table_Red", (0.62, 0.06, 0.05), 0.4)
 M["tabletop"] = dp.plain("Tabletop_White", (0.88, 0.88, 0.86), 0.4)
 # park and beach
-M["lawn"] = town.grass(dp, "Lawn")
+M["lawn"] = pbr("Lawn", "grass", 2.5, (0.85, 0.95, 0.7))
 M["hedge"] = env.leaf_material(dp, "Hedge_Leaf", (0.04, 0.12, 0.03), (0.12, 0.26, 0.06))
-M["sand"] = dp.sand("Sand", (0.86, 0.79, 0.64), (0.80, 0.72, 0.56))
-M["wet"] = dp.sand("Wet_Sand", (0.60, 0.53, 0.42), (0.55, 0.48, 0.38), rough=0.4, ripples=False, wet=True)
+M["sand"] = pbr("Sand", "sand", 3.0, (1.12, 1.06, 0.95))
+M["wet"] = pbr("Wet_Sand", "sand", 3.0, (0.7, 0.64, 0.56), rough_mul=0.5)
 M["dune"] = env.leaf_material(dp, "Sea_Grape", (0.08, 0.16, 0.04), (0.22, 0.30, 0.08))
 M["coral"] = town.slabs(dp, "Coral_Stone", (0.78, 0.72, 0.60), size_ft=1.5, var=0.3)
 M["ocean"] = dp.ocean("Ocean")
-M["bark"] = dp.plain("Palm_Trunk_Grey", (0.42, 0.38, 0.33), 0.9)
+M["bark"] = pbr("Palm_Trunk_Grey", "bark", 1.2, (1.05, 1.0, 0.95), sat=0.5)
 M["frond"] = env.frond_material(dp, "Palm_Frond", (0.06, 0.13, 0.04), (0.28, 0.38, 0.10))
 M["leaf_tree"] = env.leaf_material(dp, "Leaf_Buttonwood", (0.10, 0.16, 0.10), (0.36, 0.44, 0.32))
 
@@ -252,7 +303,7 @@ for k, (x, y) in enumerate(((-4, -20), (-4, -40), (-20, -4), (-38, -4))):
 for k in range(3):
     ax, ay = -70 + k * 12, -40
     p.box(ax, ay, H2 + 0.7, ax + 4, ay + 3.5, H2 + 3.4, M["ac"])
-bldg = p.build(0)
+bldg = p.build(0.025)
 
 # ---------------------------------------------------------------- the cafe shell (inside surfaces)
 q = P("Cafe_Shell", "Interior")
@@ -269,7 +320,7 @@ q.box(X0, -0.4, 0, X1, 0.2, 0.8, M["frame_white"])
 for x in (X0 + 0.1, -40.0, -34.0, X1 - 0.1):
     q.box(x - 0.15, -0.4, 0.8, x + 0.15, 0.2, 10.0, M["frame_white"])
 q.box(X0, -0.4, 7.6, X1, 0.2, 7.9, M["frame_white"])             # transom bar
-cafe_shell = q.build(0)
+cafe_shell = q.build(0.008)
 g = P("Glass_Cafe_Front", "Glass")
 g.box(X0, -0.15, 0.8, -40.15, -0.05, 10.0, M["shopglass"])
 g.box(-39.85, -0.15, 7.9, -34.15, -0.05, 10.0, M["shopglass"])
@@ -282,7 +333,7 @@ door.box(-39.5, -0.25, 0.05, -34.5, -0.05, 0.6, M["frame_white"])
 door.box(-39.5, -0.25, 7.2, -34.5, -0.05, 7.55, M["frame_white"])
 door.box(-39.5, -0.2, 0.6, -34.5, -0.1, 7.2, M["shopglass"])
 door.box(-35.2, 0.0, 3.2, -35.0, 0.35, 4.6, M["steel"])
-door_o = door.build(0)
+door_o = door.build(0.005)
 
 # ---------------------------------------------------------------- cafe furniture (from the photos)
 f = P("Cafe_Furn", "Furn")
@@ -394,7 +445,7 @@ for dy in (-1.6, 1.6):
 for (x, y) in ((-29.5, -20), (-29.5, -12), (-29.5, -6), (-40.5, -26.5), (-38.0, -24.0)):
     f.cyl(x, y, 8.2, 11.0, 0.02, M["black"], seg=4)
     f.cyl(x, y, 7.4, 8.2, 0.75, M["pendant"], 0.2, seg=14)
-cafe_furn = f.build(0)
+cafe_furn = f.build(0.006)
 
 # lights in the cafe (warm, like the photos): ceiling cans and the pendants
 for (x, y) in ((-41, -6), (-33, -6), (-41, -16), (-33, -16), (-41, -30), (-33, -33)):
@@ -413,7 +464,7 @@ s = P("Street", "Street")
 # 8th St: building-side sidewalk y 0..12, road 12..40, north sidewalk 40..52
 # (no two slabs overlap: coplanar overlapping solids shadow each other black in the bake)
 s.box(-260, 0, -0.3, 0, 11.6, 0.5, M["paver"])
-s.box(-260, 12, -0.3, 16, 40, 0.0, M["asphalt"])
+s.box(-260, 12, -0.3, 0, 40, 0.0, M["asphalt"])
 s.box(-260, 40.4, -0.3, 0, 52, 0.5, M["paver"])
 for y0, y1 in ((11.6, 12.0), (40.0, 40.4)):
     s.box(-260, y0, 0.0, 0, y1, 0.55, M["kerb_yellow"])
@@ -472,9 +523,9 @@ oc = bpy.data.objects.new("Ocean", me)
 bpy.data.collections["Site"].objects.link(oc)
 
 # ======================================================================= neighbours
-nb_mats = [town.stucco(dp, n, c) for n, c in (("Deco_Mint", (0.66, 0.80, 0.74)), ("Deco_Peach", (0.90, 0.74, 0.62)),
-                                                ("Deco_Lilac", (0.78, 0.72, 0.82)), ("Deco_Cream", (0.88, 0.84, 0.72)),
-                                                ("Deco_Sky", (0.68, 0.80, 0.86)), ("Deco_White", (0.86, 0.86, 0.83)))]
+nb_mats = [pbr(n, "stucco", 2.5, c, sat=0.2) for n, c in (("Deco_Mint", (0.76, 0.92, 0.86)), ("Deco_Peach", (1.04, 0.86, 0.72)),
+                                                ("Deco_Lilac", (0.90, 0.84, 0.95)), ("Deco_Cream", (1.02, 0.97, 0.84)),
+                                                ("Deco_Sky", (0.80, 0.92, 1.0)), ("Deco_White", (1.0, 1.0, 0.97)))]
 accents = [M["teal"], M["pink"], dp.plain("Deco_Yellow", (0.86, 0.70, 0.22), 0.6), dp.plain("Deco_Navy", (0.10, 0.18, 0.36), 0.6)]
 
 
@@ -515,7 +566,7 @@ def deco_block(name, y0, y1, depth, floors, body, acc, sign=False, porch=None):
                     b.box(cx - 0.8 if a else cx + 0.6, yy - 0.8, 2.0, cx - 0.6 if a else cx + 0.8, yy + 0.8, 3.6, M["wicker"])
             b.cyl(8, yy + 3.5, 0.5, 8.5, 0.08, M["pole"], seg=6)
             b.cyl(8, yy + 3.5, 7.4, 8.8, 5.0, porch, 0.2, seg=12)
-    return b.build(0)
+    return b.build(0.03)
 
 
 # the Starlite Hotel, right south of 760: three floors, cream with teal and pink, yellow umbrellas
@@ -561,7 +612,7 @@ for (x, y) in ((14, 13), (14, 38), (62, 13), (62, 38)):                         
 for y in range(-400, 430, 80):
     pr.cyl(66, y, 0.6, 20, 0.25, M["pole"], seg=8)
     pr.ell((66, y, 20.5), (0.9, 0.9, 1.2), M["frame_white"])
-props = pr.build(0)
+props = pr.build(0.01)
 cm = cars.materials(dp)
 paints = [dp.plain(n, c, 0.35) for n, c in (("Car_White", (0.80, 0.80, 0.78)), ("Car_Black", (0.03, 0.03, 0.035)),
                                               ("Car_Silver", (0.50, 0.51, 0.52)), ("Car_Grey", (0.24, 0.25, 0.26)),
@@ -593,7 +644,9 @@ for o in list(bpy.data.collections["Env"].objects):                             
     bpy.data.collections["Env"].objects.unlink(o)
     bpy.data.collections["Trees"].objects.link(o)
 
-# ======================================================================= daylight: morning sun over the ocean
+# ======================================================================= daylight: a real sky (HDRI)
+# A photographed clear sky (Poly Haven, CC0) lights everything; its own sun gives the shadows. Turn it so
+# the sun stands east-south-east over the ocean, like a Miami morning.
 world = bpy.data.worlds.new("Miami_Morning")
 scene.world = world
 world.use_nodes = True
@@ -602,32 +655,31 @@ for n_ in list(nt.nodes):
     nt.nodes.remove(n_)
 out = nt.nodes.new("ShaderNodeOutputWorld")
 bg = nt.nodes.new("ShaderNodeBackground")
-sky = nt.nodes.new("ShaderNodeTexSky")
-try:
-    sky.sky_type = "NISHITA"
-except TypeError:
-    pass
-SUN_EL, SUN_AZ = math.radians(30), math.radians(-25)       # morning: east-south-east, over the ocean (from +x toward +y)
-for attr, val in (("sun_elevation", SUN_EL), ("sun_rotation", SUN_AZ), ("altitude", 10.0),
-                  ("air_density", 1.0), ("dust_density", 1.4), ("ozone_density", 1.0), ("sun_size", math.radians(0.8))):
-    if hasattr(sky, attr):
-        setattr(sky, attr, val)
-if hasattr(sky, "sun_disc"):
-    sky.sun_disc = True
-nt.links.new(sky.outputs[0], bg.inputs[0])
+env_t = nt.nodes.new("ShaderNodeTexEnvironment")
+env_t.image = bpy.data.images.load(os.path.join(TEXD, "sky.hdr"))
+mp = nt.nodes.new("ShaderNodeMapping")
+tc = nt.nodes.new("ShaderNodeTexCoord")
+nt.links.new(tc.outputs["Generated"], mp.inputs["Vector"])
+nt.links.new(mp.outputs[0], env_t.inputs["Vector"])
+nt.links.new(env_t.outputs[0], bg.inputs[0])
 nt.links.new(bg.outputs[0], out.inputs[0])
-bg.inputs[1].default_value = 0.6
-sun = bpy.data.objects.new("Sun", bpy.data.lights.new("Sun", "SUN"))
-sun.data.energy = 4.0
-sun.data.angle = math.radians(1.0)
-sun.data.color = (1.0, 0.93, 0.82)
-# Nishita's sun_rotation is measured from +y toward... the sky texture: rotation 0 = +x? Match the lamp
-# to the panorama by direction vector: azimuth measured from +x toward +y, as in Blender's sky texture.
-d = Vector((math.cos(SUN_AZ) * math.cos(SUN_EL), math.sin(SUN_AZ) * math.cos(SUN_EL), math.sin(SUN_EL)))
-sun.rotation_euler = (-d).to_track_quat("-Z", "Y").to_euler()
-sun.visible_glossy = False
-scene.collection.objects.link(sun)
+# where is the sun in the HDR? Cycles' equirect: u = -atan2(y, x)/2pi + 0.5, v = atan2(z, r)/pi + 0.5
+import numpy as _np  # noqa: E402
+w_, h_ = env_t.image.size
+px = _np.empty(w_ * h_ * 4, dtype=_np.float32)
+env_t.image.pixels.foreach_get(px)
+lum = px.reshape(h_, w_, 4)[..., :3].sum(-1)
+row, col = _np.unravel_index(_np.argmax(lum), lum.shape)     # rows bottom-up in Blender
+u, v = (col + 0.5) / w_, (row + 0.5) / h_
+hdr_az = -(u - 0.5) * 2 * math.pi                              # azimuth from +x toward +y
+SUN_EL = (v - 0.5) * math.pi
+WANT_AZ = math.radians(-25)                                    # east-south-east
+rot = WANT_AZ - hdr_az
+mp.inputs["Rotation"].default_value[2] = -rot                  # turn the lookup the other way to turn the sky by +rot
+d = Vector((math.cos(WANT_AZ) * math.cos(SUN_EL), math.sin(WANT_AZ) * math.cos(SUN_EL), math.sin(SUN_EL)))
 scene["sun_dir"] = list(d)
+print(f"HDR sun at elevation {math.degrees(SUN_EL):.0f}, turned {math.degrees(rot):.0f} deg to the east-south-east")
+bg.inputs[1].default_value = 1.0
 vs = scene.view_settings
 vs.view_transform = "AgX"
 vs.look = "AgX - Base Contrast" if "AgX - Base Contrast" in [l.identifier for l in
