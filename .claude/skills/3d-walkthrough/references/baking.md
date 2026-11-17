@@ -55,6 +55,15 @@ doors: { Ext_Front_door2: { opensAt: [...], angle: 1.75 }, Ext_Rear_slider2: { o
 
 The engine's tone mapping is Blender's AgX with an adjustable 'Punchy' look (three's `CustomToneMapping`). Full Punchy (power 1.35, saturation 1.4) came out far redder and more contrasty than Blender's; power 1.08 and saturation 1.05 with a warm tint matched the film best. Compare a site screenshot with a film still from the same camera before settling it.
 
+## Daylight scenes (Il Dante Caffe)
+
+- Light with Blender's physical sky (Nishita) and a sun lamp. The bake script turns the sky texture's sun until the panorama agrees with the lamp, and sets `sky_dir` from it, so the panorama and the baked shadows match.
+- Physical daylight bakes about 20x brighter than the golden-hour cottage. Set `exposure` around 0.09 and use `insideBoost` (about 3) for the room, which is lit by its own lamps.
+- `outsideAt: [a, b]` takes the walk back outside at the end, for a cafe tour that ends on the street.
+- Glass (`Glass_*` materials) is made fully transmissive for the bake, so daylight reaches the room, and renders as clear glass on the site. Other shops' windows use a baked material, so they don't show the solid block behind them.
+- Never let two solids overlap with coplanar tops (two street slabs, a kerb inside a sidewalk). The bake shadows each from inside the other, and they come out black.
+- Faces pointing into a wall bake black: make the normals consistent on each joined group before baking.
+
 ## The build-up and baked light
 
 The bake is of the finished house, so surfaces hidden in it (the deck under the floors, the floor under walls and furniture, the sand under the house) are dark. During a build-up opening they show as black patches. `spec.lightUp` fixes it: baked surfaces show flat light (a plain model) until the house is up, then the baked light fades in. It reads as the golden hour switching on.

@@ -563,7 +563,8 @@ export async function createWalkthrough({ canvas, spec, site }) {
       else if (d.slide !== undefined) d.o.position.x = d.x0 + d.slide * t;
       else d.o.rotation.y = d.rot0 + (d.angle ?? 1.5) * t;
     }
-    const inside = smooth(insideFrom[0], insideFrom[1], p);
+    // spec.outsideAt = [a, b]: the walk goes back out (a cafe tour that ends on the street)
+    const inside = smooth(insideFrom[0], insideFrom[1], p) * (spec.outsideAt ? 1 - smooth(spec.outsideAt[0], spec.outsideAt[1], p) : 1);
     scene.fog.color.copy(OUT_FOG).lerp(IN_FOG, inside);
     scene.fog.density = theme.fogDensity * (1 - inside * 0.6);
     hemi.intensity = theme.hemiIntensity * (1 - inside * 0.55);
