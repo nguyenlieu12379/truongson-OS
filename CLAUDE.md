@@ -31,6 +31,10 @@ Each pack is a full copy of one Sunaii kit with its own `VENDORED.md` (source an
 - **muapi-video (SamurAIGPT muapi-skills, MIT):** AI video generation through the Muapi API. Text-to-video, image-to-video, and 16 motion recipes (product ads, UGC, music video). Use for any generated video clip. Needs `MUAPI_API_KEY`. Path: `.claude/skills/muapi-video/`. Entry: `.claude/skills/muapi-video/SKILL.md`. API guide: `references/muapi-api.md`.
 - **sales-agent (Harvey):** cold-outreach agent. Use only when Son or Truong asks to set it up or run it. It sends real email, so confirm the list, copy, and sending account first. Path: `.claude/skills/sales-agent/`. Entry: `.claude/skills/sales-agent/CLAUDE.md`
 
+### Plugins (installed per computer)
+
+- **claude-mem (thedotmack, Apache-2.0): persistent memory plugin.** Records each session and starts the next one with a summary of past work in this repo. Installed per computer, not vendored: the repo only registers its marketplace in `.claude/settings.json`. Setup, provider choice and privacy rules: `references/claude-mem.md`. Not useful in cloud sessions (the container is wiped). It does not replace `decisions/log.md`, `context/` or `brainstorms/`.
+
 ## Where things live
 
 - `context/` — about you, your business, your priorities (filled by `/onboard`)
