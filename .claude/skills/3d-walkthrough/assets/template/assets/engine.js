@@ -318,6 +318,7 @@ export async function createWalkthrough({ canvas, spec, site }) {
     glass.envMap = env;
     glass.envMapIntensity = 0.6;
   }
+  const photoCache = new Map();
   const roleOf = (o) => { for (let n = o; n; n = n.parent) if (n.userData?.role) return n.userData.role; return undefined; };
   model.traverse((o) => {
     if (o.name) byName.set(o.name, o);
@@ -329,6 +330,15 @@ export async function createWalkthrough({ canvas, spec, site }) {
     const mats = Array.isArray(o.material) ? o.material : [o.material];
     const swapped = mats.map((m) => {
       const key = (m.name || '').toLowerCase();
+      // Photo-textured scans (Google 3D Tiles via projects/haulover-cafe/tiles_to_blend.py): the light is
+      // in the photos already, so show them unlit with their own colours, untouched by tone mapping.
+      if (m.userData?.photo) {
+        if (!photoCache.has(m)) {
+          if (m.map) { m.map.anisotropy = renderer.capabilities.getMaxAnisotropy(); }
+          photoCache.set(m, new THREE.MeshBasicMaterial({ map: m.map, color: m.map ? 0xffffff : m.color, toneMapped: false }));
+        }
+        return photoCache.get(m);
+      }
       if (baked) {
         if (key.startsWith('glass')) return glass;
         if (key === 'ocean') return water;
