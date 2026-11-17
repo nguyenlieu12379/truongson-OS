@@ -1,7 +1,8 @@
 name: Deploy websites to GitHub Pages
 
 # /forno-notte/      -> websites/TruongSon-demos/forno-notte (3D scroll demo)
-# /coastal-cottage/  -> websites/TruongSon-demos/coastal-cottage (scroll film walkthrough)
+# /coastal-cottage/  -> websites/TruongSon-demos/coastal-cottage (baked live-3D walkthrough)
+# /il-dante-caffe/   -> websites/TruongSon-demos/il-dante-caffe (concept demo, baked live-3D walkthrough)
 # /             -> redirects to /forno-notte/
 
 on:
@@ -37,6 +38,9 @@ jobs:
           mkdir -p _site/coastal-cottage
           cp -R websites/TruongSon-demos/coastal-cottage/. _site/coastal-cottage/
           rm -f _site/coastal-cottage/README.md
+          mkdir -p _site/il-dante-caffe
+          cp -R websites/TruongSon-demos/il-dante-caffe/. _site/il-dante-caffe/
+          rm -f _site/il-dante-caffe/README.md
           cat > _site/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">
