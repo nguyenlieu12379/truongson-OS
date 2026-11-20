@@ -11,7 +11,7 @@ Build a scroll-driven walkthrough of an F&B venue: street, door, inside, hero sp
 - **Clients:** F&B only (restaurants, cafes, coffee shops, bars), always open venues with real photos.
 - **Blender = structure only.** Plain grey clay: walls, doors, furniture as simple blocks, and the camera route. No materials, textures, lights, sky or decor. This keeps the model light and quick to build.
 - **Real photos = the design.** Every surface's look comes from photos of the venue.
-- **AI models = the render.** An AI image model paints the photos onto a clay frame; an AI video model (Wan2.1 VACE on Kaggle's free GPU, step 6) carries that look through the clay clip.
+- **AI model = the render.** One free AI video model, Wan2.1 VACE on Kaggle's free GPU (step 6), takes the clay clip for shape and camera move and the real photos for the look. No paid tools, no web demo pages.
 - **Site = clips, not a film.** One short clip per chapter, triggered by scroll, so slow scrolls never stutter.
 
 Reference: the Il Dante Caffe test (`projects/il-dante/`): clay clips from its model, Google Maps photos as the design wrap. The previous method (designed and baked in Blender, `references/baking.md`) and the film-frame site (`archives/3d-walkthrough-film-site/`) are kept for reference only.
@@ -66,16 +66,20 @@ Check which one the session has before step 3. Don't ask the user to switch: a c
 - **Clips must join cleanly.** Each clip starts on the exact frame where the previous one ends, at the same walking speed. No ease-out at the end of one clip and ease-in at the start of the next, and no overlap: either one reads as the camera stopping. If shots were rendered separately, find the matching frame (smallest image difference), cut there, and drop frames from any slow tail so the per-frame motion matches across the join. `ffmpeg -framerate 24 -i f_%04d.png -c:v libx264 -crf 16 -pix_fmt yuv420p shot.mp4`.
 - Check a start, middle and end contact sheet of each shot: no jumps, no camera inside walls, furniture all there.
 
-## 5. Paint the first frame
+## 5. Pick the photos for each shot
 
-For each shot: first clay frame + the 2 or 3 real photos that show that spot, into an AI image model. Ask it to keep the clay frame's geometry and camera exactly and take materials, colours, finishes and light from the photos. Check the result against the photos: same layout, real look, no stray text or people.
+For each shot, make a job folder `projects/<venue>/work/jobs/<shot>/` with:
+- `clay.mp4`: the clay clip (step 4).
+- `refs/`: the 1 to 3 real photos that best show what this shot sees (sharp, no text on glass, no people, no strong reflections).
+- `prompt.txt`: one line about the place, e.g. "A bright small cafe, white walls, oak bar, green tile wall, morning daylight".
+- Optional `first.png`: a hand-made or approved real-looking first frame. VACE keeps it as frame 0. Leave it out by default: the photos alone set the look.
 
 ## 6. Make the real clips
 
-For each shot: the clay clip (motion and structure) + 1 to 3 real photos of that spot (look) + the painted first frame (optional) into the AI video model.
+For each shot's job folder (step 5): the clay clip (motion and structure) + 1 to 3 real photos of that spot (look) into the AI video model, on Kaggle's free GPU.
 
 **Model: Wan2.1 VACE 1.3B** (`ali-vilab/VACE`, Apache-2.0) on Kaggle's free GPU (about 30 GPU hours a week). Scripts: `assets/vace/`.
-- `run_vace.py` turns the clay clip into a depth video, uses it as the control (layout and camera move), takes the photos as reference images (materials, colours, light), and fixes frame 0 to the painted frame when given. Output: 832x480 at 16 fps.
+- `run_vace.py` turns the clay clip into a depth video, uses it as the control (layout and camera move), takes the photos as reference images (materials, colours, light), and fixes frame 0 to `first.png` when given. Output: 832x480 at 16 fps.
 - Job folder per shot: `clay.mp4`, `refs/*.jpg`, optional `first.png` and `prompt.txt` (one line about the place).
 - Run: `bash assets/vace/push_and_fetch.sh <job_dir> <out_dir> <kaggle_username>`. It uploads the job as a private Kaggle dataset, runs `run_vace.py` on a GPU, waits, and downloads `out.mp4` and `depth.mp4`.
 - One-time setup: a free Kaggle account with a verified phone (needed for GPU and internet), then an API token (Kaggle Settings, API, Create New Token). In cloud sessions, add the token through the secure credential form for `www.kaggle.com`, never in chat. `pip install kaggle`.
@@ -96,7 +100,7 @@ Scroll triggers each clip, it doesn't scrub it. Reference build: `websites/Truon
 - **Load clips into memory.** `fetch` each clip and play it from a blob URL. Seeking and reverse need byte-range support, which not every host gives; a blob always seeks.
 - **Seek-ready encoding.** Every frame a keyframe (ffmpeg `-g 1`), so reverse and jumps are instant. A smaller set for phones (854 px wide).
 - **Scrubbed hero moments only.** One or two moments tied 1:1 to scroll (the espresso pour, the door opening): add in-between frames with RIFE (24 to 60 fps) and play them as a preloaded WebP frame sequence on a canvas.
-- **Reduced motion:** show each chapter's painted still instead of the video.
+- **Reduced motion:** show a still from each chapter's clip instead of the video.
 - One short text panel per chapter: name, what's there, the hero line. Show the user the draft headlines before treating them as final.
 
 ## 8. Film (output `film` or `both`)

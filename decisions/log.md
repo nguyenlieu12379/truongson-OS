@@ -208,3 +208,11 @@ Open: needs a Kaggle account with a verified phone and an API token (not set up 
 **Why:** Son has Blender MCP connected on his desktop. Local Blender renders on his graphics card (seconds a frame vs about 10 s on cloud CPU) and he can watch the scene build. Cloud stays the fallback for work handed off while his computer is off.
 
 **Owner:** Son
+
+## 2026-11-20 - 3d-walkthrough: Kaggle GPU only, no Hugging Face demos
+
+**Decision:** Drop the free Hugging Face demo pages (Qwen Image Edit, LTX Studio) from the workflow. The only AI step is Wan2.1 VACE on Kaggle's free GPU, which takes the clay clip and the real photos directly. Step 5 is now "pick the photos for each shot" (a job folder per shot); a painted first frame is optional, not a separate image-model step.
+
+**Why:** The demo pages ran out of free GPU halfway through the Il Dante test and some get paused or are unsuitable for client work. Kaggle is free (about 30 GPU hours a week, no card), steady, and drivable from a cloud session.
+
+**Owner:** Son
