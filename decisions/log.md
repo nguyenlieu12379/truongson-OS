@@ -223,6 +223,14 @@ Open: needs a Kaggle account with a verified phone and an API token (not set up 
 
 **Why:** So the AIOS can watch YouTube tutorials (first use: a Claude + Blender + Higgsfield tutorial for `/3d-walkthrough`). In cloud sessions YouTube blocks video downloads (403), so only captions come through; a free Gemini key or a local run gives frames.
 
+## 2026-11-20 - Outreach tools: sales-agent in, REA out
+
+**Decision:** sales-agent (Harvey) is our main cold-outreach tool. It is already vendored in `.claude/skills/sales-agent/` (upstream commit 6b6a23a, current) and linked from CLAUDE.md and AGENTS.md. Not set up yet. When we set it up, run it in approval mode, no autopilot. From agency-agents, take only 2 or 3 personas (sales, content) if needed. craft-anything gets one test on our own Forno Notte demo before we decide. REA is dropped.
+
+**Why:** Cold outreach is our biggest time sink. sales-agent does the work (finds, writes, sends, sorts replies); agency-agents only gives advice in chat. REA analyzes binaries and apps, which we don't need for websites. Comparison: https://claude.ai/artifact/9F3BVxoZpLBWMRq5HKTUBQ
+
+**Owner:** Son
+
 ## 2026-11-20 - Vendor scroll-craft as /scroll-craft
 
 **Decision:** Copy the scroll-craft skill from nateherkai/scroll-craft (MIT, commit 75d81f7) into `.claude/skills/scroll-craft/` and `.agents/skills/scroll-craft/`, with `VENDORED.md`. `.scrollcraft.json` at the repo root routes builds to `websites/TruongSon-demos/scrollcraft/`. Linked from CLAUDE.md and AGENTS.md.
