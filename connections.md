@@ -2,6 +2,8 @@
 
 Registry of every system your AIOS can reach. Filled by `/onboard` from Q4-Q7 answers; expanded over time as you wire new tools. `/audit` checks this file for domain coverage and freshness.
 
+**Status (2026-11-20):** setup phase on a temporary claude.ai account. Its Gmail, Drive and Calendar connectors are not our business accounts, so don't use them. Rows 1 to 7 get wired after the move to our own plan.
+
 | # | Domain | Tool | Mechanism | Auth | Last checked |
 |---|---|---|---|---|---|
 | 1 | Revenue / Financials | Stripe (planned, not set up) | not yet connected | — | — |
