@@ -6,7 +6,7 @@ dataset, pushes this file as the kernel, and downloads /kaggle/working/out.mp4.
 Job folder (one shot):
   clay.mp4          the clay clip (structure and camera move), 5 s or less
   refs/*.jpg        1 to 3 real photos of that spot (the look); on Kaggle they arrive as ref_1.jpg ...
-  first.png         optional: the painted first frame (step 5); kept as frame 0
+  first.png         optional: a real-looking first frame; kept as frame 0
   prompt.txt        optional: one line describing the place
 
 How it works: the clay clip becomes a depth video (Depth Anything V2 Small), which VACE uses as
