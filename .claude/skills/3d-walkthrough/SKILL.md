@@ -49,7 +49,8 @@ Draw a rough top-down layout from the photos and the satellite view (a small SVG
 
 - Camera path through the stops (smooth curve, gentle ease in and out), 24 fps, 1280x720, about 52 degrees vertical field of view.
 - Render with Workbench (flat clay with cavity and shadow). Headless here: `apt-get install -y libegl1 libegl-mesa0 libgl1-mesa-dri` and run with `EGL_PLATFORM=surfaceless`. About 10 s a frame on CPU.
-- Split the route into shots of 5 s or less (121 frames), one per stop pair: street to door, door to inside, inside to counter, and so on. `ffmpeg -framerate 24 -i f_%04d.png -c:v libx264 -crf 16 -pix_fmt yuv420p shot.mp4`.
+- Render the whole route as **one continuous camera path**, then cut it into shots of 5 s or less (121 frames), one per stop pair: street to door, door to inside, inside to counter, and so on.
+- **Clips must join cleanly.** Each clip starts on the exact frame where the previous one ends, at the same walking speed. No ease-out at the end of one clip and ease-in at the start of the next, and no overlap: either one reads as the camera stopping. If shots were rendered separately, find the matching frame (smallest image difference), cut there, and drop frames from any slow tail so the per-frame motion matches across the join. `ffmpeg -framerate 24 -i f_%04d.png -c:v libx264 -crf 16 -pix_fmt yuv420p shot.mp4`.
 - Check a start, middle and end contact sheet of each shot: no jumps, no camera inside walls, furniture all there.
 
 ## 5. Paint the first frame
@@ -64,7 +65,7 @@ Check every clip against its photos and the clay clip: layout holds, nothing dri
 
 ## 7. Build the site
 
-Scroll triggers each clip, it doesn't scrub it.
+Scroll triggers each clip, it doesn't scrub it. Reference build: `websites/TruongSon-demos/corner-crema-mockup/` (copy its script for the player).
 
 - **One clip per chapter.** Scrolling into a chapter plays its clip at normal speed; scrolling back plays it in reverse.
 - **Loaded per chapter.** 1 to 3 MB per clip, preload only the next one. About 10 to 20 MB in total.

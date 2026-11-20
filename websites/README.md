@@ -17,6 +17,7 @@ websites/
 | --- | --- | --- | --- |
 | TruongSon-demos | Forno Notte, 3D scroll pizzeria demo | Live at https://nguyenlieu12379.github.io/truongson-OS/forno-notte/ | `websites/TruongSon-demos/forno-notte/` |
 | TruongSon-demos | Coastal Cottage, baked live-3D walkthrough (golden hour) | Live at https://nguyenlieu12379.github.io/truongson-OS/coastal-cottage/ (after merge) | `websites/TruongSon-demos/coastal-cottage/` |
+| TruongSon-demos | Corner Crema, walkthrough mockup (clay clips, queued playback); reference for `/3d-walkthrough` step 7 | Not published | `websites/TruongSon-demos/corner-crema-mockup/` |
 
 ## Add a site
 
