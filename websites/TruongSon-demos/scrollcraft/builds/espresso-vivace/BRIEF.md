@@ -1,3 +1,5 @@
+> **Superseded 2026-11-20 (v3).** Son asked for a short, direct site: menu, map, ordering. The page is no longer a scroll-craft build; see README.md. This brief records the earlier editorial version.
+
 # BRIEF: Espresso Vivace (concept demo)
 
 **Self-authored under explicit creative delegation.** Son said: "just pick the simplest one, find inputs online and build" (2026-11-20). No interview with the business. Every decision below is ours; facts are sourced, assumptions are labeled.
