@@ -84,6 +84,19 @@ The kit includes setup, ongoing context interviews, routing, verification, a wee
 | `/level-up` | Recurring thinking skill | Day 14, then weekly. Three Ms interview (Mindset → Method → Machine). One run = one shipped artifact. |
 | `/3d-brain` | Interactive knowledge explorer | Choose your brain's name and categories. Builds a local 3D globe from your selected files, with search, note reading, Cinema, and a branching growth replay. |
 
+### Added in this repo — 6 more
+
+| Skill | Type | When to run |
+|---|---|---|
+| `/watch` | Video reader (vendored, MIT) | Watch a YouTube link or video file. Captions plus frames. Cloud sessions get the transcript only. |
+| `/scroll-craft` | Website builder (vendored, MIT) | Premium scroll-driven landing pages. Builds go to `websites/TruongSon-demos/scrollcraft/`. |
+| `/sales-agent` | Cold-outreach agent (vendored, MIT) | Harvey. Not set up. Sends real email, so confirm list, copy and sending account first. |
+| `/craft-anything` | Study and rebuild (vendored, MIT/Apache) | Rebuild a site or app we own or may copy. Early alpha. Not set up. |
+| design-skills | Kit pack (no slash command) | All UI design work. Entry: `.claude/skills/design-skills/skills/emil-design-eng/SKILL.md`. |
+| video-edit-kit | Kit pack (no slash command) | Talking-head edits, Reels and Shorts. Entry: `.claude/skills/video-edit-kit/AGENTS.md`. |
+
+Full routing for every skill and pack: `CLAUDE.md` (Claude) and `AGENTS.md` (Codex).
+
 `/audit` checks whether the AI OS can find its information and perform useful work reliably. Rubric v2 awards points for evidence, not folder counts, API keys, or skills named "daily." Missing or unverified layers cap the total; installed skills cannot compensate for absent connections or execution history. The report includes five retrieval probes, stale-cache and source-authority checks, operating-manual differences, skill-package compatibility, and up to three prioritized improvements. It separates confirmed defects, verification gaps, intentional runtime differences, and optional improvements. The score measures verified operational reliability, not overall usefulness. Old rubric scores need a new baseline.
 
 **Automatic audit history:** Every `/audit` saves a unique dated Markdown report in `audits/` and compares it with relevant prior reports. Findings retain their IDs and are tracked as new, still open, resolved, reopened, not rechecked, or no longer applicable. Resolution requires fresh evidence. Score comparisons distinguish actual fixes from better evidence and changed coverage. Earlier reports are preserved; the inspected system is unchanged apart from the new local report. Audit reports are gitignored because they may contain private project context. An explicit request not to save overrides this default.
@@ -116,7 +129,7 @@ The complete [skill package](.claude/skills/3d-brain/README.md) includes source 
 
 ### Using the kit in Codex
 
-The six skills are also installed under `.agents/skills/`. Use the skill picker (`/skills` in Codex CLI or the IDE extension), or type `$` and select `audit`, `link`, `onboard`, `level-up`, `grill-me`, or `3d-brain`. Codex normally detects skill updates automatically; restart it if the list does not refresh.
+All skills and packs are also installed under `.agents/skills/`. Use the skill picker (`/skills` in Codex CLI or the IDE extension), or type `$` and select `audit`, `link`, `onboard`, `level-up`, `grill-me`, `3d-brain`, `watch`, `scroll-craft`, `sales-agent`, or `craft-anything`. Codex normally detects skill updates automatically; restart it if the list does not refresh.
 
 `.claude/skills/` remains the authoring source. After editing a skill, run `bash scripts/sync-codex-skills.sh <skill-name>` to regenerate its Codex copy, supporting files, and menu metadata. The onboard intake template and level-up framework travel with their skills; existing projects retain their own canonical context routes.
 
@@ -152,7 +165,7 @@ AIS-OS/
 ├── brainstorms/                     ← Created by /grill-me; saved interviews (gitignored)
 ├── audits/                          ← Created on first audit; dated private reports (gitignored)
 ├── scripts/sync-codex-skills.sh      ← Regenerates the Codex skill copies
-├── .agents/skills/                  ← Codex copies of all six skills and supporting files
+├── .agents/skills/                  ← Codex copies of every skill and pack
 └── .claude/
     └── skills/
         ├── onboard/SKILL.md
@@ -160,7 +173,13 @@ AIS-OS/
         ├── level-up/SKILL.md
         ├── grill-me/SKILL.md
         ├── 3d-brain/                ← Skill, portable app template, docs, and validation scripts
-        └── link/SKILL.md
+        ├── link/SKILL.md
+        ├── watch/                   ← Vendored: YouTube/video reader
+        ├── scroll-craft/            ← Vendored: scroll-driven landing pages
+        ├── design-skills/           ← Vendored kit pack: UI design
+        ├── video-edit-kit/          ← Vendored kit pack: video editing
+        ├── sales-agent/             ← Vendored: Harvey cold outreach (not set up)
+        └── craft-anything/          ← Vendored: study and rebuild (not set up)
 ```
 
 See `EXPANSIONS.md` for what to add as you grow (`projects/`, `templates/`, `scripts/`, `.claude/agents/`, sub-OS folders, etc.).
