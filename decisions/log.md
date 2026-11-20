@@ -174,3 +174,11 @@ Limit: the pack expects Blender MCP and a desktop Blender app. Cloud sessions ap
 Open: the AI video models, their cost and free-tier limits. Tested so far on Il Dante Caffe clay clips with free Hugging Face demos (Qwen Image Edit, LTX 2.3 Studio); the free GPU quota ran out before a full run.
 
 **Owner:** Son
+
+## 2026-11-20 - 3d-walkthrough site: queued clips that speed up to catch up
+
+**Decision:** The walkthrough site plays one clip per chapter on scroll (triggered, not scrubbed). Clips are queued in route order and speed up (to 3x) when the visitor scrolls ahead or back, hand off on matching frames with a hard cut, reverse by stepping `currentTime`, and load into memory as blobs. Added to step 7 of `/3d-walkthrough`.
+
+**Why:** Tested on the Corner Crema mockup. Fading between clips flashed the background, fast scrolls cut clips off, and reverse failed on hosts without byte-range support. The queued, sped-up playback felt good to Son; scroll-scrubbing was tried and set aside.
+
+**Owner:** Son
