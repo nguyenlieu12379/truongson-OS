@@ -68,6 +68,10 @@ Scroll triggers each clip, it doesn't scrub it.
 
 - **One clip per chapter.** Scrolling into a chapter plays its clip at normal speed; scrolling back plays it in reverse.
 - **Loaded per chapter.** 1 to 3 MB per clip, preload only the next one. About 10 to 20 MB in total.
+- **Queued, never skipped.** Clips play in route order. When the visitor scrolls several chapters ahead (or back), each queued clip speeds up (1x plus 0.75x per chapter still to go, up to 3x) so the camera catches up without cutting. Turning around mid-clip reverses from that exact frame.
+- **Seamless hand-off.** Each clip starts on the previous clip's last frame. Pre-seek the next clip, show it only once its first frame is painted (`requestVideoFrameCallback`, else the `playing` event), then hard-cut. No cross-fade: fading both videos shows the background between them.
+- **Reverse by stepping.** Browsers don't play video backwards: step `currentTime` back each animation frame using the real clock (`performance.now()`), waiting while a seek is in flight.
+- **Load clips into memory.** `fetch` each clip and play it from a blob URL. Seeking and reverse need byte-range support, which not every host gives; a blob always seeks.
 - **Seek-ready encoding.** Every frame a keyframe (ffmpeg `-g 1`), so reverse and jumps are instant. A smaller set for phones (854 px wide).
 - **Scrubbed hero moments only.** One or two moments tied 1:1 to scroll (the espresso pour, the door opening): add in-between frames with RIFE (24 to 60 fps) and play them as a preloaded WebP frame sequence on a canvas.
 - **Reduced motion:** show each chapter's painted still instead of the video.
