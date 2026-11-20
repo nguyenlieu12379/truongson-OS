@@ -11,8 +11,7 @@ Registry of every system your AIOS can reach. Filled by `/onboard` from Q4-Q7 an
 | 5 | Project / task tracking | Notion (assumed, confirm) | not yet connected | — | — |
 | 6 | Meeting intelligence | Google Meet (no recorder yet) | not yet connected | — | — |
 | 7 | Knowledge / files | Notion | not yet connected | — | — |
-| 8 | Video generation | Muapi (api.muapi.ai) via `.claude/skills/muapi-video/` | key+ref (`references/muapi-api.md`) | `MUAPI_API_KEY` not set yet | 2026-11-14 |
-| 9 | Video watching (YouTube, files) | yt-dlp + ffmpeg via `.claude/skills/watch/` | script | none (local engine); optional free `GEMINI_API_KEY` for visuals in cloud | 2026-11-20 |
+| 8 | Video watching (YouTube, files) | yt-dlp + ffmpeg via `.claude/skills/watch/` | script | none (local engine); optional free `GEMINI_API_KEY` for visuals in cloud | 2026-11-20 |
 
 **Mechanism options:** `mcp` (MCP server), `script` (Python/Bash hitting an API, in `scripts/`), `export` (CSV/JSON dump pipeline), `key+ref` (`.env` key + `references/{tool}-api.md` guide), `not yet connected`.
 

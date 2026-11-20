@@ -17,7 +17,6 @@ Read `references/3ms-framework.md` once. It's how Son and Truong think about AI 
 - `/grill-me`: Deepen context through one-question interviews. Saves every answer to `brainstorms/`; requested context-building sessions also update relevant context pages with confirmed facts.
 - `/link`: Link a project, file, folder, or source into the right operating-manual route or index.
 - `/3d-brain`: Choose a brain name and categories, then build a local 3D knowledge globe with Cinema and interactive growth replay. Uses selected local files and the bundled app template.
-- `/3d-walkthrough`: Scroll-driven walkthrough website or film of an F&B venue (restaurant, cafe, coffee shop, bar), always a real, open place. Blender builds only the structure as plain clay along the route (street, door, inside, hero spot). Real photos of every corner give the look: a free AI video model (Wan2.1 VACE on Kaggle's free GPU) takes each clay clip plus the photos and makes the real-looking clip. The site plays one short clip per chapter on scroll (triggered, not scrubbed). Always loads design-skills first. Path: `.claude/skills/3d-walkthrough/`.
 - `/watch` (bradautomates/claude-video, MIT): Watch a YouTube link or video file. Pulls captions and frames so the AI can answer questions about it. Free local mode by default; in cloud sessions YouTube blocks the download, so you get the transcript only. Read `VENDORED.md` first for setup. Path: `.claude/skills/watch/`.
 - `/level-up` — Weekly 3Ms interview. Find one automation, scope it, ship it. One per week.
 
@@ -29,8 +28,8 @@ Each pack is a full copy of one Sunaii kit with its own `VENDORED.md` (source an
 - **scroll-craft (Nate Herk, MIT):** premium scroll-driven landing pages (layered heroes, scrollytelling, scrub-video acts, one bespoke signature move). Runs as `/scroll-craft`. Interview brief first, then grammar, fingerprint gate, build, and Playwright scroll verification. Assets from real client photos (no key) or generated via kie.ai (`KIE_AI_API_KEY`, costs credits). Builds go to `websites/TruongSon-demos/scrollcraft/` via `.scrollcraft.json`. Pair with design-skills for UI polish. Path: `.claude/skills/scroll-craft/`. Entry: `SKILL.md`.
 - `PRODUCT.md` is product context for the TruongSon site (users, positioning, rules). Read it before design work on that site.
 - **video-edit-kit:** talking-head editing, Reels and Shorts, HyperFrames motion graphics. Use for video or Instagram content. Path: `.claude/skills/video-edit-kit/`. Entry: `.claude/skills/video-edit-kit/AGENTS.md`, then `docs/WORKFLOW.md`
-- **muapi-video (SamurAIGPT muapi-skills, MIT):** AI video generation through the Muapi API. Text-to-video, image-to-video, and 16 motion recipes (product ads, UGC, music video). Use for any generated video clip. Needs `MUAPI_API_KEY`. Path: `.claude/skills/muapi-video/`. Entry: `.claude/skills/muapi-video/SKILL.md`. API guide: `references/muapi-api.md`.
-- **sales-agent (Harvey):** cold-outreach agent. Use only when Son or Truong asks to set it up or run it. It sends real email, so confirm the list, copy, and sending account first. Path: `.claude/skills/sales-agent/`. Entry: `.claude/skills/sales-agent/CLAUDE.md`
+- **sales-agent (Harvey), `/sales-agent`:** cold-outreach agent. Not set up yet. Use only when Son or Truong asks to set it up or run it. It sends real email, so confirm the list, copy, and sending account first. Path: `.claude/skills/sales-agent/`. Entry: `.claude/skills/sales-agent/SKILL.md`, then the pack's `CLAUDE.md`
+- **craft-anything (storytold, MIT/Apache), `/craft-anything`:** study a website, web app or app, then rebuild our own version. Early alpha. Not set up. Only for software we own or have permission to copy; never a competitor's. Path: `.claude/skills/craft-anything/`. Entry: `.claude/skills/craft-anything/SKILL.md`, then the pack's `README.md`
 
 ## Where things live
 
@@ -40,7 +39,7 @@ Each pack is a full copy of one Sunaii kit with its own `VENDORED.md` (source an
 - `decisions/log.md` — append-only record of decisions and why
 - `brainstorms/` - Dated interview captures and resume points. Read relevant captures on demand; confirmed current context belongs in its canonical page.
 - `audits/` — dated audit reports and finding history; point-in-time evidence, not live business state
-- `websites/` — website projects, one folder per owner (`websites/<owner>/<site-name>/`). Index and rules: `websites/README.md`. Pizza demo (live on Pages): `websites/TruongSon-demos/forno-notte/`.
+- `websites/` — website projects, one folder per owner (`websites/<owner>/<site-name>/`). Index and rules: `websites/README.md`. Scroll-craft builds: `websites/TruongSon-demos/scrollcraft/builds/`.
 - `archives/` — old stuff. Don't delete. Move here.
 
 See `EXPANSIONS.md` for what to add as you grow.

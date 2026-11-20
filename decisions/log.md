@@ -240,3 +240,25 @@ Open: needs a Kaggle account with a verified phone and an API token (not set up 
 **Alternatives considered:** Building scroll pages by hand with design-skills only. `/3d-walkthrough` stays the tool for venue walk-throughs; scroll-craft is for brand landing pages.
 
 **Owner:** Son
+
+## 2026-11-20 - Delete /3d-walkthrough and every earlier site; scroll-craft replaces it
+
+**Decision:** Scroll-craft passed its test, so `/3d-walkthrough` is deleted (not archived) with everything built for it: the skill and its Codex copy, the sites Forno Notte, Coastal Cottage, Corner Crema mockup and Il Dante Caffe, `projects/` (3d-walkthrough-skill, coastal-cottage, haulover-cafe, il-dante), and `archives/` 3d-walkthrough-film-site and haulover-beach-cafe-site. Links removed from CLAUDE.md, AGENTS.md, README.md, EXPANSIONS.md, websites/README.md and the Pages workflow. The Pages root now redirects to Espresso Vivace. Kept: design-skills, /watch, scroll-craft and its builds.
+
+**Why:** Requested directly, overriding the "move to archives" rule. Forno Notte and Coastal Cottage go offline on the next Pages deploy. Everything stays recoverable from git history (last commit with it: aa0f5ec). Asked by: Son.
+
+## 2026-11-20 - Remove muapi-video
+
+**Decision:** Retire the muapi-video skill. Moved `.claude/skills/muapi-video/`, its `.agents/skills/` mirror and `references/muapi-api.md` to `archives/muapi-video-2026-11-20/`. Removed it from CLAUDE.md, AGENTS.md and `connections.md`. Never set up (`MUAPI_API_KEY` was never added).
+
+**Why:** Son asked to remove it. To bring it back, move the folders back and restore the lines.
+
+**Owner:** Son
+
+## 2026-11-20 - Add craft-anything; list every skill in README
+
+**Decision:** Vendor storytold/craft-anything (MIT/Apache-2.0, commit 827be60) into `.claude/skills/craft-anything/` with a `SKILL.md` entry point and the `.agents/skills/` mirror. Linked from CLAUDE.md and AGENTS.md. Not set up. README now lists every skill and pack, not only the six kit skills.
+
+**Why:** It is the pick over REA for rebuilding websites and web apps (REA only analyzes). First test is our own Forno Notte demo against the scroll-craft flow. Only for software we own or may copy. For a CRM, check open-source CRMs first. README was missing watch, scroll-craft, sales-agent, design-skills and video-edit-kit.
+
+**Owner:** Son
