@@ -99,7 +99,9 @@ Scroll triggers each clip, it doesn't scrub it. Reference build: `websites/Truon
 - **Reverse by stepping.** Browsers don't play video backwards: step `currentTime` back each animation frame using the real clock (`performance.now()`), waiting while a seek is in flight.
 - **Load clips into memory.** `fetch` each clip and play it from a blob URL. Seeking and reverse need byte-range support, which not every host gives; a blob always seeks.
 - **Seek-ready encoding.** Every frame a keyframe (ffmpeg `-g 1`), so reverse and jumps are instant. A smaller set for phones (854 px wide).
-- **Scrubbed hero moments only.** One or two moments tied 1:1 to scroll (the espresso pour, the door opening): add in-between frames with RIFE (24 to 60 fps) and play them as a preloaded WebP frame sequence on a canvas.
+- **Scrubbed hero moments only.** One or two moments tied 1:1 to scroll (the espresso pour, the door opening), 1 to 3 s each:
+    - Frames: `bash scripts/hero_frames.sh <clip.mp4> <site>/hero/<moment> --start S --dur S`. RIFE (free, CPU, rife-v4.6) fills in-between frames from 24 to 60 fps and saves WebP sets (1280 and 854 wide) plus `frames.json`. About 1.6 s per frame on a cloud CPU: 1.5 s of clip took 2.5 min, 1.5 MB desktop, 1.1 MB phone. First run downloads RIFE (430 MB) and a software Vulkan driver.
+    - Player: copy `assets/scrub/scrub.js`. A tall section with a sticky canvas; `scrub(section, 'hero/<moment>/')`. Loads when two screens away, decodes every frame once, draws the frame for the scroll position, one still under reduced motion.
 - **Reduced motion:** show a still from each chapter's clip instead of the video.
 - One short text panel per chapter: name, what's there, the hero line. Show the user the draft headlines before treating them as final.
 
