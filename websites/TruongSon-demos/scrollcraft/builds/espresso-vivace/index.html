@@ -83,41 +83,17 @@
     </div>
   </section>
 
-  <!-- PEAK · THE POUR: pinned, bespoke. Scroll pours the rosetta. -->
-  <section class="ch--dark pour" data-sc-act="pin" data-sc-span="3" id="pour" data-folio="III" data-folio-t="The pour">
+  <!-- PEAK · THE POUR: a real rosetta pour, scrubbed by the reader's hand. -->
+  <section class="ch--dark pour" data-sc-act="scrub" data-sc-span="2.8" data-sc-dwell="0.3" id="pour" data-folio="III" data-folio-t="The pour">
     <div data-sc-stage class="pour__stage">
-      <svg class="cup" viewBox="-300 -300 600 600" role="img" aria-labelledby="cup-t">
-        <title id="cup-t">A cup of espresso seen from above. As you scroll, steamed milk pours in and forms a rosetta.</title>
-        <defs>
-          <radialGradient id="crema" cx="0" cy="0" r="200" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#C9945F"/>
-            <stop offset="0.55" stop-color="#9C6036"/>
-            <stop offset="0.9" stop-color="#6A3A1C"/>
-            <stop offset="1" stop-color="#4A2712"/>
-          </radialGradient>
-          <radialGradient id="porcelain" cx="-40" cy="-60" r="320" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#FFFFFF"/>
-            <stop offset="1" stop-color="#D9D5CD"/>
-          </radialGradient>
-          <linearGradient id="milkshade" x1="0" y1="-1" x2="0" y2="1">
-            <stop offset="0" stop-color="#FFFDF8"/>
-            <stop offset="1" stop-color="#EFE6D8"/>
-          </linearGradient>
-          <clipPath id="surface"><circle r="192"/></clipPath>
-        </defs>
-        <circle class="cup__shadow" r="262" cx="14" cy="22"/>
-        <circle r="258" fill="url(#porcelain)"/>
-        <circle r="214" fill="#E8E4DC"/>
-        <circle r="198" fill="#3A1E0D"/>
-        <circle r="192" fill="url(#crema)"/>
-        <g clip-path="url(#surface)">
-          <g class="milk" id="milk"></g>
-          <path class="pullthrough" id="pull" d="M 0 -176 C 2 -60, -2 60, 0 168" pathLength="1"/>
-        </g>
-        <rect class="stream" id="stream" x="-6" y="-900" width="12" height="900" rx="6"/>
-      </svg>
-      <div class="pour__copy" data-sc-cue="0.8 1 0.06 0.04">
+      <div class="cupframe">
+        <img class="sc-stage__poster" src="assets/pour-poster.webp" alt="" width="720" height="720">
+        <img class="pour__final" src="assets/pour-final.webp" alt="A finished rosetta in a cup of latte." width="720" height="720">
+        <video data-sc-scrub data-sc-src="assets/pour.mp4" data-sc-src-mobile="assets/pour-m.mp4" muted playsinline aria-label="A barista pours steamed milk into espresso, wiggling the pitcher to form a rosetta, then pulls through."></video>
+      </div>
+      <div class="pour__copy" data-sc-cue="0.62 1 0.08 0.04">
         <p class="pour__lede">Schomer is credited with developing and popularizing latte art in the United States.</p>
+        <p class="pour__credit">A rosetta pour. Video: Anna Frodesiak, CC0.</p>
       </div>
     </div>
   </section>
