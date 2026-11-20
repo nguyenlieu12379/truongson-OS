@@ -11,11 +11,19 @@ websites/
       assets/
 ```
 
+## Primary demo
+
+**Espresso Vivace** is the primary demo and the reference style for new sites (Son, 2026-11-20: "the best site I've built").
+
+- Live: https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/
+- Folder: `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` (its README lists sources and what to update each season)
+- The style: short and practical. Hero with live open-now status and Order, then menu, locations with storefront photo and maps, ordering. Looping pour video, vector logo, subtle appear-on-scroll. Facts only from the business's own site or listings; no invented prices.
+
 ## Sites
 
 | Owner | Site | Status | Path |
 | --- | --- | --- | --- |
-| TruongSon-demos | Espresso Vivace, practical cafe concept (menu, live open-now, maps, ordering) | Live at https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/ | `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` |
+| TruongSon-demos | **Espresso Vivace (primary demo)**, practical cafe concept (menu, live open-now, maps, ordering) | Live at https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/ | `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` |
 
 Scroll-craft builds live in `websites/TruongSon-demos/scrollcraft/builds/` (set by `.scrollcraft.json`), next to the skill's `FINGERPRINTS.md` registry.
 
