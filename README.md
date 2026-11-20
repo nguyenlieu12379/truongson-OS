@@ -77,23 +77,23 @@ The kit includes setup, ongoing context interviews, routing, verification, a wee
 
 | Skill | Type | When to run |
 |---|---|---|
-| `/onboard` | Setup wizard (one-time) | Day 1, immediately after clone. 7-question interview. Generates the Day-1 file set and fills the shared `CLAUDE.md` and `AGENTS.md` manuals. |
-| `/grill-me` | Saved context interview | Any time you want to unpack a plan or add more context. Asks one question at a time and saves every answer to `brainstorms/`. |
-| `/audit` | Evidence-based check | After setup, after a meaningful fix, and weekly while building. Checks routing, freshness, and Claude/Codex compatibility, scores verified reliability, and automatically saves a dated report. |
-| `/link` | Routing helper | When adding a project, file, folder, or important source. Adds the smallest useful manual/index route and checks it resolves. |
-| `/level-up` | Recurring thinking skill | Day 14, then weekly. Three Ms interview (Mindset → Method → Machine). One run = one shipped artifact. |
-| `/3d-brain` | Interactive knowledge explorer | Choose your brain's name and categories. Builds a local 3D globe from your selected files, with search, note reading, Cinema, and a branching growth replay. |
+| [`/onboard`](.claude/skills/onboard/SKILL.md) | Setup wizard (one-time) | Day 1, immediately after clone. 7-question interview. Generates the Day-1 file set and fills the shared `CLAUDE.md` and `AGENTS.md` manuals. |
+| [`/grill-me`](.claude/skills/grill-me/SKILL.md) | Saved context interview | Any time you want to unpack a plan or add more context. Asks one question at a time and saves every answer to `brainstorms/`. |
+| [`/audit`](.claude/skills/audit/SKILL.md) | Evidence-based check | After setup, after a meaningful fix, and weekly while building. Checks routing, freshness, and Claude/Codex compatibility, scores verified reliability, and automatically saves a dated report. |
+| [`/link`](.claude/skills/link/SKILL.md) | Routing helper | When adding a project, file, folder, or important source. Adds the smallest useful manual/index route and checks it resolves. |
+| [`/level-up`](.claude/skills/level-up/SKILL.md) | Recurring thinking skill | Day 14, then weekly. Three Ms interview (Mindset → Method → Machine). One run = one shipped artifact. |
+| [`/3d-brain`](.claude/skills/3d-brain/SKILL.md) | Interactive knowledge explorer | Choose your brain's name and categories. Builds a local 3D globe from your selected files, with search, note reading, Cinema, and a branching growth replay. |
 
 ### Added in this repo — 6 more
 
 | Skill | Type | When to run |
 |---|---|---|
-| `/watch` | Video reader (vendored, MIT) | Watch a YouTube link or video file. Captions plus frames. Cloud sessions get the transcript only. |
-| `/scroll-craft` | Website builder (vendored, MIT) | Premium scroll-driven landing pages. Builds go to `websites/TruongSon-demos/scrollcraft/`. |
-| `/sales-agent` | Cold-outreach agent (vendored, MIT) | Harvey. Not set up. Sends real email, so confirm list, copy and sending account first. |
-| `/craft-anything` | Study and rebuild (vendored, MIT/Apache) | Rebuild a site or app we own or may copy. Early alpha. Not set up. |
-| design-skills | Kit pack (no slash command) | All UI design work. Entry: `.claude/skills/design-skills/skills/emil-design-eng/SKILL.md`. |
-| video-edit-kit | Kit pack (no slash command) | Talking-head edits, Reels and Shorts. Entry: `.claude/skills/video-edit-kit/AGENTS.md`. |
+| [`/watch`](.claude/skills/watch/SKILL.md) | Video reader (vendored, MIT) | Watch a YouTube link or video file. Captions plus frames. Cloud sessions get the transcript only. |
+| [`/scroll-craft`](.claude/skills/scroll-craft/SKILL.md) | Website builder (vendored, MIT) | Premium scroll-driven landing pages. Builds go to `websites/TruongSon-demos/scrollcraft/`. |
+| [`/sales-agent`](.claude/skills/sales-agent/SKILL.md) | Cold-outreach agent (vendored, MIT) | Harvey. Not set up. Sends real email, so confirm list, copy and sending account first. |
+| [`/craft-anything`](.claude/skills/craft-anything/SKILL.md) | Study and rebuild (vendored, MIT/Apache) | Rebuild a site or app we own or may copy. Early alpha. Not set up. |
+| [design-skills](.claude/skills/design-skills/skills/emil-design-eng/SKILL.md) | Kit pack (no slash command) | All UI design work. Entry: `.claude/skills/design-skills/skills/emil-design-eng/SKILL.md`. |
+| [video-edit-kit](.claude/skills/video-edit-kit/AGENTS.md) | Kit pack (no slash command) | Talking-head edits, Reels and Shorts. Entry: `.claude/skills/video-edit-kit/AGENTS.md`. |
 
 Full routing for every skill and pack: `CLAUDE.md` (Claude) and `AGENTS.md` (Codex).
 
