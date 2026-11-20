@@ -127,16 +127,19 @@ a:focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 4px; bord
 .chapter-no--big { font-size: clamp(4rem, 3rem + 6vw, 9rem); line-height: 1; margin: 0; }
 .hush__t { font-family: var(--sc-font-display); font-size: var(--sc-t-2xl); letter-spacing: -0.02em; margin: var(--sc-3) 0 0; color: var(--dark-ink); }
 
-/* ---- PEAK · the pour ---- */
-.pour__stage { height: 100svh; display: grid; place-items: center; overflow: hidden; }
-.cup { width: min(76svh, 88vw); height: auto; overflow: visible; }
-.cup__shadow { fill: rgb(0 0 0 / 0.45); filter: blur(18px); }
-.milk path { fill: #FBF6EC; }
-.milk circle { fill: #FBF6EC; }
-#pull { fill: none; stroke: #A9693B; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
-.stream { fill: #FBF7EF; opacity: 0; }
-.pour__copy { position: absolute; left: var(--gutter); bottom: clamp(2rem, 7vh, 4.5rem); max-width: 30ch; }
+/* ---- PEAK · the pour: real footage, scrubbed, in its own column ---- */
+.pour__stage { height: 100svh; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--sc-5); align-items: center; padding: 0 var(--gutter); overflow: hidden; }
+.pourframe { grid-column: 5 / span 8; grid-row: 1; position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--sc-r-sm, 4px); background: #2A2620; box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.8); }
+.pourframe picture { display: contents; }
+.pour__final { display: none; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+.pour__copy { grid-column: 1 / span 4; grid-row: 1; align-self: end; padding-bottom: clamp(2rem, 9vh, 6rem); }
 .pour__lede { margin: 0; font-family: var(--sc-font-display); font-size: var(--sc-t-xl); line-height: 1.2; letter-spacing: -0.012em; color: var(--dark-ink); text-wrap: balance; }
+.pour__credit { margin: var(--sc-3) 0 0; font-size: var(--sc-t-xs); color: var(--dark-soft); letter-spacing: 0.01em; }
+@media (max-width: 860px) {
+  .pour__stage { grid-template-columns: 1fr; grid-template-rows: auto auto; align-content: center; gap: var(--sc-5); padding-top: var(--sc-8); }
+  .pourframe { grid-column: 1; grid-row: 1; aspect-ratio: 4 / 5; width: min(100%, 52svh); justify-self: center; }
+  .pour__copy { grid-column: 1; grid-row: 2; align-self: start; padding-bottom: 0; }
+}
 
 /* ---- the real one ---- */
 .real { display: grid; justify-items: center; gap: var(--sc-5); padding-top: var(--sc-7); }
@@ -196,9 +199,9 @@ a:focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 4px; bord
 
 @media (prefers-reduced-motion: reduce) {
   .folio__ch { transition: none; }
-  /* No pinned hold without motion: the finished rosetta is one screen, not three. */
+  /* No pinned hold without motion: the poster frame is one screen, not three. */
   #pour { height: auto !important; }
   #pour .pour__stage { position: relative !important; top: auto !important; }
   #pour .pour__copy { opacity: 1 !important; transform: none !important; }
-  .stream { display: none; }
+  .pour__final { display: block; }
 }
