@@ -87,6 +87,166 @@
     });
   };
 
+
+  /* ===================== v3.3: order flow (demo cart, no prices, no payment) ===================== */
+  var MILK = ["Macchiato", "Cappuccino", "Caffe Latte", "White Velvet", "Caffe Caramel", "Caffe Mocha",
+              "Iced Latte", "Iced White Velvet", "Iced Caffe Caramel", "Iced Mocha", "Hot Chocolate", "Steamed Milk"];
+  // Drinks the menu lists both hot and iced: [hot name, iced name].
+  var PAIRS = [["Caffe Latte", "Iced Latte"], ["White Velvet", "Iced White Velvet"], ["Caffe Caramel", "Iced Caffe Caramel"],
+               ["Caffe Soy", "Iced Caffe Soy"], ["Caffe Mocha", "Iced Mocha"], ["Americano", "Iced Americano"], ["Tea", "Iced Tea"]];
+  var NO_SIZE = ["Espresso", "Sugared Espresso (Vita)", "Macchiato"];
+  var KEY = "vivace-cart-v1";
+
+  var pairOf = function (name) {
+    for (var i = 0; i < PAIRS.length; i++) {
+      if (PAIRS[i][0] === name) return { base: PAIRS[i][0], temp: "Hot" };
+      if (PAIRS[i][1] === name) return { base: PAIRS[i][0], temp: "Iced" };
+    }
+    return null;
+  };
+  var load = function () { try { var v = JSON.parse(localStorage.getItem(KEY) || "[]"); return Array.isArray(v) ? v : []; } catch (e) { return []; } };
+  var save = function () { try { localStorage.setItem(KEY, JSON.stringify(cart)); } catch (e) { /* private mode: cart lives for this visit */ } };
+  var cart = load();
+
+  var addDlg = document.getElementById("add");
+  var cartDlg = document.getElementById("cart");
+  var cartBtn = document.querySelector(".cart-btn");
+  var form = document.getElementById("add-form");
+  var qtyOut = document.getElementById("add-qty");
+  var current = null, opener = null, qty = 1;
+
+  var open = function (dlg, from) {
+    opener = from || document.activeElement;
+    if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
+  };
+  var close = function (dlg) { if (dlg.open) dlg.close(); };
+  [addDlg, cartDlg].forEach(function (dlg) {
+    if (!dlg) return;
+    dlg.addEventListener("close", function () { if (opener && document.contains(opener)) opener.focus(); });
+    // Keep Tab inside the open panel (native modals let it escape to the browser UI).
+    dlg.addEventListener("keydown", function (e) {
+      if (e.key !== "Tab") return;
+      var f = Array.prototype.filter.call(dlg.querySelectorAll('button, [href], input, [tabindex]:not([tabindex="-1"])'), function (el) {
+        return !el.disabled && el.offsetParent !== null && !el.closest("[hidden]") && !(el.type === "radio" && !el.checked);
+      });
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+    dlg.addEventListener("click", function (e) {
+      if (e.target === dlg) close(dlg);                       // tap on the backdrop
+      if (e.target.closest("[data-close]")) close(dlg);
+    });
+  });
+
+  // Turn each menu line into a button.
+  Array.prototype.forEach.call(document.querySelectorAll(".menu li"), function (li) {
+    var note = li.querySelector(".m");
+    var name = li.firstChild.textContent.trim();
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "drink"; b.setAttribute("aria-haspopup", "dialog");
+    b.setAttribute("aria-label", "Add " + name);
+    b.innerHTML = '<span class="drink__name"></span><span class="drink__plus" aria-hidden="true">+</span>';
+    b.firstChild.textContent = name;
+    if (note) { b.firstChild.appendChild(document.createTextNode(" ")); b.firstChild.appendChild(note); }
+    b.dataset.drink = name;
+    li.textContent = ""; li.appendChild(b);
+    b.addEventListener("click", function () { startAdd(name, b); });
+  });
+
+  var setQty = function (n) {
+    qty = Math.max(1, Math.min(10, n)); qtyOut.textContent = qty;
+    form.querySelector('[data-step="-1"]').disabled = qty <= 1;
+    form.querySelector('[data-step="1"]').disabled = qty >= 10;
+  };
+  form.querySelectorAll("[data-step]").forEach(function (s) {
+    s.addEventListener("click", function () { setQty(qty + Number(s.dataset.step)); });
+  });
+  var show = function (opt, on) { form.querySelector('[data-opt="' + opt + '"]').hidden = !on; };
+
+  var startAdd = function (name, from) {
+    var p = pairOf(name);
+    current = { name: p ? p.base : name };
+    document.getElementById("add-h").textContent = p ? p.base : name;
+    form.reset(); setQty(1);
+    show("size", NO_SIZE.indexOf(name) < 0);
+    show("temp", !!p);
+    if (p) form.querySelector('input[name="temp"][value="' + p.temp + '"]').checked = true;
+    current.milkFor = function (temp) {
+      var n = p ? (temp === "Iced" ? PAIRS.filter(function (x) { return x[0] === p.base; })[0][1] : p.base) : name;
+      return MILK.indexOf(n) >= 0;
+    };
+    show("milk", current.milkFor(p ? p.temp : null));
+    open(addDlg, from);
+  };
+  form.querySelectorAll('input[name="temp"]').forEach(function (r) {
+    r.addEventListener("change", function () { if (current) show("milk", current.milkFor(r.value)); });
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var fd = new FormData(form);
+    var vis = function (opt) { return !form.querySelector('[data-opt="' + opt + '"]').hidden; };
+    var temp = vis("temp") ? fd.get("temp") : null;
+    var item = {
+      name: temp === "Iced" ? PAIRS.filter(function (x) { return x[0] === current.name; })[0][1] : current.name,
+      size: vis("size") ? fd.get("size") : null,
+      milk: vis("milk") ? fd.get("milk") : null,
+      notes: String(fd.get("notes") || "").trim().slice(0, 80) || null,
+      qty: qty
+    };
+    var same = cart.filter(function (c) { return c.name === item.name && c.size === item.size && c.milk === item.milk && c.notes === item.notes; })[0];
+    if (same) same.qty = Math.min(10, same.qty + item.qty); else cart.push(item);
+    save(); render(true);
+    close(addDlg);
+  });
+
+  var count = function () { return cart.reduce(function (n, c) { return n + c.qty; }, 0); };
+  var list = cartDlg.querySelector(".cart__list");
+  var render = function (bump) {
+    var n = count();
+    cartBtn.querySelector(".cart-btn__n").textContent = n;
+    cartBtn.classList.toggle("has", n > 0);
+    cartBtn.setAttribute("aria-label", "Cart, " + n + (n === 1 ? " item" : " items"));
+    if (bump) { cartBtn.classList.remove("bump"); void cartBtn.offsetWidth; cartBtn.classList.add("bump"); }
+    cartDlg.querySelector(".cart__empty").hidden = n > 0;
+    cartDlg.querySelector(".cart__foot").hidden = n === 0;
+    list.textContent = "";
+    cart.forEach(function (c, i) {
+      var li = document.createElement("li"); li.className = "cart__item";
+      var opts = [c.size, c.milk && c.milk + " milk", c.notes && "“" + c.notes + "”"].filter(Boolean).join(" · ");
+      li.innerHTML = '<span class="cart__name"></span><span class="cart__opts"></span>' +
+        '<span class="cart__ctrl"><span class="qty"><button type="button" class="qty__b" data-d="-1"></button><span class="n"></span>' +
+        '<button type="button" class="qty__b" data-d="1"></button></span><button type="button" class="rm">Remove</button></span>';
+      li.querySelector(".cart__name").textContent = c.name;
+      li.querySelector(".cart__opts").textContent = opts;
+      li.querySelector(".n").textContent = c.qty;
+      var minus = li.querySelector('[data-d="-1"]'), plus = li.querySelector('[data-d="1"]');
+      minus.textContent = "−"; plus.textContent = "+";
+      minus.setAttribute("aria-label", "One less " + c.name); plus.setAttribute("aria-label", "One more " + c.name);
+      plus.disabled = c.qty >= 10;
+      li.querySelector(".rm").setAttribute("aria-label", "Remove " + c.name);
+      minus.addEventListener("click", function () { if (c.qty > 1) { c.qty--; } else { cart.splice(i, 1); } save(); render(); focusIn(i, ".qty__b"); });
+      plus.addEventListener("click", function () { c.qty = Math.min(10, c.qty + 1); save(); render(); focusIn(i, '[data-d="1"]'); });
+      li.querySelector(".rm").addEventListener("click", function () { cart.splice(i, 1); save(); render(); focusIn(i, ".rm"); });
+      list.appendChild(li);
+    });
+  };
+  // Keep keyboard focus somewhere sensible after the list re-renders.
+  var focusIn = function (i, sel) {
+    var items = list.querySelectorAll(".cart__item");
+    var target = items[Math.min(i, items.length - 1)];
+    var el = target ? target.querySelector(sel) : cartDlg.querySelector(".x");
+    if (el && !el.disabled) el.focus(); else if (target) target.querySelector(".rm").focus(); else cartDlg.querySelector(".x").focus();
+  };
+  cartBtn.addEventListener("click", function () { document.getElementById("demo-note").hidden = true; open(cartDlg, cartBtn); });
+  document.getElementById("checkout").addEventListener("click", function () {
+    var note = document.getElementById("demo-note"); note.hidden = false;
+    note.querySelector("a").focus();
+  });
+  render(false);
+
   // Appear on scroll: tag groups, stagger children, reveal once on entry.
   var groups = [
     [".hero__text > *", 70, 0], [".hero__img", 0, 160],

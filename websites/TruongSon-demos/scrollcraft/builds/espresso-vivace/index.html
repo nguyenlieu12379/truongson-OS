@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Kaushan+Script&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="site.css?v=3.3">
+<link rel="stylesheet" href="site.css?v=3.4">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
@@ -48,7 +48,7 @@
   <nav class="bar__nav" aria-label="Sections">
     <a href="#menu">Menu</a>
     <a href="#visit">Locations</a>
-    <a class="bar__cta" href="#order">Order</a>
+    <a class="bar__cta" href="#menu">Order</a>
   </nav>
 </header>
 
@@ -64,7 +64,6 @@
         <li data-status="alley"><span class="dot"></span><b>Alley 24</b> <span class="status__t">Weekdays 6am to 4pm, weekends 7am to 5pm</span></li>
       </ul>
       <div class="hero__actions">
-        <a class="btn btn--primary" href="#order">Order</a>
         <a class="btn" href="#menu">See the menu</a>
       </div>
     </div>
@@ -77,10 +76,16 @@
   <!-- MENU -->
   <section class="block" id="menu" aria-labelledby="menu-h">
     <div class="block__head">
-      <h2 id="menu-h">Menu</h2>
-      <p class="note">Drinks as listed for Alley 24. Prices at the bar.</p>
+      <div class="menu__title">
+        <h2 id="menu-h">Menu</h2>
+        <button class="cart-btn" type="button" aria-haspopup="dialog" aria-controls="cart" aria-label="Cart, 0 items">
+          <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l-1.2 12.1a1.6 1.6 0 0 1-1.6 1.4H8.8a1.6 1.6 0 0 1-1.6-1.4L6 7Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 9.5V6.8a3 3 0 0 1 6 0v2.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          <span class="cart-btn__n" aria-hidden="true">0</span>
+        </button>
+      </div>
+      <p class="note">Tap a drink to add it. Drinks as listed for Alley 24. Prices at the bar.</p>
     </div>
-    <div class="menu">
+    <div class="menu" tabindex="-1">
       <div class="menu__col">
         <h3>Espresso</h3>
         <ul>
@@ -211,12 +216,81 @@
 
 </main>
 
+<!-- Add to cart -->
+<dialog class="sheet" id="add" aria-labelledby="add-h">
+  <form class="sheet__in" method="dialog" id="add-form">
+    <header class="sheet__head">
+      <h2 id="add-h">Drink</h2>
+      <button class="x" type="button" data-close aria-label="Close">&times;</button>
+    </header>
+    <fieldset class="opt">
+      <legend>Quantity</legend>
+      <div class="qty">
+        <button type="button" class="qty__b" data-step="-1" aria-label="One less">&minus;</button>
+        <output id="add-qty" aria-live="polite">1</output>
+        <button type="button" class="qty__b" data-step="1" aria-label="One more">+</button>
+      </div>
+    </fieldset>
+    <fieldset class="opt" data-opt="size">
+      <legend>Size</legend>
+      <div class="chips">
+        <label><input type="radio" name="size" value="Small"><span>Small</span></label>
+        <label><input type="radio" name="size" value="Medium" checked><span>Medium</span></label>
+        <label><input type="radio" name="size" value="Large"><span>Large</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="opt" data-opt="temp">
+      <legend>Hot or iced</legend>
+      <div class="chips">
+        <label><input type="radio" name="temp" value="Hot" checked><span>Hot</span></label>
+        <label><input type="radio" name="temp" value="Iced"><span>Iced</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="opt" data-opt="milk">
+      <legend>Milk</legend>
+      <div class="chips">
+        <label><input type="radio" name="milk" value="Whole" checked><span>Whole</span></label>
+        <label><input type="radio" name="milk" value="Nonfat"><span>Nonfat</span></label>
+        <label><input type="radio" name="milk" value="Soy"><span>Soy</span></label>
+      </div>
+    </fieldset>
+    <label class="opt notes">
+      <span class="legend">Notes <span class="m">optional</span></span>
+      <input type="text" name="notes" maxlength="80" placeholder="Extra hot, half sweet..." autocomplete="off">
+    </label>
+    <button class="btn btn--primary btn--block" type="submit">Add to cart</button>
+  </form>
+</dialog>
+
+<!-- Cart -->
+<dialog class="sheet" id="cart" aria-labelledby="cart-h">
+  <div class="sheet__in">
+    <header class="sheet__head">
+      <h2 id="cart-h">Your order</h2>
+      <button class="x" type="button" data-close aria-label="Close">&times;</button>
+    </header>
+    <p class="cart__empty">Nothing here yet. Tap a drink on the menu to add it.</p>
+    <ul class="cart__list"></ul>
+    <div class="cart__foot">
+      <button class="btn btn--primary btn--block" type="button" id="checkout">Order ahead (demo)</button>
+      <div class="cart__demo" id="demo-note" hidden>
+        <p><strong>Online ordering isn't connected yet.</strong> This is a concept demo. To order now:</p>
+        <ul>
+          <li>Alley 24 pickup or delivery: <a class="link" href="https://www.grubhub.com/restaurant/espresso-vivace-alley-24-227-yale-avenue-north-seattle/1905780" rel="noopener">Grubhub</a></li>
+          <li>Call Brix: <a class="link" href="tel:+12068602722">206.860.2722</a></li>
+          <li>Call Alley 24: <a class="link" href="tel:+12063885164">206.388.5164</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</dialog>
+
 <footer class="foot">
   <svg class="mark mark--lg" width="160" height="160" role="img" aria-label="Espresso Vivace sign: una bella tazza di caffè"><use href="#vivace-mark"/></svg>
   <p class="foot__line">Founded 1988 by David Schomer and Geneva Sullivan. Schomer is credited with popularizing latte art in the US.</p>
   <p class="foot__small"><strong>Concept demo by TruongSon.</strong> Not made by or affiliated with Espresso Vivace. Hours and phones from espressovivace.com (checked Nov 20, 2026). Drink list from Vivace's Grubhub listing. Pour video from Mixkit, not filmed at Vivace. Credits: <a class="link" href="credits.html">credits</a>.</p>
 </footer>
 
-<script src="site.js?v=3.3"></script>
+<script src="site.js?v=3.4"></script>
 </body>
 </html>
