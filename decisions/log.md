@@ -162,3 +162,15 @@ Limit: the pack expects Blender MCP and a desktop Blender app. Cloud sessions ap
 **Alternatives considered:** Moving it to `archives/`, which CLAUDE.md prefers over deleting. Not chosen because the request was to delete. The files stay in git history at the commit before this change.
 
 **Owner:** Unassigned (confirm: Son or Truong)
+
+## 2026-11-20 - 3d-walkthrough: clay structure in Blender, real photos and AI models for the look
+
+**Decision:** Rewrite `/3d-walkthrough` for F&B venues only (always real, open places). Blender builds only the structure as plain clay along the route (street, door, inside, hero spot): no materials, lights, decor or bake. Real photos of every corner are the design. An AI image model paints the photos onto each clay shot's first frame, and AI video models carry that look through the shot. The site plays one short clip per chapter, triggered by scroll (not scrubbed), loaded per chapter, all-intra encoded. The specific AI video models get added once that setup is connected.
+
+**Why:** Designing and baking in Blender is slow and still looked plastic. Real photos make the venue look like itself, which is what an F&B owner recognises. Triggered short clips stay smooth on slow scrolls and load one chapter at a time, unlike the old 17 to 29 MB scrubbed film.
+
+**Alternatives considered:** Keep designing and baking in Blender (heavy, plastic). One long scrubbed film (stutters on slow scrolls, heavy). Real estate and BnB modes (dropped: F&B is the focus).
+
+Open: the AI video models, their cost and free-tier limits. Tested so far on Il Dante Caffe clay clips with free Hugging Face demos (Qwen Image Edit, LTX 2.3 Studio); the free GPU quota ran out before a full run.
+
+**Owner:** TODO: Son or Truong
