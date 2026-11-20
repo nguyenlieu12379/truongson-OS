@@ -7,9 +7,9 @@ A short, practical site for **Espresso Vivace**, Seattle: menu, live open-now st
 
 ## What a drink buyer gets
 
-1. **First screen:** what it is, both bars with live "open now / opens at" status (Seattle time), Order and Menu buttons.
+1. **First screen:** what it is, both bars with live "open now / opens at" status (Seattle time), Order and Menu buttons, and a looping latte-art pour video (muted; a still of the finished cup when motion is off).
 2. **Menu:** drink names in three groups, plus beans.
-3. **Locations:** map, hours, address, tap-to-call, directions for each bar. Holiday hours in a fold-out.
+3. **Locations:** the Brix storefront photo, then map, hours, address, tap-to-call, directions for each bar. Holiday hours in a fold-out.
 4. **Order:** Grubhub (Alley 24 pickup or delivery), call ahead, beans shop.
 
 ## Sources (checked 2026-11-20)
@@ -20,6 +20,7 @@ A short, practical site for **Espresso Vivace**, Seattle: menu, live open-now st
 | Drink list | Vivace's Grubhub listing for Alley 24 (via Allmenus, (c) 2023) |
 | Grubhub ordering link | grubhub.com listing for Alley 24 (returns 200) |
 | Founding, latte art credit | Wikipedia |
+| Storefront photo | Wikimedia Commons, "Seattle in October 2022 - 168.jpg" |
 
 **Prices are not shown on purpose.** The only priced list is from 2023 ($3.75 latte) and recent reviews say about $6. Get the current menu from the owner before any real use. No drink ordering found for Brix, so the page offers a phone number for it.
 
@@ -32,8 +33,9 @@ A short, practical site for **Espresso Vivace**, Seattle: menu, live open-now st
 | `index.html` | The page. |
 | `site.css` | Styles. |
 | `site.js` | Open-now status from regular and holiday hours, in Seattle time. |
-| `credits.html` | Photo credit. |
-| `assets/latte*.webp` | Hero photo (Commons, CC BY 2.0). |
+| `credits.html` | Credits for the storefront photo and pour video. |
+| `assets/pour*.mp4`, `pour-poster*`, `pour-final*` | Pour video (Mixkit "Latte art" #810, free license, not filmed at Vivace): 1280x720 desktop, 576x720 phone crop, first/last-frame posters. |
+| `assets/brix-outside.webp` | Brix storefront, Oct 2022 (Commons, Another Believer, CC BY-SA 4.0). 960px: full size was rate-limited. |
 | `verify/` | Screenshots from the last check. |
 | `BRIEF.md` | History: the earlier scroll-craft editorial version and why it changed. |
 
@@ -41,11 +43,12 @@ A short, practical site for **Espresso Vivace**, Seattle: menu, live open-now st
 
 - **v1:** scroll-craft chaptered editorial page with an SVG rosetta drawn by scroll.
 - **v2:** the drawing swapped for a real Mixkit pour video scrubbed by scroll.
-- **v3 (current, 2026-11-20):** Son asked for less fluff: just what a drink buyer needs (menu, map, ordering). Story chapters, scroll effects and the video were removed. Earlier versions are in git history.
+- **v3 (2026-11-20):** Son asked for less fluff: just what a drink buyer needs (menu, map, ordering). Story chapters, scroll effects and the video were removed.
+- **v3.1 (current, 2026-11-20):** Son asked to add the pour video and a cafe exterior photo. The pour loops in the hero (replacing the latte photo); the Brix storefront heads the Locations section. Earlier versions are in git history.
 
 ## Verified (2026-11-20, headless Chrome)
 
-- Desktop 1280 and phone 390: no horizontal scroll, no console errors, both Google Maps embeds load with the right pins.
+- Desktop 1280 and phone 390: no horizontal scroll, no console errors, both Google Maps embeds load with the right pins. Pour video autoplays (desktop clip on desktop, portrait crop on phone); with reduced motion it stays paused on the finished-cup still.
 - Open-now logic tested at fixed times: weekday open, Friday after Alley 24 closes, late night, Thanksgiving (Brix 8am to 2pm, Alley 24 closed), Sunday before opening.
 
 **Not verified:** a real iPhone.

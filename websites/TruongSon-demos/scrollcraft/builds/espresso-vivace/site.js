@@ -1,7 +1,25 @@
-/* Espresso Vivace concept: live "open now" status in Seattle time.
+/* Espresso Vivace concept: hero pour video + live "open now" status in Seattle time.
    Hours and holiday hours from espressovivace.com, checked 2026-11-20. */
 (function () {
   "use strict";
+
+  // Hero pour: portrait crop on phones; motion off shows the finished cup as a still.
+  var v = document.querySelector("video.pour");
+  if (v) {
+    var phone = window.matchMedia("(max-width: 860px)").matches;
+    var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (phone) {
+      v.poster = v.getAttribute("data-poster-mobile");
+      v.src = v.getAttribute("data-src-mobile");
+    }
+    if (still) {
+      v.removeAttribute("autoplay");
+      v.pause();
+      v.removeAttribute("src");
+      v.load();
+      v.poster = v.getAttribute(phone ? "data-final-mobile" : "data-final");
+    }
+  }
 
   // Regular hours: [open, close] in minutes after midnight, by weekday (0 = Sunday).
   var HOURS = {
