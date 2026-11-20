@@ -40,7 +40,16 @@ Draw a rough top-down layout from the photos and the satellite view (a small SVG
 
 ## 3. Build the shape (Blender, clay only)
 
-`python3 -m venv <scratchpad>/bl && <scratchpad>/bl/bin/pip install bpy`, then a `build_scene.py` in `projects/<venue>/`.
+Write the scene as a script, `projects/<venue>/build_scene.py` (plain `bpy`), so it rebuilds the same way anywhere. Then run it one of two ways:
+
+- **Blender MCP connected** (a local session on Son's or Truong's computer with the Blender desktop extension or `blender-mcp`; tools like `execute_blender_code`, `get_scene_info`, `get_viewport_screenshot`). Prefer this when the tools are present:
+  1. Ask before touching the open Blender file: save it, or start a new file.
+  2. Run the script inside that Blender: `execute_blender_code` with `exec(open(r"<absolute path to build_scene.py>").read())`. Keep each call short; for big scenes run the script in parts (site, building, interior, props).
+  3. Check with `get_scene_info` and `get_viewport_screenshot` from the route's stops. Fix and rerun.
+  4. Save to `projects/<venue>/work/<venue>_clay.blend`.
+- **No Blender MCP** (cloud session, or Blender not connected): `python3 -m venv <scratchpad>/bl && <scratchpad>/bl/bin/pip install bpy`, then `<scratchpad>/bl/bin/python projects/<venue>/build_scene.py --out projects/<venue>/work/<venue>_clay.blend`.
+
+Check which one the session has before step 3. Don't ask the user to switch: a cloud session handed off while their computer is off uses the second way.
 
 - Street, sidewalk, the building and its neighbours as blocks; then walls, openings, door (origin on the hinge so it can swing), counter, bar, stools, tables, shelves, pendants, plants.
 - Size everything from the photos with standard sizes: door 0.9 m wide and 2.1 m high, counter 1 m high, bar 1.05 m, bar stool 75 cm, table 75 cm, ceiling about 3 m.
@@ -50,7 +59,9 @@ Draw a rough top-down layout from the photos and the satellite view (a small SVG
 ## 4. Render the clay clips
 
 - Camera path through the stops (smooth curve, gentle ease in and out), 24 fps, 1280x720, about 52 degrees vertical field of view.
-- Render with Workbench (flat clay with cavity and shadow). Headless here: `apt-get install -y libegl1 libegl-mesa0 libgl1-mesa-dri` and run with `EGL_PLATFORM=surfaceless`. About 10 s a frame on CPU.
+- Render with Workbench (flat clay with cavity and shadow).
+    - **Blender MCP:** render in the user's Blender on their graphics card, a frame range per `execute_blender_code` call (about 24 to 48 frames, so no call times out): set `scene.frame_start`/`frame_end`, `render.filepath` to `projects/<venue>/work/clay/f_`, then `bpy.ops.render.render(animation=True)`. Seconds a frame or less.
+    - **Headless (cloud):** `apt-get install -y libegl1 libegl-mesa0 libgl1-mesa-dri` and run with `EGL_PLATFORM=surfaceless`. About 10 s a frame on CPU, so a 10 s route takes about 40 minutes: fine for an unattended run.
 - Render the whole route as **one continuous camera path**, then cut it into shots of 5 s or less (121 frames), one per stop pair: street to door, door to inside, inside to counter, and so on.
 - **Clips must join cleanly.** Each clip starts on the exact frame where the previous one ends, at the same walking speed. No ease-out at the end of one clip and ease-in at the start of the next, and no overlap: either one reads as the camera stopping. If shots were rendered separately, find the matching frame (smallest image difference), cut there, and drop frames from any slow tail so the per-frame motion matches across the join. `ffmpeg -framerate 24 -i f_%04d.png -c:v libx264 -crf 16 -pix_fmt yuv420p shot.mp4`.
 - Check a start, middle and end contact sheet of each shot: no jumps, no camera inside walls, furniture all there.

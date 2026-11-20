@@ -200,3 +200,11 @@ Open: the AI video models, their cost and free-tier limits. Tested so far on Il 
 Open: needs a Kaggle account with a verified phone and an API token (not set up yet). The runner is untested on Kaggle; the first run is the test.
 
 **Owner:** Son
+
+## 2026-11-20 - 3d-walkthrough: use Blender MCP when connected
+
+**Decision:** `/3d-walkthrough` steps 3 and 4 run the clay build and render in the user's own Blender through Blender MCP when a session has it (local session with the Blender desktop extension). Without it (cloud, or Blender not connected) the skill uses headless `bpy` as before. The scene stays a `build_scene.py` script either way, so it rebuilds the same in both.
+
+**Why:** Son has Blender MCP connected on his desktop. Local Blender renders on his graphics card (seconds a frame vs about 10 s on cloud CPU) and he can watch the scene build. Cloud stays the fallback for work handed off while his computer is off.
+
+**Owner:** Son
