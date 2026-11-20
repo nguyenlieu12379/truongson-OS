@@ -190,3 +190,13 @@ Open: the AI video models, their cost and free-tier limits. Tested so far on Il 
 **Why:** In the mockup, walking from the door into the cafe showed a slight stop. The two clay shots overlapped by about a second and the first slowed down at its end. Cutting at the matching frame and thinning the slow tail evened the speed across the join.
 
 **Owner:** Son
+
+## 2026-11-20 - 3d-walkthrough: Wan2.1 VACE on Kaggle, photo brief, Maps photo tool
+
+**Decision:** Use Wan2.1 VACE 1.3B (Apache-2.0) on Kaggle's free GPU as the video model for `/3d-walkthrough` step 6. The runner (`assets/vace/`) uploads a shot (clay clip, 1 to 3 photos, optional painted frame), runs on a T4 and downloads the clip. Photos: paying clients get `references/photo-brief.md` (10-minute phone shot list); pitches use `scripts/maps_photos.cjs` (Google Maps photos, never published).
+
+**Why:** VACE takes our two inputs directly (a structure video as control plus reference photos), fits a free 16 GB GPU, and Kaggle can be driven from a cloud session with one API token. The Hugging Face demo pages ran out of free GPU halfway through the Il Dante test.
+
+Open: needs a Kaggle account with a verified phone and an API token (not set up yet). The runner is untested on Kaggle; the first run is the test.
+
+**Owner:** Son
