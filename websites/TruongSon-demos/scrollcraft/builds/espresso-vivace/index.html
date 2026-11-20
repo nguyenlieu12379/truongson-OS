@@ -3,188 +3,183 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Espresso Vivace · Seattle espresso since 1988 (concept)</title>
-<meta name="description" content="Concept demo: Espresso Vivace menu, hours, locations and ordering. Brix on Capitol Hill and Alley 24 in South Lake Union.">
+<title>Espresso Vivace · Absolute fidelity to a better cup (concept)</title>
+<meta name="description" content="Concept demo: Espresso Vivace, Seattle espresso bar and roaster since 1988. The cart, the engineer, the pour, the room.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='15' fill='%23B11F24'/><circle cx='16' cy='16' r='10' fill='%23F1EFEA'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="scrollcraft.css">
 <link rel="stylesheet" href="site.css">
 </head>
 <body>
 
-<a class="skip" href="#menu">Skip to menu</a>
+<span data-sc-progress></span>
+<div class="sc-grain" aria-hidden="true"></div>
 
-<header class="bar">
-  <a class="bar__mark" href="#top">Espresso Vivace</a>
-  <nav class="bar__nav" aria-label="Sections">
-    <a href="#menu">Menu</a>
-    <a href="#visit">Locations</a>
-    <a class="bar__cta" href="#order">Order</a>
-  </nav>
-</header>
+<!-- Editorial grammar: no bar. A folio in the margin that names the chapter. -->
+<nav class="folio" aria-label="Chapters" data-ground="paper">
+  <a class="folio__mark" href="#top">Espresso Vivace</a>
+  <span class="folio__ch" aria-live="polite"><span class="folio__n">&nbsp;</span> <span class="folio__t">Seattle, since 1988</span></span>
+</nav>
 
 <main id="top">
 
-  <!-- First screen: what, where, is it open, how to order. -->
-  <section class="hero">
-    <div class="hero__text">
-      <h1>Seattle espresso,<br><em>since 1988.</em></h1>
-      <p class="hero__sub">Two bars: Brix on Capitol Hill and Alley 24 in South Lake Union. Cashless.</p>
-      <ul class="status" aria-live="polite">
-        <li data-status="brix"><span class="dot"></span><b>Brix</b> <span class="status__t">6am to 7pm daily</span></li>
-        <li data-status="alley"><span class="dot"></span><b>Alley 24</b> <span class="status__t">Weekdays 6am to 4pm, weekends 7am to 5pm</span></li>
-      </ul>
-      <div class="hero__actions">
-        <a class="btn btn--primary" href="#order">Order</a>
-        <a class="btn" href="#menu">See the menu</a>
+  <!-- 0 · TITLE PAGE -->
+  <section class="ch ch--paper title" data-folio="" data-folio-t="Seattle, since 1988">
+    <div class="title__inner">
+      <p class="title__kicker">Espresso Vivace · Seattle · Since 1988</p>
+      <h1 class="title__h"><span class="title__line">Absolute fidelity</span> <span class="title__line"><em>to a better cup.</em></span></h1>
+      <div class="title__foot">
+        <p class="title__sub">An espresso bar and roaster on Capitol Hill and in South Lake Union. Founded by an engineer who measures everything.</p>
+        <a class="link-cta" href="#visit">Plan a visit</a>
       </div>
     </div>
-    <figure class="hero__img">
-      <img src="assets/latte.webp" srcset="assets/latte-m.webp 1000w, assets/latte.webp 2000w" sizes="(max-width: 860px) 100vw, 46vw" width="2000" height="1500" alt="A latte at Espresso Vivace with a fern of latte art in the foam.">
-      <figcaption>A latte at Vivace. Photo: Ron Diggity, CC BY 2.0.</figcaption>
+  </section>
+
+  <!-- I · THE CART -->
+  <section class="ch ch--paper spread spread--cart" data-sc-act="flow" data-folio="I" data-folio-t="The cart">
+    <div class="spread__text sc-stack" data-sc-in data-sc-stagger="60">
+      <p class="chapter-no">I</p>
+      <h2 class="h2">It started as a cart at 5th and Union.</h2>
+      <p class="body">In 1988, David Schomer, a former Boeing metrologist, and Geneva Sullivan, a mainframe technician, opened a coffee cart downtown. The office crowd walked past without noticing what was in the cup.</p>
+      <p class="body">So they moved up to Capitol Hill, where people did notice. A covered stand on Broadway became a neighborhood ritual for the next three decades.</p>
+    </div>
+    <figure class="spread__media" data-sc-reveal="up" data-sc-reveal-at="0.12 0.5">
+      <img src="assets/cart.webp" srcset="assets/cart-m.webp 1000w, assets/cart.webp 2000w" sizes="(max-width: 860px) 100vw, 55vw" width="2000" height="1500" alt="People lined up at the red-awninged Espresso Vivace sidewalk bar on Broadway, with a small dog waiting at their feet." loading="lazy">
+      <figcaption>The Broadway sidewalk bar, 2007. It served the street until 2023. Photo: Joe Mabel, CC BY-SA 3.0.</figcaption>
     </figure>
   </section>
 
-  <!-- MENU -->
-  <section class="block" id="menu" aria-labelledby="menu-h">
-    <div class="block__head">
-      <h2 id="menu-h">Menu</h2>
-      <p class="note">Drinks as listed for Alley 24. Prices at the bar.</p>
+  <!-- II · THE OBSESSION -->
+  <section class="ch ch--paper obsession" data-sc-act="flow" data-folio="II" data-folio-t="The engineer">
+    <div class="obsession__media" aria-hidden="false">
+      <figure class="obsession__a" data-sc-parallax="-1.1">
+        <img src="assets/schomer-roast.webp" srcset="assets/schomer-roast-m.webp 1000w, assets/schomer-roast.webp 2000w" sizes="(max-width: 860px) 90vw, 38vw" width="2000" height="1333" alt="David Schomer in a black turtleneck tasting from a cupping spoon beside a coffee roaster." loading="lazy">
+      </figure>
+      <figure class="obsession__b" data-sc-parallax="0.7">
+        <img src="assets/schomer-bar.webp" srcset="assets/schomer-bar-m.webp 1000w, assets/schomer-bar.webp 2000w" sizes="(max-width: 860px) 70vw, 26vw" width="2000" height="1333" alt="David Schomer looking down, focused, behind the espresso bar." loading="lazy">
+        <figcaption>David Schomer, 2015. Photos: Breville USA, CC BY 2.0.</figcaption>
+      </figure>
     </div>
-    <div class="menu">
-      <div class="menu__col">
-        <h3>Espresso</h3>
-        <ul>
-          <li>Espresso</li>
-          <li>Sugared Espresso (Vita)</li>
-          <li>Macchiato</li>
-          <li>Cappuccino</li>
-          <li>Caffe Latte</li>
-          <li>White Velvet</li>
-          <li>Caffe Nico</li>
-          <li>Caffe Breve</li>
-          <li>Caffe Soy</li>
-          <li>Caffe Caramel</li>
-          <li>Caffe Mocha</li>
-          <li>Americano</li>
-        </ul>
-      </div>
-      <div class="menu__col">
-        <h3>Cold</h3>
-        <ul>
-          <li>Iced Latte</li>
-          <li>Iced White Velvet</li>
-          <li>Iced Caffe Caramel</li>
-          <li>Iced Caffe Soy</li>
-          <li>Iced Mocha</li>
-          <li>Iced Americano</li>
-          <li>Coffee Soda</li>
-          <li>Italian Sodas</li>
-          <li>Iced Tea <span class="m">seasonal</span></li>
-          <li>Lemonade</li>
-          <li>Fresh Squeezed OJ</li>
-        </ul>
-      </div>
-      <div class="menu__col">
-        <h3>Not coffee</h3>
-        <ul>
-          <li>Beautiful Stephanie <span class="m">milk tea</span></li>
-          <li>Tea <span class="m">selected varieties</span></li>
-          <li>Hot Chocolate</li>
-          <li>Hot Spiced Cider</li>
-          <li>Steamed Milk</li>
-        </ul>
-        <h3 class="menu__beans">Beans</h3>
-        <p>Roasted in house. Order bags online and get them within days of roasting.</p>
-        <a class="link" href="https://espressovivace.com/shop/" rel="noopener">Shop beans</a>
+    <div class="obsession__text sc-stack" data-sc-in data-sc-stagger="60">
+      <p class="chapter-no">II</p>
+      <h2 class="h2">A measurer behind the bar.</h2>
+      <p class="body">Schomer's trade was metrology: making sure a number means the same thing every time. He brought that to espresso. Vivace's grinders and machines run PID controllers, so the water holds one temperature, shot after shot.</p>
+      <p class="body">The coffee is roasted in house. The method is written down.</p>
+      <blockquote class="pull">
+        <p>"Schomer is as influential in the gourmet coffee world as Starbucks CEO Howard Schultz is in the mainstream coffee industry."</p>
+        <cite>The Seattle Times</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- III · SILENCE (authored): the hush before the peak -->
+  <section class="ch ch--dark hush" data-folio="III" data-folio-t="The pour">
+    <div class="hush__inner" data-sc-in>
+      <p class="chapter-no chapter-no--big">III</p>
+      <p class="hush__t">The pour.</p>
+    </div>
+  </section>
+
+  <!-- PEAK · THE POUR: a real rosetta pour, scrubbed by the reader's hand. -->
+  <section class="ch--dark pour" data-sc-act="scrub" data-sc-span="2.8" data-sc-dwell="0.2" id="pour" data-folio="III" data-folio-t="The pour">
+    <div data-sc-stage class="pour__stage">
+      <figure class="pourframe">
+        <picture>
+          <source media="(max-width: 860px)" srcset="assets/pour-poster-m.webp">
+          <img class="sc-stage__poster" src="assets/pour-poster.webp" alt="" width="1280" height="720">
+        </picture>
+        <picture>
+          <source media="(max-width: 860px)" srcset="assets/pour-final-m.webp">
+          <img class="pour__final" src="assets/pour-final.webp" alt="A finished latte-art tulip in a green cup." width="1280" height="720">
+        </picture>
+        <video data-sc-scrub data-sc-src="assets/pour.mp4" data-sc-src-mobile="assets/pour-m.mp4" muted playsinline aria-label="A barista pours steamed milk into espresso and builds a layered latte-art tulip, then pulls through."></video>
+      </figure>
+      <div class="pour__copy" data-sc-cue="0.12 1 0.1 0.04">
+        <p class="pour__lede">Schomer is credited with developing and popularizing latte art in the United States.</p>
+        <p class="pour__credit">A latte-art pour, not filmed at Vivace. Video: Mixkit, free license.</p>
       </div>
     </div>
   </section>
 
-  <!-- LOCATIONS -->
-  <section class="block" id="visit" aria-labelledby="visit-h">
-    <div class="block__head">
-      <h2 id="visit-h">Locations</h2>
-      <p class="note">Both cashless, with indoor seating.</p>
-    </div>
-    <div class="places">
-      <article class="place">
-        <iframe class="place__map" title="Map: Vivace at Brix, 532 Broadway E, Seattle" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=Espresso+Vivace+Brix,+532+Broadway+E,+Seattle,+WA+98102&amp;z=15&amp;output=embed"></iframe>
-        <div class="place__body">
-          <h3>Brix <span class="place__area">Capitol Hill</span></h3>
-          <p class="place__open" data-status="brix"><span class="dot"></span><span class="status__t">6am to 7pm daily</span></p>
-          <dl>
-            <dt>Hours</dt><dd>6am to 7pm daily</dd>
-            <dt>Address</dt><dd>532 Broadway E, Seattle, WA 98102</dd>
-            <dt>Phone</dt><dd><a class="link" href="tel:+12068602722">206.860.2722</a></dd>
-          </dl>
-          <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Espresso+Vivace+532+Broadway+E+Seattle+WA+98102" rel="noopener">Directions</a>
-        </div>
-      </article>
-      <article class="place">
-        <iframe class="place__map" title="Map: Vivace Alley 24, 227 Yale Ave N, Seattle" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=Espresso+Vivace+Alley+24,+227+Yale+Ave+N,+Seattle,+WA+98109&amp;z=15&amp;output=embed"></iframe>
-        <div class="place__body">
-          <h3>Alley 24 <span class="place__area">South Lake Union</span></h3>
-          <p class="place__open" data-status="alley"><span class="dot"></span><span class="status__t">Weekdays 6am to 4pm</span></p>
-          <dl>
-            <dt>Hours</dt><dd>Weekdays 6am to 4pm<br>Weekends 7am to 5pm</dd>
-            <dt>Address</dt><dd>227 Yale Ave N, Seattle, WA 98109</dd>
-            <dt>Phone</dt><dd><a class="link" href="tel:+12063885164">206.388.5164</a></dd>
-          </dl>
-          <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Espresso+Vivace+227+Yale+Ave+N+Seattle+WA+98109" rel="noopener">Directions</a>
-        </div>
-      </article>
-    </div>
-    <details class="holiday">
-      <summary>Holiday hours</summary>
-      <table>
-        <thead><tr><th scope="col">Day</th><th scope="col">Brix</th><th scope="col">Alley 24</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">Thu, Nov 26 (Thanksgiving)</th><td>8am to 2pm</td><td>Closed</td></tr>
-          <tr><th scope="row">Tue, Dec 8</th><td>6am to 3pm</td><td>6am to 3pm</td></tr>
-          <tr><th scope="row">Thu, Dec 24</th><td>6am to 4pm</td><td>7am to 2pm</td></tr>
-          <tr><th scope="row">Fri, Dec 25</th><td>Closed</td><td>Closed</td></tr>
-          <tr><th scope="row">Thu, Dec 31</th><td>6am to 7pm</td><td>6am to 4pm</td></tr>
-          <tr><th scope="row">Fri, Jan 1</th><td>8am to 7pm</td><td>8am to 4pm</td></tr>
-        </tbody>
-      </table>
-    </details>
+  <!-- THE REAL ONE: iris, once on the page -->
+  <section class="ch ch--dark real" data-sc-act="flow" data-folio="III" data-folio-t="The pour">
+    <figure class="real__fig" data-sc-reveal="iris" data-sc-reveal-at="0.08 0.46">
+      <img src="assets/latte.webp" srcset="assets/latte-m.webp 1000w, assets/latte.webp 2000w" sizes="(max-width: 860px) 92vw, 60vw" width="2000" height="1500" alt="A latte at Espresso Vivace with a fern-shaped rosetta poured into the foam." loading="lazy">
+    </figure>
+    <p class="real__cap" data-sc-in>This one is real. A latte at Vivace. <span class="credit">Photo: Ron Diggity, CC BY 2.0.</span></p>
   </section>
 
-  <!-- ORDER -->
-  <section class="block order" id="order" aria-labelledby="order-h">
-    <div class="block__head">
-      <h2 id="order-h">Order</h2>
+  <!-- IV · THE ROOM: the poster-wall yellow -->
+  <section class="ch ch--yellow room" data-sc-act="flow" data-folio="IV" data-folio-t="The room">
+    <div class="room__head sc-stack" data-sc-in data-sc-stagger="60">
+      <p class="chapter-no">IV</p>
+      <h2 class="h2">Posters, chalkboards, and a line out the door.</h2>
+      <p class="body">When the light rail came through, the flagship moved five blocks north on Broadway. The walls came too: decades of posters, a chalkboard menu, a long espresso bar you can watch from every seat.</p>
     </div>
-    <div class="order__grid">
-      <div class="order__card">
-        <h3>Drinks for pickup or delivery</h3>
-        <p>Alley 24, through Grubhub.</p>
-        <a class="btn btn--primary" href="https://www.grubhub.com/restaurant/espresso-vivace-alley-24-227-yale-avenue-north-seattle/1905780" rel="noopener">Order on Grubhub</a>
-      </div>
-      <div class="order__card">
-        <h3>Call ahead</h3>
-        <p>Brix <a class="link" href="tel:+12068602722">206.860.2722</a><br>Alley 24 <a class="link" href="tel:+12063885164">206.388.5164</a></p>
-      </div>
-      <div class="order__card">
-        <h3>Beans to your door</h3>
-        <p>Espresso blends shipped within days of roasting.</p>
-        <a class="btn" href="https://espressovivace.com/shop/" rel="noopener">Shop beans</a>
+    <figure class="room__wide" data-sc-parallax="-0.8">
+      <img src="assets/room.webp" srcset="assets/room-m.webp 1000w, assets/room.webp 2000w" sizes="(max-width: 860px) 100vw, 62vw" width="2000" height="1432" alt="Inside Espresso Vivace on Capitol Hill: a wall covered in colorful posters above the bar, pendant lights, and a tiled floor." loading="lazy">
+      <figcaption>Capitol Hill, 2014. Photo: Another Believer, CC BY-SA 3.0.</figcaption>
+    </figure>
+    <figure class="room__tall" data-sc-parallax="0.9">
+      <img src="assets/wall.webp" srcset="assets/wall-m.webp 800w, assets/wall.webp 1400w" sizes="(max-width: 860px) 60vw, 26vw" width="1400" height="1867" alt="A tall wall of framed posters and a clock beside the window." loading="lazy">
+      <figcaption>The poster wall. Photo: Another Believer, CC BY-SA 3.0.</figcaption>
+    </figure>
+    <figure class="room__line" data-sc-in>
+      <img src="assets/line.webp" srcset="assets/line-m.webp 1000w, assets/line.webp 2000w" sizes="(max-width: 860px) 100vw, 44vw" width="2000" height="1168" alt="A fisheye view of a crowded Vivace bar with people waiting at the counter." loading="lazy">
+      <figcaption>The line, 2009. Photo: ChrisDag, CC BY 2.0.</figcaption>
+    </figure>
+  </section>
+
+  <!-- V · THE BOOK: one real figure -->
+  <section class="ch ch--paper book" data-folio="V" data-folio-t="The method">
+    <div class="book__grid">
+      <p class="book__fig" aria-label="38 years"><span data-sc-count="0 38" data-sc-count-ms="1500">38</span><span class="book__unit">years</span></p>
+      <div class="sc-stack" data-sc-in data-sc-stagger="60">
+        <p class="chapter-no">V</p>
+        <h2 class="h2">The method is in a book.</h2>
+        <p class="body">In 1996 Schomer published <cite>Espresso Coffee: Professional Techniques</cite>, still called the industry bible. He has trained hundreds of baristas who carried the method to coffee bars across the country.</p>
+        <p class="body">You can buy the beans and the book from the roastery. <a class="link-inline" href="https://www.espressovivace.com/shop/" rel="noopener">Shop at espressovivace.com</a>.</p>
       </div>
     </div>
+  </section>
+
+  <!-- VI · VISIT (colophon close). Resolves and holds. -->
+  <section class="ch ch--paper visit" id="visit" data-folio="VI" data-folio-t="Plan a visit">
+    <div class="visit__grid">
+      <div class="visit__text sc-stack" data-sc-in data-sc-stagger="60">
+        <p class="chapter-no">VI</p>
+        <h2 class="h2 h2--close">Plan a visit.</h2>
+        <div class="places">
+          <div class="place">
+            <h3>Vivace at Brix</h3>
+            <p>532 Broadway E<br>Capitol Hill, Seattle</p>
+            <a class="link-inline" href="https://www.google.com/maps/search/?api=1&amp;query=Espresso+Vivace+532+Broadway+E+Seattle" rel="noopener">Directions</a>
+          </div>
+          <div class="place">
+            <h3>Alley 24</h3>
+            <p>227 Yale Ave N<br>South Lake Union, Seattle</p>
+            <a class="link-inline" href="https://www.google.com/maps/search/?api=1&amp;query=Espresso+Vivace+227+Yale+Ave+N+Seattle" rel="noopener">Directions</a>
+          </div>
+        </div>
+      </div>
+      <figure class="visit__sign" data-sc-in>
+        <img src="assets/sign.webp" srcset="assets/sign-m.webp 800w, assets/sign.webp 1600w" sizes="(max-width: 860px) 80vw, 30vw" width="1600" height="1200" alt="The round orange Espresso Vivace blade sign on a brick wall, reading una bella tazza di caffè." loading="lazy">
+        <figcaption>Una bella tazza di caffè. Photo: Another Believer, CC BY-SA 3.0.</figcaption>
+      </figure>
+    </div>
+    <footer class="colophon">
+      <p><strong>Concept demo by TruongSon.</strong> Not made by or affiliated with Espresso Vivace. Facts from public sources; hours not shown because we could not confirm them.</p>
+      <p>Pour video from Mixkit (free license, not filmed at Vivace). Photos from Wikimedia Commons, used under their licenses: Joe Mabel (CC BY-SA 3.0), Breville USA (CC BY 2.0), Ron Diggity (CC BY 2.0), Another Believer (CC BY-SA 3.0), ChrisDag (CC BY 2.0). Resized and cropped. <a class="link-inline" href="credits.html">Full credits</a>.</p>
+    </footer>
   </section>
 
 </main>
 
-<footer class="foot">
-  <p class="foot__line">Founded 1988 by David Schomer and Geneva Sullivan. Schomer is credited with popularizing latte art in the US.</p>
-  <p class="foot__small"><strong>Concept demo by TruongSon.</strong> Not made by or affiliated with Espresso Vivace. Hours and phones from espressovivace.com (checked Nov 20, 2026). Drink list from Vivace's Grubhub listing. Photo credits: <a class="link" href="credits.html">credits</a>.</p>
-</footer>
-
+<script src="scrollcraft.js"></script>
+<script>ScrollCraft.mount(document.body);</script>
 <script src="site.js"></script>
 </body>
 </html>
