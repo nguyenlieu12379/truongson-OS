@@ -240,3 +240,9 @@ Open: needs a Kaggle account with a verified phone and an API token (not set up 
 **Alternatives considered:** Building scroll pages by hand with design-skills only. `/3d-walkthrough` stays the tool for venue walk-throughs; scroll-craft is for brand landing pages.
 
 **Owner:** Son
+
+## 2026-11-20 - Delete /3d-walkthrough and every earlier site; scroll-craft replaces it
+
+**Decision:** Scroll-craft passed its test, so `/3d-walkthrough` is deleted (not archived) with everything built for it: the skill and its Codex copy, the sites Forno Notte, Coastal Cottage, Corner Crema mockup and Il Dante Caffe, `projects/` (3d-walkthrough-skill, coastal-cottage, haulover-cafe, il-dante), and `archives/` 3d-walkthrough-film-site and haulover-beach-cafe-site. Links removed from CLAUDE.md, AGENTS.md, README.md, EXPANSIONS.md, websites/README.md and the Pages workflow. The Pages root now redirects to Espresso Vivace. Kept: design-skills, /watch, scroll-craft and its builds.
+
+**Why:** Requested directly, overriding the "move to archives" rule. Forno Notte and Coastal Cottage go offline on the next Pages deploy. Everything stays recoverable from git history (last commit with it: aa0f5ec). Asked by: (Son or Truong, to confirm).

@@ -16,7 +16,7 @@ The AIOS structure should look like a small, well-run business. Not a hoarder's 
 | `brainstorms/` | Saved `/grill-me` interviews; created on first use. Confirmed context is linked back to its capture. |
 | `archives/` | Old files. Don't delete — move here. |
 | `connections.md` | Registry of every system your AIOS can reach. |
-| `.claude/skills/` | Your skills: `/onboard`, `/audit`, `/level-up`, `/link`, `/grill-me`, `/3d-brain`, `/3d-walkthrough`. Add more only when they solve a real need. |
+| `.claude/skills/` | Your skills: `/onboard`, `/audit`, `/level-up`, `/link`, `/grill-me`, `/3d-brain`. Add more only when they solve a real need. |
 | `aios-intake.md` | Source-of-truth for `/onboard`. Edit and re-run any time. |
 | `CLAUDE.md` | Root operating manual. Filled by `/onboard`. Edit when your role/voice changes. |
 
