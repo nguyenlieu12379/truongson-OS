@@ -2,7 +2,7 @@
 
 A scroll-driven, chaptered editorial page for **Espresso Vivace**, Seattle (espresso bar and roaster since 1988). Built with `/scroll-craft` as a free build: real photos only, no AI generation, no spend.
 
-- **Status:** concept demo, not published. `noindex`. Not affiliated with Espresso Vivace.
+- **Status:** concept demo on GitHub Pages at https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/ (after merge to `main`). `noindex`. Not affiliated with Espresso Vivace.
 - **Why this prospect:** a real, open business with a strong founder story and a weak homepage. Their current homepage (espressovivace.com) is a looping espresso video with nav only: no headline, no story, no addresses or hours on the first screen. Their "visit" and "learn" links rendered the shop page when we checked (2026-11-20).
 - **Brief, grammar, feeling curve, score:** `BRIEF.md`.
 - **Signature move (the peak):** scrolling pours a latte-art rosetta into a top-down cup (`site.js`), then the next section wipes to a real photo of a Vivace latte.
@@ -59,6 +59,6 @@ Add `--width 390 --height 844` for phone, `--reduced-motion` for motion off.
 
 **Not verified:** a real phone (iOS Safari). Open it on an iPhone before showing anyone.
 
-## Publish (when wanted)
+## Publish
 
-Add a copy step to `.github/workflows/deploy-pages.yml` (see `websites/README.md`). Talk to Son first: publishing a page about a real business is outward-facing.
+Deployed by `.github/workflows/deploy-pages.yml` on push to `main`. `README.md`, `BRIEF.md` and `verify/` are stripped from the deploy. Son approved publishing on 2026-11-20.
