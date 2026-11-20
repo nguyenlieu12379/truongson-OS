@@ -216,3 +216,9 @@ Open: needs a Kaggle account with a verified phone and an API token (not set up 
 **Why:** The demo pages ran out of free GPU halfway through the Il Dante test and some get paused or are unsuitable for client work. Kaggle is free (about 30 GPU hours a week, no card), steady, and drivable from a cloud session.
 
 **Owner:** Son
+
+## 2026-11-20 - Vendor claude-video as /watch
+
+**Decision:** Copy the `watch` skill from bradautomates/claude-video (MIT, commit 03ceb42, release 0.3.2) into `.claude/skills/watch/` and `.agents/skills/watch/`, with `VENDORED.md`. Link it from CLAUDE.md, AGENTS.md and `connections.md`. Default setup is free: local engine, captions only.
+
+**Why:** So the AIOS can watch YouTube tutorials (first use: a Claude + Blender + Higgsfield tutorial for `/3d-walkthrough`). In cloud sessions YouTube blocks video downloads (403), so only captions come through; a free Gemini key or a local run gives frames.

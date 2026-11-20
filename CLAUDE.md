@@ -18,6 +18,7 @@ Read `references/3ms-framework.md` once. It's how Son and Truong think about AI 
 - `/link`: Link a project, file, folder, or source into the right operating-manual route or index.
 - `/3d-brain`: Choose a brain name and categories, then build a local 3D knowledge globe with Cinema and interactive growth replay. Uses selected local files and the bundled app template.
 - `/3d-walkthrough`: Scroll-driven walkthrough website or film of an F&B venue (restaurant, cafe, coffee shop, bar), always a real, open place. Blender builds only the structure as plain clay along the route (street, door, inside, hero spot). Real photos of every corner give the look: a free AI video model (Wan2.1 VACE on Kaggle's free GPU) takes each clay clip plus the photos and makes the real-looking clip. The site plays one short clip per chapter on scroll (triggered, not scrubbed). Always loads design-skills first. Path: `.claude/skills/3d-walkthrough/`.
+- `/watch` (bradautomates/claude-video, MIT): Watch a YouTube link or video file. Pulls captions and frames so the AI can answer questions about it. Free local mode by default; in cloud sessions YouTube blocks the download, so you get the transcript only. Read `VENDORED.md` first for setup. Path: `.claude/skills/watch/`.
 - `/level-up` — Weekly 3Ms interview. Find one automation, scope it, ship it. One per week.
 
 ### Kit packs (whole repos, in `.claude/skills/`)
