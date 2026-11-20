@@ -26,7 +26,6 @@ Each pack is a full copy of one Sunaii kit with its own `VENDORED.md` (source an
 
 - **design-skills (Emil Kowalski): the one UI design skill.** Use it for all UI design work: building, polishing, and reviewing websites and app screens, plus motion and interactions. Path: `.claude/skills/design-skills/`. Entry: `.claude/skills/design-skills/skills/emil-design-eng/SKILL.md`, then the matching sub-skill in `.claude/skills/design-skills/skills/` (`animate`, `choreograph`, `review-animations`, `break-ui`, `mobile-native`, `prototype`, `apple-design`). Cheat sheets: `ui-cheatsheet.md`, `performance-cheatsheet.md`.
 - **scroll-craft (Nate Herk, MIT):** premium scroll-driven landing pages (layered heroes, scrollytelling, scrub-video acts, one bespoke signature move). Runs as `/scroll-craft`. Interview brief first, then grammar, fingerprint gate, build, and Playwright scroll verification. Assets from real client photos (no key) or generated via kie.ai (`KIE_AI_API_KEY`, costs credits). Builds go to `websites/TruongSon-demos/scrollcraft/` via `.scrollcraft.json`. Pair with design-skills for UI polish. Path: `.claude/skills/scroll-craft/`. Entry: `SKILL.md`.
-- `PRODUCT.md` is product context for the TruongSon site (users, positioning, rules). Read it before design work on that site.
 - **video-edit-kit:** talking-head editing, Reels and Shorts, HyperFrames motion graphics. Use for video or Instagram content. Path: `.claude/skills/video-edit-kit/`. Entry: `.claude/skills/video-edit-kit/AGENTS.md`, then `docs/WORKFLOW.md`
 - **sales-agent (Harvey), `/sales-agent`:** cold-outreach agent. Not set up yet. Use only when Son or Truong asks to set it up or run it. It sends real email, so confirm the list, copy, and sending account first. Path: `.claude/skills/sales-agent/`. Entry: `.claude/skills/sales-agent/SKILL.md`, then the pack's `CLAUDE.md`
 - **craft-anything (storytold, MIT/Apache), `/craft-anything`:** study a website, web app or app, then rebuild our own version. Early alpha. Not set up. Only for software we own or have permission to copy; never a competitor's. Path: `.claude/skills/craft-anything/`. Entry: `.claude/skills/craft-anything/SKILL.md`, then the pack's `README.md`
@@ -49,7 +48,7 @@ See `EXPANSIONS.md` for what to add as you grow.
 - **What we do:** Websites for any kind of business. Details: `context/about-business.md`
 - **Who we serve:** Any small business in the US. F&B (independent restaurants and coffee shops) is the first segment.
 - **Who we are:** Son and Truong, two co-founders sharing this AIOS. Details: `context/about-me.md`
-- **This quarter (to 2027-02-06):** 1) Sign 10 paying clients. 2) Build an Instagram brand as proof/portfolio. Details: `context/priorities.md`
+- **This quarter (to 2027-02-06):** 1) Sign 10 paying clients. 2) Build an Instagram brand as proof/portfolio. Details and current status: `context/priorities.md`
 - **Biggest time sinks:** Cold outreach and building each website
 - **Stage:** Pre-revenue
 
@@ -59,7 +58,9 @@ Match the register in `references/voice.md`. Casual but professional. Short sent
 
 ## Connections
 
-Full registry: `connections.md`. None wired yet.
+Full registry: `connections.md`. Only `/watch` (local script) is wired. Business tools are not connected yet.
+
+**Temporary account:** this repo runs on a borrowed claude.ai account until Son and Truong move it to their own plan. Do not use that account's Gmail, Drive, Calendar or other connectors for business work. Connections, automation, outreach and Instagram get set up after the move.
 
 - Revenue: Stripe (planned)
 - Email + calendar: Gmail, Google Calendar
