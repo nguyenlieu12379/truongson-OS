@@ -254,3 +254,11 @@ Open: needs a Kaggle account with a verified phone and an API token (not set up 
 **Why:** Son asked to remove it. To bring it back, move the folders back and restore the lines.
 
 **Owner:** Son
+
+## 2026-11-20 - Add craft-anything; list every skill in README
+
+**Decision:** Vendor storytold/craft-anything (MIT/Apache-2.0, commit 827be60) into `.claude/skills/craft-anything/` with a `SKILL.md` entry point and the `.agents/skills/` mirror. Linked from CLAUDE.md and AGENTS.md. Not set up. README now lists every skill and pack, not only the six kit skills.
+
+**Why:** It is the pick over REA for rebuilding websites and web apps (REA only analyzes). First test is our own Forno Notte demo against the scroll-craft flow. Only for software we own or may copy. For a CRM, check open-source CRMs first. README was missing watch, scroll-craft, sales-agent, design-skills and video-edit-kit.
+
+**Owner:** Son
