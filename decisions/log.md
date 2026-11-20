@@ -270,3 +270,13 @@ Open: needs a Kaggle account with a verified phone and an API token (not set up 
 **Why:** Audit 2026-11-20 scored 49/100. The Context defects (broken routes, no status source, conflicting connection status) are cheap to fix and don't depend on accounts. The rest needs our own accounts.
 
 **Owner:** Son
+
+## 2026-11-20 - Espresso Vivace is the primary demo and our default site style
+
+**Decision:** Espresso Vivace (https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/) is the primary demo we show prospects and the reference for every new site. Default style: short and direct. Hero with live open-now status and an Order button, then menu, locations (storefront photo, map, hours, tap-to-call, directions) and ordering. One looping hero video at most, a vector logo drawn in code, subtle appear-on-scroll. Recorded in websites/README.md (primary demo section).
+
+**Why:** Son: "I always prefer sites like this... the best site I've built." It shows a drink buyer what they need in seconds. The editorial scroll-craft version felt like fluff for this buyer.
+
+**Alternatives considered:** The scroll-craft chaptered editorial version with a scrubbed pour video (v2, in git history). Kept as an option for brands with a strong story, not the default.
+
+**Owner:** Son
