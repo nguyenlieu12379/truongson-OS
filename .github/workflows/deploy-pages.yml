@@ -3,6 +3,7 @@ name: Deploy websites to GitHub Pages
 # /forno-notte/      -> websites/TruongSon-demos/forno-notte (3D scroll demo)
 # /coastal-cottage/  -> websites/TruongSon-demos/coastal-cottage (baked live-3D walkthrough)
 # /il-dante-caffe/   -> websites/TruongSon-demos/il-dante-caffe (concept demo, baked live-3D walkthrough)
+# /espresso-vivace/ -> websites/TruongSon-demos/scrollcraft/builds/espresso-vivace (concept demo, scroll-craft)
 # /             -> redirects to /forno-notte/
 
 on:
@@ -41,6 +42,9 @@ jobs:
           mkdir -p _site/il-dante-caffe
           cp -R websites/TruongSon-demos/il-dante-caffe/. _site/il-dante-caffe/
           rm -f _site/il-dante-caffe/README.md
+          mkdir -p _site/espresso-vivace
+          cp -R websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/. _site/espresso-vivace/
+          rm -rf _site/espresso-vivace/README.md _site/espresso-vivace/BRIEF.md _site/espresso-vivace/verify _site/espresso-vivace/.gitignore
           cat > _site/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">

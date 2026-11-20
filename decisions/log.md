@@ -230,3 +230,13 @@ Open: needs a Kaggle account with a verified phone and an API token (not set up 
 **Why:** Cold outreach is our biggest time sink. sales-agent does the work (finds, writes, sends, sorts replies); agency-agents only gives advice in chat. REA analyzes binaries and apps, which we don't need for websites. Comparison: https://claude.ai/artifact/9F3BVxoZpLBWMRq5HKTUBQ
 
 **Owner:** Son
+
+## 2026-11-20 - Vendor scroll-craft as /scroll-craft
+
+**Decision:** Copy the scroll-craft skill from nateherkai/scroll-craft (MIT, commit 75d81f7) into `.claude/skills/scroll-craft/` and `.agents/skills/scroll-craft/`, with `VENDORED.md`. `.scrollcraft.json` at the repo root routes builds to `websites/TruongSon-demos/scrollcraft/`. Linked from CLAUDE.md and AGENTS.md.
+
+**Why:** Premium scroll-driven landing pages are a strong portfolio and Instagram proof piece, and a sellable upgrade for F&B clients. Builds from a client's real photos cost nothing; kie.ai generation is optional and paid.
+
+**Alternatives considered:** Building scroll pages by hand with design-skills only. `/3d-walkthrough` stays the tool for venue walk-throughs; scroll-craft is for brand landing pages.
+
+**Owner:** Son
