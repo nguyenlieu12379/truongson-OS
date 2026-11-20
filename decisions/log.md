@@ -222,3 +222,13 @@ Open: needs a Kaggle account with a verified phone and an API token (not set up 
 **Decision:** Copy the `watch` skill from bradautomates/claude-video (MIT, commit 03ceb42, release 0.3.2) into `.claude/skills/watch/` and `.agents/skills/watch/`, with `VENDORED.md`. Link it from CLAUDE.md, AGENTS.md and `connections.md`. Default setup is free: local engine, captions only.
 
 **Why:** So the AIOS can watch YouTube tutorials (first use: a Claude + Blender + Higgsfield tutorial for `/3d-walkthrough`). In cloud sessions YouTube blocks video downloads (403), so only captions come through; a free Gemini key or a local run gives frames.
+
+## 2026-11-20 - Vendor scroll-craft as /scroll-craft
+
+**Decision:** Copy the scroll-craft skill from nateherkai/scroll-craft (MIT, commit 75d81f7) into `.claude/skills/scroll-craft/` and `.agents/skills/scroll-craft/`, with `VENDORED.md`. `.scrollcraft.json` at the repo root routes builds to `websites/TruongSon-demos/scrollcraft/`. Linked from CLAUDE.md and AGENTS.md.
+
+**Why:** Premium scroll-driven landing pages are a strong portfolio and Instagram proof piece, and a sellable upgrade for F&B clients. Builds from a client's real photos cost nothing; kie.ai generation is optional and paid.
+
+**Alternatives considered:** Building scroll pages by hand with design-skills only. `/3d-walkthrough` stays the tool for venue walk-throughs; scroll-craft is for brand landing pages.
+
+**Owner:** Son
