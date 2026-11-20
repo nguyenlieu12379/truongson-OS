@@ -47,7 +47,7 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--red); outline-
 /* brand mark: vector redraw of the round Vivace sign, one symbol reused */
 .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
 .mark { display: block; flex: none; }
-.mark--sm { width: 2.5rem; height: 2.5rem; }
+.mark--sm { width: 2.25rem; height: 2.25rem; }
 .mark--lg { width: clamp(7rem, 16vw, 10rem); height: clamp(7rem, 16vw, 10rem); }
 .bar__nav { display: flex; align-items: center; gap: clamp(0.75rem, 2.5vw, 1.75rem); font-size: 0.95rem; font-weight: 500; }
 .bar__nav a { text-decoration: none; }
