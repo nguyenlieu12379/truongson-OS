@@ -153,6 +153,16 @@ Limit: the pack expects Blender MCP and a desktop Blender app. Cloud sessions ap
 
 **Owner:** Son
 
+## 2026-11-20 - Delete blender-skills
+
+**Decision:** Delete the vendored `blender-skills` pack from `.claude/skills/blender-skills/` and its Codex copy in `.agents/skills/blender-skills/`. Remove the links to it from CLAUDE.md, AGENTS.md, README.md and both `3d-walkthrough` SKILL.md files.
+
+**Why:** Requested directly. The pack assumes Blender MCP and a desktop Blender app, which this setup does not use. `/3d-walkthrough` runs headless `bpy` scripts and keeps `references/realism.md` as its craft guide.
+
+**Alternatives considered:** Moving it to `archives/`, which CLAUDE.md prefers over deleting. Not chosen because the request was to delete. The files stay in git history at the commit before this change.
+
+**Owner:** Unassigned (confirm: Son or Truong)
+
 ## 2026-11-20 - 3d-walkthrough: clay structure in Blender, real photos and AI models for the look
 
 **Decision:** Rewrite `/3d-walkthrough` for F&B venues only (always real, open places). Blender builds only the structure as plain clay along the route (street, door, inside, hero spot): no materials, lights, decor or bake. Real photos of every corner are the design. An AI image model paints the photos onto each clay shot's first frame, and AI video models carry that look through the shot. The site plays one short clip per chapter, triggered by scroll (not scrubbed), loaded per chapter, all-intra encoded. The specific AI video models get added once that setup is connected.

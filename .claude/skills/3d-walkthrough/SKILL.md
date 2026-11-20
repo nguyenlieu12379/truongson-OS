@@ -18,7 +18,7 @@ Reference: the Il Dante Caffe test (`projects/il-dante/`): clay clips from its m
 
 ## 0. Load the design skill
 
-Before any site code, read the design-skills pack: `.claude/skills/design-skills/skills/emil-design-eng/SKILL.md`, then `apple-design`, `choreograph`, `animate`, `animation-performance`, and `ui-cheatsheet.md`. Use `review-animations` in step 9. For modelling structure in Blender, the blender-skills pack (`.claude/skills/blender-skills/.claude/skills/blender-director/SKILL.md`) is the craft reference; skip its materials and lighting skills.
+Before any site code, read the design-skills pack: `.claude/skills/design-skills/skills/emil-design-eng/SKILL.md`, then `apple-design`, `choreograph`, `animate`, `animation-performance`, and `ui-cheatsheet.md`. Use `review-animations` in step 9.
 
 ## 1. Collect
 
