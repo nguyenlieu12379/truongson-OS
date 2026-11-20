@@ -182,3 +182,11 @@ Open: the AI video models, their cost and free-tier limits. Tested so far on Il 
 **Why:** Tested on the Corner Crema mockup. Fading between clips flashed the background, fast scrolls cut clips off, and reverse failed on hosts without byte-range support. The queued, sped-up playback felt good to Son; scroll-scrubbing was tried and set aside.
 
 **Owner:** Son
+
+## 2026-11-20 - 3d-walkthrough: one continuous camera path, clips that join cleanly
+
+**Decision:** Render the route as one continuous camera path and cut chapter clips from it. Each clip starts on the previous clip's last frame at the same walking speed. Added to step 4 of `/3d-walkthrough`. The Corner Crema mockup is saved as the step 7 reference build in `websites/TruongSon-demos/corner-crema-mockup/`.
+
+**Why:** In the mockup, walking from the door into the cafe showed a slight stop. The two clay shots overlapped by about a second and the first slowed down at its end. Cutting at the matching frame and thinning the slow tail evened the speed across the join.
+
+**Owner:** Son
