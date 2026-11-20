@@ -1,10 +1,7 @@
 name: Deploy websites to GitHub Pages
 
-# /forno-notte/      -> websites/TruongSon-demos/forno-notte (3D scroll demo)
-# /coastal-cottage/  -> websites/TruongSon-demos/coastal-cottage (baked live-3D walkthrough)
-# /il-dante-caffe/   -> websites/TruongSon-demos/il-dante-caffe (concept demo, baked live-3D walkthrough)
 # /espresso-vivace/ -> websites/TruongSon-demos/scrollcraft/builds/espresso-vivace (concept demo, scroll-craft)
-# /             -> redirects to /forno-notte/
+# /             -> redirects to /espresso-vivace/
 
 on:
   push:
@@ -33,25 +30,16 @@ jobs:
       - uses: actions/checkout@v4
       - name: Assemble site
         run: |
-          mkdir -p _site/forno-notte
-          cp -R websites/TruongSon-demos/forno-notte/. _site/forno-notte/
-          rm -f _site/forno-notte/README.md
-          mkdir -p _site/coastal-cottage
-          cp -R websites/TruongSon-demos/coastal-cottage/. _site/coastal-cottage/
-          rm -f _site/coastal-cottage/README.md
-          mkdir -p _site/il-dante-caffe
-          cp -R websites/TruongSon-demos/il-dante-caffe/. _site/il-dante-caffe/
-          rm -f _site/il-dante-caffe/README.md
           mkdir -p _site/espresso-vivace
           cp -R websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/. _site/espresso-vivace/
           rm -rf _site/espresso-vivace/README.md _site/espresso-vivace/BRIEF.md _site/espresso-vivace/verify _site/espresso-vivace/.gitignore
           cat > _site/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">
-          <title>Forno Notte</title>
-          <meta http-equiv="refresh" content="0; url=forno-notte/">
-          <link rel="canonical" href="forno-notte/">
-          <a href="forno-notte/">Forno Notte</a>
+          <title>Espresso Vivace</title>
+          <meta http-equiv="refresh" content="0; url=espresso-vivace/">
+          <link rel="canonical" href="espresso-vivace/">
+          <a href="espresso-vivace/">Espresso Vivace</a>
           HTML
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
