@@ -15,7 +15,7 @@ websites/
 
 | Owner | Site | Status | Path |
 | --- | --- | --- | --- |
-| TruongSon-demos | Espresso Vivace, practical cafe concept (menu, live open-now, maps, ordering) | Live at https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/ (after merge) | `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` |
+| TruongSon-demos | Espresso Vivace, scroll-craft editorial concept (real Commons photos, scroll-poured rosetta) | Live at https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/ (after merge) | `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` |
 
 Scroll-craft builds live in `websites/TruongSon-demos/scrollcraft/builds/` (set by `.scrollcraft.json`), next to the skill's `FINGERPRINTS.md` registry.
 
