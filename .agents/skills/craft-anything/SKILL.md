@@ -9,7 +9,7 @@ Entry point for the vendored craft-anything pack (source and commit in `VENDORED
 
 ## Status
 
-Added and linked. Not set up: nothing built or installed. Decision: `decisions/log.md`, 2026-11-20. First planned test: rebuild our own Forno Notte demo and compare with the scroll-craft flow.
+Added and linked. Not set up: nothing built or installed. Decision: `decisions/log.md`, 2026-11-20. First planned test: rebuild our own Espresso Vivace demo (`websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/`) and compare with the scroll-craft flow.
 
 ## Rules
 

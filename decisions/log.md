@@ -262,3 +262,11 @@ Open: needs a Kaggle account with a verified phone and an API token (not set up 
 **Why:** It is the pick over REA for rebuilding websites and web apps (REA only analyzes). First test is our own Forno Notte demo against the scroll-craft flow. Only for software we own or may copy. For a CRM, check open-source CRMs first. README was missing watch, scroll-craft, sales-agent, design-skills and video-edit-kit.
 
 **Owner:** Son
+
+## 2026-11-20 - Fix context now; connections and automation after the account move
+
+**Decision:** The repo runs on a temporary claude.ai account (borrowed) until we have our own plan. Fix Context now: remove the dead `PRODUCT.md` route, correct the Connections status in CLAUDE.md and AGENTS.md, add a dated status section to `context/priorities.md` (0/10 clients), point craft-anything's first test at Espresso Vivace. Connections, automation, outreach (sales-agent) and Instagram get set up after the move. Don't use the temporary account's Gmail, Drive or Calendar for business.
+
+**Why:** Audit 2026-11-20 scored 49/100. The Context defects (broken routes, no status source, conflicting connection status) are cheap to fix and don't depend on accounts. The rest needs our own accounts.
+
+**Owner:** Son
