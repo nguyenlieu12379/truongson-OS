@@ -84,16 +84,22 @@
   </section>
 
   <!-- PEAK · THE POUR: a real rosetta pour, scrubbed by the reader's hand. -->
-  <section class="ch--dark pour" data-sc-act="scrub" data-sc-span="2.8" data-sc-dwell="0.3" id="pour" data-folio="III" data-folio-t="The pour">
+  <section class="ch--dark pour" data-sc-act="scrub" data-sc-span="2.8" data-sc-dwell="0.2" id="pour" data-folio="III" data-folio-t="The pour">
     <div data-sc-stage class="pour__stage">
-      <div class="cupframe">
-        <img class="sc-stage__poster" src="assets/pour-poster.webp" alt="" width="720" height="720">
-        <img class="pour__final" src="assets/pour-final.webp" alt="A finished rosetta in a cup of latte." width="720" height="720">
-        <video data-sc-scrub data-sc-src="assets/pour.mp4" data-sc-src-mobile="assets/pour-m.mp4" muted playsinline aria-label="A barista pours steamed milk into espresso, wiggling the pitcher to form a rosetta, then pulls through."></video>
-      </div>
-      <div class="pour__copy" data-sc-cue="0.62 1 0.08 0.04">
+      <figure class="pourframe">
+        <picture>
+          <source media="(max-width: 860px)" srcset="assets/pour-poster-m.webp">
+          <img class="sc-stage__poster" src="assets/pour-poster.webp" alt="" width="1280" height="720">
+        </picture>
+        <picture>
+          <source media="(max-width: 860px)" srcset="assets/pour-final-m.webp">
+          <img class="pour__final" src="assets/pour-final.webp" alt="A finished latte-art tulip in a green cup." width="1280" height="720">
+        </picture>
+        <video data-sc-scrub data-sc-src="assets/pour.mp4" data-sc-src-mobile="assets/pour-m.mp4" muted playsinline aria-label="A barista pours steamed milk into espresso and builds a layered latte-art tulip, then pulls through."></video>
+      </figure>
+      <div class="pour__copy" data-sc-cue="0.12 1 0.1 0.04">
         <p class="pour__lede">Schomer is credited with developing and popularizing latte art in the United States.</p>
-        <p class="pour__credit">A rosetta pour. Video: Anna Frodesiak, CC0.</p>
+        <p class="pour__credit">A latte-art pour, not filmed at Vivace. Video: Mixkit, free license.</p>
       </div>
     </div>
   </section>
@@ -166,7 +172,7 @@
     </div>
     <footer class="colophon">
       <p><strong>Concept demo by TruongSon.</strong> Not made by or affiliated with Espresso Vivace. Facts from public sources; hours not shown because we could not confirm them.</p>
-      <p>Photos from Wikimedia Commons, used under their licenses: Joe Mabel (CC BY-SA 3.0), Breville USA (CC BY 2.0), Ron Diggity (CC BY 2.0), Another Believer (CC BY-SA 3.0), ChrisDag (CC BY 2.0). Resized and cropped. <a class="link-inline" href="credits.html">Full credits</a>.</p>
+      <p>Pour video from Mixkit (free license, not filmed at Vivace). Photos from Wikimedia Commons, used under their licenses: Joe Mabel (CC BY-SA 3.0), Breville USA (CC BY 2.0), Ron Diggity (CC BY 2.0), Another Believer (CC BY-SA 3.0), ChrisDag (CC BY 2.0). Resized and cropped. <a class="link-inline" href="credits.html">Full credits</a>.</p>
     </footer>
   </section>
 

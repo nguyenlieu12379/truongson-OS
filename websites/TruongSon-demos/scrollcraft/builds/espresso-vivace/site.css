@@ -127,17 +127,19 @@ a:focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 4px; bord
 .chapter-no--big { font-size: clamp(4rem, 3rem + 6vw, 9rem); line-height: 1; margin: 0; }
 .hush__t { font-family: var(--sc-font-display); font-size: var(--sc-t-2xl); letter-spacing: -0.02em; margin: var(--sc-3) 0 0; color: var(--dark-ink); }
 
-/* ---- PEAK · the pour: real footage in a porcelain rim ---- */
-.pour__stage { height: 100svh; display: grid; place-items: center; overflow: hidden; }
-.cupframe {
-  position: relative; width: min(72svh, 86vw); aspect-ratio: 1; border-radius: 50%; overflow: hidden;
-  box-shadow: 0 0 0 clamp(14px, 2.4vw, 30px) #ECE8E1, 0 0 0 calc(clamp(14px, 2.4vw, 30px) + 1px) rgb(0 0 0 / 0.25), 0 40px 90px -20px rgb(0 0 0 / 0.75);
-  background: #2A170B;
-}
+/* ---- PEAK · the pour: real footage, scrubbed, in its own column ---- */
+.pour__stage { height: 100svh; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--sc-5); align-items: center; padding: 0 var(--gutter); overflow: hidden; }
+.pourframe { grid-column: 5 / span 8; grid-row: 1; position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--sc-r-sm, 4px); background: #2A2620; box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.8); }
+.pourframe picture { display: contents; }
 .pour__final { display: none; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
-.pour__copy { position: absolute; left: var(--gutter); bottom: clamp(2rem, 7vh, 4.5rem); max-width: 30ch; }
+.pour__copy { grid-column: 1 / span 4; grid-row: 1; align-self: end; padding-bottom: clamp(2rem, 9vh, 6rem); }
 .pour__lede { margin: 0; font-family: var(--sc-font-display); font-size: var(--sc-t-xl); line-height: 1.2; letter-spacing: -0.012em; color: var(--dark-ink); text-wrap: balance; }
 .pour__credit { margin: var(--sc-3) 0 0; font-size: var(--sc-t-xs); color: var(--dark-soft); letter-spacing: 0.01em; }
+@media (max-width: 860px) {
+  .pour__stage { grid-template-columns: 1fr; grid-template-rows: auto auto; align-content: center; gap: var(--sc-5); padding-top: var(--sc-8); }
+  .pourframe { grid-column: 1; grid-row: 1; aspect-ratio: 4 / 5; width: min(100%, 52svh); justify-self: center; }
+  .pour__copy { grid-column: 1; grid-row: 2; align-self: start; padding-bottom: 0; }
+}
 
 /* ---- the real one ---- */
 .real { display: grid; justify-items: center; gap: var(--sc-5); padding-top: var(--sc-7); }

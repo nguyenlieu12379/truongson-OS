@@ -23,7 +23,7 @@
 5. **What no other site does:** you draw a latte-art rosetta with your scroll wheel, then it wipes to a real Vivace latte.
 6. **Distance from premium-minimal:** editorial. Paper grounds, folios, captions, real photos in columns. One loud ground (the yellow of their poster wall).
 7. **One world or distinct scenes:** distinct chapters. Hard cuts between grounds.
-8. **Assets:** 12 free-licensed photos from Wikimedia Commons (CC BY / CC BY-SA, credited on the page). No generated imagery. No spend.
+8. **Assets:** free-licensed photos from Wikimedia Commons (CC BY / CC BY-SA, credited on the page) and one free Mixkit pour video (not filmed at Vivace, labeled as such). No generated imagery. No spend.
 
 ## Grammar
 
@@ -31,11 +31,13 @@
 
 ## Signature move
 
-**The scroll-poured rosetta.** A pinned top-down cup. Scrolling pours a milk stream, builds the rosetta leaf by leaf from the bottom, then draws the pull-through line. The next chapter wipes the drawing into a real photo of a Vivace latte. Coded in the page (`site.js`), engine untouched.
+**v1 (dropped 2026-11-20):** an SVG rosetta drawn by scroll. Son: it lacked motion and looked bad (read as a Christmas tree).
+
+**v2 (current): pour, then the real cup.** A real latte-art pour (Mixkit, free license) scrubbed by the scroll wheel in the editorial media column, then an iris wipe to a real photo of a Vivace latte. Honest caveat: scrubbing a clip is a kit device (`scrub`), so by uniqueness.md §3 this is weaker as a signature move than v1. The bespoke part is the pairing: a pour you control, resolved by the cafe's own cup. Realism won over novelty here.
 
 ## Tell-someone sentence
 
-It's the site where you pour a latte-art fern with your scroll wheel, and then it turns into a real one from the cafe.
+It's the site where you pour a latte with your scroll wheel, and then it cuts to a real one from the cafe.
 
 ## Feeling curve
 
@@ -44,7 +46,7 @@ It's the site where you pour a latte-art fern with your scroll wheel, and then i
 1  Warmth       a cart at 5th and Union, the sidewalk bar crowd in 2007
 2  Curiosity    the engineer: PID controllers, a measurer behind the bar
 3  Hush         an empty dark page, "The pour." and nothing else (authored silence)
-4  Delight      PEAK: the rosetta pours under your hand, leaf by leaf
+4  Delight      PEAK: a real pour under your hand, milk folding into a tulip
 5  Trust        the wipe: a real Vivace latte, credited
 6  Belonging    the room: poster wall, chalkboards, the line
 7  Respect, earned  the book, the baristas, 38 years
@@ -53,7 +55,7 @@ It's the site where you pour a latte-art fern with your scroll wheel, and then i
 
 ## The peak
 
-"I scrolled and poured a rosetta, and then it became a photo of their actual latte." Lives in act 4. Gets the largest span (3.0vh), the only pin, and the silence of act 3 in front of it.
+"I scrolled and the milk poured into a tulip, and then it cut to a photo of their actual latte." Lives in act 4. Gets the largest span (2.8vh), the only pinned act, and the silence of act 3 in front of it.
 
 ## Authored silence
 
@@ -67,10 +69,10 @@ Act 3 (intertitle) is deliberately near-empty: a dark ground with "III" and "The
 | 1 | The cart | flow + reveal | The cart-to-sidewalk-bar photo wipes in: a change of state |
 | 2 | The obsession | flow + parallax media column | Two Schomer portraits at different rates beside the text |
 | 3 | Silence | flow (intertitle) | Hard cut to dark, nothing moves |
-| 4 | The pour (peak) | pin + bespoke SVG | Signature move |
+| 4 | The pour (peak) | scrub (the only clip) | Real liquid needs real footage |
 | 5 | The real one | reveal (iris, once) | The drawing becomes the photo |
 | 6 | The room | flow + parallax, yellow ground | Asymmetric spread, captions as labels |
 | 7 | The book | count (38 years, real) | One real figure in prose |
 | 8 | Visit (colophon) | flow + in | CTA as running text, credits, demo note |
 
-Families: flow/in, reveal, parallax, pin, count, kinetic. No family twice in a row as the act's primary device. One scrub budget unused (no footage).
+Families: flow/in, reveal, parallax, pin, count, kinetic. No family twice in a row as the act's primary device. One of two scrub slots used.
