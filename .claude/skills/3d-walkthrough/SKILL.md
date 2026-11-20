@@ -88,6 +88,12 @@ For each shot's job folder (step 5): the clay clip (motion and structure) + 1 to
 
 Check every clip against its photos and the clay clip: layout holds, nothing drifts or melts, the look matches the venue. Redo the ones that fail.
 
+**Finish each clip for the site** (VACE gives 832x480 at 16 fps; the site wants 1280x720 at 24 fps plus a phone set):
+`bash scripts/finish_clip.sh <out.mp4> <site>/clips --name 2-door`. It writes `2-door.mp4` (1280x720) and `2-door-phone.mp4` (854x480), 24 fps, every frame a keyframe, no audio.
+- Frame rate: RIFE fills 16 to 24 fps (free, CPU, about 2 min per 5 s clip).
+- Size, `--mode`: `sharp` (default, Lanczos plus light sharpen, seconds, closest to the source), `blend` (half Real-ESRGAN, crisper edges, a little waxy, about 10 min per clip on CPU), `ai` (Real-ESRGAN only, smooths foam and wood grain). Tested on a real photo 832 to 1280 wide: sharp 40.8, blend 38.5, ai 33.4 PSNR. Try `blend` only if a real clip looks soft.
+- An upscaled 480p clip is not native 1080p. If the look isn't good enough to sell, that's a model limit, not a finishing problem.
+
 ## 7. Build the site
 
 Scroll triggers each clip, it doesn't scrub it. Reference build: `websites/TruongSon-demos/corner-crema-mockup/` (copy its script for the player).
