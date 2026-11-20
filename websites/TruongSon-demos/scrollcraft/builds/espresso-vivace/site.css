@@ -75,6 +75,13 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--red); outline-
 .hero__img img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--r); }
 .hero__img figcaption { margin-top: 0.4rem; font-size: 0.75rem; color: var(--ink-soft); }
 
+.hero__img--video video { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 62% 50%; border-radius: var(--r); background: #2A2620; }
+
+/* Brix storefront, the "outlook" shot. Wide crop that keeps the sign and the Brix door. */
+.outside { margin: 0 0 clamp(1rem, 3vw, 2rem); }
+.outside img { width: 100%; height: auto; aspect-ratio: 21 / 9; object-fit: cover; object-position: 50% 72%; border-radius: var(--r); }
+.outside figcaption { margin-top: 0.4rem; font-size: 0.75rem; color: var(--ink-soft); }
+
 /* open-now status */
 .status { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 0.4rem; font-size: 0.95rem; }
 .status li, .place__open { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; margin: 0; }
@@ -133,6 +140,8 @@ h3 { font-family: var(--text); font-size: 0.8rem; font-weight: 600; letter-spaci
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr; }
   .hero__img { order: -1; }
+  .hero__img--video video { aspect-ratio: 4 / 5; max-height: 62svh; }
+  .outside img { aspect-ratio: 4 / 3; object-position: 50% 60%; }
   .menu { grid-template-columns: 1fr 1fr; }
   .menu__col:last-child { grid-column: 1 / -1; }
   .places, .order__grid { grid-template-columns: 1fr; }
