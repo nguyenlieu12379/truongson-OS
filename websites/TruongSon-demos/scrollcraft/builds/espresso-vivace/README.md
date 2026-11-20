@@ -32,7 +32,7 @@ A short, practical site for **Espresso Vivace**, Seattle: menu, live open-now st
 |---|---|
 | `index.html` | The page. |
 | `site.css` | Styles. |
-| `site.js` | Open-now status from regular and holiday hours, in Seattle time. |
+| `site.js` | Hero video source per device, appear-on-scroll animations, open-now status from regular and holiday hours (Seattle time). |
 | `credits.html` | Credits for the storefront photo and pour video. |
 | `assets/pour*.mp4`, `pour-poster*`, `pour-final*` | Pour video (Mixkit "Latte art" #810, free license, not filmed at Vivace): 1280x720 desktop, 576x720 phone crop, first/last-frame posters. |
 | `assets/brix-outside.webp` | Brix storefront, Oct 2022 (Commons, Another Believer, CC BY-SA 4.0). 960px: full size was rate-limited. |
@@ -44,7 +44,8 @@ A short, practical site for **Espresso Vivace**, Seattle: menu, live open-now st
 - **v1:** scroll-craft chaptered editorial page with an SVG rosetta drawn by scroll.
 - **v2:** the drawing swapped for a real Mixkit pour video scrubbed by scroll.
 - **v3 (2026-11-20):** Son asked for less fluff: just what a drink buyer needs (menu, map, ordering). Story chapters, scroll effects and the video were removed.
-- **v3.1 (current, 2026-11-20):** Son asked to add the pour video and a cafe exterior photo. The pour loops in the hero (replacing the latte photo); the Brix storefront heads the Locations section. Earlier versions are in git history.
+- **v3.1 (2026-11-20):** Son asked to add the pour video and a cafe exterior photo. The pour loops in the hero (replacing the latte photo); the Brix storefront heads the Locations section. Earlier versions are in git history.
+- **v3.2 (current, 2026-11-20):** appear-on-scroll animations (fade + 14px rise, staggered, once; plain fade under reduced motion; nothing hidden without JS) and a vector redraw of the round Vivace sign as the brand mark (header, footer, favicon). It is our SVG approximation of their sign, set in Kaushan Script and Archivo, not their artwork: swap in their real logo file if they sign.
 
 ## Verified (2026-11-20, headless Chrome)
 

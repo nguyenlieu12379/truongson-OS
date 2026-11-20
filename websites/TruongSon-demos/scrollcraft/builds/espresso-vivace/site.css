@@ -42,7 +42,13 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--red); outline-
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
 }
-.bar__mark { font-family: var(--display); font-size: 1.25rem; font-weight: 500; letter-spacing: -0.01em; text-decoration: none; }
+.bar__mark { display: inline-flex; align-items: center; gap: 0.6rem; font-family: var(--display); font-size: 1.25rem; font-weight: 500; letter-spacing: -0.01em; text-decoration: none; }
+
+/* brand mark: vector redraw of the round Vivace sign, one symbol reused */
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.mark { display: block; flex: none; }
+.mark--sm { width: 2.5rem; height: 2.5rem; }
+.mark--lg { width: clamp(7rem, 16vw, 10rem); height: clamp(7rem, 16vw, 10rem); }
 .bar__nav { display: flex; align-items: center; gap: clamp(0.75rem, 2.5vw, 1.75rem); font-size: 0.95rem; font-weight: 500; }
 .bar__nav a { text-decoration: none; }
 @media (hover: hover) and (pointer: fine) { .bar__nav a:not(.bar__cta):hover { text-decoration: underline; text-underline-offset: 0.3em; } }
@@ -131,7 +137,8 @@ h3 { font-family: var(--text); font-size: 0.8rem; font-weight: 600; letter-spaci
 .order__card p { margin: 0; }
 
 /* ---- footer ---- */
-.foot { max-width: var(--maxw); margin: 0 auto; padding: 2rem var(--gutter) 3rem; border-top: 1px solid var(--line); display: grid; gap: 0.75rem; }
+.foot { max-width: var(--maxw); margin: 0 auto; padding: 2.5rem var(--gutter) 3rem; border-top: 1px solid var(--line); display: grid; gap: 0.75rem; justify-items: start; }
+.foot .mark--lg { margin-bottom: 0.75rem; }
 .foot__line { margin: 0; font-family: var(--display); font-size: 1.15rem; max-width: 52ch; }
 .foot__small { margin: 0; font-size: 0.8rem; color: var(--ink-soft); max-width: 80ch; }
 .foot__small strong { color: var(--ink); }
@@ -150,4 +157,12 @@ h3 { font-family: var(--text); font-size: 0.8rem; font-weight: 600; letter-spaci
   .bar__nav a:not(.bar__cta):first-child { display: none; }
   .menu { grid-template-columns: 1fr; }
   .menu li { font-size: 1.1rem; }
+}
+
+/* ---- appear on scroll: fade + 14px rise, once, staggered. Only with JS. ---- */
+.js .rv { opacity: 0; transform: translateY(14px); transition: opacity 620ms var(--ease), transform 620ms var(--ease); transition-delay: var(--d, 0ms); }
+.js .rv.in { opacity: 1; transform: none; }
+.js .rv--scale { transform: translateY(10px) scale(0.98); }
+@media (prefers-reduced-motion: reduce) {
+  .js .rv, .js .rv--scale { transform: none; transition-duration: 220ms; transition-delay: 0ms; }
 }

@@ -87,6 +87,42 @@
     });
   };
 
+  // Appear on scroll: tag groups, stagger children, reveal once on entry.
+  var groups = [
+    [".hero__text > *", 70, 0], [".hero__img", 0, 160],
+    [".block__head", 0, 0], [".menu__col", 90, 0], [".outside", 0, 0],
+    [".place", 110, 0], [".holiday", 0, 0], [".order__card", 90, 0],
+    [".foot > *", 70, 0]
+  ];
+  var tagged = [];
+  groups.forEach(function (g) {
+    var els = document.querySelectorAll(g[0]);
+    Array.prototype.forEach.call(els, function (el, i) {
+      el.classList.add("rv");
+      if (el.matches(".hero__img, .outside, .place")) el.classList.add("rv--scale");
+      el.style.setProperty("--d", (g[2] + i * g[1]) + "ms");
+      tagged.push(el);
+    });
+  });
+  // Menu items cascade inside each column after the column lands.
+  Array.prototype.forEach.call(document.querySelectorAll(".menu__col"), function (col) {
+    Array.prototype.forEach.call(col.querySelectorAll("li"), function (li, i) {
+      li.classList.add("rv");
+      li.style.setProperty("--d", Math.min(i * 35, 420) + "ms");
+      tagged.push(li);
+    });
+  });
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { rootMargin: "0px 0px -10% 0px", threshold: 0.01 });
+    tagged.forEach(function (el) { io.observe(el); });
+  } else {
+    tagged.forEach(function (el) { el.classList.add("in"); });
+  }
+
   if (window.Intl && Intl.DateTimeFormat) {
     update();
     setInterval(update, 60000);
