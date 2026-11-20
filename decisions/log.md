@@ -161,7 +161,7 @@ Limit: the pack expects Blender MCP and a desktop Blender app. Cloud sessions ap
 
 **Alternatives considered:** Moving it to `archives/`, which CLAUDE.md prefers over deleting. Not chosen because the request was to delete. The files stay in git history at the commit before this change.
 
-**Owner:** Unassigned (confirm: Son or Truong)
+**Owner:** Son
 
 ## 2026-11-20 - 3d-walkthrough: clay structure in Blender, real photos and AI models for the look
 
@@ -173,4 +173,4 @@ Limit: the pack expects Blender MCP and a desktop Blender app. Cloud sessions ap
 
 Open: the AI video models, their cost and free-tier limits. Tested so far on Il Dante Caffe clay clips with free Hugging Face demos (Qwen Image Edit, LTX 2.3 Studio); the free GPU quota ran out before a full run.
 
-**Owner:** TODO: Son or Truong
+**Owner:** Son
