@@ -152,3 +152,13 @@ Risk: the bake hasn't been run in this setup yet. The cottage is the first test.
 Limit: the pack expects Blender MCP and a desktop Blender app. Cloud sessions apply it through headless `bpy` scripts instead.
 
 **Owner:** Son
+
+## 2026-11-20 - Delete blender-skills
+
+**Decision:** Delete the vendored `blender-skills` pack from `.claude/skills/blender-skills/` and its Codex copy in `.agents/skills/blender-skills/`. Remove the links to it from CLAUDE.md, AGENTS.md, README.md and both `3d-walkthrough` SKILL.md files.
+
+**Why:** Requested directly. The pack assumes Blender MCP and a desktop Blender app, which this setup does not use. `/3d-walkthrough` runs headless `bpy` scripts and keeps `references/realism.md` as its craft guide.
+
+**Alternatives considered:** Moving it to `archives/`, which CLAUDE.md prefers over deleting. Not chosen because the request was to delete. The files stay in git history at the commit before this change.
+
+**Owner:** Unassigned (confirm: Son or Truong)

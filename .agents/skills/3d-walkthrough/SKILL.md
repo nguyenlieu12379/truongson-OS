@@ -32,7 +32,7 @@ Use `review-animations` in step 10. Apply what they say over anything in this fi
 
 Read `references/realism.md` before modelling: photo-scanned CC0 textures, a real HDRI sky, bevels and real-looking glass are what keep a scene from looking plastic.
 
-For the Blender craft (modeling, materials, lighting, surroundings, realism), use the blender-skills pack as the reference: `.agents/skills/blender-skills/.agents/skills/` (start at `blender-director/SKILL.md`). The most useful here: `archviz`, `environment-artist`, `set-dressing`, `vehicle-artist`, `vegetation-artist`, `materials`, `lighting`, `realistic-style`. The pack drives Blender through MCP; we run the same ideas as headless `bpy` scripts.
+For the Blender craft (modeling, materials, lighting, surroundings, realism), work from `references/realism.md` and run the same ideas as headless `bpy` scripts.
 
 ## 1. Collect the inputs
 
