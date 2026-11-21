@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tōv Coffee · Egyptian coffee on SE Hawthorne (concept)</title>
+<meta name="description" content="Concept demo for Tōv Coffee, Portland: cardamom espresso, rose mochas and sahlep at 3639 SE Hawthorne Blvd. Menu, hours, directions.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#26122E">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2326122E'/><path d='M8 28V14a8 8 0 0 1 16 0v14' fill='none' stroke='%23E5B94E' stroke-width='2.4'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Instrument+Sans:wdth,wght@75..100,400..700&display=swap">
+<link rel="stylesheet" href="scrollcraft.css">
+<link rel="preload" as="image" href="assets/room.webp">
+<style>
+  :root {
+    --sc-canvas:     #26122E;
+    --sc-surface:    #341A3F;
+    --sc-ink:        #F8EEDD;
+    --sc-ink-soft:   #D6C3D3;
+    --sc-accent:     #E5B94E;
+    --sc-accent-ink: #26122E;
+    --sc-font-display: "Fraunces", Georgia, serif;
+    --sc-font-text:    "Instrument Sans", system-ui, sans-serif;
+    --sc-shadow-color: 290 45% 5%;
+
+    --wall: #3E1C4E;
+    --wall-deep: #2A1236;
+    --gold: #E5B94E;
+    --gold-soft: color-mix(in oklab, #E5B94E 55%, transparent);
+    --blind: #121012;
+    --blind-ink: #F6EDCF;
+    --bar-h: 4.25rem;
+  }
+  html { scroll-padding-top: var(--bar-h); }
+  body { font-feature-settings: "ss01"; }
+  .sc-display { font-variation-settings: "opsz" 120; letter-spacing: -0.02em; }
+  em { font-style: italic; }
+  a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  a.sr-only:focus { width: auto; height: auto; clip: auto; z-index: 100; left: 1rem; top: 1rem; padding: 0.6rem 1rem; background: var(--gold); color: var(--sc-accent-ink); border-radius: 3px; }
+
+  /* ---------------------------------------------------------------- chrome */
+  .bar {
+    position: fixed; inset: 0 0 auto 0; z-index: var(--sc-z-chrome);
+    height: var(--bar-h); display: flex; align-items: center; justify-content: space-between;
+    padding-inline: var(--sc-gutter); pointer-events: none;
+  }
+  .bar > * { pointer-events: auto; }
+  .mark {
+    display: grid; place-items: center; height: calc(3rem + 10px); padding: 0 0.95rem 0.15rem; border-radius: 9px;
+    font-family: var(--sc-font-display); font-size: 1.6rem; font-weight: 600; text-decoration: none;
+    letter-spacing: -0.02em; color: var(--blind-ink); background: #2B2124;
+    box-shadow: inset 0 1px 0 hsl(40 40% 90% / 0.12), 0 6px 18px hsl(290 50% 4% / 0.45);
+  }
+  /* The destination blind. A strip of stop names behind a window; scroll rolls it. */
+  .mac { position: relative; }
+  .mac::after { content: ""; position: absolute; left: 0.1em; right: 0.1em; top: 0.08em; height: 0.075em; background: currentColor; border-radius: 1px; }
+  .blind { position: relative; }
+  .blind__btn {
+    display: flex; align-items: stretch; gap: 0; padding: 5px; border: 0; cursor: pointer;
+    background: #2B2124; border-radius: 9px; color: var(--blind-ink);
+    box-shadow: inset 0 1px 0 hsl(40 40% 90% / 0.12), 0 6px 18px hsl(290 50% 4% / 0.45), 0 1px 2px hsl(290 50% 4% / 0.5);
+    transition: transform 140ms var(--sc-ease-out);
+  }
+  .blind__btn:active { transform: translateY(1px); }
+  .blind__win {
+    position: relative; display: block; overflow: hidden; width: 17rem; height: 3rem;
+    background: var(--blind); border-radius: 5px;
+  }
+  .blind__win::after { /* the roller's curvature: darker at top and bottom */
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, hsl(0 0% 0% / 0.55), transparent 28%, transparent 72%, hsl(0 0% 0% / 0.55));
+  }
+  .blind__roll { display: block; will-change: transform; }
+  .blind__stop {
+    display: flex; flex-direction: column; justify-content: center; height: 3rem; padding-inline: 0.85rem;
+    text-align: left;
+  }
+  .blind__dest {
+    font-family: var(--sc-font-text); font-weight: 700; font-stretch: 78%; text-transform: uppercase;
+    font-size: 1.12rem; line-height: 1.05; letter-spacing: 0.035em; white-space: nowrap;
+  }
+  .blind__via { font-size: 0.7rem; line-height: 1.2; letter-spacing: 0.02em; color: #CFC4A6; white-space: nowrap; }
+  .blind__caret {
+    display: grid; place-items: center; width: 1.9rem; color: var(--gold);
+    transition: transform 200ms var(--sc-ease-out);
+  }
+  .blind__btn[aria-expanded="true"] .blind__caret { transform: rotate(180deg); }
+  .route {
+    position: absolute; right: 0; top: calc(100% + 8px); width: 100%; min-width: 17rem;
+    background: var(--blind); color: var(--blind-ink); border-radius: 9px; padding: 0.4rem;
+    box-shadow: 0 14px 40px hsl(290 50% 4% / 0.55), inset 0 1px 0 hsl(40 40% 90% / 0.1);
+    transform-origin: top right; animation: routeIn 200ms var(--sc-ease-out);
+  }
+  @keyframes routeIn { from { opacity: 0; transform: scale(0.96) translateY(-4px); } }
+  .route[hidden] { display: none; }
+  .route ol { list-style: none; margin: 0; padding: 0; }
+  .route a {
+    display: grid; grid-template-columns: 1.1rem 1fr; gap: 0.6rem; align-items: center;
+    padding: 0.6rem 0.6rem; border-radius: 6px; text-decoration: none;
+  }
+  .route a::before { content: ""; width: 9px; height: 9px; border-radius: 50%; border: 2px solid #8E8268; justify-self: center; }
+  .route a[aria-current="step"]::before { background: var(--gold); border-color: var(--gold); }
+  .route a:hover { background: hsl(40 30% 90% / 0.07); }
+  .route b { font-weight: 700; font-stretch: 78%; text-transform: uppercase; letter-spacing: 0.03em; }
+
+  /* ------------------------------------------------------------ 1 doorway */
+  .door {
+    --q: clamp(0, (var(--sc-p, 0) - 0.05) / 0.8, 1);
+    --q3: calc(var(--q) * var(--q) * var(--q));
+    --ax: 67vw; --ay: 53vh; --aw: min(27vw, 25rem);
+    background: var(--wall);
+  }
+  .door__stage { background: var(--wall); }
+  .door__room {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 64%;
+    transform: scale(calc(1.18 - 0.18 * var(--q))) translate(calc(var(--mx, 0) * -4px), calc(var(--my, 0) * -3px));
+    transform-origin: var(--ax) var(--ay);
+  }
+  .door__glow {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(40vmax 34vmax at var(--ax) calc(var(--ay) + 6vh), hsl(36 90% 60% / 0.16), transparent 70%);
+    opacity: calc(1 - var(--q));
+  }
+  /* Wall and jamb are drawn in arch units (the opening is 100 x 160) and
+     extend far past the viewport, so they always cover it. */
+  .door__plane {
+    position: absolute; left: var(--ax); top: var(--ay);
+    width: var(--aw); height: calc(var(--aw) * 1.6); overflow: visible;
+    translate: -50% -50%;
+    transform-origin: 50% 62%;
+  }
+  .door__plane svg { width: 100%; height: 100%; overflow: visible; display: block; }
+  .door__jamb {
+    transform: translate(calc(var(--q) * (50vw - var(--ax)) * 0.9), calc(var(--q) * (50vh - var(--ay)) * 0.9))
+               scale(calc(1 + 5.4 * var(--q3)))
+               translate(calc(var(--mx, 0) * 3px), calc(var(--my, 0) * 2px));
+  }
+  .door__wall {
+    transform: translate(calc(var(--q) * (50vw - var(--ax))), calc(var(--q) * (50vh - var(--ay))))
+               scale(calc(1 + 9 * var(--q3)))
+               translate(calc(var(--mx, 0) * 7px), calc(var(--my, 0) * 5px));
+  }
+  .door__copy {
+    position: absolute; z-index: var(--sc-z-copy);
+    left: var(--sc-gutter); top: 50%; translate: 0 -46%;
+    width: min(31rem, calc(var(--ax) - var(--aw) / 2 - var(--sc-gutter) * 1.8));
+  }
+  .door__copy h1 { font-size: clamp(2.6rem, 1.4rem + 3.9vw, 5.4rem); line-height: 0.98; margin: 0; text-wrap: balance; }
+  .door__copy h1 em { color: var(--gold); font-weight: 500; }
+  .door__copy p { margin: var(--sc-5) 0 0; font-size: var(--sc-t-lg); line-height: 1.45; color: var(--sc-ink-soft); max-width: 26ch; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem; min-height: 3rem; padding: 0 1.4rem;
+    border-radius: 3px; text-decoration: none; font-weight: 650; letter-spacing: 0.01em;
+    background: var(--gold); color: var(--sc-accent-ink);
+    box-shadow: inset 0 1px 0 hsl(45 90% 85% / 0.6), 0 3px 10px hsl(290 50% 5% / 0.35);
+    transition: transform 140ms var(--sc-ease-out), background-color 160ms var(--sc-ease-out);
+  }
+  .btn:active { transform: scale(0.97); }
+  @media (hover: hover) and (pointer: fine) { .btn:hover { background: #F0C966; } }
+  .btn--ghost { background: transparent; color: var(--sc-ink); box-shadow: inset 0 0 0 1.5px var(--gold-soft); }
+  @media (hover: hover) and (pointer: fine) { .btn--ghost:hover { background: hsl(42 75% 60% / 0.12); } }
+  .door__copy .btn { margin-top: var(--sc-6); }
+  .door__cap {
+    position: absolute; z-index: var(--sc-z-copy); right: var(--sc-gutter); bottom: var(--sc-6);
+    margin: 0; padding: 0.45rem 0.8rem; border-radius: 3px; font-size: var(--sc-t-sm);
+    background: hsl(290 45% 10% / 0.72); color: var(--sc-ink);
+  }
+
+  /* ------------------------------------------------------------ 2 slow */
+  .slow { background: var(--gold); color: var(--sc-accent-ink); --sc-ink: #26122E; --sc-ink-soft: #5A3A25; }
+  .slow .sc-wrap { padding-block: clamp(5rem, 14vh, 9rem); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 20rem); gap: var(--sc-8); align-items: end; }
+  .slow blockquote { margin: 0; }
+  .slow blockquote p {
+    font-family: var(--sc-font-display); font-style: italic; font-weight: 450;
+    font-size: clamp(2.2rem, 1.2rem + 4vw, 5rem); line-height: 1.02; letter-spacing: -0.025em; margin: 0; text-wrap: balance;
+  }
+  .slow blockquote p span { font-style: normal; font-weight: 650; }
+  .slow .notes p { margin: 0 0 var(--sc-4); color: var(--sc-ink-soft); font-size: var(--sc-t-base); }
+  .slow .notes p:first-child { font-size: var(--sc-t-xs); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 650; color: #6A4A14; }
+
+  /* ------------------------------------------------------------ 3 menu */
+  .menu { background: var(--sc-canvas); }
+  .menu .sc-stage { display: flex; align-items: center; }
+  .rail { display: flex; gap: clamp(1rem, 2vw, 1.75rem); padding-inline: var(--sc-gutter); align-items: stretch; }
+  .rail > * { flex: 0 0 auto; }
+  .rail__lead { width: min(26rem, 80vw); align-self: center; padding-right: var(--sc-6); }
+  .rail__lead h2 { margin: 0 0 var(--sc-4); }
+  .rail__lead p { color: var(--sc-ink-soft); margin: 0; max-width: 30ch; }
+  .plate {
+    position: relative; width: clamp(16.5rem, 23vw, 21rem); min-height: min(30rem, 62svh);
+    padding: 2.6rem 1.6rem 1.6rem; background: var(--sc-surface);
+    border: 1px solid var(--gold-soft); outline: 1px solid hsl(42 75% 60% / 0.28); outline-offset: -8px;
+    display: flex; flex-direction: column; box-shadow: var(--sc-e2), var(--sc-edge);
+  }
+  .plate::before { content: ""; position: absolute; left: 50%; top: 38%; width: 7.5rem; height: 7.5rem; translate: -50% -50%; opacity: 0.09; pointer-events: none;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23E5B94E' stroke-width='1.6'%3E%3Crect x='22' y='22' width='56' height='56'/%3E%3Crect x='22' y='22' width='56' height='56' transform='rotate(45 50 50)'/%3E%3Ccircle cx='50' cy='50' r='16'/%3E%3Ccircle cx='50' cy='50' r='44'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat; }
+  .plate--list::before, .plate--end::before { display: none; }
+  .plate__star { position: absolute; top: -12px; left: 50%; translate: -50% 0; width: 24px; height: 24px; }
+  .plate h3 {
+    font-family: var(--sc-font-display); font-weight: 560; font-size: clamp(1.7rem, 1.3rem + 1.2vw, 2.35rem);
+    line-height: 1.02; letter-spacing: -0.02em; margin: 0; text-wrap: balance;
+  }
+  .plate dl { margin: auto 0 0; display: grid; gap: 0.15rem; padding-top: var(--sc-6); }
+  .plate dt { font-size: var(--sc-t-xs); text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); font-weight: 650; margin-top: var(--sc-3); }
+  .plate dd { margin: 0; color: var(--sc-ink); line-height: 1.45; }
+  .plate--list h3 { margin-bottom: var(--sc-5); }
+  .plate--list ul { list-style: none; margin: 0; padding: 0; display: grid; }
+  .plate--list li { padding: 0.55rem 0; border-top: 1px solid var(--sc-hairline); line-height: 1.35; }
+  .plate--list li span { display: block; color: var(--sc-ink-soft); font-size: var(--sc-t-sm); }
+  .plate--end { background: var(--gold); color: var(--sc-accent-ink); border-color: transparent; outline-color: hsl(290 45% 12% / 0.3); justify-content: center; gap: var(--sc-4); }
+  .plate--end h3 { color: var(--sc-accent-ink); }
+  .plate--end p { margin: 0; color: #4A2B18; }
+  .plate--end .btn { background: var(--sc-canvas); color: var(--sc-ink); align-self: start; }
+  @media (prefers-reduced-motion: no-preference) {
+    .menu .plate { opacity: clamp(0.55, (var(--sc-p, 0) * 11) - var(--i, 0) + 1.6, 1); }
+  }
+
+  /* ------------------------------------------------------------ 4 house */
+  .house { background: #1E0E24; }
+  .house .sc-wrap { padding-block: var(--sc-7) var(--sc-section); }
+  .house__head { max-width: 34rem; margin-bottom: var(--sc-8); }
+  .house__head h2 { margin: 0 0 var(--sc-4); }
+  .house__grid { display: grid; grid-template-columns: 1.05fr 1fr; grid-template-rows: auto auto; gap: clamp(1rem, 2.4vw, 2rem); }
+  .house__grid figure { margin: 0; }
+  .house__grid img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .house__grid .frame { overflow: hidden; border-radius: 2px; }
+  .f-hall { grid-row: 1 / span 2; }
+  .f-hall .frame { aspect-ratio: 3 / 4; }
+  .f-counter .frame { aspect-ratio: 3 / 2; }
+  .f-window { width: 78%; justify-self: end; }
+  .f-window .frame { aspect-ratio: 5 / 6; }
+  figcaption { margin-top: var(--sc-3); font-size: var(--sc-t-sm); color: var(--sc-ink-soft); }
+  figcaption b { color: var(--sc-ink); font-weight: 650; }
+
+  /* ------------------------------------------------------------ 5 bus */
+  .bus { background: #3A0F16; --sc-ink-soft: #E9C9C6; }
+  .bus .sc-wrap { padding-block: var(--sc-section); display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: var(--sc-8); align-items: center; }
+  .bus__photo { margin: 0; }
+  .bus__photo .frame { overflow: hidden; aspect-ratio: 4 / 3; border-radius: 2px; box-shadow: var(--sc-e3); }
+  .bus__photo img { display: block; width: 100%; height: 116%; margin-top: -8%; object-fit: cover; }
+  .bus h2 { margin: 0 0 var(--sc-5); }
+  .bus p { margin: 0 0 var(--sc-4); max-width: 38ch; color: var(--sc-ink-soft); }
+
+  /* ------------------------------------------------------------ 6 terminus */
+  .end { background: var(--sc-canvas); }
+  .end .sc-wrap { padding-block: calc(var(--bar-h) + var(--sc-6)) var(--sc-6); }
+  .end__top { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: var(--sc-8); align-items: start; }
+  .end h2 { margin: 0; font-size: clamp(2.3rem, 1.5rem + 3vw, 4.4rem); line-height: 0.98; }
+  .end h2 span { display: block; font-size: 0.42em; font-weight: 450; color: var(--sc-ink-soft); margin-top: var(--sc-3); letter-spacing: -0.01em; }
+  .status { display: inline-flex; align-items: center; gap: 0.6rem; margin: var(--sc-5) 0 0; font-size: var(--sc-t-lg); font-weight: 600; }
+  .status::before { content: ""; width: 11px; height: 11px; border-radius: 50%; background: #9C8FA0; box-shadow: 0 0 0 4px hsl(290 20% 60% / 0.18); }
+  .status[data-open="true"]::before { background: #7BD88F; box-shadow: 0 0 0 4px hsl(134 55% 66% / 0.2); }
+  .week { list-style: none; margin: var(--sc-5) 0 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; max-width: 30rem; font-variant-numeric: tabular-nums; }
+  .week li { display: grid; gap: 2px; padding: 0.5rem 0.2rem; text-align: center; border: 1px solid var(--sc-hairline); font-size: var(--sc-t-xs); line-height: 1.25; color: var(--sc-ink-soft); }
+  .week b { font-size: var(--sc-t-sm); color: var(--sc-ink); font-weight: 650; }
+  .week .shut { background: hsl(290 30% 8% / 0.5); }
+  .week .shut b { color: var(--sc-ink-soft); text-decoration: line-through; }
+  .week .today { border-color: var(--gold); box-shadow: inset 0 0 0 1px var(--gold); }
+  .week .today b { color: var(--gold); }
+  .end__actions { display: flex; flex-wrap: wrap; gap: var(--sc-3); margin-top: var(--sc-6); }
+  .end__contact { margin-top: var(--sc-5); color: var(--sc-ink-soft); }
+  .end__contact a { color: var(--sc-ink); }
+  .end__map { display: grid; gap: var(--sc-4); }
+  .end__map iframe { width: 100%; aspect-ratio: 4 / 3; border: 0; display: block; background: var(--sc-surface); border-radius: 2px; }
+  .end__door { display: grid; grid-template-columns: 9rem 1fr; gap: var(--sc-4); align-items: center; margin: 0; }
+  .end__door img { width: 100%; height: 6.5rem; object-fit: cover; border-radius: 2px; display: block; }
+  .end__door figcaption { margin: 0; }
+  .foot { margin-top: var(--sc-7); padding-top: var(--sc-5); border-top: 1px solid var(--sc-hairline); font-size: var(--sc-t-xs); color: var(--sc-ink-soft); display: grid; gap: 0.4rem; max-width: 70ch; }
+  .foot p { margin: 0; }
+
+  /* ------------------------------------------------------------ phone */
+  @media (max-width: 760px) {
+    :root { --bar-h: 3.75rem; }
+    .mark { font-size: 1.35rem; height: calc(2.6rem + 10px); padding-inline: 0.75rem; }
+    .blind__win { width: 12.25rem; height: 2.6rem; }
+    .blind__stop { height: 2.6rem; padding-inline: 0.65rem; }
+    .blind__dest { font-size: 0.98rem; }
+    .blind__via { font-size: 0.64rem; }
+    .blind__caret { width: 1.5rem; }
+    .route { min-width: 0; }
+    .door { --ax: 50vw; --ay: 36svh; --aw: 50vw; }
+    .door__room { height: 160%; top: -62%; object-position: 64% 50%; }
+    .door__copy { left: var(--sc-gutter); right: var(--sc-gutter); width: auto; top: auto; bottom: 1.4rem; translate: none;
+      padding: 1.1rem 1.1rem 1.25rem; background: hsl(285 45% 13% / 0.9); border-radius: 3px; }
+    .door__copy h1 { font-size: clamp(2.15rem, 9.6vw, 2.8rem); }
+    .door__copy p { font-size: var(--sc-t-base); margin-top: var(--sc-3); max-width: none; }
+    .door__copy .btn { margin-top: var(--sc-4); }
+    .door__cap { left: var(--sc-gutter); right: auto; bottom: var(--sc-4); }
+    .slow .sc-wrap { grid-template-columns: 1fr; gap: var(--sc-6); }
+    .plate { width: 78vw; min-height: 64svh; }
+    .rail__lead { width: 72vw; }
+    .house__grid { grid-template-columns: 1fr; }
+    .f-hall { grid-row: auto; }
+    .f-window { width: 82%; }
+    .bus .sc-wrap, .end__top { grid-template-columns: 1fr; gap: var(--sc-7); }
+  }
+  @media (max-height: 560px) and (min-width: 761px) { .plate { min-height: 0; } }
+
+  /* Motion off: the doorway is a still composition, no pinned travel. */
+  @media (prefers-reduced-motion: reduce) {
+    .door { height: auto !important; --q: 0; }
+    .door .sc-stage, .door__stage { position: relative; }
+    .door__cap { display: none; }
+    /* The menu becomes a sideways scroll region that takes one screen, not three. */
+    .menu { height: auto !important; }
+    .menu .sc-stage { position: relative; height: auto; padding-block: var(--sc-8); }
+  }
+</style>
+</head>
+<body>
+
+<a class="sr-only" href="#menu">Skip to the menu</a>
+
+<header class="bar">
+  <a class="mark" href="#doorway" aria-label="Tōv Coffee, back to the top"><span aria-hidden="true">T<span class="mac">o</span>v</span></a>
+  <div class="blind">
+    <button class="blind__btn" type="button" aria-expanded="false" aria-controls="route">
+      <span class="sr-only">Stops on this page. Current stop: </span>
+      <span class="blind__win"><span class="blind__roll" aria-hidden="true"></span><span class="sr-only blind__now">SE Hawthorne</span></span>
+      <span class="blind__caret" aria-hidden="true"><svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
+    </button>
+    <nav id="route" class="route" aria-label="Stops" hidden><ol></ol></nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1 · DOORWAY. Bespoke pin: wall, jamb and room move at different rates. -->
+  <section id="doorway" class="door" data-sc-act="pin" data-sc-span="3.2"
+           data-stop="SE Hawthorne" data-via="through the front door">
+    <div data-sc-stage class="door__stage">
+      <img class="door__room" src="assets/room.webp" width="1440" height="1920" fetchpriority="high"
+           alt="The lounge at Tōv: violet walls with gold moulding and paintings of old Cairo, red kilim floor cushions, a brass tray and black lanterns.">
+      <div class="door__glow" aria-hidden="true"></div>
+      <div class="door__plane door__jamb" aria-hidden="true">
+        <svg viewBox="0 0 100 160">
+          <path fill="#22102C" fill-rule="evenodd"
+            d="M-3000,-3000 H3100 V3160 H-3000 Z M8,160 V61 A54,54 0 0 1 50,9 A54,54 0 0 1 92,61 V160 Z"/>
+          <path fill="none" stroke="#E5B94E" stroke-opacity="0.45" stroke-width="0.5"
+            d="M8,160 V61 A54,54 0 0 1 50,9 A54,54 0 0 1 92,61 V160"/>
+        </svg>
+      </div>
+      <div class="door__plane door__wall" aria-hidden="true">
+        <svg viewBox="0 0 100 160">
+          <defs>
+            <pattern id="khatam" width="22" height="22" patternUnits="userSpaceOnUse">
+              <path d="M11 4.5 13 9 17.5 11 13 13 11 17.5 9 13 4.5 11 9 9Z" fill="none" stroke="#F0D59A" stroke-opacity="0.07" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+          <path fill="#3E1C4E" fill-rule="evenodd"
+            d="M-3000,-3000 H3100 V3160 H-3000 Z M0,160 V58 A62,62 0 0 1 50,0 A62,62 0 0 1 100,58 V160 Z"/>
+          <path fill="url(#khatam)" fill-rule="evenodd"
+            d="M-3000,-3000 H3100 V3160 H-3000 Z M0,160 V58 A62,62 0 0 1 50,0 A62,62 0 0 1 100,58 V160 Z"/>
+          <!-- gold moulding, like the real wall -->
+          <g fill="none" stroke="#E5B94E" stroke-opacity="0.55" stroke-width="0.6">
+            <rect x="-118" y="-14" width="96" height="104"/>
+            <rect x="-118" y="100" width="96" height="60"/>
+            <rect x="-238" y="-14" width="106" height="174"/>
+            <rect x="122" y="-14" width="112" height="104"/>
+            <rect x="122" y="100" width="112" height="60"/>
+            <path d="M-3000,160 H3100"/>
+          </g>
+          <path fill="none" stroke="#E5B94E" stroke-width="1.1"
+            d="M-1.2,160 V58 A63,63 0 0 1 50,-1.4 A63,63 0 0 1 101.2,58 V160"/>
+          <path fill="#2A1236" d="M-3000,160 H3100 V3160 H-3000 Z"/>
+        </svg>
+      </div>
+      <div class="door__copy" data-sc-cue="0 0.34 0 0.14">
+        <h1 class="sc-display">Egyptian coffee, <em>made slow.</em></h1>
+        <p>Cardamom espresso, rose mochas and sahlep on SE Hawthorne, Portland. Since 2015.</p>
+        <a class="btn" href="#terminus">Plan a visit</a>
+      </div>
+      <p class="door__cap" data-sc-cue="0.8 1 0.1 0.02">The lounge at Tōv, SE Hawthorne.</p>
+    </div>
+  </section>
+
+  <!-- 2 · MADE SLOW. Authored quiet before the menu. -->
+  <section class="slow" data-stop="Made slow" data-via="up to 20 minutes">
+    <div class="sc-wrap" data-sc-in data-sc-stagger="70">
+      <blockquote>
+        <p>“Your simple drip or latte may take up to <span>20 minutes.</span>”</p>
+      </blockquote>
+      <div class="notes">
+        <p>From Tōv's own menu</p>
+        <p>Every drink is made by hand, one at a time. So take a cushion.</p>
+        <p>In a hurry? The menu itself sends you a block east, to Fresh Pot.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · THE MENU. Pan: the drinks slide past on plates. -->
+  <section id="menu" class="menu" data-sc-act="pan" data-sc-span="3.1"
+           data-stop="The menu" data-via="cardamom espresso">
+    <div data-sc-stage>
+      <div class="rail" data-sc-pan="0.04">
+        <div class="rail__lead">
+          <h2 class="sc-display sc-display--lg">The menu</h2>
+          <p>Tōv's house drinks, as their menu describes them. Prices and the tea list at the counter.</p>
+        </div>
+        <article class="plate" style="--i:1">
+          <svg class="plate__star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5 15 9 22.5 12 15 15 12 22.5 9 15 1.5 12 9 9Z" fill="#E5B94E"/></svg>
+          <h3>Nectar of the Gods</h3>
+          <dl><dt>Kind</dt><dd>Latte</dd><dt>In it</dt><dd>House-made caramel sauce, cardamom-infused espresso</dd><dt>Size</dt><dd>12 or 16 oz</dd></dl>
+        </article>
+        <article class="plate" style="--i:2">
+          <svg class="plate__star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5 15 9 22.5 12 15 15 12 22.5 9 15 1.5 12 9 9Z" fill="#E5B94E"/></svg>
+          <h3>Arabic People Latte</h3>
+          <dl><dt>Kind</dt><dd>Latte</dd><dt>In it</dt><dd>House-made vanilla syrup, cardamom-infused espresso</dd><dt>Size</dt><dd>12 or 16 oz</dd></dl>
+        </article>
+        <article class="plate" style="--i:3">
+          <svg class="plate__star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5 15 9 22.5 12 15 15 12 22.5 9 15 1.5 12 9 9Z" fill="#E5B94E"/></svg>
+          <h3>Rose Mocha</h3>
+          <dl><dt>Kind</dt><dd>Mocha</dd><dt>In it</dt><dd>Milk or dark chocolate, a hint of rose</dd><dt>Size</dt><dd>12 or 16 oz</dd></dl>
+        </article>
+        <article class="plate" style="--i:4">
+          <svg class="plate__star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5 15 9 22.5 12 15 15 12 22.5 9 15 1.5 12 9 9Z" fill="#E5B94E"/></svg>
+          <h3>Little Mermaid Latte</h3>
+          <dl><dt>Kind</dt><dd>Latte</dd><dt>In it</dt><dd>House-made caramel and vanilla, a hint of rose</dd><dt>Size</dt><dd>12 or 16 oz</dd></dl>
+        </article>
+        <article class="plate" style="--i:5">
+          <svg class="plate__star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5 15 9 22.5 12 15 15 12 22.5 9 15 1.5 12 9 9Z" fill="#E5B94E"/></svg>
+          <h3>Mucho Caliente</h3>
+          <dl><dt>Kind</dt><dd>Dark chocolate mocha</dd><dt>In it</dt><dd>Aji panca chili sauce, cinnamon espresso</dd><dt>Size</dt><dd>12 or 16 oz</dd></dl>
+        </article>
+        <article class="plate" style="--i:6">
+          <svg class="plate__star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5 15 9 22.5 12 15 15 12 22.5 9 15 1.5 12 9 9Z" fill="#E5B94E"/></svg>
+          <h3>Chocolate Jesus</h3>
+          <dl><dt>Kind</dt><dd>Cappuccino, made with chocolate milk</dd><dt>In it</dt><dd>Two double shots, cardamom and cinnamon infused</dd><dt>Size</dt><dd>6 oz</dd></dl>
+        </article>
+        <article class="plate" style="--i:7">
+          <svg class="plate__star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5 15 9 22.5 12 15 15 12 22.5 9 15 1.5 12 9 9Z" fill="#E5B94E"/></svg>
+          <h3>Mint Thing</h3>
+          <dl><dt>Kind</dt><dd>Cold brew</dd><dt>In it</dt><dd>House-made mint syrup, with cream, chocolate milk, oat or chocolate oat</dd><dt>Size</dt><dd>16 oz</dd></dl>
+        </article>
+        <article class="plate plate--list" style="--i:8">
+          <svg class="plate__star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5 15 9 22.5 12 15 15 12 22.5 9 15 1.5 12 9 9Z" fill="#E5B94E"/></svg>
+          <h3>The basics</h3>
+          <ul><li>Drip coffee</li><li>Cardamom drip</li><li>Americano</li><li>Egyptiano</li><li>Cappuccino</li><li>Cortado</li></ul>
+        </article>
+        <article class="plate plate--list" style="--i:9">
+          <svg class="plate__star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5 15 9 22.5 12 15 15 12 22.5 9 15 1.5 12 9 9Z" fill="#E5B94E"/></svg>
+          <h3>No caffeine</h3>
+          <ul>
+            <li>Karkhadeh<span>Iced Egyptian hibiscus tea. Tangy, slightly sweet</span></li>
+            <li>Chai Delicious<span>Herbal coconut chai, dairy or oat</span></li>
+            <li>Egyptian Sahlep<span>Rice-flour milk, rose water, nuts, coconut</span></li>
+            <li>Craft tea<span>Ask for the tea list</span></li>
+          </ul>
+        </article>
+        <article class="plate plate--end" style="--i:10">
+          <h3>Want it to go?</h3>
+          <p>Order for pickup or delivery through DoorDash, or call ahead.</p>
+          <a class="btn" href="https://www.doordash.com/store/t%C5%8Dv-coffee-portland-24294826/" rel="noopener">Order on DoorDash</a>
+          <p><a href="tel:+15419082555">541.908.2555</a></p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · THE HOUSE. Reveals: each wipe is the next room. -->
+  <section class="house" data-stop="The house" data-via="cushions and lanterns">
+    <div class="sc-wrap">
+      <div class="house__head" data-sc-in data-sc-stagger="70">
+        <h2 class="sc-display sc-display--lg">The house</h2>
+        <p class="sc-body">Sit on the floor cushions, by the window, or at a café table under the lanterns.</p>
+      </div>
+      <div class="house__grid">
+        <figure class="f-hall">
+          <div class="frame" data-sc-reveal="up" data-sc-reveal-at="0.02 0.4"><img src="assets/house-hall.webp" width="1200" height="1600" loading="lazy" alt="The main room: brass lanterns hang over café tables and patterned chairs, the coffee bar at the back."></div>
+          <figcaption><b>The hall.</b> Lanterns, patterned chairs, the bar at the back.</figcaption>
+        </figure>
+        <figure class="f-counter">
+          <div class="frame" data-sc-reveal="left" data-sc-reveal-at="0.08 0.46"><img src="assets/house-counter.webp" width="1400" height="933" loading="lazy" alt="The counter, with violet walls behind it and blue and white tins stacked on the bar."></div>
+          <figcaption><b>The counter.</b> Where every drink gets made, one at a time.</figcaption>
+        </figure>
+        <figure class="f-window">
+          <div class="frame" data-sc-reveal="right" data-sc-reveal-at="0.16 0.56"><img src="assets/house-window.webp" width="1000" height="1217" loading="lazy" alt="A window seat with café chairs and patterned curtains, looking out to Hawthorne Boulevard."></div>
+          <figcaption><b>The window.</b> Hawthorne going by.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · SINCE 2015. Flow with a parallax photo. -->
+  <section class="bus" data-sc-act="flow" data-stop="Since 2015" data-via="the red bus">
+    <div class="sc-wrap">
+      <figure class="bus__photo">
+        <div class="frame"><img src="assets/bus.webp" width="1600" height="1200" loading="lazy" data-sc-parallax="-0.9"
+          alt="Tōv's red double-decker bus, parked with steps up to the door, a purple bench and plants beside it."></div>
+        <figcaption>The Tōv bus, July 2022.</figcaption>
+      </figure>
+      <div data-sc-in data-sc-stagger="70">
+        <h2 class="sc-display sc-display--lg">It started on a bus.</h2>
+        <p>In 2015 Joseph Nazir opened Tōv in a red double-decker on Hawthorne. The artists Rather Severe painted it with a sphinx holding a coffee cup.</p>
+        <p>In late 2023 Tōv moved indoors, to the shop at 3639.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · TERMINUS. The last stop holds: address, open now, the door. -->
+  <section id="terminus" class="end" data-stop="3639 SE Hawthorne" data-via="checking hours…">
+    <div class="sc-wrap">
+      <div class="end__top">
+        <div data-sc-in data-sc-stagger="60">
+          <h2 class="sc-display">3639 SE Hawthorne Blvd <span>Portland, OR 97214</span></h2>
+          <p class="status" id="status" data-open="false">Open 9:30am to 5pm, closed Wednesdays</p>
+          <p class="sr-only">Hours: 9:30am to 5pm every day except Wednesday, when it's closed.</p>
+          <ol class="week" id="hours" aria-hidden="true"></ol>
+          <div class="end__actions">
+            <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=T%C5%8Dv+Coffee%2C+3639+SE+Hawthorne+Blvd%2C+Portland%2C+OR+97214" rel="noopener">Get directions</a>
+            <a class="btn btn--ghost" href="https://www.doordash.com/store/t%C5%8Dv-coffee-portland-24294826/" rel="noopener">Order on DoorDash</a>
+          </div>
+          <p class="end__contact">Call <a href="tel:+15419082555">541.908.2555</a>. Specials and hours changes go up on Instagram first: <a href="https://www.instagram.com/tovcoffee_co" rel="noopener">@tovcoffee_co</a>.</p>
+        </div>
+        <div class="end__map" data-sc-in>
+          <iframe title="Map: Tōv Coffee, 3639 SE Hawthorne Blvd, Portland" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=T%C5%8Dv+Coffee%2C+3639+SE+Hawthorne+Blvd%2C+Portland%2C+OR+97214&amp;z=15&amp;output=embed"></iframe>
+          <figure class="end__door">
+            <img src="assets/storefront.webp" width="1600" height="1200" loading="lazy" alt="Tōv's storefront: purple trim, a gold door, and the words Egyptian Coffee over the windows.">
+            <figcaption>Look for the gold door and <b>Egyptian Coffee</b> over the windows.</figcaption>
+          </figure>
+        </div>
+      </div>
+      <footer class="foot">
+        <p><b>Concept demo by TruongSon.</b> Not made by or affiliated with Tōv Coffee.</p>
+        <p>Drinks from Tōv's printed menu (photographed June 2025). Hours and phone from Tōv's Yelp listing, checked Nov 21, 2026; Tōv has no website, so confirm before you go. History from Wikipedia.</p>
+        <p>Photos by Another Believer, CC BY-SA 4.0, cropped. <a href="credits.html">Credits</a>.</p>
+      </footer>
+    </div>
+  </section>
+
+</main>
+
+<div class="sc-grain" aria-hidden="true"></div>
+<script src="scrollcraft.js"></script>
+<script>ScrollCraft.mount(document.body);</script>
+<script src="tov.js"></script>
+</body>
+</html>
