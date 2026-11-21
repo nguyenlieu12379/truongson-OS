@@ -3,23 +3,89 @@
 (function () {
   "use strict";
 
-  // Hero pour: portrait crop on phones; motion off shows the finished cup as a still.
-  var v = document.querySelector("video.pour");
-  if (v) {
+  // Hero pour, played by scroll. Desktop: the hero pins under the bar and the
+  // next ~0.9 screens of scroll run the clip start to finish. Phone: pins only
+  // if the whole hero fits the screen; otherwise the pour plays as the hero
+  // scrolls away. Motion off: the finished cup as a still, no clip.
+  (function () {
+    var v = document.querySelector("video.pour");
+    if (!v) return;
+    var track = document.querySelector(".pour-track");
+    var hero = track.querySelector(".hero");
+    var hold = document.querySelector(".pour__hold");
+    var bar = document.querySelector(".bar");
     var phone = window.matchMedia("(max-width: 860px)").matches;
     var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (phone) {
-      v.poster = v.getAttribute("data-poster-mobile");
-      v.src = v.getAttribute("data-src-mobile");
-    }
+    var poster = v.getAttribute(phone ? "data-poster-mobile" : "poster");
+    v.poster = poster; if (hold) hold.src = poster;
     if (still) {
-      v.removeAttribute("autoplay");
-      v.pause();
-      v.removeAttribute("src");
-      v.load();
-      v.poster = v.getAttribute(phone ? "data-final-mobile" : "data-final");
+      var fin = v.getAttribute(phone ? "data-final-mobile" : "data-final");
+      v.poster = fin; if (hold) hold.src = fin;
+      return;
     }
-  }
+
+    var dur = 0, cur = 0, target = 0, pinned = false, painted = false, s0 = 0, s1 = 1;
+    function clamp(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
+
+    function layout() {
+      var bh = bar ? bar.offsetHeight : 0;
+      document.documentElement.style.setProperty("--bar-h", bh + "px");
+      track.classList.remove("is-pinned");
+      var fits = hero.offsetHeight <= window.innerHeight - bh + 2;
+      pinned = fits;
+      var trackTop = track.getBoundingClientRect().top + window.scrollY;
+      if (pinned) {
+        var travel = Math.round(window.innerHeight * (phone ? 0.8 : 0.9));
+        track.style.setProperty("--pour-travel", travel + "px");
+        track.classList.add("is-pinned");
+        s0 = trackTop - bh; s1 = s0 + travel;
+      } else {
+        var r = v.getBoundingClientRect();
+        s0 = Math.max(0, trackTop - bh);
+        s1 = Math.max(s0 + 200, r.top + window.scrollY + r.height * 0.7 - bh);
+      }
+      update();
+    }
+    function update() { target = clamp((window.scrollY - s0) / (s1 - s0)) * dur; }
+
+    function showFrame() {
+      if (painted) return; painted = true;
+      if (hold) hold.classList.add("is-off");
+    }
+    function loop() {
+      if (dur) {
+        var d = target - cur;
+        if (Math.abs(d) > 0.004) {
+          cur += d * 0.2;
+          if (Math.abs(target - cur) < 0.004) cur = target;
+          if (!v.seeking && Math.abs(v.currentTime - cur) > 0.02) v.currentTime = cur;
+        }
+      }
+      requestAnimationFrame(loop);
+    }
+    v.addEventListener("seeked", function () {
+      if (painted) return;
+      if (v.requestVideoFrameCallback) v.requestVideoFrameCallback(showFrame); else showFrame();
+    });
+    v.addEventListener("loadedmetadata", function () {
+      dur = Math.max(0, v.duration - 0.05);
+      update(); cur = -1;
+      // iOS keeps a never-played muted video blank: a play/pause primes the decoder.
+      var pr = v.play(); if (pr && pr.then) pr.then(function () { v.pause(); }).catch(function () {});
+    });
+
+    // Fetch as a blob so seeking never depends on range requests.
+    var src = v.getAttribute(phone ? "data-src-mobile" : "data-src");
+    fetch(src).then(function (r) { if (!r.ok) throw 0; return r.blob(); })
+      .then(function (b) { v.src = URL.createObjectURL(b); })
+      .catch(function () { v.src = src; });
+
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", layout);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+    layout();
+    requestAnimationFrame(loop);
+  })();
 
   // Regular hours: [open, close] in minutes after midnight, by weekday (0 = Sunday).
   var HOURS = {
