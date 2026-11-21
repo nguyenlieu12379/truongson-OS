@@ -1,0 +1,83 @@
+{
+  "slug": "tov",
+  "name": "Tōv Coffee",
+  "title": "Tōv Coffee · Egyptian coffee on SE Hawthorne, Portland (concept)",
+  "description": "Concept demo: Tōv Coffee menu, hours, location and ordering. Egyptian coffee and tea on SE Hawthorne Blvd, Portland.",
+  "demo": true,
+  "version": "1",
+  "tz": "America/Los_Angeles",
+  "colors": { "accent": "#5B2C83", "accentInk": "#FFF7E6", "paper": "#F4EEE3", "ink": "#1C1521", "inkSoft": "#5F5566" },
+
+  "hero": {
+    "title": "Egyptian coffee,",
+    "titleEm": "on Hawthorne.",
+    "sub": "Cardamom espresso, rose mochas and sahlep. Since 2015, first in a red double-decker bus.",
+    "image": { "src": "assets/hero.webp", "w": 1600, "h": 1200, "alt": "Inside Tōv: purple walls, gold-framed paintings, low red floor cushions with Egyptian patterns and a round brass table." }
+  },
+
+  "menu": {
+    "note": "Tap a drink to add it. From the menu at the shop. Prices at the counter. Every drink is made by hand, so it can take up to 20 minutes.",
+    "sections": [
+      { "title": "House favorites", "items": [
+        { "name": "Nectar of the Gods", "note": "caramel, cardamom espresso" },
+        { "name": "Arabic People Latte", "note": "vanilla, cardamom espresso" },
+        { "name": "Rose Mocha", "note": "milk or dark chocolate" },
+        { "name": "Little Mermaid Latte", "note": "caramel, vanilla, rose" },
+        { "name": "Mucho Caliente", "note": "dark mocha, chili, cinnamon" },
+        { "name": "Chocolate Jesus", "note": "6 oz, chocolate milk cappuccino" },
+        { "name": "Mint Thing", "note": "16 oz, mint cold brew" }
+      ] },
+      { "title": "Basics", "items": ["Drip Coffee", "Cardamom Drip", "Americano", "Egyptiano", "Cappuccino", "Cortado"] },
+      { "title": "No caffeine", "items": [
+        { "name": "Karkhadeh", "note": "iced hibiscus tea" },
+        { "name": "Chai Delicious", "note": "coconut chai" },
+        { "name": "Egyptian Sahlep", "note": "rose, nuts, coconut" },
+        { "name": "Craft Tea", "note": "ask for the tea list" }
+      ] }
+    ],
+    "extra": { "title": "Pastries", "text": "Egyptian pastries in the case by the counter." }
+  },
+
+  "options": {
+    "sizes": ["12 oz", "16 oz"],
+    "milks": ["Dairy", "Oat"],
+    "milkDrinks": ["Nectar of the Gods", "Arabic People Latte", "Rose Mocha", "Little Mermaid Latte", "Mucho Caliente", "Mint Thing", "Cappuccino", "Cortado", "Chai Delicious"],
+    "pairs": [],
+    "noSize": ["Chocolate Jesus", "Mint Thing", "Cortado"]
+  },
+
+  "locationsNote": "Indoor seating on couches and floor cushions.",
+  "outsidePhoto": { "src": "assets/outside.webp", "w": 1600, "h": 1200, "alt": "Tōv's storefront on SE Hawthorne: purple trim, gold door, and the words Egyptian Coffee above the windows.", "caption": "Tōv on SE Hawthorne Blvd. Photo: Another Believer, CC BY-SA 4.0." },
+  "locations": [
+    {
+      "id": "hawthorne", "name": "Hawthorne", "area": "Sunnyside, SE Portland",
+      "address": "3639 SE Hawthorne Blvd, Portland, OR 97214",
+      "mapQuery": "Tōv Coffee, 3639 SE Hawthorne Blvd, Portland, OR 97214",
+      "phone": "+15419082555", "phoneLabel": "541.908.2555",
+      "hoursText": ["9:30am to 5pm", "Closed Wednesdays"],
+      "week": { "sun": "09:30-17:00", "mon": "09:30-17:00", "tue": "09:30-17:00", "wed": "closed", "thu": "09:30-17:00", "fri": "09:30-17:00", "sat": "09:30-17:00" }
+    }
+  ],
+  "holidays": [],
+
+  "order": {
+    "cards": [
+      { "title": "Pickup or delivery", "text": "Through DoorDash.", "button": { "label": "Order on DoorDash", "href": "https://www.doordash.com/store/t%C5%8Dv-coffee-portland-24294826/", "primary": true } },
+      { "type": "phones", "title": "Call ahead" },
+      { "title": "News and specials", "text": "Seasonal drinks and hours changes go up on Instagram first.", "button": { "label": "@tovcoffee_co", "href": "https://www.instagram.com/tovcoffee_co" } }
+    ]
+  },
+  "checkout": {
+    "button": "Order ahead (demo)",
+    "routes": [ { "text": "Pickup or delivery", "label": "DoorDash", "href": "https://www.doordash.com/store/t%C5%8Dv-coffee-portland-24294826/" } ]
+  },
+
+  "footer": {
+    "line": "Opened by Joseph Nazir in 2015 in a red double-decker bus on Hawthorne. Moved into this shop in 2023.",
+    "sources": "Drink list from the printed menu in the shop (photo, June 2025). Hours and phone from Tōv's Yelp listing (checked Nov 21, 2026); Tōv has no website. History from Wikipedia."
+  },
+  "credits": [
+    { "where": "Hero, the lounge", "title": "Portland, Oregon, US - June 2025 - 026.jpg", "href": "https://commons.wikimedia.org/wiki/File:Portland,_Oregon,_US_-_June_2025_-_026.jpg", "author": "Another Believer", "license": "CC BY-SA 4.0", "licenseHref": "https://creativecommons.org/licenses/by-sa/4.0/", "changes": "Cropped to 4:3, resized, converted to WebP." },
+    { "where": "Visit, storefront", "title": "Portland, Oregon in January 2025 - 138.jpg", "href": "https://commons.wikimedia.org/wiki/File:Portland,_Oregon_in_January_2025_-_138.jpg", "author": "Another Believer", "license": "CC BY-SA 4.0", "licenseHref": "https://creativecommons.org/licenses/by-sa/4.0/", "changes": "Cropped, resized, converted to WebP." }
+  ]
+}

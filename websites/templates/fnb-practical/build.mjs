@@ -142,7 +142,7 @@ const routes = (d.checkout?.routes || []).map((r) => `          <li>${esc(r.text
   .concat(d.locations.filter((l) => l.phone).map((l) => `          <li>Call ${esc(l.name)}: ${tel(l)}</li>`)).join("\n");
 
 const credits = d.credits || [];
-const creditLine = d.footer?.credits || (credits.length ? `Photo and video credits: <a class="link" href="credits.html">credits</a>.` : "");
+const creditLine = d.footer?.credits || (credits.length ? `${h.video ? "Photo and video" : "Photo"} credits: <a class="link" href="credits.html">credits</a>.` : "");
 
 // ---------------------------------------------------------------- index.html
 const html = `<!doctype html>

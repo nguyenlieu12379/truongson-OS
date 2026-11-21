@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tōv Coffee · Egyptian coffee on SE Hawthorne, Portland (concept)</title>
+<meta name="description" content="Concept demo: Tōv Coffee menu, hours, location and ordering. Egyptian coffee and tea on SE Hawthorne Blvd, Portland.">
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css?v=1">
+<style>:root { --red: #5B2C83; --red-ink: #FFF7E6; --paper: #F4EEE3; --ink: #1C1521; --ink-soft: #5F5566; }</style>
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+
+<a class="skip" href="#menu">Skip to menu</a>
+
+<header class="bar">
+  <a class="bar__mark" href="#top"><span>Tōv Coffee</span></a>
+  <nav class="bar__nav" aria-label="Sections">
+    <a href="#menu">Menu</a>
+    <a href="#visit">Visit</a>
+    <a class="bar__cta" href="#menu">Order</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="hero__text">
+      <h1>Egyptian coffee,<br><em>on Hawthorne.</em></h1>
+      <p class="hero__sub">Cardamom espresso, rose mochas and sahlep. Since 2015, first in a red double-decker bus.</p>
+      <ul class="status" aria-live="polite">
+        <li data-status="hawthorne"><span class="dot"></span><b>Hawthorne</b> <span class="status__t">9:30am to 5pm, Closed Wednesdays</span></li>
+      </ul>
+      <div class="hero__actions">
+        <a class="btn" href="#menu">See the menu</a>
+      </div>
+    </div>
+    <figure class="hero__img">
+      <img src="assets/hero.webp" width="1600" height="1200" alt="Inside Tōv: purple walls, gold-framed paintings, low red floor cushions with Egyptian patterns and a round brass table." fetchpriority="high">
+    </figure>
+  </section>
+
+  <section class="block" id="menu" aria-labelledby="menu-h">
+    <div class="block__head">
+      <div class="menu__title">
+        <h2 id="menu-h">Menu</h2>
+        <button class="cart-btn" type="button" aria-haspopup="dialog" aria-controls="cart" aria-label="Cart, 0 items">
+          <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l-1.2 12.1a1.6 1.6 0 0 1-1.6 1.4H8.8a1.6 1.6 0 0 1-1.6-1.4L6 7Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 9.5V6.8a3 3 0 0 1 6 0v2.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          <span class="cart-btn__n" aria-hidden="true">0</span>
+        </button>
+      </div>
+      <p class="note">Tap a drink to add it. From the menu at the shop. Prices at the counter. Every drink is made by hand, so it can take up to 20 minutes.</p>
+    </div>
+    <div class="menu" tabindex="-1">
+      <div class="menu__col">
+        <h3>House favorites</h3>
+        <ul>
+          <li>Nectar of the Gods <span class="m">caramel, cardamom espresso</span></li>
+          <li>Arabic People Latte <span class="m">vanilla, cardamom espresso</span></li>
+          <li>Rose Mocha <span class="m">milk or dark chocolate</span></li>
+          <li>Little Mermaid Latte <span class="m">caramel, vanilla, rose</span></li>
+          <li>Mucho Caliente <span class="m">dark mocha, chili, cinnamon</span></li>
+          <li>Chocolate Jesus <span class="m">6 oz, chocolate milk cappuccino</span></li>
+          <li>Mint Thing <span class="m">16 oz, mint cold brew</span></li>
+        </ul>
+      </div>
+      <div class="menu__col">
+        <h3>Basics</h3>
+        <ul>
+          <li>Drip Coffee</li>
+          <li>Cardamom Drip</li>
+          <li>Americano</li>
+          <li>Egyptiano</li>
+          <li>Cappuccino</li>
+          <li>Cortado</li>
+        </ul>
+      </div>
+      <div class="menu__col">
+        <h3>No caffeine</h3>
+        <ul>
+          <li>Karkhadeh <span class="m">iced hibiscus tea</span></li>
+          <li>Chai Delicious <span class="m">coconut chai</span></li>
+          <li>Egyptian Sahlep <span class="m">rose, nuts, coconut</span></li>
+          <li>Craft Tea <span class="m">ask for the tea list</span></li>
+        </ul>
+        <h3 class="menu__beans">Pastries</h3>
+        <p>Egyptian pastries in the case by the counter.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="visit" aria-labelledby="visit-h">
+    <div class="block__head">
+      <h2 id="visit-h">Visit</h2>
+      <p class="note">Indoor seating on couches and floor cushions.</p>
+    </div>
+    <figure class="outside">
+      <img src="assets/outside.webp" width="1600" height="1200" loading="lazy" alt="Tōv's storefront on SE Hawthorne: purple trim, gold door, and the words Egyptian Coffee above the windows.">
+      <figcaption>Tōv on SE Hawthorne Blvd. Photo: Another Believer, CC BY-SA 4.0.</figcaption>
+    </figure>
+    <div class="places">
+      <article class="place">
+        <iframe class="place__map" title="Map: Hawthorne, 3639 SE Hawthorne Blvd, Portland, OR 97214" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=T%C5%8Dv+Coffee,+3639+SE+Hawthorne+Blvd,+Portland,+OR+97214&amp;z=15&amp;output=embed"></iframe>
+        <div class="place__body">
+          <h3>Hawthorne <span class="place__area">Sunnyside, SE Portland</span></h3>
+          <p class="place__open" data-status="hawthorne"><span class="dot"></span><span class="status__t">9:30am to 5pm</span></p>
+          <dl>
+            <dt>Hours</dt><dd>9:30am to 5pm<br>Closed Wednesdays</dd>
+            <dt>Address</dt><dd>3639 SE Hawthorne Blvd, Portland, OR 97214</dd>
+            <dt>Phone</dt><dd><a class="link" href="tel:+15419082555">541.908.2555</a></dd>
+          </dl>
+          <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=T%C5%8Dv+Coffee,+3639+SE+Hawthorne+Blvd,+Portland,+OR+97214" rel="noopener">Directions</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="block order" id="order" aria-labelledby="order-h">
+    <div class="block__head">
+      <h2 id="order-h">Order</h2>
+    </div>
+    <div class="order__grid">
+      <div class="order__card">
+        <h3>Pickup or delivery</h3>
+        <p>Through DoorDash.</p>
+        <a class="btn btn--primary" href="https://www.doordash.com/store/t%C5%8Dv-coffee-portland-24294826/" rel="noopener">Order on DoorDash</a>
+      </div>
+      <div class="order__card">
+        <h3>Call ahead</h3>
+        <p><a class="link" href="tel:+15419082555">541.908.2555</a></p>
+      </div>
+      <div class="order__card">
+        <h3>News and specials</h3>
+        <p>Seasonal drinks and hours changes go up on Instagram first.</p>
+        <a class="btn" href="https://www.instagram.com/tovcoffee_co" rel="noopener">@tovcoffee_co</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<dialog class="sheet" id="add" aria-labelledby="add-h">
+  <form class="sheet__in" method="dialog" id="add-form">
+    <header class="sheet__head">
+      <h2 id="add-h">Drink</h2>
+      <button class="x" type="button" data-close aria-label="Close">&times;</button>
+    </header>
+    <fieldset class="opt">
+      <legend>Quantity</legend>
+      <div class="qty">
+        <button type="button" class="qty__b" data-step="-1" aria-label="One less">&minus;</button>
+        <output id="add-qty" aria-live="polite">1</output>
+        <button type="button" class="qty__b" data-step="1" aria-label="One more">+</button>
+      </div>
+    </fieldset>
+    <fieldset class="opt" data-opt="size">
+      <legend>Size</legend>
+      <div class="chips">
+        <label><input type="radio" name="size" value="12 oz"><span>12 oz</span></label>
+        <label><input type="radio" name="size" value="16 oz" checked><span>16 oz</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="opt" data-opt="temp">
+      <legend>Hot or iced</legend>
+      <div class="chips">
+        <label><input type="radio" name="temp" value="Hot" checked><span>Hot</span></label>
+        <label><input type="radio" name="temp" value="Iced"><span>Iced</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="opt" data-opt="milk">
+      <legend>Milk</legend>
+      <div class="chips">
+        <label><input type="radio" name="milk" value="Dairy" checked><span>Dairy</span></label>
+        <label><input type="radio" name="milk" value="Oat"><span>Oat</span></label>
+      </div>
+    </fieldset>
+    <label class="opt notes">
+      <span class="legend">Notes <span class="m">optional</span></span>
+      <input type="text" name="notes" maxlength="80" placeholder="Extra hot, half sweet..." autocomplete="off">
+    </label>
+    <button class="btn btn--primary btn--block" type="submit">Add to cart</button>
+  </form>
+</dialog>
+
+<dialog class="sheet" id="cart" aria-labelledby="cart-h">
+  <div class="sheet__in">
+    <header class="sheet__head">
+      <h2 id="cart-h">Your order</h2>
+      <button class="x" type="button" data-close aria-label="Close">&times;</button>
+    </header>
+    <p class="cart__empty">Nothing here yet. Tap a drink on the menu to add it.</p>
+    <ul class="cart__list"></ul>
+    <div class="cart__foot">
+      <button class="btn btn--primary btn--block" type="button" id="checkout">Order ahead (demo)</button>
+      <div class="cart__demo" id="demo-note" hidden>
+        <p><strong>Online ordering isn't connected yet.</strong> This is a concept demo. To order now:</p>
+        <ul>
+          <li>Pickup or delivery: <a class="link" href="https://www.doordash.com/store/t%C5%8Dv-coffee-portland-24294826/" rel="noopener">DoorDash</a></li>
+          <li>Call Hawthorne: <a class="link" href="tel:+15419082555">541.908.2555</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<footer class="foot">
+  <p class="foot__line">Opened by Joseph Nazir in 2015 in a red double-decker bus on Hawthorne. Moved into this shop in 2023.</p>
+  <p class="foot__small"><strong>Concept demo by TruongSon.</strong> Not made by or affiliated with Tōv Coffee. Drink list from the printed menu in the shop (photo, June 2025). Hours and phone from Tōv's Yelp listing (checked Nov 21, 2026); Tōv has no website. History from Wikipedia. Photo credits: <a class="link" href="credits.html">credits</a>.</p>
+</footer>
+
+<script type="application/json" id="site-data">{"slug":"tov","tz":"America/Los_Angeles","hours":{"hawthorne":[[570,1020],[570,1020],[570,1020],null,[570,1020],[570,1020],[570,1020]]},"holidays":{"hawthorne":{}},"options":{"milkDrinks":["Nectar of the Gods","Arabic People Latte","Rose Mocha","Little Mermaid Latte","Mucho Caliente","Mint Thing","Cappuccino","Cortado","Chai Delicious"],"pairs":[],"noSize":["Chocolate Jesus","Mint Thing","Cortado"]}}</script>
+<script src="site.js?v=1"></script>
+</body>
+</html>
