@@ -288,3 +288,13 @@ Open: needs a Kaggle account with a verified phone and an API token (not set up 
 **Why:** Cold emails that read as AI get ignored. Harvey's writer rules already ban some patterns; no-ai-slop adds a second, focused editing pass. Harvey keeps the original draft if an edit drops a merge variable, adds an em dash or gets longer. We run Harvey from Claude Code, so the repo path works with no extra setup.
 
 **Owner:** Son
+
+## 2026-11-21 - Each F&B site gets its own scroll-craft build; no shared template
+
+**Decision:** Delete the F&B practical template (`websites/templates/fnb-practical/`, built from Vivace). Build every new F&B client site with scroll-craft, with its own vibe. Don't copy layout, code or style from one client site to another. Vivace stays the primary demo, but its style is for Vivace only. This replaces the "default site style" part of the 2026-11-20 Vivace decision.
+
+**Why:** Son: the Vivace vibe "is just for the last website we made", and the template version of Tōv Coffee "looks off". Each business needs a site that fits it.
+
+**Alternatives considered:** Keep the template and restyle it per client. Rejected: the shared structure still shows.
+
+**Owner:** Son

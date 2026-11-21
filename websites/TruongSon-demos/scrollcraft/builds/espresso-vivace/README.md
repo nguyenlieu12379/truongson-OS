@@ -7,7 +7,7 @@ A short, practical site for **Espresso Vivace**, Seattle: menu, live open-now st
 
 ## What a drink buyer gets
 
-1. **First screen:** what it is, both bars with live "open now / opens at" status (Seattle time), Order and Menu buttons, and a looping latte-art pour video (muted; a still of the finished cup when motion is off).
+1. **First screen:** what it is, both bars with live "open now / opens at" status (Seattle time), Order and Menu buttons, and a latte-art pour that scrolling plays (the hero holds briefly while it pours; a still of the finished cup when motion is off).
 2. **Menu:** drink names in three groups, plus beans.
 3. **Locations:** the Brix storefront photo, then map, hours, address, tap-to-call, directions for each bar. Holiday hours in a fold-out.
 4. **Order:** Grubhub (Alley 24 pickup or delivery), call ahead, beans shop.
@@ -32,10 +32,10 @@ A short, practical site for **Espresso Vivace**, Seattle: menu, live open-now st
 |---|---|
 | `index.html` | The page. |
 | `site.css` | Styles. |
-| `site.js` | Hero video source per device, demo cart (drink buttons, add-to-cart panel, cart, localStorage), appear-on-scroll animations, open-now status (Seattle time). Drink option rules (milk drinks, hot/iced pairs, no-size drinks) are the `MILK`, `PAIRS`, `NO_SIZE` lists at the top of the cart code. |
+| `site.js` | Scroll-played hero pour (pin length, playhead lerp, iOS prime), demo cart (drink buttons, add-to-cart panel, cart, localStorage), appear-on-scroll animations, open-now status (Seattle time). Drink option rules (milk drinks, hot/iced pairs, no-size drinks) are the `MILK`, `PAIRS`, `NO_SIZE` lists at the top of the cart code. |
 | `assets/logo.svg` | Vivace badge, traced to vector from the image Son supplied, recolored. |
 | `credits.html` | Credits for the storefront photo and pour video. |
-| `assets/pour*.mp4`, `pour-poster*`, `pour-final*` | Pour video (Mixkit "Latte art" #810, free license, not filmed at Vivace): 1280x720 desktop, 576x720 phone crop, first/last-frame posters. |
+| `assets/pour-scrub*.mp4`, `pour-poster*`, `pour-final*` | Pour video (Mixkit "Latte art" #810, free license, not filmed at Vivace), re-encoded with a keyframe every 8 frames (phone: 4) so scroll can seek smoothly: 1280x720 desktop, 576x720 phone crop, first/last-frame posters. |
 | `assets/brix-outside.webp` | Brix storefront, Oct 2022 (Commons, Another Believer, CC BY-SA 4.0). 960px: full size was rate-limited. |
 | `verify/` | Screenshots from the last check. |
 | `BRIEF.md` | History: the earlier scroll-craft editorial version and why it changed. |
@@ -48,7 +48,14 @@ A short, practical site for **Espresso Vivace**, Seattle: menu, live open-now st
 - **v3.1 (2026-11-20):** Son asked to add the pour video and a cafe exterior photo. The pour loops in the hero (replacing the latte photo); the Brix storefront heads the Locations section. Earlier versions are in git history.
 - **v3.2 (2026-11-20):** appear-on-scroll animations (fade + 14px rise, staggered, once; plain fade under reduced motion; nothing hidden without JS) and a vector redraw of the round Vivace sign as the brand mark (header, footer, favicon). It is our SVG approximation of their sign, set in Kaushan Script and Archivo, not their artwork: swap in their real logo file if they sign.
 - **v3.3 (, 2026-11-21, 4am UTC+7 as Son scheduled):** order flow. The hero Order button is removed; the header Order goes to the menu. Every drink is a button that opens an add-to-cart panel (quantity, size, hot/iced where the menu has both, milk for milk drinks, notes; bottom sheet on phone, side panel on laptop). A cart icon with a count badge sits beside the Menu heading; the cart keeps items in localStorage and lets you change quantity or remove. No prices and no payment: "Order ahead (demo)" says ordering isn't connected and links Grubhub and both phone numbers. On phones the menu sections swipe sideways, each about two-thirds of the screen.
-- **v3.4 (current, 2026-11-21):** logo is now a vector trace of the Vivace badge Son supplied ("espresso / tradizione nord Italia"), saved as `assets/logo.svg` and used in the header (36px), footer and favicon. Recolored as Son asked: ring and script red-orange (#E8471F), the crosshatched cup kept red (#D91E26). Traced from a 316px image at 4x with potrace, so edges are smooth but follow that source; re-trace from their original file if they sign. Kaushan Script font dropped.
+- **v3.4 (2026-11-21):** logo is now a vector trace of the Vivace badge Son supplied ("espresso / tradizione nord Italia"), saved as `assets/logo.svg` and used in the header (36px), footer and favicon. Recolored as Son asked: ring and script red-orange (#E8471F), the crosshatched cup kept red (#D91E26). Traced from a 316px image at 4x with potrace, so edges are smooth but follow that source; re-trace from their original file if they sign. Kaushan Script font dropped.
+
+- **v3.5 (current, 2026-11-21):** the pour is played by scroll instead of looping. The hero holds under the bar for about 0.9 of a screen (0.8 on phones) while scrolling runs the clip from first pour to finished tulip; scrolling up rewinds. If the hero is taller than the screen (small phones like 360x640) it doesn't hold: the pour plays as the hero scrolls away. All content unchanged.
+
+## Verified (2026-11-21, scroll pour, Chrome)
+
+- 1280x800, 390x844, 360x640: playhead follows scroll (0 to 13.2s across the hold), poster hands off to live frames, menu follows right after, no console errors.
+- Reduced motion: no clip loaded, no hold, finished-cup still.
 
 ## Verified (2026-11-20, headless Chrome)
 
