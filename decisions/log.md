@@ -280,3 +280,11 @@ Open: needs a Kaggle account with a verified phone and an API token (not set up 
 **Alternatives considered:** The scroll-craft chaptered editorial version with a scrubbed pour video (v2, in git history). Kept as an option for brands with a strong story, not the default.
 
 **Owner:** Son
+
+## 2026-11-21 - Add no-ai-slop; Harvey runs it on every cold email
+
+**Decision:** Vendor petergyang/no-ai-slop (MIT, commit 000650b) into `.claude/skills/no-ai-slop/` as `/no-ai-slop`. Wire it into Harvey's email drafting: the humanizer pass now loads it (SKILL.md plus eval.md) and is on (`writer.humanizer: true` in `harvey.yaml`). Run `/no-ai-slop` on any external copy written by hand (Instagram, client emails, cold scripts, site copy) before showing a draft.
+
+**Why:** Cold emails that read as AI get ignored. Harvey's writer rules already ban some patterns; no-ai-slop adds a second, focused editing pass. Harvey keeps the original draft if an edit drops a merge variable, adds an em dash or gets longer. We run Harvey from Claude Code, so the repo path works with no extra setup.
+
+**Owner:** Son
