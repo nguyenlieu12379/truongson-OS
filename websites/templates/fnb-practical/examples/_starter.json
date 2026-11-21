@@ -1,0 +1,59 @@
+{
+  "slug": "TODO-short-name",
+  "name": "TODO Business Name",
+  "title": "TODO Business Name · one-line promise (concept)",
+  "description": "Concept demo: TODO Business Name menu, hours, locations and ordering.",
+  "demo": true,
+  "version": "1",
+  "tz": "America/Los_Angeles",
+  "logo": "assets/logo.svg",
+  "colors": { "accent": "#B11F24", "accentInk": "#FFF8F2", "paper": "#F1EFEA", "ink": "#171514", "inkSoft": "#5B554D" },
+
+  "hero": {
+    "title": "TODO short headline,",
+    "titleEm": "TODO second line.",
+    "sub": "TODO one sentence: what it is and where. Max 20 words.",
+    "image": { "src": "assets/hero.webp", "w": 1600, "h": 1200, "alt": "TODO describe the photo" }
+  },
+
+  "menu": {
+    "note": "Tap a drink to add it. Prices at the counter.",
+    "sections": [
+      { "title": "Coffee", "items": ["TODO Espresso", "TODO Latte", { "name": "TODO Seasonal drink", "note": "seasonal" }] },
+      { "title": "Cold", "items": ["TODO Iced Latte"] }
+    ]
+  },
+
+  "options": {
+    "sizes": ["Small", "Medium", "Large"],
+    "milks": ["Whole", "Oat"],
+    "milkDrinks": ["TODO Latte", "TODO Iced Latte"],
+    "pairs": [["TODO Latte", "TODO Iced Latte"]],
+    "noSize": ["TODO Espresso"]
+  },
+
+  "locationsNote": "",
+  "locations": [
+    {
+      "id": "main", "name": "TODO Street name", "area": "TODO Neighborhood",
+      "address": "TODO 123 Street, City, ST 00000",
+      "phone": "+1TODO", "phoneLabel": "TODO 555.555.5555",
+      "hoursText": ["TODO 7am to 3pm daily"],
+      "week": { "sun": "07:00-15:00", "mon": "07:00-15:00", "tue": "07:00-15:00", "wed": "07:00-15:00", "thu": "07:00-15:00", "fri": "07:00-15:00", "sat": "07:00-15:00" }
+    }
+  ],
+  "holidays": [],
+
+  "order": {
+    "cards": [
+      { "title": "Pickup or delivery", "text": "TODO through which service.", "button": { "label": "TODO Order on ...", "href": "https://TODO", "primary": true } },
+      { "type": "phones", "title": "Call ahead" }
+    ]
+  },
+  "checkout": { "button": "Order ahead (demo)", "routes": [ { "text": "Pickup or delivery", "label": "TODO service", "href": "https://TODO" } ] },
+
+  "footer": { "line": "TODO one true sentence about the business.", "sources": "Hours and phones from TODO (checked TODO date). Drink list from TODO." },
+  "credits": [
+    { "where": "Hero photo", "title": "TODO file name", "href": "https://TODO", "author": "TODO", "license": "TODO", "licenseHref": "https://TODO", "changes": "Resized, converted to WebP." }
+  ]
+}
