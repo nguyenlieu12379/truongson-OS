@@ -18,6 +18,7 @@ Added and linked. Not set up: no venv, no `.env`, no mail account. Decision: `de
 - Approval mode only. Never turn on autopilot unless they say so in writing.
 - Use a separate sending domain, never the main one, and warm it up first.
 - Show drafts before anything goes out (house rule: no faking our voice without a review).
+- Every draft gets a no-ai-slop pass. Harvey does it automatically (`writer.humanizer: true` in `harvey.yaml`, skill at `.claude/skills/no-ai-slop/`). For any copy you write or edit by hand (templates, `prompts/writer.md`, reply scripts), run `/no-ai-slop` on it before showing Son or Truong.
 
 ## How to run it
 
