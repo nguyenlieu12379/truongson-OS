@@ -31,7 +31,6 @@ changes only grammar and world will fail it.
 | espresso-vivace (2026-11-20) | Chaptered editorial | Fixed folio band: wordmark left, roman chapter + title right, band takes the chapter ground colour | Title page: type only on paper, no media above the fold | flow(title) > flow+reveal > flow+parallax column > flow intertitle (authored silence) > pin 3.0 (bespoke) > flow iris reveal > flow+parallax on yellow > count (outside acts) > flow colophon. 9 sections, ~11.2vh, 5 engine acts | Colophon: two addresses as plain text with Directions links, sign photo, demo note + photo credits. CTA is running text, no button | Scroll-poured latte-art rosetta (SVG, page JS) that wipes into a real photo of the same drink | Real Commons photography, paper / dark / poster-wall yellow grounds, Newsreader + Archivo, Vivace red | 4500 |
 | espresso-vivace v2 (2026-11-20, amends row above) | same | same | same | Peak changed: pin 3.0 bespoke SVG became scrub 2.8 (real pour clip in the editorial media column). ~11vh | same | Real pour scrubbed by hand, resolved by an iris wipe to the cafe's own latte (kit scrub + bespoke pairing; SVG rosetta retired) | same + one Mixkit clip | 4500 |
 | espresso-vivace v3 (2026-11-20, retires rows above) | Not a scroll-craft page anymore: practical cafe site (menu, open-now, maps, order) | Sticky bar: wordmark, Menu, Locations, Order pill | Headline + live open-now status + Order button + photo | Static sections, no acts | Order cards | None (open-now status is a utility, not a signature) | Paper, Vivace red | 4500 |
-| tov-coffee (2026-11-21) | Route line (new): the page is a bus route, stops on hard grounds, ends at a terminus | Fixed destination blind (bus roller sign) that rolls to the current stop and opens into a clickable stop list; wordmark in matching housing | Layered doorway: violet wall with an arch, the jamb and the lounge photo as separate planes, scale at different rates as you walk through | pin 3.2 (bespoke doorway) > flow (gold quote, authored silence) > pan 3.1 (menu plates) > flow + reveal x3 > flow + parallax (bus) > flow terminus. 6 stops, ~11vh, 2 pinned acts | Terminus: address, live open-now, week strip, directions + DoorDash, map, storefront photo; the blind reads the address and open status | Bus destination blind as navigation, ends on the business's live open status | Real Commons photography, deep violet / gold / bus red grounds, Fraunces + Instrument Sans | 4530 |
 
 
 ---
@@ -50,8 +49,6 @@ Nothing is taken yet.
 - **Title page with no media** as the hero (espresso-vivace).
 - **Draw-then-reveal-the-real-photo** peak: an illustration completed by scroll, then wiped to the photograph (espresso-vivace).
 - **Colophon close with addresses as running text** (espresso-vivace).
-- **Route line grammar** with a destination-blind nav and a terminus close (tov-coffee).
-- **Walk-through-the-doorway hero**: an arch in a wall plane that scales past the viewer into a room photo (tov-coffee).
 
 ---
 
