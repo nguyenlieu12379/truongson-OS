@@ -27,6 +27,10 @@ websites/
 
 Scroll-craft builds live in `websites/TruongSon-demos/scrollcraft/builds/` (set by `.scrollcraft.json`), next to the skill's `FINGERPRINTS.md` registry.
 
+## Template for new F&B sites
+
+`websites/templates/fnb-practical/` turns one data file into a site in the Espresso Vivace style. Steps, schema and checks: its `README.md`. Start every new F&B prospect site there.
+
 ## Add a site
 
 Create `websites/<owner>/<site-name>/`, add a row above, and give the site its own README.
