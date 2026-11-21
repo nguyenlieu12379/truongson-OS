@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rutt's Hut · Rippers since 1928 · Clifton, NJ</title>
+<meta name="description" content="Deep-fried hot dogs at 417 River Road, Clifton, New Jersey, since 1928. In-and-Outer, Ripper, Weller or Cremator.">
+<meta name="theme-color" content="#F2C230">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23F2C230'/><rect x='5' y='12' width='22' height='9' rx='4.5' fill='%239E4523'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&family=Big+Shoulders+Display:wght@800;900&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/sign.webp">
+<link rel="preload" as="image" href="assets/roof.webp">
+<link rel="stylesheet" href="scrollcraft.css">
+<style>
+  :root {
+    --fry:     #15100C;   /* fryer black, the canvas */
+    --cobalt:  #2350B4;   /* the sky over River Road */
+    --mustard: #F2C230;   /* the relish */
+    --enamel:  #EEF0EC;   /* the sign face */
+    --oil:     #C98A1C;
+
+    --sc-canvas: var(--fry);
+    --sc-surface: #221A13;
+    --sc-ink: #F7F3EA;
+    --sc-ink-soft: #CFC6B6;
+    --sc-accent: var(--mustard);
+    --sc-accent-ink: var(--fry);
+    --sc-font-display: "Big Shoulders Display", "Archivo", system-ui, sans-serif;
+    --sc-font-text: "Archivo", system-ui, sans-serif;
+    --sc-shadow-color: 28 40% 4%;
+    --sc-r-sm: 4px;
+
+    --bar-h: 64px;
+    --sc-z-chrome: 40;
+  }
+  @media (max-width: 700px) { :root { --bar-h: 56px; } }
+
+  /* Grounds. Each cut paints its own: a cutlist changes ground on a hard edge. */
+  .g-fry     { background: var(--fry);     --sc-ink: #F7F3EA; --sc-ink-soft: #CFC6B6; --sc-accent: var(--mustard); color: var(--sc-ink); }
+  .g-cobalt  { background: var(--cobalt);  --sc-ink: #FFFFFF; --sc-ink-soft: #E3EAFB; --sc-accent: var(--mustard); color: var(--sc-ink); }
+  .g-mustard { background: var(--mustard); --sc-ink: #15100C; --sc-ink-soft: #3B2E12; --sc-accent: #15100C; --sc-accent-ink: var(--mustard); color: var(--sc-ink); }
+  .g-enamel  { background: var(--enamel);  --sc-ink: #15100C; --sc-ink-soft: #4A4236; --sc-accent: #15100C; --sc-accent-ink: var(--enamel); color: var(--sc-ink); }
+
+  .vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+  .big {
+    font-family: var(--sc-font-display); font-weight: 900; text-transform: uppercase;
+    line-height: 0.88; letter-spacing: -0.01em; margin: 0; text-wrap: balance;
+  }
+  .say { font-size: var(--sc-t-lg); line-height: 1.4; max-width: 34ch; margin: 0; text-wrap: pretty; }
+  .small { font-size: var(--sc-t-sm); color: var(--sc-ink-soft); margin: 0; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: .5em; min-height: 48px; padding: 0 1.15em;
+    font-family: var(--sc-font-display); font-weight: 800; font-size: 1.25rem; letter-spacing: .03em;
+    text-transform: uppercase; text-decoration: none; white-space: nowrap; cursor: pointer;
+    border: 3px solid currentColor; border-radius: var(--sc-r-sm);
+    background: var(--sc-accent); color: var(--sc-accent-ink); border-color: var(--sc-accent);
+    transition: transform 140ms var(--sc-ease-out), background-color 160ms var(--sc-ease-out), color 160ms var(--sc-ease-out);
+  }
+  .btn--line { background: transparent; color: var(--sc-ink); border-color: var(--sc-ink); }
+  .btn:active { transform: translateY(2px); }
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover { transform: translateY(-2px); }
+    .btn--line:hover { background: var(--sc-ink); color: var(--sc-canvas); }
+  }
+
+  /* ------------------------------------------------------------ the bar -- */
+  .bar {
+    position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--bar-h);
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--sc-4);
+    padding-inline: clamp(.75rem, 2.5vw, 2rem);
+    background: var(--mustard); color: var(--fry); border-bottom: 3px solid var(--fry);
+    --sc-accent: var(--fry); --sc-accent-ink: var(--mustard);
+  }
+  .bar__mark {
+    font-family: var(--sc-font-display); font-weight: 900; font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.3rem);
+    letter-spacing: .01em; text-transform: uppercase; text-decoration: none; line-height: 1; color: var(--fry);
+  }
+  .bar__order {
+    justify-self: center; display: inline-flex; align-items: center; gap: .6rem;
+    min-height: 44px; padding: 0 .8rem; border: 2px solid var(--fry); border-radius: var(--sc-r-sm);
+    background: transparent; cursor: pointer; font-weight: 700; font-size: var(--sc-t-sm);
+    transition: background-color 160ms var(--sc-ease-out), transform 140ms var(--sc-ease-out);
+  }
+  .bar__order:active { transform: translateY(1px); }
+  @media (hover: hover) and (pointer: fine) { .bar__order:hover { background: color-mix(in oklab, var(--fry) 10%, transparent); } }
+  .bar__order svg { width: 54px; height: 22px; }
+  .bar__order b { font-family: var(--sc-font-display); font-weight: 900; font-size: 1.2rem; letter-spacing: .03em; text-transform: uppercase; }
+  .bar .btn { min-height: 44px; font-size: 1.1rem; }
+  @media (max-width: 700px) {
+    .bar { gap: var(--sc-2); }
+    .bar__order { padding: 0 .45rem; }
+    .bar__order .lbl { display: none; }
+    .bar__order b { display: none; }
+    .bar .btn { padding: 0 .7em; font-size: 1rem; }
+  }
+
+  /* --------------------------------------------------------- the fryer --
+     Chrome, not an act. It unfurls out from under the bar while the four
+     doneness cuts scroll past under it, then rolls back up. */
+  .fryer {
+    position: fixed; z-index: 45; left: 0; top: calc(var(--bar-h) - 3px);
+    width: 50vw; height: calc(100svh - var(--bar-h) + 3px);
+    display: grid; grid-template-rows: 1fr auto; align-content: center;
+    padding: clamp(1rem, 3vw, 3rem); gap: var(--sc-5);
+    background: var(--fry); color: #F7F3EA;
+    border-right: 3px solid var(--fry);
+    transform: translate3d(0, calc((1 - var(--open, 0)) * -102%), 0);
+    visibility: hidden;
+  }
+  .fryer.is-live { visibility: visible; }
+  .fryer__tank { width: 100%; height: auto; max-height: 58svh; align-self: center; }
+  .fryer__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--sc-4); }
+  .fryer__title { font-family: var(--sc-font-display); font-weight: 900; text-transform: uppercase; font-size: var(--sc-t-xl); letter-spacing: .02em; margin: 0; line-height: 1; }
+  .fryer__now { font-size: var(--sc-t-sm); color: #CFC6B6; margin: 0; }
+  .fryer__stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 0; padding: 0; list-style: none; }
+  .fryer__stages button {
+    width: 100%; min-height: 48px; padding: .4rem .3rem; cursor: pointer;
+    font-family: var(--sc-font-display); font-weight: 800; font-size: clamp(.95rem, .8rem + .5vw, 1.25rem);
+    text-transform: uppercase; letter-spacing: .02em; line-height: 1;
+    color: #F7F3EA; background: transparent; border: 2px solid #5A4C3C; border-radius: var(--sc-r-sm);
+    transition: background-color 160ms var(--sc-ease-out), border-color 160ms var(--sc-ease-out), color 160ms var(--sc-ease-out);
+  }
+  .fryer__stages button.is-here { border-color: #F7F3EA; }
+  .fryer__stages button[aria-pressed="true"] { background: var(--mustard); color: var(--fry); border-color: var(--mustard); }
+  @media (hover: hover) and (pointer: fine) { .fryer__stages button:hover { border-color: var(--mustard); } }
+  @media (max-width: 860px) {
+    .fryer { width: 100vw; height: 46svh; border-right: 0; border-bottom: 3px solid var(--fry); padding: .75rem var(--sc-gutter) .9rem; gap: .6rem; }
+    .fryer__tank { max-height: none; }
+    .fryer__stages button { min-height: 44px; font-size: .95rem; }
+    .fryer__title { font-size: var(--sc-t-lg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fryer { transform: none; opacity: var(--open, 0); }
+  }
+
+  /* bubbles, the only ambient motion on the page */
+  .bub { animation: rise var(--d, 2.4s) linear infinite; animation-delay: var(--dl, 0s); opacity: calc(var(--heat, 0) * .9); }
+  @keyframes rise { from { transform: translateY(0); } to { transform: translateY(-150px); } }
+  @media (prefers-reduced-motion: reduce) { .bub { animation: none; } }
+
+  /* ---------------------------------------------------------- the hero -- */
+  .hero {
+    position: relative; height: 100svh; min-height: 560px; overflow: hidden;
+    background: linear-gradient(180deg, #17398C 0%, #2350B4 52%, #3466C4 100%);
+    color: #fff;
+  }
+  .hero__plane { position: absolute; will-change: transform; pointer-events: none; }
+  /* Both cutouts share one frame so the sign stays on its roof. The frame is
+     sized so the sign's top lands about 12vh down on desktop. */
+  .hero__frame {
+    --W: max(100vw, 140vh);
+    position: absolute; left: 50%; width: var(--W); height: calc(var(--W) * .75);
+    top: calc(12vh + var(--bar-h) * .5 - var(--W) * .1575); margin-left: calc(var(--W) / -2);
+  }
+  .hero__frame img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: fill; }
+  .hero__sky { inset: -20% 0 0 0; background: inherit; }
+  .hero__word {
+    position: absolute; z-index: 1; margin: 0;
+    left: calc(50% + var(--W) * -0.012); top: calc(12vh + var(--bar-h) * .5 - var(--W) * .1575 + var(--W) * .75 * .40);
+    --W: max(100vw, 140vh);
+    font-family: var(--sc-font-display); font-weight: 900; text-transform: uppercase;
+    font-size: calc(var(--W) * .125); line-height: .8; letter-spacing: -.005em; color: var(--mustard);
+    text-shadow: 0 6px 18px rgb(10 22 60 / .35);
+  }
+  .hero__sign { z-index: 2; }
+  .hero__roof { z-index: 3; }
+  .hero__fade { position: absolute; inset: auto 0 0 0; height: 70px; z-index: 4; background: linear-gradient(to bottom, transparent, rgb(21 16 12 / .55)); pointer-events: none; }
+  .hero__copy {
+    position: absolute; z-index: 5; left: var(--sc-gutter); top: calc(var(--bar-h) + 14vh);
+    max-width: min(30rem, 34vw); display: grid; gap: var(--sc-4); justify-items: start;
+  }
+  .hero__copy .say { font-size: var(--sc-t-xl); line-height: 1.2; font-weight: 500; color: #fff; }
+  .hero__copy .small { color: #E3EAFB; }
+  .hero__scrim { display: none; }
+  @media (max-width: 860px) {
+    .hero__frame { --W: 250vw; top: calc(34svh - var(--W) * .1575); margin-left: calc(var(--W) * -.55); }
+    .hero__word { --W: 100vw; left: var(--sc-gutter); top: calc(var(--bar-h) + 5svh); font-size: 24vw; }
+    .hero__copy { top: auto; bottom: 1.25rem; right: var(--sc-gutter); max-width: none; gap: var(--sc-3); }
+    .hero__copy .say { font-size: var(--sc-t-lg); }
+    .hero__scrim { display: block; position: absolute; inset: auto 0 0 0; height: 34svh; z-index: 4; pointer-events: none;
+      background: linear-gradient(to top, rgb(21 16 12 / .94) 0%, rgb(21 16 12 / .86) 55%, rgb(21 16 12 / .0) 100%); }
+  }
+  @media (max-width: 860px) and (max-height: 700px) {
+    .hero__word { font-size: 19vw; }
+  }
+
+  /* ---------------------------------------------------------- the cuts -- */
+  .cut { position: relative; min-height: 100svh; display: grid; align-content: center; padding-block: calc(var(--bar-h) + 2rem) 3rem; overflow: clip; }
+  .cut--short { min-height: 88svh; }
+  .cut__in { width: 100%; max-width: var(--sc-maxw); margin-inline: auto; padding-inline: var(--sc-gutter); }
+
+  .rip .big { font-size: clamp(3.4rem, 1.5rem + 8.4vw, 10.5rem); max-width: 11ch; }
+  .rip .say { margin-top: var(--sc-6); margin-left: auto; text-align: right; }
+
+  .photo { margin: 0; position: relative; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--sc-r-sm); }
+  .photo figcaption { font-size: var(--sc-t-xs); color: var(--sc-ink-soft); margin-top: .5rem; }
+
+  .counter .cut__in { display: grid; grid-template-columns: 1.6fr 1fr; gap: clamp(1.5rem, 4vw, 4rem); align-items: end; }
+  .counter .photo img { aspect-ratio: 4 / 3; height: auto; }
+  .counter .big { font-size: var(--sc-t-3xl); }
+
+  .doors .cut__in { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 4vw, 4rem); align-items: center; }
+  .doors .photo { order: 2; transform: rotate(1.5deg); box-shadow: var(--sc-e3); }
+  .doors .photo img { aspect-ratio: 4 / 3; height: auto; border: 8px solid #fff; border-radius: 2px; }
+  .doors .big { font-size: var(--sc-t-3xl); }
+
+  .quiet { min-height: 80svh; }
+  .quiet .cut__in { padding-left: calc(50vw + var(--sc-gutter) * .6); max-width: none; }
+  @media (max-width: 860px) { .quiet .cut__in { padding-left: var(--sc-gutter); } }
+  .quiet p { font-size: var(--sc-t-lg); color: var(--sc-ink-soft); margin: 0; }
+
+  /* The four doneness cuts. Copy lives on the right half (desktop) or the
+     bottom half (phone), because the fryer owns the other half. */
+  .done .cut__in { padding-left: calc(50vw + var(--sc-gutter) * .6); max-width: none; display: grid; gap: var(--sc-5); justify-items: start; }
+  .done .big { font-size: clamp(3.6rem, 1.6rem + 6.6vw, 9rem); }
+  .done .say { max-width: 28ch; }
+  @media (max-width: 860px) {
+    .done { align-content: end; padding-top: calc(var(--bar-h) + 46svh + 1rem); padding-bottom: 2rem; }
+    .done .cut__in { padding-left: var(--sc-gutter); gap: var(--sc-3); }
+    .done .big { font-size: 17vw; }
+  }
+
+  .relish .cut__in { display: grid; grid-template-columns: 1fr 1.25fr; gap: clamp(1.5rem, 4vw, 4rem); align-items: center; }
+  .relish .big { font-size: var(--sc-t-3xl); }
+  .relish .say { margin-top: var(--sc-5); }
+  .relish .photo img { aspect-ratio: 1.7; height: auto; }
+
+  .sides .cut__in { display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(1rem, 2.5vw, 2rem); }
+  .sides .one { grid-column: 1 / span 5; align-self: start; }
+  .sides .two { grid-column: 6 / span 7; margin-top: clamp(3rem, 10vh, 7rem); }
+  .sides .photo img { aspect-ratio: 4 / 3; height: auto; }
+  .sides h2 { font-family: var(--sc-font-display); font-weight: 900; text-transform: uppercase; font-size: var(--sc-t-2xl); line-height: .95; margin: var(--sc-4) 0 var(--sc-2); }
+
+  .since .cut__in { display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(1.5rem, 4vw, 4rem); align-items: center; }
+  .since .photo img { aspect-ratio: 4 / 3; height: auto; }
+  .since dl { margin: 0; display: grid; gap: var(--sc-6); }
+  .since dt { font-family: var(--sc-font-display); font-weight: 900; font-size: var(--sc-t-3xl); line-height: .9; color: var(--mustard); }
+  .since dd { margin: .35rem 0 0; font-size: var(--sc-t-lg); line-height: 1.35; max-width: 30ch; }
+
+  @media (max-width: 860px) {
+    .counter .cut__in, .doors .cut__in, .relish .cut__in, .since .cut__in { grid-template-columns: 1fr; }
+    .doors .photo { order: 0; }
+    .sides .one, .sides .two { grid-column: 1 / -1; margin-top: 0; }
+    .rip .say { text-align: left; margin-left: 0; }
+  }
+
+  /* ---------------------------------------------------------- the close -- */
+  .close { min-height: 100svh; display: grid; grid-template-rows: 1fr auto; padding-top: var(--bar-h); }
+  .close__main { align-self: center; width: 100%; max-width: var(--sc-maxw); margin-inline: auto; padding: clamp(1.5rem, 5vh, 4rem) var(--sc-gutter); display: grid; gap: var(--sc-5); }
+  .close__label { font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: var(--sc-t-sm); margin: 0; }
+  .close .big { font-size: clamp(4.2rem, 1.4rem + 11vw, 13.5rem); }
+  .close__row { display: flex; flex-wrap: wrap; gap: var(--sc-3); }
+  .close__facts { display: grid; grid-template-columns: repeat(3, minmax(0, auto)); justify-content: start; gap: var(--sc-3) clamp(1.5rem, 4vw, 4rem); margin: var(--sc-3) 0 0; }
+  .close__facts dt { font-size: var(--sc-t-xs); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+  .close__facts dd { margin: .2rem 0 0; font-size: var(--sc-t-base); }
+  .close__facts a { color: inherit; }
+  .close__foot { border-top: 3px solid var(--fry); padding: .9rem var(--sc-gutter); display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 2rem; font-size: var(--sc-t-xs); }
+  .close__foot a { color: inherit; }
+  @media (max-width: 700px) { .close__facts { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <a class="bar__mark" href="#top">Rutt's Hut</a>
+  <button class="bar__order" type="button" data-goto-fryer aria-label="Your order: Ripper. Change it at the fryer.">
+    <span class="lbl">Your order</span>
+    <svg viewBox="0 0 120 48" aria-hidden="true"><rect class="mini-dog" x="8" y="12" width="104" height="24" rx="12" fill="#9E4523" stroke="#15100C" stroke-width="3"/><path class="mini-rip" d="M34 15 l6 6 l-4 4 M62 14 l5 7 l-5 4 M88 15 l5 6 l-4 4" fill="none" stroke="#F4BE95" stroke-width="3" stroke-linecap="round"/></svg>
+    <b data-order-name>Ripper</b>
+  </button>
+  <a class="btn" href="https://order.online/business/Ruttshut-16988327" rel="noopener">Order online</a>
+</header>
+
+<!-- The fryer: fixed chrome, driven by page scroll across #fry-0 .. #fry-3 -->
+<aside class="fryer" id="fryer" aria-label="The fryer" data-sc-verify-state="0">
+  <svg class="fryer__tank" viewBox="0 0 600 360" role="img" aria-labelledby="fryer-desc">
+    <desc id="fryer-desc">A hot dog in a fryer of hot oil. It gets darker and its skin splits the longer it stays in.</desc>
+    <defs>
+      <linearGradient id="oil" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#E0A43A"/><stop offset="1" stop-color="#8A5410"/>
+      </linearGradient>
+      <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#B9BDBF"/><stop offset="1" stop-color="#6E7376"/>
+      </linearGradient>
+      <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+      <clipPath id="tank-in"><rect x="44" y="96" width="512" height="226" rx="10"/></clipPath>
+    </defs>
+    <!-- basket hook and tank -->
+    <rect x="30" y="80" width="540" height="258" rx="16" fill="url(#steel)"/>
+    <rect x="44" y="96" width="512" height="226" rx="10" fill="#7A6A58"/>
+    <g clip-path="url(#tank-in)">
+      <rect id="oil-body" x="44" y="128" width="512" height="200" fill="url(#oil)"/>
+      <g id="bubbles" fill="#FFE2A0">
+        <circle class="bub" cx="90"  cy="320" r="5" style="--d:2.1s;--dl:-.3s"/>
+        <circle class="bub" cx="150" cy="330" r="3" style="--d:1.7s;--dl:-1.1s"/>
+        <circle class="bub" cx="230" cy="326" r="4" style="--d:2.6s;--dl:-.7s"/>
+        <circle class="bub" cx="300" cy="332" r="6" style="--d:2.2s;--dl:-1.6s"/>
+        <circle class="bub" cx="370" cy="324" r="3" style="--d:1.9s;--dl:-.2s"/>
+        <circle class="bub" cx="440" cy="330" r="5" style="--d:2.4s;--dl:-1.3s"/>
+        <circle class="bub" cx="510" cy="326" r="4" style="--d:1.8s;--dl:-.9s"/>
+        <circle class="bub" cx="200" cy="334" r="3" style="--d:2.9s;--dl:-2s"/>
+        <circle class="bub" cx="470" cy="334" r="3" style="--d:2.7s;--dl:-.5s"/>
+      </g>
+      <!-- the dog -->
+      <g id="dog" transform="translate(300 300)">
+        <g id="dog-body">
+          <rect id="dog-skin" x="-200" y="-34" width="400" height="68" rx="34" fill="#D98472" stroke="#15100C" stroke-width="4"/>
+          <rect x="-180" y="-26" width="360" height="22" rx="11" fill="url(#sheen)" id="dog-shine"/>
+          <g id="dog-rips" fill="none" stroke="#F4BE95" stroke-linecap="round" stroke-linejoin="round" opacity="0">
+            <path d="M-150 -30 l10 14 l-8 10 l6 10"/>
+            <path d="M-88 -32 l12 12 l-10 12 l8 8"/>
+            <path d="M-20 -33 l9 15 l-9 9 l7 12"/>
+            <path d="M48 -32 l11 13 l-9 11 l8 9"/>
+            <path d="M116 -31 l10 14 l-8 10 l7 9"/>
+          </g>
+          <g id="dog-char" fill="#0B0705" opacity="0">
+            <ellipse cx="-160" cy="8" rx="16" ry="9"/><ellipse cx="-70" cy="14" rx="22" ry="8"/>
+            <ellipse cx="10" cy="-6" rx="14" ry="10"/><ellipse cx="90" cy="12" rx="20" ry="9"/>
+            <ellipse cx="165" cy="-4" rx="13" ry="10"/>
+          </g>
+        </g>
+      </g>
+      <!-- surface line drawn over the dog so a floating dog sits IN the oil -->
+      <path id="oil-top" d="M44 128 q32 -6 64 0 t64 0 t64 0 t64 0 t64 0 t64 0 t64 0 t64 0 V360 H44 Z" fill="url(#oil)" opacity=".3"/>
+    </g>
+    <!-- basket handle -->
+    <path d="M300 20 V80" stroke="#6E7376" stroke-width="10" stroke-linecap="round"/>
+    <rect x="262" y="12" width="76" height="20" rx="6" fill="#15100C"/>
+  </svg>
+  <div>
+    <div class="fryer__head">
+      <p class="fryer__title">How long it stays in</p>
+      <p class="fryer__now" aria-live="polite">Your order: <strong data-order-name>Ripper</strong></p>
+    </div>
+    <ul class="fryer__stages" style="margin-top:.6rem">
+      <li><button type="button" data-stage="0" aria-pressed="false">In-and-Outer</button></li>
+      <li><button type="button" data-stage="1" aria-pressed="true">Ripper</button></li>
+      <li><button type="button" data-stage="2" aria-pressed="false">Weller</button></li>
+      <li><button type="button" data-stage="3" aria-pressed="false">Cremator</button></li>
+    </ul>
+  </div>
+</aside>
+
+<span data-sc-progress></span>
+<div class="sc-grain" aria-hidden="true"></div>
+
+<main id="top">
+
+  <!-- 1 · SIGN: layered planes, natural flow (no pin in a cutlist) -->
+  <section class="hero" id="hero" aria-labelledby="h1">
+    <div class="hero__plane hero__sky" data-depth="0.5" aria-hidden="true"></div>
+    <h1 class="hero__word hero__plane" id="h1" data-depth="0.32"><span class="vh">Rutt's Hut: </span>Rippers</h1>
+    <div class="hero__frame hero__plane hero__sign" data-depth="0.16" aria-hidden="true">
+      <img src="assets/sign.webp" width="1800" height="1350" alt="">
+    </div>
+    <div class="hero__frame hero__plane hero__roof" data-depth="0" aria-hidden="true">
+      <img src="assets/roof.webp" width="1800" height="1350" alt="">
+    </div>
+    <div class="hero__fade" aria-hidden="true"></div>
+    <div class="hero__scrim" aria-hidden="true"></div>
+    <div class="hero__copy">
+      <p class="say">Deep-fried hot dogs since 1928.</p>
+      <p class="small">417 River Road, Clifton, New Jersey</p>
+      <a class="btn" href="https://order.online/business/Ruttshut-16988327" rel="noopener">Order online</a>
+    </div>
+  </section>
+
+  <!-- 2 · RIP -->
+  <section class="cut cut--short g-mustard rip" data-sc-act="flow" aria-labelledby="rip-h">
+    <div class="cut__in">
+      <h2 class="big" id="rip-h" data-sc-cue="0.08 1 0.22 0" data-sc-kinetic="words">Dropped in hot oil till the skin rips.</h2>
+      <p class="say" data-sc-in>The casing cracks and splits in the fryer. That's the name: a Ripper.</p>
+    </div>
+  </section>
+
+  <!-- 3 · COUNTER -->
+  <section class="cut g-enamel counter" data-sc-act="flow" aria-labelledby="counter-h">
+    <div class="cut__in">
+      <figure class="photo" data-sc-reveal="right" data-sc-reveal-at="0.1 0.42">
+        <img src="assets/counter.webp" width="1024" height="768" alt="Rutt's Hut take-out counter: a long white counter, menu boards overhead, a cook at the grill." loading="lazy">
+      </figure>
+      <div class="sc-stack" data-sc-in data-sc-stagger="60">
+        <h2 class="big" id="counter-h">The take-out counter.</h2>
+        <p class="say">One side of the building. Order at the counter, pay, eat.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · TWO DOORS -->
+  <section class="cut cut--short g-cobalt doors" data-sc-act="flow" aria-labelledby="doors-h">
+    <div class="cut__in">
+      <figure class="photo" data-sc-in>
+        <img src="assets/bar-door.webp" width="1024" height="768" alt="Brick building with a glass vestibule under a sign reading Bar, Dining Room." loading="lazy">
+      </figure>
+      <div class="sc-stack" data-sc-in data-sc-stagger="60">
+        <h2 class="big" id="doors-h">The other door.</h2>
+        <p class="say">Bar and dining room, same building, if you'd rather sit down.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · QUIET (authored silence before the peak) -->
+  <section class="cut g-fry quiet" data-sc-act="flow" aria-label="Pick a doneness">
+    <div class="cut__in">
+      <p data-sc-cue="0.25 1 0.25 0">So. How long should it stay in?</p>
+    </div>
+  </section>
+
+  <!-- 6-9 · THE FRYER (peak). The fryer chrome holds over these four cuts. -->
+  <section class="cut g-enamel done" id="fry-0" data-fry="0" data-sc-act="flow" aria-labelledby="d0">
+    <div class="cut__in" data-sc-in data-sc-stagger="60">
+      <h2 class="big" id="d0">In-and-Outer</h2>
+      <p class="say">In the oil, out of the oil. It sinks, floats back up, and comes out. Closest to a regular hot dog.</p>
+      <button class="btn" type="button" data-pick="0">Make it an In-and-Outer</button>
+    </div>
+  </section>
+  <section class="cut g-cobalt done" id="fry-1" data-fry="1" data-sc-act="flow" aria-labelledby="d1">
+    <div class="cut__in" data-sc-in data-sc-stagger="60">
+      <h2 class="big" id="d1">Ripper</h2>
+      <p class="say">The house dog. Fried until the casing cracks open.</p>
+      <button class="btn" type="button" data-pick="1">Make it a Ripper</button>
+    </div>
+  </section>
+  <section class="cut g-mustard done" id="fry-2" data-fry="2" data-sc-act="flow" aria-labelledby="d2">
+    <div class="cut__in" data-sc-in data-sc-stagger="60">
+      <h2 class="big" id="d2">Weller</h2>
+      <p class="say">Well-done. Longer in, darker and crisper all the way around.</p>
+      <button class="btn" type="button" data-pick="2">Make it a Weller</button>
+    </div>
+  </section>
+  <section class="cut g-fry done" id="fry-3" data-fry="3" data-sc-act="flow" aria-labelledby="d3">
+    <div class="cut__in" data-sc-in data-sc-stagger="60">
+      <h2 class="big" id="d3">Cremator</h2>
+      <p class="say">Charred black. Fried until it shrivels. People ask for it on purpose.</p>
+      <button class="btn" type="button" data-pick="3">Make it a Cremator</button>
+    </div>
+  </section>
+
+  <!-- 10 · RELISH -->
+  <section class="cut g-mustard relish" data-sc-act="flow" aria-labelledby="relish-h">
+    <div class="cut__in">
+      <div data-sc-in data-sc-stagger="60" class="sc-stack">
+        <h2 class="big" id="relish-h">Then the relish.</h2>
+        <p class="say">Mustard, cabbage, pickle relish and a blend of spices the house keeps to itself.</p>
+      </div>
+      <figure class="photo" data-sc-reveal="iris" data-sc-reveal-at="0.12 0.46">
+        <img src="assets/rippers.webp" width="1800" height="1059" alt="Two Rippers in buns topped with yellow relish, next to a paper plate of onion rings." loading="lazy">
+      </figure>
+    </div>
+  </section>
+
+  <!-- 11 · SIDES -->
+  <section class="cut g-fry sides" data-sc-act="flow" aria-label="Sides">
+    <div class="cut__in">
+      <figure class="photo one" data-sc-in>
+        <img src="assets/gravy-fries.webp" width="1024" height="768" alt="French fries covered in brown gravy, with a plastic fork." loading="lazy">
+        <figcaption><h2>Fries with gravy.</h2></figcaption>
+      </figure>
+      <figure class="photo two" data-sc-in>
+        <img src="assets/platter.webp" width="1024" height="768" alt="The hot dog platter: two deep-fried dogs with potato salad and cole slaw in pepper rings, tomato and cucumber." loading="lazy">
+        <figcaption><h2>The platter.</h2>Two dogs, potato salad, cole slaw.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 12 · SINCE 1928 -->
+  <section class="cut g-cobalt since" data-sc-act="flow" aria-labelledby="since-h">
+    <h2 class="vh" id="since-h">History</h2>
+    <div class="cut__in">
+      <figure class="photo" data-sc-reveal="up" data-sc-reveal-at="0.1 0.44">
+        <img src="assets/building.webp" width="1024" height="768" alt="Rutt's Hut from the parking lot: low brick buildings with the RUTT'S HUT sign on the roof." loading="lazy">
+      </figure>
+      <dl data-sc-in data-sc-stagger="70">
+        <div><dt>1928</dt><dd>Royal "Abe" Rutt and his wife Anna open a roadside stand.</dd></div>
+        <div><dt>1974</dt><dd>The Rutts sell it. The Rippers stay.</dd></div>
+        <div><dt>Since</dt><dd>PBS's <i>A Hot Dog Program</i>, and a page in <i>1,000 Places to See in the USA and Canada Before You Die</i>.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 13 · ORDER (abrupt, full bleed, holds) -->
+  <section class="g-mustard close" id="order" data-sc-act="flow" aria-labelledby="order-h">
+    <div class="close__main">
+      <p class="close__label">Your order</p>
+      <h2 class="big" id="order-h">One <span data-order-name>Ripper</span>.</h2>
+      <p class="say">Say it at the take-out counter, or order ahead.</p>
+      <div class="close__row">
+        <a class="btn" href="https://order.online/business/Ruttshut-16988327" rel="noopener">Order online</a>
+        <a class="btn btn--line" href="https://www.google.com/maps/search/?api=1&amp;query=Rutt%27s+Hut+417+River+Rd+Clifton+NJ" rel="noopener">Directions</a>
+      </div>
+      <dl class="close__facts">
+        <div><dt>Where</dt><dd>417 River Road<br>Clifton, NJ 07014</dd></div>
+        <div><dt>Call</dt><dd><a href="tel:+19737798615">(973) 779-8615</a></dd></div>
+        <div><dt>Hours</dt><dd>Daily from 8am<br>Till 10pm, Fri &amp; Sat till 11pm</dd></div>
+      </dl>
+    </div>
+    <footer class="close__foot">
+      <span>Concept site by Truong &amp; Son. Not made by or for Rutt's Hut.</span>
+      <a href="credits.html">Photo credits</a>
+    </footer>
+  </section>
+
+</main>
+
+<script src="scrollcraft.js"></script>
+<script>ScrollCraft.mount(document.body);</script>
+<script src="rutts.js"></script>
+</body>
+</html>
