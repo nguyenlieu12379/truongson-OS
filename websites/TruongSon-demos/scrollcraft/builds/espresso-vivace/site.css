@@ -82,14 +82,6 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--red); outline-
 .hero__img figcaption { margin-top: 0.4rem; font-size: 0.75rem; color: var(--ink-soft); }
 
 .hero__img--video video { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 62% 50%; border-radius: var(--r); background: #2A2620; }
-/* Scroll plays the pour. The hero pins under the bar for --pour-travel of
-   scroll (only when it fits the screen); site.js maps that travel to the clip. */
-.hero__img--video { position: relative; }
-.pour__hold { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 50%; border-radius: var(--r); pointer-events: none; transition: opacity 200ms ease-out; }
-.pour__hold.is-off { opacity: 0; }
-.pour-track { position: relative; }
-.pour-track.is-pinned { height: calc(100svh - var(--bar-h, 64px) + var(--pour-travel, 90svh)); }
-.pour-track.is-pinned .hero { position: sticky; top: var(--bar-h, 64px); min-height: calc(100svh - var(--bar-h, 64px)); box-sizing: border-box; }
 
 /* Brix storefront, the "outlook" shot. Wide crop that keeps the sign and the Brix door. */
 .outside { margin: 0 0 clamp(1rem, 3vw, 2rem); }
@@ -155,8 +147,7 @@ h3 { font-family: var(--text); font-size: 0.8rem; font-weight: 600; letter-spaci
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr; }
   .hero__img { order: -1; }
-  .hero__img--video video, .pour__hold { aspect-ratio: 4 / 5; max-height: 62svh; }
-  .pour__hold { object-position: 50% 50%; }
+  .hero__img--video video { aspect-ratio: 4 / 5; max-height: 62svh; }
   .outside img { aspect-ratio: 4 / 3; object-position: 50% 60%; }
   .menu { grid-template-columns: 1fr 1fr; }
   .menu__col:last-child { grid-column: 1 / -1; }
