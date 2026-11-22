@@ -31,6 +31,15 @@ Scroll-craft builds live in `websites/TruongSon-demos/scrollcraft/builds/` (set 
 
 Build each one with scroll-craft (`/scroll-craft`), with its own vibe from that business's brand, photos and story. Don't copy layout, code or style from another client's site, Vivace included: what fits one business may not fit the next.
 
+## Must-haves on every client site
+
+Son, 2026-11-22. Check all four before a client sees the site.
+
+- [ ] **One engineered peak.** A feeling curve (one emotion per section) with one "remember this" moment. It gets the most scroll room, the biggest asset budget and a quieter section before it.
+- [ ] **Layered hero.** Background, subject, foreground and atmosphere planes that move at different rates, with real cutouts and overlap. A flat photo with fading text does not pass. See `.claude/skills/scroll-craft/references/hero-depth.md`.
+- [ ] **Real photos by default.** The client's own food and space first. Generate only to fill gaps, with one shared style prompt. No clay or low-poly look. Plan clean-background shots so the hero can be cut into layers.
+- [ ] **No AI tells.** None of these: scroll cue or arrow, `01 / 06` counters, an eyebrow on every heading, em dashes, centred copy in every section, gradient text or neon glow, invented stats, a full-frame dark overlay for contrast, an ending that fades into a footer.
+
 ## Add a site
 
 Create `websites/<owner>/<site-name>/`, add a row above, and give the site its own README.

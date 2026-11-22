@@ -298,3 +298,18 @@ Open: needs a Kaggle account with a verified phone and an API token (not set up 
 **Alternatives considered:** Keep the template and restyle it per client. Rejected: the shared structure still shows.
 
 **Owner:** Son
+
+## 2026-11-22 - Four scroll-craft rules are required on every client site
+
+**Decision:** Every client site must have these four scroll-craft rules (from Nate Herk's scroll-craft skill):
+1. Feeling curve with one engineered peak: one "remember this" moment with the most scroll room, the biggest asset budget and a quieter section before it.
+2. Layered hero: background, subject, foreground and atmosphere planes that move at different rates. A flat photo with text fades does not pass.
+3. Real photos by default: the client's own food and space first. Generate only to fill gaps. No clay or low-poly look as a default.
+4. Banned AI tells: no scroll cue or arrow, no `01 / 06` counters, no eyebrow on every heading, no em dashes, no centred copy in every section, no gradient text or neon glow, no invented stats, no full-frame dark overlay, no ending that fades into a footer.
+Recorded as a must-have checklist in `websites/README.md`.
+
+**Why:** Son: these are the "musts" that make our sites look different from template and AI-slop sites.
+
+**Note:** The layered hero needs cut-out subjects, so plan clean-background shots into each client's photo shoot.
+
+**Owner:** Son
