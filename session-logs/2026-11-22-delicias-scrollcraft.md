@@ -2,7 +2,7 @@
 kind: handoff
 date: 2026-11-22
 topic: delicias-scrollcraft
-status: in-progress
+status: done
 ---
 
 # Pick an F&B client with WhatsApp and no website, then build their site with scroll-craft
@@ -14,26 +14,27 @@ Son asked for an F&B brand with no website and a WhatsApp account, with all inpu
 - Delícias chosen over Moi Homemade and Pão Brasil (both have websites), Oasis Reading (Toast ordering, no WhatsApp found) and Meritíssimo (too little evidence it's open).
 - Four must-haves apply to every client site (Son, 2026-11-22, `websites/README.md`): one engineered peak, layered hero, real photos by default, no AI tells.
 - Each F&B site is its own scroll-craft build. Don't copy Vivace's layout or style.
-- Spec demo only. Don't deploy publicly until Delícias says yes.
+- Was "spec demo only"; changed 2026-11-23: deployed at /delicias-cake/ (noindex) on request. Logged in `decisions/log.md`.
 - No kie.ai key, so no generated assets. Real photos only.
 
 ## State
 - ✅ done: candidate search and vetting; Delícias facts and sources in `RESEARCH.md`; four must-haves logged and added to `websites/README.md`; session-handoff skill installed.
 - ✅ done (local session): 14 photos saved to `assets/source/` via Claude in Chrome, sources in `assets/source/SOURCES.md`. Owner confirmed as Roseli Reis. Hours corrected from Instagram.
-- ✅ done (2026-11-23): brief (`BRIEF.md`), build (`index.html`, `site.css`, `site.js`), verified in Chrome on desktop, phone frames and reduced motion; fingerprint row added. Not committed. Not checked on a real phone.
+- ✅ done (2026-11-23): brief, build, liquid-glass revisions, verified in Chrome (desktop, phone frames, reduced motion). Committed and live: https://nguyenlieu12379.github.io/truongson-OS/delicias-cake/
+- ⏳ open: confirm WhatsApp number ((781) 365-0181 vs 661-8417) and hours with Delícias. Not checked on a real phone.
 
 ## Artifacts
 - `websites/TruongSon-demos/scrollcraft/builds/delicias-cake/RESEARCH.md`: facts, sources, shot list, next steps
 - `websites/README.md`: must-haves checklist
 - `websites/TruongSon-demos/scrollcraft/FINGERPRINTS.md`: registry the new build must clear
-- Branch: `ccr-13689177-uaplic`
+- Branch: `claude/hello-de255e`, merged to `main`
 
 ## Next step
-With browser use on and Instagram logged in, open @deliciascakee and save 10-15 photos (plus 1-2 short videos if good) to `websites/TruongSon-demos/scrollcraft/builds/delicias-cake/assets/source/`. Show Son the picks. Then run `/scroll-craft` and ask Son the 8 brief questions.
+Contact Delícias with the live link. Confirm the WhatsApp number and hours, then fix them in `index.html` if they differ. Check the site on a real iPhone before the meeting.
 
 ## What NOT to do
 - Don't use bot-evasion scrapers (undetected chromedriver, proxy rotation, stealth). Blocked by the safety layer and against site terms. ScrapeGraphAI was checked and not installed for this reason.
 - Don't build from the three press images alone (one storefront photo, a small owner portrait, and a pão de queijo shot that looks like stock). Not enough for the layered hero.
-- Don't use the owner's name (Roseli) on the site until it's confirmed.
+- Owner name Roseli is confirmed (Instagram profile "Delícias Cake - By Roseli").
 - Don't invent prices or stats. None are published.
 - Don't use the borrowed account's connectors (Gmail, Drive, Higgsfield, Figma) for business work.
