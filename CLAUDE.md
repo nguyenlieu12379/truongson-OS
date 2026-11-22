@@ -17,6 +17,7 @@ Read `references/3ms-framework.md` once. It's how Son and Truong think about AI 
 - `/grill-me`: Deepen context through one-question interviews. Saves every answer to `brainstorms/`; requested context-building sessions also update relevant context pages with confirmed facts.
 - `/link`: Link a project, file, folder, or source into the right operating-manual route or index.
 - `/3d-brain`: Choose a brain name and categories, then build a local 3D knowledge globe with Cinema and interactive growth replay. Uses selected local files and the bundled app template.
+- `/handoff` and `/pickup` (simplybychris/handoff-skill, MIT): `/handoff` saves a short handoff note for the current session to `session-logs/`; `/pickup` starts a fresh session from the newest one. Use it to move work from a cloud session to a local one, or before a long session gets heavy. Path: `.claude/skills/session-handoff/` (commands in `.claude/commands/`).
 - `/watch` (bradautomates/claude-video, MIT): Watch a YouTube link or video file. Pulls captions and frames so the AI can answer questions about it. Free local mode by default; in cloud sessions YouTube blocks the download, so you get the transcript only. Read `VENDORED.md` first for setup. Path: `.claude/skills/watch/`.
 - `/level-up` — Weekly 3Ms interview. Find one automation, scope it, ship it. One per week.
 - `/no-ai-slop` (Peter Yang, MIT): edit a draft to strip AI-sounding patterns while keeping our voice, or say "is this slop?" to just flag them. Run it on anything external (Instagram, client emails, cold scripts, site copy) before showing a draft. Harvey runs it on every cold email automatically. Path: `.claude/skills/no-ai-slop/`.
@@ -38,6 +39,7 @@ Each pack is a full copy of one Sunaii kit with its own `VENDORED.md` (source an
 - `connections.md` — registry of every system your AIOS can reach
 - `decisions/log.md` — append-only record of decisions and why
 - `brainstorms/` - Dated interview captures and resume points. Read relevant captures on demand; confirmed current context belongs in its canonical page.
+- `session-logs/` - Handoff notes from `/handoff`: the state of one task, for `/pickup` in the next session. Delete once the task is done.
 - `audits/` — dated audit reports and finding history; point-in-time evidence, not live business state
 - `websites/` — website projects, one folder per owner (`websites/<owner>/<site-name>/`). Index and rules: `websites/README.md`. Scroll-craft builds: `websites/TruongSon-demos/scrollcraft/builds/`.
 - `archives/` — old stuff. Don't delete. Move here.

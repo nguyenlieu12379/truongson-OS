@@ -313,3 +313,13 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Note:** The layered hero needs cut-out subjects, so plan clean-background shots into each client's photo shoot.
 
 **Owner:** Son
+
+## 2026-11-22 - Add session-handoff (/handoff and /pickup)
+
+**Decision:** Vendor simplybychris/handoff-skill (MIT, commit 8990d64) into `.claude/skills/session-handoff/`, with `/handoff` and `/pickup` in `.claude/commands/`. Handoff notes go to `session-logs/`.
+
+**Why:** Son wants to move work between cloud and local sessions. Cloud sessions can't reach Instagram, Yelp or YouTube; a local session with browser use can. `/handoff` in one session and `/pickup` in the next carries the task over without re-explaining it.
+
+**Alternatives considered:** blader/baton and REMvisual/claude-handoff (heavier, include a mod). This one is three markdown files, no scripts.
+
+**Owner:** Son
