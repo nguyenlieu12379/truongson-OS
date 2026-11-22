@@ -1,5 +1,6 @@
 ---
 name: session-handoff
+user-invocable: false
 description: Save and resume work across sessions without loading the whole previous conversation. Use when the user wants to "wrap up the session", "save a handoff", "summarize the session to a file", "start from the last session", "continue from the previous window", or types /handoff or /pickup. Works in ANY project (code and content), sections adapt to the project. Triggers: handoff, wrap session, save session, continue work, pickup, resume last session, clean session, pass the context, zapisz handoff, czysta sesja, przekaż kontekst, wznów sesję.
 ---
 
