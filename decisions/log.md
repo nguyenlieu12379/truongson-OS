@@ -333,3 +333,13 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Still to confirm with the client:** WhatsApp number ((781) 365-0181 vs 661-8417) and hours.
 
 **Owner:** Son or Truong (not stated in chat)
+
+## 2026-11-23 - Add /pre-build and run it before every scroll-craft build
+
+**Decision:** New skill `/pre-build` (`.claude/skills/pre-build/`, mirrored to `.agents/skills/pre-build/` for Codex). Before any website build it asks, in one message: who's asking, client, photos, vibe, hero, journey, feeling and peak, signature move, style, world, UI material, motion and speed, facts to confirm, the one action, and deploy. Answers go to the build's `PREFS.md`; scroll-craft's interview reuses them. Defaults live in `.claude/skills/pre-build/references/standing-preferences.md`, seeded from the Delícias build.
+
+**How it always runs:** a UserPromptSubmit hook (`.claude/settings.json` -> `.claude/hooks/pre-build-reminder.sh`) tells Claude to run pre-build whenever a prompt mentions scroll-craft. `CLAUDE.md` and `AGENTS.md` say the same, which covers Codex and Claude starting scroll-craft on its own. The vendored scroll-craft files are untouched (read-only copy).
+
+**Why:** Son: the questions from the Delícias interview and follow-ups (hero cutout, liquid glass, speed, deploy) should be asked up front every time instead of discovered mid-build.
+
+**Owner:** Son
