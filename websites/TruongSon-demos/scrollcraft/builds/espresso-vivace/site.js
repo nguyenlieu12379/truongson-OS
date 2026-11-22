@@ -21,34 +21,6 @@
     }
   }
 
-  // Dark mode toggle. Default follows the device; a click saves the choice.
-  (function () {
-    var root = document.documentElement;
-    var btn = document.querySelector(".theme-btn");
-    var mq = window.matchMedia("(prefers-color-scheme: dark)");
-    var meta = document.querySelectorAll('meta[name="theme-color"]');
-    function now() {
-      var t = root.getAttribute("data-theme");
-      return t ? t : (mq.matches ? "dark" : "light");
-    }
-    function render() {
-      var dark = now() === "dark";
-      root.setAttribute("data-theme-now", dark ? "dark" : "light");
-      if (btn) {
-        btn.setAttribute("aria-pressed", String(dark));
-      }
-      if (root.hasAttribute("data-theme")) meta.forEach(function (m) { m.setAttribute("content", dark ? "#161311" : "#F1EFEA"); });
-    }
-    if (btn) btn.addEventListener("click", function () {
-      var next = now() === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", next);
-      try { localStorage.setItem("vivace-theme", next); } catch (e) {}
-      render();
-    });
-    if (mq.addEventListener) mq.addEventListener("change", render);
-    render();
-  })();
-
   // Regular hours: [open, close] in minutes after midnight, by weekday (0 = Sunday).
   var HOURS = {
     brix:  { all: [360, 1140] },                                 // 6am to 7pm daily

@@ -12,15 +12,57 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#F1EFEA" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#161311" media="(prefers-color-scheme: dark)">
-<link rel="stylesheet" href="site.css?v=3.5">
+<link rel="stylesheet" href="site.css?v=3.6">
 <script>
-  // Apply a saved theme before first paint so the page never flashes the wrong one.
+  // Theme: applied before first paint (no flash), and the toggle lives here,
+  // not in site.js, so a cached old site.js can never leave the button dead.
   (function (d) {
     d.classList.add("js");
-    var t = null; try { t = localStorage.getItem("vivace-theme"); } catch (e) {}
+    var KEY = "vivace-theme";
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    var t = null; try { t = localStorage.getItem(KEY); } catch (e) {}
     if (t === "dark" || t === "light") d.setAttribute("data-theme", t);
-    var dark = t ? t === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
-    d.setAttribute("data-theme-now", dark ? "dark" : "light");
+    function now() { var x = d.getAttribute("data-theme"); return x ? x : (mq.matches ? "dark" : "light"); }
+    function render() {
+      var dark = now() === "dark";
+      d.setAttribute("data-theme-now", dark ? "dark" : "light");
+      var b = document.querySelector(".theme-btn"); if (b) b.setAttribute("aria-pressed", String(dark));
+      if (d.hasAttribute("data-theme")) document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute("content", dark ? "#161311" : "#F1EFEA"); });
+    }
+    function apply(next) {
+      d.setAttribute("data-theme", next);
+      try { localStorage.setItem(KEY, next); } catch (e) {}
+      render();
+    }
+    render();
+    document.addEventListener("DOMContentLoaded", render);
+    if (mq.addEventListener) mq.addEventListener("change", render); else if (mq.addListener) mq.addListener(render);
+
+    document.addEventListener("click", function (e) {
+      var btn = e.target.closest && e.target.closest(".theme-btn");
+      if (!btn) return;
+      var next = now() === "dark" ? "light" : "dark";
+      var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (still) { apply(next); return; }
+      // The new theme grows as a circle out of the button.
+      if (document.startViewTransition) {
+        var r = btn.getBoundingClientRect();
+        var x = r.left + r.width / 2, y = r.top + r.height / 2;
+        var end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+        d.classList.add("theme-vt");
+        var vt = document.startViewTransition(function () { apply(next); });
+        vt.ready.then(function () {
+          d.animate({ clipPath: ["circle(0px at " + x + "px " + y + "px)", "circle(" + end + "px at " + x + "px " + y + "px)"] },
+            { duration: 560, easing: "cubic-bezier(0.23, 1, 0.32, 1)", pseudoElement: "::view-transition-new(root)" });
+        }).catch(function () {});
+        vt.finished.then(function () { d.classList.remove("theme-vt"); }, function () { d.classList.remove("theme-vt"); });
+        return;
+      }
+      // Browsers without view transitions: a quick colour cross-fade.
+      d.classList.add("theme-fade");
+      apply(next);
+      setTimeout(function () { d.classList.remove("theme-fade"); }, 420);
+    });
   })(document.documentElement);
 </script>
 </head>
@@ -279,6 +321,6 @@
   <p class="foot__small"><strong>Concept demo by TruongSon.</strong> Not made by or affiliated with Espresso Vivace. Hours and phones from espressovivace.com (checked Nov 20, 2026). Drink list from Vivace's Grubhub listing. Pour video from Mixkit, not filmed at Vivace. Credits: <a class="link" href="credits.html">credits</a>.</p>
 </footer>
 
-<script src="site.js?v=3.4"></script>
+<script src="site.js?v=3.6"></script>
 </body>
 </html>
