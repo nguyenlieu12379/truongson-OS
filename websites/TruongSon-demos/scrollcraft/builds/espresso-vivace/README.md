@@ -48,7 +48,14 @@ A short, practical site for **Espresso Vivace**, Seattle: menu, live open-now st
 - **v3.1 (2026-11-20):** Son asked to add the pour video and a cafe exterior photo. The pour loops in the hero (replacing the latte photo); the Brix storefront heads the Locations section. Earlier versions are in git history.
 - **v3.2 (2026-11-20):** appear-on-scroll animations (fade + 14px rise, staggered, once; plain fade under reduced motion; nothing hidden without JS) and a vector redraw of the round Vivace sign as the brand mark (header, footer, favicon). It is our SVG approximation of their sign, set in Kaushan Script and Archivo, not their artwork: swap in their real logo file if they sign.
 - **v3.3 (, 2026-11-21, 4am UTC+7 as Son scheduled):** order flow. The hero Order button is removed; the header Order goes to the menu. Every drink is a button that opens an add-to-cart panel (quantity, size, hot/iced where the menu has both, milk for milk drinks, notes; bottom sheet on phone, side panel on laptop). A cart icon with a count badge sits beside the Menu heading; the cart keeps items in localStorage and lets you change quantity or remove. No prices and no payment: "Order ahead (demo)" says ordering isn't connected and links Grubhub and both phone numbers. On phones the menu sections swipe sideways, each about two-thirds of the screen.
-- **v3.4 (current, 2026-11-21):** logo is now a vector trace of the Vivace badge Son supplied ("espresso / tradizione nord Italia"), saved as `assets/logo.svg` and used in the header (36px), footer and favicon. Recolored as Son asked: ring and script red-orange (#E8471F), the crosshatched cup kept red (#D91E26). Traced from a 316px image at 4x with potrace, so edges are smooth but follow that source; re-trace from their original file if they sign. Kaushan Script font dropped.
+- **v3.4 (2026-11-21):** logo is now a vector trace of the Vivace badge Son supplied ("espresso / tradizione nord Italia"), saved as `assets/logo.svg` and used in the header (36px), footer and favicon. Recolored as Son asked: ring and script red-orange (#E8471F), the crosshatched cup kept red (#D91E26). Traced from a 316px image at 4x with potrace, so edges are smooth but follow that source; re-trace from their original file if they sign. Kaushan Script font dropped.
+- **v3.5 (current, 2026-11-22):** dark mode. Follows the device setting by default; a moon/sun button in the bar switches it and remembers the choice (localStorage `vivace-theme`, applied in `<head>` before first paint so there's no flash). Dark palette: espresso-brown ground, lighter red for text and links so they stay readable, brighter green for "open now". Colors live as tokens at the top of `site.css`. Phone header tightened so the extra button fits down to 320px.
+
+## Verified (2026-11-22, dark mode, Chrome)
+
+- Device dark at 1280 and 390: whole page, add-to-cart panel and Google Maps render correctly.
+- Device light, toggle to dark, reload (stays dark), toggle back. `aria-pressed` follows.
+- Header: no horizontal scroll at 390, 360 and 320.
 
 ## Verified (2026-11-20, headless Chrome)
 
