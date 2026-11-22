@@ -1,0 +1,316 @@
+:root {
+  --canvas: #F9D3DE;      /* soft pink, their IG ground */
+  --surface: #FFF0F4;
+  --ink: #3B1A1F;         /* cocoa */
+  --ink-soft: #74404D;
+  --accent: #D61F69;      /* their hot pink */
+  --accent-ink: #FFF4F7;
+  --caramel: #B8732A;
+  --display: "Bricolage Grotesque", "Outfit", system-ui, sans-serif;
+  --text: "Outfit", system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --r: 22px;
+  --shadow: 0 18px 40px -18px rgba(122, 22, 62, 0.45), 0 4px 10px -4px rgba(122, 22, 62, 0.25);
+  --gutter: clamp(16px, 4vw, 48px);
+}
+
+* { box-sizing: border-box; }
+html { background: var(--canvas); scrollbar-color: var(--accent) var(--canvas); }
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font: 400 1.0625rem/1.6 var(--text);
+  -webkit-font-smoothing: antialiased;
+  caret-color: var(--accent);
+}
+::selection { background: var(--accent); color: var(--accent-ink); }
+a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1.5px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+.skip {
+  position: fixed; left: 12px; top: -60px; z-index: 200;
+  background: var(--ink); color: var(--surface); padding: 10px 14px; border-radius: 10px;
+}
+.skip:focus { top: 12px; }
+
+/* ---------- chrome: wordmark, order, and the route map ---------- */
+.bar {
+  position: fixed; inset: 0 0 auto 0; z-index: 60;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px var(--gutter);
+  pointer-events: none;
+}
+.bar > * { pointer-events: auto; }
+.mark {
+  font: 800 1.45rem/1 var(--display);
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  text-decoration: none;
+}
+.mark span { color: var(--ink); }
+
+.btn {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 48px; padding: 0 22px;
+  background: var(--accent); color: var(--accent-ink);
+  font: 600 1rem/1 var(--text);
+  border-radius: 999px; text-decoration: none; white-space: nowrap;
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.35);
+  transition: transform 140ms var(--ease-out), background-color 160ms var(--ease-out);
+}
+.btn:active { transform: scale(0.97); }
+.btn--small { min-height: 40px; padding: 0 16px; font-size: 0.9375rem; }
+
+.route {
+  position: fixed; left: 50%; bottom: 18px; z-index: 60;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  padding: 6px 10px;
+}
+.route ol { list-style: none; margin: 0; padding: 0; display: flex; gap: 2px; position: relative; }
+.route button {
+  appearance: none; border: 0; background: none; cursor: pointer;
+  font: 500 0.8125rem/1 var(--text); color: var(--ink-soft);
+  padding: 9px 11px; border-radius: 999px; min-height: 34px;
+  transition: color 160ms var(--ease-out), background-color 160ms var(--ease-out);
+}
+.route button[aria-current="true"] { color: var(--accent-ink); background: var(--accent); }
+@media (hover: hover) and (pointer: fine) {
+  .route button:not([aria-current="true"]):hover { color: var(--ink); background: rgba(214, 31, 105, 0.1); }
+}
+.route__dot { display: none; }
+
+/* ---------- the world ---------- */
+.room {
+  position: fixed; inset: 0; z-index: 1;
+  opacity: 0; pointer-events: none;
+  overflow: hidden;
+}
+.room img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: blur(7px) saturate(1.1);
+  transform: scale(1.12);
+}
+.room::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(120% 90% at 50% 100%, rgba(249, 211, 222, 0.0) 30%, rgba(249, 211, 222, 0.55) 100%);
+}
+
+.stage {
+  position: fixed; inset: 0; z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+.it {
+  position: absolute; left: 50%; top: 50%;
+  will-change: transform, opacity;
+  transform-origin: 50% 50%;
+  margin: 0;
+}
+.it--glow {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, #FFB3CB 0%, rgba(255, 179, 203, 0.55) 45%, rgba(249, 211, 222, 0) 100%);
+}
+.word {
+  margin: 0;
+  font: 800 38vw/0.9 var(--display);
+  font-variation-settings: "opsz" 96;
+  letter-spacing: -0.055em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.word .l { display: inline-block; transform-origin: 50% 85%; will-change: transform; }
+
+.it--pudim { pointer-events: auto; cursor: pointer; }
+.pudim { position: relative; transform-origin: 50% 75%; will-change: transform; }
+.pudim img {
+  display: block; width: 100%; height: auto;
+  clip-path: url(#pudim-cut);
+}
+.pudim::before {           /* soft contact shadow under the plate, a sibling plane */
+  content: ""; position: absolute; left: 8%; right: 8%; top: 70%; height: 9%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(110, 30, 60, 0.35), rgba(110, 30, 60, 0));
+  filter: blur(6px);
+  transform: translateY(14%);
+}
+
+.ph { overflow: hidden; background: var(--surface); box-shadow: var(--shadow); border: 0.7vw solid var(--surface); }
+.ph img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ph--circle { aspect-ratio: 1; border-radius: 50%; }
+.ph--arch { aspect-ratio: 4 / 5; border-radius: 999px 999px 28px 28px; }
+.ph--blob { aspect-ratio: 1; border-radius: 42% 58% 55% 45% / 48% 40% 60% 52%; }
+.ph--door { aspect-ratio: 1080 / 1920; border-radius: 34px; border-width: 0; background: transparent; }
+
+.spr {
+  position: absolute; left: 50%; top: 50%;
+  width: 1.3vw; height: 0.42vw; min-width: 12px; min-height: 4px;
+  border-radius: 999px;
+  will-change: transform, opacity;
+}
+
+/* ---------- copy layer ---------- */
+.copy { position: fixed; inset: 0; z-index: 50; pointer-events: none; }
+.cp {
+  position: absolute;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+/* blocks with links leave the tab order when they are not on screen; plain text stays readable to screen readers */
+.cp--hero, .cp--counter { visibility: hidden; }
+.cp--hero.is-on, .cp--counter.is-on { visibility: visible; }
+.cp.is-live { pointer-events: auto; }
+.cp h2 {
+  margin: 0 0 10px;
+  font: 800 clamp(1.7rem, 3.1vw, 2.6rem)/1.02 var(--display);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.cp p { margin: 0; text-wrap: pretty; }
+
+.cp--plate {
+  border-radius: var(--r);
+  padding: 22px 24px 24px;
+  max-width: 25rem;
+}
+.cp--plate p { color: var(--ink-soft); }
+.cp--lead { left: var(--gutter); bottom: 96px; }
+.cp--trail { right: var(--gutter); bottom: 96px; }
+.cp--low { bottom: 96px; }
+
+.cp--hero { left: var(--gutter); bottom: 96px; max-width: 19rem; }
+.cp--hero .cp__lede { font: 500 1.125rem/1.45 var(--text); margin-bottom: 16px; }
+
+.cp--quiet {
+  left: 0; right: 0; top: 17%; text-align: center;
+  font: 800 clamp(1.4rem, 2.4vw, 2rem)/1.1 var(--display);
+  letter-spacing: -0.03em; color: var(--ink);
+}
+.cp--door {
+  left: var(--gutter); top: 50%; margin-top: -0.6em; max-width: 4.2em;
+  font: 800 clamp(2.4rem, 5vw, 4.6rem)/0.95 var(--display);
+  letter-spacing: -0.045em; color: var(--ink);
+}
+
+.cp--counter { right: var(--gutter); top: 50%; transform: translateY(-50%); max-width: 27rem; }
+.cp--counter h2 { font-size: clamp(1.8rem, 3.2vw, 2.7rem); }
+.hours { margin: 14px 0 6px; display: grid; gap: 4px; }
+.hours div { display: flex; justify-content: space-between; gap: 16px; border-bottom: 1px solid rgba(116, 64, 77, 0.18); padding: 6px 0; }
+.hours dt { font-weight: 600; color: var(--ink); }
+.hours dd { margin: 0; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.addr { margin: 10px 0 18px !important; color: var(--ink) !important; font-weight: 500; }
+.acts { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
+.link { font-weight: 600; color: var(--ink); min-height: 44px; display: inline-flex; align-items: center; }
+@media (hover: hover) and (pointer: fine) { .link:hover { color: var(--accent); } }
+.note { margin-top: 16px !important; font-size: 0.8125rem; }
+
+.grain {
+  position: fixed; inset: 0; z-index: 70; pointer-events: none; opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.spacer { width: 1px; }
+
+/* at the counter the card carries the order button, so the header one steps aside */
+.bar .btn--small { transition: opacity 200ms var(--ease-out), transform 140ms var(--ease-out); }
+.at-counter .bar .btn--small { opacity: 0; pointer-events: none; }
+
+@media (max-height: 640px) and (min-width: 761px) {
+  .cp--counter { padding: 16px 20px 18px; max-width: 25rem; }
+  .cp--counter h2 { font-size: 1.7rem; margin-bottom: 4px; }
+  .hours { margin: 6px 0 2px; gap: 0; }
+  .hours div { padding: 3px 0; }
+  .addr { margin: 6px 0 10px !important; }
+  .note { margin-top: 8px !important; }
+  .cp--counter { top: calc(50% - 26px); }
+}
+
+/* ---------- liquid glass ----------
+   A clear refractive lens: no blur, no frost, no milk. What is behind the pane is magnified and
+   bent along its edges and corners (Chromium: per-pane SVG displacement built in site.js), and
+   a thin specular line runs around the rim. The rim light follows the cursor (--gx, --gy, --gp). */
+.glass {
+  --gx: 30%; --gy: -10%; --gp: 0;
+  isolation: isolate;   /* every glass block is already positioned (absolute, fixed, or relative on .btn) */
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.28),
+    0 14px 34px -22px rgba(122, 22, 62, 0.4);
+}
+/* the specular rim: a 1px line, brightest top-left and where the cursor is */
+.glass::before {
+  content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  border-radius: inherit; padding: 1px;
+  background:
+    radial-gradient(120px 120px at var(--gx) var(--gy), rgba(255, 255, 255, calc(0.25 + var(--gp) * 0.75)), rgba(255, 255, 255, 0) 70%),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.12) 38%, rgba(255, 255, 255, 0.05) 62%, rgba(255, 255, 255, 0.6));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.glass::after { content: none; }
+
+/* text sits on clear glass, so it carries its own soft light edge to stay readable over photos */
+.cp--plate.glass h2, .cp--plate.glass p, .cp--plate.glass dl, .cp--plate.glass .link {
+  text-shadow: 0 1px 1px rgba(255, 246, 249, 0.9), 0 0 10px rgba(255, 240, 246, 0.85);
+}
+.route.glass button { text-shadow: 0 0 8px rgba(255, 240, 246, 0.9); }
+
+/* buttons: a pink-tinted clear lens (tint, no frost), leaning toward the cursor */
+.btn.glass {
+  background: linear-gradient(160deg, rgba(226, 46, 120, 0.9), rgba(200, 22, 94, 0.84));
+  translate: var(--mgx, 0px) var(--mgy, 0px);
+  transition: transform 140ms var(--ease-out), translate 260ms var(--ease-out), filter 160ms var(--ease-out);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.25),
+    0 12px 26px -14px rgba(160, 20, 80, 0.6);
+}
+@media (hover: hover) and (pointer: fine) { .btn.glass:hover { filter: brightness(1.07) saturate(1.05); } }
+
+/* the map pill */
+.route button[aria-current="true"] {
+  background: linear-gradient(160deg, rgba(226, 46, 120, 0.92), rgba(200, 22, 94, 0.86));
+  text-shadow: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 6px 14px -8px rgba(160, 20, 80, 0.7);
+}
+
+/* photo frames: no frame band, no filter (they move every frame), just the thin specular rim on the photo edge */
+.ph.glass { border-width: 0; background: none; }
+
+@media (hover: none), (pointer: coarse) {
+  .glass { --gx: 28%; --gy: 0%; --gp: 0.3; }
+}
+
+/* ---------- phone ---------- */
+@media (max-width: 760px) {
+  .mark { font-size: 1.2rem; }
+  .btn--small { min-height: 38px; padding: 0 14px; font-size: 0.875rem; }
+  .route { bottom: 12px; padding: 5px 6px; max-width: calc(100vw - 24px); }
+  .route button { font-size: 0; padding: 0; width: 30px; height: 30px; min-height: 30px; position: relative; }
+  .route button::after {
+    content: ""; position: absolute; inset: 11px; border-radius: 50%; background: rgba(116, 64, 77, 0.45);
+  }
+  .route button[aria-current="true"] { width: auto; padding: 0 12px; font-size: 0.8125rem; white-space: nowrap; }
+  .route button[aria-current="true"]::after { display: none; }
+  .cp--lead, .cp--trail, .cp--hero { left: 16px; right: 16px; bottom: 76px; max-width: none; }
+  .cp--plate { padding: 18px 18px 20px; }
+  .cp h2 { font-size: 1.6rem; }
+  .cp--counter { left: 16px; right: 16px; top: auto; bottom: 64px; transform: none; max-width: none; }
+  .word { font-size: 44vw; }
+  .cp--door { left: 16px; right: 16px; top: 12%; margin-top: 0; max-width: none; font-size: 2.6rem; }
+  .ph { border-width: 1.6vw; }
+  .spr { width: 3vw; height: 1vw; }
+}
+
+/* ---------- reduced motion: same story, no travel ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .it, .cp, .spr { transition: none !important; }
+}

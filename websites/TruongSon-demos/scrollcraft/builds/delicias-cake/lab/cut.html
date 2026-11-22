@@ -1,0 +1,23 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  body { margin: 0; background: #333; }
+  .wrap { display: flex; gap: 20px; padding: 10px; }
+  svg { width: 640px; height: auto; display: block; }
+</style>
+<div class="wrap">
+  <svg id="a" viewBox="0 0 1350 1687">
+    <image href="../assets/source/delicias-55-pudim.jpg" width="1350" height="1687"/>
+    <g id="shapes" fill="rgba(255,0,180,.35)" stroke="#0f0" stroke-width="3"></g>
+  </svg>
+  <svg id="b" viewBox="0 0 1350 1687" style="background:#F9D3DE">
+    <defs><clipPath id="cp"></clipPath></defs>
+    <image href="../assets/source/delicias-55-pudim.jpg" width="1350" height="1687" clip-path="url(#cp)"/>
+  </svg>
+</div>
+<script>
+window.draw = (d) => {
+  document.getElementById('shapes').innerHTML = d;
+  document.getElementById('cp').innerHTML = d;
+};
+</script>

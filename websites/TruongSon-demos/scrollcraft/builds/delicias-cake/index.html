@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Delícias Cake &amp; Bakery · Burlington, MA</title>
+<meta name="description" content="Brazilian cakes, pudim, brigadeiros and pão de queijo, made by Roseli at 45 Winn St, Burlington, MA. Order on WhatsApp.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/source/delicias-55-pudim.jpg">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<a class="skip" href="#counter-copy" data-goto="6">Skip to hours and ordering</a>
+
+<!-- Clip shape for the real pudim photo. Coordinates are in the photo's own pixels (1350x1687). -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <clipPath id="pudim-cut" clipPathUnits="objectBoundingBox" transform="scale(0.000740741 0.000592768)">
+      <ellipse cx="682" cy="1010" rx="652" ry="255"/>
+      <polygon points="228,690 1165,690 1288,1010 112,1010"/>
+      <ellipse cx="697" cy="660" rx="470" ry="135"/>
+    </clipPath>
+    <!-- Liquid glass filters are built per pane by site.js (edge refraction shaped to each pane, plus a cursor lens). -->
+    <g id="glass-filters"></g>
+  </defs>
+</svg>
+
+<header class="bar">
+  <a class="mark" href="#" data-goto="0" aria-label="Delícias Cake, back to the start">Delícias <span>Cake</span></a>
+  <a class="btn btn--small glass" href="https://wa.me/17813650181" target="_blank" rel="noopener">Order on WhatsApp</a>
+</header>
+
+<nav class="route glass" aria-label="Places in the bakery">
+  <ol>
+    <li><button type="button" data-goto="0">Pudim</button></li>
+    <li><button type="button" data-goto="1">Sweets</button></li>
+    <li><button type="button" data-goto="2">Morning</button></li>
+    <li><button type="button" data-goto="3">Parties</button></li>
+    <li><button type="button" data-goto="4">Winn St</button></li>
+    <li><button type="button" data-goto="5">Front door</button></li>
+    <li><button type="button" data-goto="6">Counter</button></li>
+  </ol>
+  <span class="route__dot" aria-hidden="true"></span>
+</nav>
+
+<!-- The world. One fixed stage. Every place is mounted at once at its own depth (data-z). -->
+<div class="room" aria-hidden="true">
+  <img src="assets/source/delicias-59-display-case-pastries.jpg" alt="" decoding="async">
+</div>
+
+<main class="stage" id="stage">
+
+  <!-- Waypoint 0: the pudim, in front of the word -->
+  <div class="it it--glow" data-z="1700" data-x="0" data-y="-6" data-w="150" data-g="0" aria-hidden="true"></div>
+  <div class="it it--word" data-nf0="180" data-nf1="560" data-z="1000" data-x="0" data-y="-36" data-my="-30" data-g="0">
+    <h1 class="word" id="word" aria-label="Delícias Cake and Bakery">Delícias</h1>
+  </div>
+  <div class="it it--pudim" data-z="500" data-x="0" data-y="17" data-my="-3" data-w="74" data-mw="150" data-g="0" id="pudim">
+    <div class="pudim" role="img" aria-label="Delícias pudim, a Brazilian caramel flan, on a white plate">
+      <img src="assets/source/delicias-55-pudim.jpg" alt="" width="1350" height="1687" decoding="async">
+    </div>
+  </div>
+
+  <!-- Waypoint 1: sweets -->
+  <figure class="it ph glass ph--circle" data-z="2400" data-x="-36" data-y="-16" data-mx="-22" data-my="-26" data-w="34" data-g="1">
+    <img src="assets/source/delicias-57-truffles-tray.jpg" alt="Brigadeiros and truffles on a white tray" width="1080" height="1350" decoding="async">
+  </figure>
+  <figure class="it ph glass ph--arch" data-z="2900" data-x="35" data-y="2" data-mx="24" data-my="-6" data-w="32" data-g="1">
+    <img src="assets/source/delicias-60-sprinkle-cupcakes.jpg" alt="Cupcakes with white frosting and rainbow sprinkles" width="1440" height="1800" decoding="async">
+  </figure>
+  <figure class="it ph glass ph--blob" data-z="3500" data-x="-30" data-y="10" data-mx="-18" data-my="8" data-w="38" data-g="1">
+    <img src="assets/source/delicias-62-rocambole.jpg" alt="Rocambole roll cake covered in white chocolate curls" width="1440" height="1800" decoding="async">
+  </figure>
+  <figure class="it ph glass ph--circle" data-z="4100" data-x="32" data-y="-14" data-mx="20" data-my="-24" data-w="28" data-g="1">
+    <img src="assets/source/delicias-04-cream-dessert-closeup.jpg" alt="Cream cake topped with chocolate wafer pieces" width="720" height="1280" decoding="async">
+  </figure>
+
+  <!-- Waypoint 2: morning -->
+  <figure class="it ph glass ph--arch" data-z="4900" data-x="-30" data-y="-4" data-mx="-18" data-my="-14" data-w="40" data-g="2">
+    <img src="assets/source/delicias-72-pao-de-queijo-interior.jpg" alt="A basket of pão de queijo on the counter inside the bakery" width="1280" height="1596" decoding="async">
+  </figure>
+  <figure class="it ph glass ph--blob" data-z="5500" data-x="33" data-y="8" data-mx="22" data-my="10" data-w="34" data-g="2">
+    <img src="assets/source/delicias-74-sweet-breads.jpg" alt="Sweet breads and sugar-topped rolls on a tray" width="1440" height="1795" decoding="async">
+  </figure>
+  <figure class="it ph glass ph--circle" data-z="6200" data-x="-28" data-y="-18" data-mx="-18" data-my="-26" data-w="26" data-g="2">
+    <img src="assets/source/delicias-52-layered-coffee.jpg" alt="Layered coffee drink in a clear cup" width="1350" height="1687" decoding="async">
+  </figure>
+
+  <!-- Waypoint 3: parties -->
+  <figure class="it ph glass ph--arch" data-z="7300" data-x="31" data-y="-8" data-mx="20" data-my="-20" data-w="34" data-g="3">
+    <img src="assets/source/delicias-64-strawberry-cream-cake.jpg" alt="Cream cake topped with fresh strawberries" width="640" height="1136" decoding="async">
+  </figure>
+  <figure class="it ph glass ph--circle" data-z="7900" data-x="-33" data-y="6" data-mx="-20" data-my="2" data-w="32" data-g="3">
+    <img src="assets/source/delicias-81-dessert-cup-logo.jpg" alt="Dessert cup with the Delícias Cake logo on a lace doily" width="1440" height="1795" decoding="async">
+  </figure>
+  <figure class="it ph glass ph--blob" data-z="8500" data-x="30" data-y="12" data-mx="18" data-my="14" data-w="34" data-g="3">
+    <img src="assets/source/delicias-78-chocolate-donuts-case.jpg" alt="Chocolate-covered donuts in the display case" width="1440" height="1800" decoding="async">
+  </figure>
+
+  <!-- Waypoint 5: the front door, seen from far away during the quiet beat -->
+  <figure class="it ph ph--door" data-far="5200" data-z="13400" data-x="0" data-y="4" data-my="0" data-w="62" data-mw="110" data-g="5" id="door">
+    <img src="assets/source/delicias-02-storefront-balloons.jpg" alt="The Delícias Cake Bakery sign with a pink and gold balloon arch" width="1080" height="1920" decoding="async">
+  </figure>
+
+  <!-- Waypoint 6: the pudim again, waiting on the counter -->
+  <div class="it it--pudim it--pudim-end" data-z="14650" data-x="-20" data-y="3" data-mx="0" data-my="-36" data-w="80" data-mw="135" data-g="6" id="pudim2">
+    <div class="pudim" role="img" aria-label="The same pudim, waiting on the counter">
+      <img src="assets/source/delicias-55-pudim.jpg" alt="" width="1350" height="1687" decoding="async">
+    </div>
+  </div>
+
+  <div id="sprinkles" aria-hidden="true"></div>
+</main>
+
+<!-- Copy layer. Fixed. Each block opens and closes against the camera's position. -->
+<div class="copy">
+  <section class="cp cp--plate glass cp--hero" data-win="hero" aria-label="Introduction">
+    <p class="cp__lede">Cake &amp; Bakery in Burlington, MA. Brazilian cakes and sweets, made by Roseli.</p>
+    <a class="btn glass" href="https://wa.me/17813650181" target="_blank" rel="noopener">Order on WhatsApp</a>
+  </section>
+
+  <section class="cp cp--plate glass cp--lead" data-win="1500 4400" aria-label="Sweets">
+    <h2>Brigadeiros, cupcakes, rocambole.</h2>
+    <p>Brazilian sweets, the way they taste back home. Pick a few for the drive, or a box for the table.</p>
+  </section>
+
+  <section class="cp cp--plate glass cp--trail" data-win="4500 6900" aria-label="Mornings">
+    <h2>Warm pão de queijo from 6am.</h2>
+    <p>Sweet bread, coffee, and something to dunk in it. Sundays we open at 7.</p>
+  </section>
+
+  <section class="cp cp--plate glass cp--lead cp--low" data-win="7000 9300" aria-label="Party cakes">
+    <h2>Your cake, your party.</h2>
+    <p>Custom cakes for birthdays, weddings, chás and company events. Tell Roseli what you have in mind and she'll make it.</p>
+  </section>
+
+  <section class="cp cp--quiet" data-win="9500 11700" aria-label="Where we are">
+    <p>45 Winn St, Burlington.</p>
+  </section>
+
+  <section class="cp cp--door" data-win="11900 13150 450 300" aria-hidden="true">
+    <p>Come on in.</p>
+  </section>
+
+  <section class="cp cp--plate glass cp--counter" data-win="finale" id="counter-copy" aria-label="Hours and ordering">
+    <h2>Bem-vindo. The pudim's been waiting.</h2>
+    <dl class="hours">
+      <div><dt>Mon to Sat</dt><dd>6am to 10pm</dd></div>
+      <div><dt>Sunday</dt><dd>7am to 5pm</dd></div>
+    </dl>
+    <p class="addr">45 Winn St, Burlington, MA 01803</p>
+    <div class="acts">
+      <a class="btn glass" href="https://wa.me/17813650181" target="_blank" rel="noopener">Order on WhatsApp</a>
+      <a class="link" href="tel:+17813650181">Call (781) 365-0181</a>
+      <a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=Delicias+Cake+%26+Bakery+45+Winn+St+Burlington+MA" target="_blank" rel="noopener">Directions</a>
+    </div>
+    <p class="note">Concept site by Son &amp; Truong. Photos from <a href="https://www.instagram.com/deliciascakee/" target="_blank" rel="noopener">@deliciascakee</a>.</p>
+  </section>
+</div>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="spacer" id="spacer" aria-hidden="true"></div>
+
+<script src="site.js"></script>
+</body>
+</html>

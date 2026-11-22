@@ -323,3 +323,13 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Alternatives considered:** blader/baton and REMvisual/claude-handoff (heavier, include a mod). This one is three markdown files, no scripts.
 
 **Owner:** Son
+
+## 2026-11-23 - Put the Delícias demo live on GitHub Pages
+
+**Decision:** Deploy the Delícias Cake & Bakery scroll-craft demo at https://nguyenlieu12379.github.io/truongson-OS/delicias-cake/ (`noindex`, so it stays out of search). Overrides the 2026-11-22 note "spec demo only, don't deploy until Delícias says yes".
+
+**Why:** Asked in chat ("great now, make it live, i use github page, commit it") so the demo can be sent as a link.
+
+**Still to confirm with the client:** WhatsApp number ((781) 365-0181 vs 661-8417) and hours.
+
+**Owner:** Son or Truong (not stated in chat)

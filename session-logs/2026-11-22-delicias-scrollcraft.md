@@ -2,7 +2,7 @@
 kind: handoff
 date: 2026-11-22
 topic: delicias-scrollcraft
-status: blocked
+status: in-progress
 ---
 
 # Pick an F&B client with WhatsApp and no website, then build their site with scroll-craft
@@ -19,8 +19,8 @@ Son asked for an F&B brand with no website and a WhatsApp account, with all inpu
 
 ## State
 - ✅ done: candidate search and vetting; Delícias facts and sources in `RESEARCH.md`; four must-haves logged and added to `websites/README.md`; session-handoff skill installed.
-- ⛔ blocked: photos. Need 10-15 from Instagram @deliciascakee (shot list in `RESEARCH.md`).
-- Not started: scroll-craft brief (8 questions), grammar, fingerprint gate, build, verify.
+- ✅ done (local session): 14 photos saved to `assets/source/` via Claude in Chrome, sources in `assets/source/SOURCES.md`. Owner confirmed as Roseli Reis. Hours corrected from Instagram.
+- ✅ done (2026-11-23): brief (`BRIEF.md`), build (`index.html`, `site.css`, `site.js`), verified in Chrome on desktop, phone frames and reduced motion; fingerprint row added. Not committed. Not checked on a real phone.
 
 ## Artifacts
 - `websites/TruongSon-demos/scrollcraft/builds/delicias-cake/RESEARCH.md`: facts, sources, shot list, next steps

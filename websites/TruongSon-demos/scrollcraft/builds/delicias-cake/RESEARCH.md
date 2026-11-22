@@ -1,6 +1,8 @@
 # Delícias Cake & Bakery: prospect research
 
-Collected 2026-11-22 for Son. Status: client picked, waiting on photos. Build not started.
+Collected 2026-11-22 for Son. Status: 14 photos saved to `assets/source/` (see `SOURCES.md`). Build not started.
+
+Photo gap: no real cake shot on a clean background, so the layered hero can't be a cut-out cake. Build the hero from the storefront sign + balloons, or a layered shop/display-case scene.
 
 ## Why this client
 - **No website.** Google Maps "website" field points to Instagram only.
@@ -11,9 +13,9 @@ Collected 2026-11-22 for Son. Status: client picked, waiting on photos. Build no
 ## Facts (from Google Maps and Brazilian Times)
 - **Address:** 45 Winn St, Burlington, MA 01803
 - **Phone:** (781) 365-0181
-- **Hours:** every day, 5am to 10pm
-- **Instagram:** @deliciascakee
-- **Owner:** likely Roseli (press photo file name "Roseli-proprietaria-da-Delicias-Cake"). Confirm before using her name.
+- **Hours:** Mon-Sat 6am-10pm, Sun 7am-5pm (Instagram "We are open" post, 2025). Google/press said every day 5am-10pm; Instagram is newer. Confirm on first contact.
+- **Instagram:** @deliciascakee (1,494 posts, 4,678 followers as of 2026-11-22)
+- **Owner:** Roseli Reis. Confirmed: profile name is "Delícias Cake - By Roseli", and posts introduce "Roseli Reis". Award: Mulheres de Excelência (press graphic on Instagram).
 - **Sells:** custom cakes for birthdays, weddings, showers (chás) and corporate events; full Brazilian breakfast; Brazilian sandwiches; pão de queijo; fresh orange and passion fruit juice; Brazilian sweets; artisan desserts.
 - **Prices:** none published. Don't invent any.
 - **Storefront:** brick strip-mall unit, pink sign with a cake logo, floral window displays, customer parking.

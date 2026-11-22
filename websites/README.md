@@ -24,6 +24,7 @@ websites/
 | Owner | Site | Status | Path |
 | --- | --- | --- | --- |
 | TruongSon-demos | **Espresso Vivace (primary demo)**, practical cafe concept (menu, live open-now, maps, ordering) | Live at https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/ | `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` |
+| TruongSon-demos | **Delícias Cake & Bakery**, Burlington MA prospect. Unbroken pink world: wobbling pudim hero, fly through their front door to the counter | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/delicias-cake/ | `websites/TruongSon-demos/scrollcraft/builds/delicias-cake/` |
 
 Scroll-craft builds live in `websites/TruongSon-demos/scrollcraft/builds/` (set by `.scrollcraft.json`), next to the skill's `FINGERPRINTS.md` registry.
 
