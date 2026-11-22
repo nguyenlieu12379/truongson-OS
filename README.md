@@ -92,7 +92,6 @@ The kit includes setup, ongoing context interviews, routing, verification, a wee
 | [`/scroll-craft`](.claude/skills/scroll-craft/SKILL.md) | Website builder (vendored, MIT) | Premium scroll-driven landing pages. Builds go to `websites/TruongSon-demos/scrollcraft/`. |
 | [`/sales-agent`](.claude/skills/sales-agent/SKILL.md) | Cold-outreach agent (vendored, MIT) | Harvey. Not set up. Sends real email, so confirm list, copy and sending account first. |
 | [`/craft-anything`](.claude/skills/craft-anything/SKILL.md) | Study and rebuild (vendored, MIT/Apache) | Rebuild a site or app we own or may copy. Early alpha. Not set up. |
-| [design-skills](.claude/skills/design-skills/skills/emil-design-eng/SKILL.md) | Kit pack (no slash command) | All UI design work. Entry: `.claude/skills/design-skills/skills/emil-design-eng/SKILL.md`. |
 | [video-edit-kit](.claude/skills/video-edit-kit/AGENTS.md) | Kit pack (no slash command) | Talking-head edits, Reels and Shorts. Entry: `.claude/skills/video-edit-kit/AGENTS.md`. |
 
 Full routing for every skill and pack: `CLAUDE.md` (Claude) and `AGENTS.md` (Codex).
@@ -176,7 +175,6 @@ AIS-OS/
         ├── link/SKILL.md
         ├── watch/                   ← Vendored: YouTube/video reader
         ├── scroll-craft/            ← Vendored: scroll-driven landing pages
-        ├── design-skills/           ← Vendored kit pack: UI design
         ├── video-edit-kit/          ← Vendored kit pack: video editing
         ├── sales-agent/             ← Vendored: Harvey cold outreach (not set up)
         └── craft-anything/          ← Vendored: study and rebuild (not set up)

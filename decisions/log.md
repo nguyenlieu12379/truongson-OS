@@ -343,3 +343,11 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Why:** Son: the questions from the Delícias interview and follow-ups (hero cutout, liquid glass, speed, deploy) should be asked up front every time instead of discovered mid-build.
 
 **Owner:** Son
+
+## 2026-11-23 - Remove design-skills
+
+**Decision:** Take the design-skills kit pack (Emil Kowalski) out of the AIOS. Moved to `archives/design-skills-2026-11-23/` (both the `.claude` and `.agents` copies), not deleted, per the archives rule. Removed from `CLAUDE.md`, `AGENTS.md` and `README.md`.
+
+**Why:** Asked in chat ("remove design-skills"). UI work now goes through scroll-craft, pre-build and the liquid-glass skill.
+
+**Owner:** Son (same session; not restated)
