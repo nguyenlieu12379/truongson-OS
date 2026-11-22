@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#F1EFEA" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#161311" media="(prefers-color-scheme: dark)">
-<link rel="stylesheet" href="site.css?v=3.9">
+<link rel="stylesheet" href="site.css?v=4.0">
 <script>
   // Theme: applied before first paint (no flash), and the toggle lives here,
   // not in site.js, so a cached old site.js can never leave the button dead.
@@ -130,11 +130,16 @@
     <feColorMatrix in="map" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0.85 0 0" result="rim"/>
     <feMerge><feMergeNode in="bent"/><feMergeNode in="rim"/></feMerge>
   </filter>
+  <filter id="ball-lens" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feImage id="ball-map" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>
+    <feDisplacementMap id="ball-dm" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB"/>
+  </filter>
   <filter id="glass-old" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
     <feImage id="glass-map-old" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="map"/>
     <feDisplacementMap id="glass-dm-old" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G"/>
   </filter>
 </svg>
+<div class="glass-ball" aria-hidden="true"></div>
 
 <a class="skip" href="#menu">Skip to menu</a>
 
@@ -389,6 +394,6 @@
   <p class="foot__small"><strong>Concept demo by TruongSon.</strong> Not made by or affiliated with Espresso Vivace. Hours and phones from espressovivace.com (checked Nov 20, 2026). Drink list from Vivace's Grubhub listing. Pour video from Mixkit, not filmed at Vivace. Credits: <a class="link" href="credits.html">credits</a>.</p>
 </footer>
 
-<script src="site.js?v=3.9"></script>
+<script src="site.js?v=4.0"></script>
 </body>
 </html>

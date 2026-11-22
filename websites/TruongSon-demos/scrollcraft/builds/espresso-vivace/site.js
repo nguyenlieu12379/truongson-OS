@@ -21,6 +21,78 @@
     }
   }
 
+  // Liquid glass ball: follows the cursor on a spring, stretches along its
+  // velocity and wobbles back to round. The lens refracts the live page
+  // (backdrop-filter + SVG displacement) where the browser supports it.
+  (function () {
+    var ball = document.querySelector(".glass-ball");
+    if (!ball) return;
+    var fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+    var still = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (!fine.matches || still.matches) return;
+
+    var size = ball.offsetWidth || 112;
+    var brands = (navigator.userAgentData && navigator.userAgentData.brands) || [];
+    var chromium = brands.some(function (b) { return /Chromium|Google Chrome|Microsoft Edge/.test(b.brand); });
+    if (chromium) {
+      // Lens map: sample toward the centre, harder near the rim (a glass sphere).
+      var n = 96, cv = document.createElement("canvas"); cv.width = cv.height = n;
+      var g = cv.getContext("2d"), img = g.createImageData(n, n), px = img.data;
+      // The bend must never fold content over itself (pull slope < 1 px/px),
+      // or thin strokes smear into blobs: wide rim band, capped pull.
+      var push = size * 0.14, S = push * 2.2;
+      for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) {
+        var nx = (x + 0.5) / n * 2 - 1, ny = (y + 0.5) / n * 2 - 1, r = Math.sqrt(nx * nx + ny * ny), i = (y * n + x) * 4;
+        var R = 128, G = 128;
+        if (r < 1 && r > 0) {
+          // gentle magnification inside, a strong bend only in the outer rim
+          var rim = r < 0.5 ? 0 : (r - 0.5) / 0.5; rim = rim * rim * (3 - 2 * rim);
+          var m = push * (0.22 * r + 0.78 * rim);
+          R = 128 - (nx / r) * m / S * 255; G = 128 - (ny / r) * m / S * 255;
+        }
+        px[i] = R; px[i + 1] = G; px[i + 2] = 128; px[i + 3] = 255;
+      }
+      g.putImageData(img, 0, 0);
+      var fe = document.getElementById("ball-map");
+      fe.setAttribute("href", cv.toDataURL()); fe.setAttribute("width", size); fe.setAttribute("height", size);
+      document.getElementById("ball-dm").setAttribute("scale", S.toFixed(1));
+      ball.classList.add("is-lens");
+    }
+
+    var tx = -200, ty = -200, x = tx, y = ty, vx = 0, vy = 0, grow = 1, gTarget = 1, running = false;
+    var K = 0.14, D = 0.72;                          // spring stiffness, damping
+    function frame() {
+      vx = (vx + (tx - x) * K) * D; vy = (vy + (ty - y) * K) * D;
+      x += vx; y += vy;
+      grow += (gTarget - grow) * 0.18;
+      var sp = Math.sqrt(vx * vx + vy * vy);
+      var st = Math.min(0.42, sp * 0.018);           // stretch along the motion
+      var ang = Math.atan2(vy, vx) * 180 / Math.PI;
+      // Stretch along the motion with no net rotation (rotate, scale, rotate
+      // back), so the round lens map always lines up with the ball.
+      if (st < 0.004) ang = 0;
+      // Position with left/top, not translate: Chrome reads the backdrop for
+      // backdrop-filter from the untransformed box, so a translated ball would
+      // refract the wrong part of the page. Transform only for the stretch.
+      ball.style.left = x.toFixed(1) + "px"; ball.style.top = y.toFixed(1) + "px";
+      ball.style.transform = "rotate(" + ang.toFixed(1) +
+        "deg) scale(" + ((1 + st) * grow).toFixed(3) + "," + ((1 - st * 0.55) * grow).toFixed(3) + ") rotate(" + (-ang).toFixed(1) + "deg)";
+      if (sp > 0.02 || Math.abs(tx - x) > 0.1 || Math.abs(gTarget - grow) > 0.002) requestAnimationFrame(frame);
+      else running = false;
+    }
+    function kick() { if (!running) { running = true; requestAnimationFrame(frame); } }
+
+    document.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse") return;
+      if (!ball.classList.contains("is-on")) { x = tx = e.clientX; y = ty = e.clientY; ball.classList.add("is-on"); }
+      tx = e.clientX; ty = e.clientY;
+      gTarget = e.target.closest && e.target.closest("a, button, summary, label, input") ? 1.28 : 1;
+      kick();
+    }, { passive: true });
+    document.documentElement.addEventListener("pointerleave", function () { ball.classList.remove("is-on"); });
+    window.addEventListener("blur", function () { ball.classList.remove("is-on"); });
+  })();
+
   // Regular hours: [open, close] in minutes after midnight, by weekday (0 = Sunday).
   var HOURS = {
     brix:  { all: [360, 1140] },                                 // 6am to 7pm daily
