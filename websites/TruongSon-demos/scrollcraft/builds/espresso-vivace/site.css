@@ -378,3 +378,24 @@ h3 { font-family: var(--text); font-size: 0.8rem; font-weight: 600; letter-spaci
 @media (prefers-reduced-motion: reduce) {
   .sheet[open], .sheet[open]::backdrop, .cart-btn.bump .cart-btn__n { animation: none; }
 }
+
+/* ---- liquid glass ball that follows the cursor (mouse/trackpad only) ----
+   site.js sizes the lens map, springs the position and stretches the ball
+   along its velocity. Where backdrop-filter can't take an SVG filter (Safari,
+   Firefox) the ball is rim and highlight only. */
+.glass-ball {
+  --size: 112px;
+  position: fixed; left: 0; top: 0; z-index: 30;
+  width: var(--size); height: var(--size); margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+  border-radius: 50%; pointer-events: none; opacity: 0;
+  transition: opacity 260ms var(--ease);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.55),
+    inset 3px 5px 8px -2px rgb(255 255 255 / 0.7),
+    inset -4px -6px 10px -4px rgb(0 0 0 / 0.22),
+    0 10px 24px -8px rgb(20 15 10 / 0.35);
+  background: radial-gradient(circle at 34% 28%, rgb(255 255 255 / 0.32), rgb(255 255 255 / 0) 34%);
+}
+.glass-ball.is-lens { -webkit-backdrop-filter: url(#ball-lens) saturate(1.15); backdrop-filter: url(#ball-lens) saturate(1.15); }
+.glass-ball.is-on { opacity: 1; }
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) { .glass-ball { display: none; } }
