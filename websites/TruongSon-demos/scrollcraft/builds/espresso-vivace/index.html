@@ -10,10 +10,131 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="site.css?v=3.4">
-<script>document.documentElement.classList.add("js")</script>
+<meta name="theme-color" content="#F1EFEA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161311" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="site.css?v=3.9">
+<script>
+  // Theme: applied before first paint (no flash), and the toggle lives here,
+  // not in site.js, so a cached old site.js can never leave the button dead.
+  (function (d) {
+    d.classList.add("js");
+    var KEY = "vivace-theme";
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    var t = null; try { t = localStorage.getItem(KEY); } catch (e) {}
+    if (t === "dark" || t === "light") d.setAttribute("data-theme", t);
+    function now() { var x = d.getAttribute("data-theme"); return x ? x : (mq.matches ? "dark" : "light"); }
+    function render() {
+      var dark = now() === "dark";
+      d.setAttribute("data-theme-now", dark ? "dark" : "light");
+      var b = document.querySelector(".theme-btn"); if (b) b.setAttribute("aria-pressed", String(dark));
+      if (d.hasAttribute("data-theme")) document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute("content", dark ? "#161311" : "#F1EFEA"); });
+    }
+    function apply(next) {
+      d.setAttribute("data-theme", next);
+      try { localStorage.setItem(KEY, next); } catch (e) {}
+      render();
+    }
+    render();
+    document.addEventListener("DOMContentLoaded", render);
+    if (mq.addEventListener) mq.addEventListener("change", render); else if (mq.addListener) mq.addListener(render);
+
+    // ---- glass lens transition ------------------------------------------
+    var DUR = 7000;                      // ms, the whole sweep
+    function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+    function glassSwitch(next, cx, cy) {
+      var W = innerWidth, H = innerHeight;
+      var band = Math.max(54, Math.min(130, Math.min(W, H) * 0.11));   // lens ring width
+      var push = band * 0.42;                                          // max bend, px
+      var S = push * 2.2;                                              // displacement scale
+      var end = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy)) + band;
+      var k = W > 900 ? 5 : 4;                                         // map is 1/k size
+      var mw = Math.ceil(W / k), mh = Math.ceil(H / k);
+      var cv = document.createElement("canvas"); cv.width = mw; cv.height = mh;
+      var cx2 = cv.getContext("2d"), img = cx2.createImageData(mw, mh), px = img.data;
+      var feN = document.getElementById("glass-map-new"), feO = document.getElementById("glass-map-old");
+      var dmN = document.getElementById("glass-dm-new"), dmO = document.getElementById("glass-dm-old");
+      [feN, feO].forEach(function (f) { f.setAttribute("width", W); f.setAttribute("height", H); });
+      [dmN, dmO].forEach(function (f) { f.setAttribute("scale", S.toFixed(1)); });
+
+      function paint(rad) {
+        for (var y = 0; y < mh; y++) {
+          var dy = y * k + k / 2 - cy;
+          for (var x = 0; x < mw; x++) {
+            var dx = x * k + k / 2 - cx, i = (y * mw + x) * 4;
+            var d = Math.sqrt(dx * dx + dy * dy) || 1, u = (d - rad) / band;
+            var R = 128, G = 128, B = 0;
+            if (u > -1 && u < 1) {
+              var bump = (1 - u * u); bump *= bump;               // smooth lens profile
+              var m = push * bump;                                // sample toward the centre:
+              R = 128 - (dx / d) * m / S * 255;                   // the ring magnifies
+              G = 128 - (dy / d) * m / S * 255;
+              var h = (u + 0.06) / 0.07;                          // thin bright rim
+              B = Math.min(255, 150 * Math.exp(-h * h) + 40 * bump);
+            }
+            px[i] = R; px[i + 1] = G; px[i + 2] = B; px[i + 3] = 255;
+          }
+        }
+        cx2.putImageData(img, 0, 0);
+        var url = cv.toDataURL();
+        feN.setAttribute("href", url); feO.setAttribute("href", url);
+      }
+
+      d.style.setProperty("--vt-x", cx + "px");
+      d.style.setProperty("--vt-y", cy + "px");
+      d.style.setProperty("--vt-r", "0px");
+      paint(-band);
+      d.classList.add("theme-vt");
+      var vt = document.startViewTransition(function () { apply(next); });
+      vt.ready.then(function () {
+        // A no-op animation keeps the transition alive for DUR; the frames
+        // themselves are driven below so the clip and the lens stay in step.
+        d.animate({ opacity: [1, 1] }, { duration: DUR, pseudoElement: "::view-transition-new(root)" });
+        var t0 = performance.now();
+        (function frame(t) {
+          var p = Math.min(1, (t - t0) / DUR), rad = ease(p) * end;
+          d.style.setProperty("--vt-r", rad + "px");
+          paint(rad);
+          if (p < 1) requestAnimationFrame(frame);
+        })(t0);
+      }).catch(function () {});
+      function done() { d.classList.remove("theme-vt"); ["--vt-x", "--vt-y", "--vt-r"].forEach(function (v) { d.style.removeProperty(v); }); }
+      vt.finished.then(done, done);
+    }
+
+    document.addEventListener("click", function (e) {
+      var btn = e.target.closest && e.target.closest(".theme-btn");
+      if (!btn) return;
+      var next = now() === "dark" ? "light" : "dark";
+      var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (still) { apply(next); return; }
+      // The new theme grows as a circle out of the button, and its edge is a
+      // glass lens: a ring that magnifies and bends the page behind it.
+      if (document.startViewTransition) {
+        var r = btn.getBoundingClientRect();
+        glassSwitch(next, r.left + r.width / 2, r.top + r.height / 2);
+        return;
+      }
+      // Browsers without view transitions: a quick colour cross-fade.
+      d.classList.add("theme-fade");
+      apply(next);
+      setTimeout(function () { d.classList.remove("theme-fade"); }, 760);
+    });
+  })(document.documentElement);
+</script>
 </head>
 <body>
+<svg class="glass-defs" width="0" height="0" aria-hidden="true" focusable="false">
+  <filter id="glass-new" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feImage id="glass-map-new" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="map"/>
+    <feDisplacementMap id="glass-dm-new" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" result="bent"/>
+    <feColorMatrix in="map" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0.85 0 0" result="rim"/>
+    <feMerge><feMergeNode in="bent"/><feMergeNode in="rim"/></feMerge>
+  </filter>
+  <filter id="glass-old" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feImage id="glass-map-old" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="map"/>
+    <feDisplacementMap id="glass-dm-old" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
 
 <a class="skip" href="#menu">Skip to menu</a>
 
@@ -22,6 +143,10 @@
   <nav class="bar__nav" aria-label="Sections">
     <a href="#menu">Menu</a>
     <a href="#visit">Locations</a>
+    <button class="theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
+      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
     <a class="bar__cta" href="#menu">Order</a>
   </nav>
 </header>
@@ -264,6 +389,6 @@
   <p class="foot__small"><strong>Concept demo by TruongSon.</strong> Not made by or affiliated with Espresso Vivace. Hours and phones from espressovivace.com (checked Nov 20, 2026). Drink list from Vivace's Grubhub listing. Pour video from Mixkit, not filmed at Vivace. Credits: <a class="link" href="credits.html">credits</a>.</p>
 </footer>
 
-<script src="site.js?v=3.4"></script>
+<script src="site.js?v=3.9"></script>
 </body>
 </html>
