@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#F1EFEA" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#161311" media="(prefers-color-scheme: dark)">
-<link rel="stylesheet" href="site.css?v=4.0">
+<link rel="stylesheet" href="site.css?v=4.1">
 <script>
   // Theme: applied before first paint (no flash), and the toggle lives here,
   // not in site.js, so a cached old site.js can never leave the button dead.
@@ -39,7 +39,7 @@
     if (mq.addEventListener) mq.addEventListener("change", render); else if (mq.addListener) mq.addListener(render);
 
     // ---- glass lens transition ------------------------------------------
-    var DUR = 7000;                      // ms, the whole sweep
+    var DUR = 5000;                      // ms, the whole sweep
     function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
     function glassSwitch(next, cx, cy) {
       var W = innerWidth, H = innerHeight;
@@ -394,6 +394,6 @@
   <p class="foot__small"><strong>Concept demo by TruongSon.</strong> Not made by or affiliated with Espresso Vivace. Hours and phones from espressovivace.com (checked Nov 20, 2026). Drink list from Vivace's Grubhub listing. Pour video from Mixkit, not filmed at Vivace. Credits: <a class="link" href="credits.html">credits</a>.</p>
 </footer>
 
-<script src="site.js?v=4.0"></script>
+<script src="site.js?v=4.1"></script>
 </body>
 </html>
