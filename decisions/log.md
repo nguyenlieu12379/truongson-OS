@@ -416,3 +416,13 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Revisit when:** emailing dozens of owners a week becomes the bottleneck.
 
 **Owner:** to confirm (Son or Truong)
+
+## 2026-11-23 - Prospect-finding pipeline shelved
+
+**Decision:** The `/find-prospects` pipeline (OpenStreetMap finder + web check for WhatsApp + Google Sheet tab), scoped in a `/level-up` run, is shelved before its first full run. Deleted: `scripts/fnb_finder.py`, the draft `find-prospects` skill, and the local `prospects/` data.
+
+**Why:** Paused by request. Test runs worked for stage 1 (Framingham + Somerville: 113 candidates), but finding a published WhatsApp number took several web searches per place, with none found in the first checks.
+
+**Revisit with:** the spec from this run (WhatsApp required, social-only "websites" count as no site, L2 review, KPI = confirmed WhatsApp prospects per hour).
+
+**Owner:** to confirm (Son or Truong)
