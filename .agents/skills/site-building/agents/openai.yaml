@@ -1,0 +1,6 @@
+interface:
+  display_name: "Site building"
+  short_description: "Website build: ask preferences, build with scroll-craft, add liquid glass"
+  default_prompt: "Use $site-building to run the website build: ask my preferences and save PREFS.md, build the page with scroll-craft, then add the liquid glass layer."
+policy:
+  allow_implicit_invocation: true

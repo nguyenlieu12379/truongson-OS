@@ -369,3 +369,11 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Alternatives considered:** Keeping three folders under one parent. Rejected: the order would still live in the docs, not in the skill.
 
 **Owner:** to confirm (Son or Truong)
+
+## 2026-11-23 - Rename /build to /site-building
+
+**Decision:** The merged website skill is renamed from `/build` to `/site-building`. Folder `.claude/skills/site-building/`, mirrored to `.agents/skills/site-building/`. Stages and modes are unchanged (`/site-building scroll`, `/site-building glass`).
+
+**Why:** Son asked for the clearer name.
+
+**Owner:** to confirm (Son or Truong)

@@ -5,7 +5,7 @@ ships. The registry exists so the next build can prove it is a different page
 rather than a re-skin of an existing one.
 
 The rules, the six dimensions and the gate itself live in
-`.claude/skills/build/references/uniqueness.md`. Short version:
+`.claude/skills/site-building/references/uniqueness.md`. Short version:
 
 **A new build must differ from EVERY row below on at least 4 of the 6
 dimensions.** Four against each row individually, not four on average across the

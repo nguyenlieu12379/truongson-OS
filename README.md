@@ -89,7 +89,7 @@ The kit includes setup, ongoing context interviews, routing, verification, a wee
 | Skill | Type | When to run |
 |---|---|---|
 | [`/watch`](.claude/skills/watch/SKILL.md) | Video reader (vendored, MIT) | Watch a YouTube link or video file. Captions plus frames. Cloud sessions get the transcript only. |
-| [`/build`](.claude/skills/build/SKILL.md) | Website build: pre-build, scroll-craft, liquid-glass (in that order) | Any website build. Asks preferences first, builds the scroll-driven page, then adds the glass layer. Builds go to `websites/TruongSon-demos/scrollcraft/`. |
+| [`/site-building`](.claude/skills/site-building/SKILL.md) | Website build: pre-build, scroll-craft, liquid-glass (in that order) | Any website build. Asks preferences first, builds the scroll-driven page, then adds the glass layer. Builds go to `websites/TruongSon-demos/scrollcraft/`. |
 | [`/sales-agent`](.claude/skills/sales-agent/SKILL.md) | Cold-outreach agent (vendored, MIT) | Harvey. Not set up. Sends real email, so confirm list, copy and sending account first. |
 | [`/craft-anything`](.claude/skills/craft-anything/SKILL.md) | Study and rebuild (vendored, MIT/Apache) | Rebuild a site or app we own or may copy. Early alpha. Not set up. |
 | [video-edit-kit](.claude/skills/video-edit-kit/AGENTS.md) | Kit pack (no slash command) | Talking-head edits, Reels and Shorts. Entry: `.claude/skills/video-edit-kit/AGENTS.md`. |

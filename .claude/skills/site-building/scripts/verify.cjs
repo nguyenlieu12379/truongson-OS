@@ -1,5 +1,5 @@
 // liquid-glass verification. Run from anywhere:
-//   node .claude/skills/build/scripts/verify.cjs <url> [outdir]
+//   node .claude/skills/site-building/scripts/verify.cjs <url> [outdir]
 // Needs Chrome (h264 not needed): uses /usr/bin/google-chrome if present,
 // else Playwright's bundled Chromium. Checks, on the given page:
 //   1. lens alignment: a grid is laid under the cursor ball and each quarter

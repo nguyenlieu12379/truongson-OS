@@ -71,8 +71,8 @@ Rules:
 ## Verify
 
 ```bash
-node .claude/skills/build/scripts/serve.mjs --root <site folder> --port 4600 &
-node .claude/skills/build/scripts/verify.cjs http://localhost:4600/ <scratch dir>
+node .claude/skills/site-building/scripts/serve.mjs --root <site folder> --port 4600 &
+node .claude/skills/site-building/scripts/verify.cjs http://localhost:4600/ <scratch dir>
 ```
 
 It checks that the ball appears and that its rim bends a test grid while the centre stays clear, that the toggle flips the theme and survives a reload, that clicks reach the element under the ball, that the ball is hidden on touch, and that there are no page errors. Venom: no strands when the mouse is far, strands within reach, strands in the CTA's own colour, a latch onto the pointer that hides the ball, and a retract when the mouse leaves. Then look at the screenshots it writes (`ball-lens.png`, `sweep-mid.png`, `after-toggle.png`, `venom-crawl.png`, `venom-latched.png`), plus the real page in light and dark at phone width. The lens test forces the ball visible on purpose, because venom can hide it near a button.
