@@ -351,3 +351,11 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Why:** Asked in chat ("remove design-skills"). UI work now goes through scroll-craft, pre-build and the liquid-glass skill.
 
 **Owner:** Son (same session; not restated)
+
+## 2026-11-22 - Make liquid glass a reusable skill
+
+**Decision:** The liquid glass work from Espresso Vivace (glass-lens theme switch, cursor ball) becomes the `/liquid-glass` skill (`.claude/skills/liquid-glass/`, mirrored to `.agents/skills/liquid-glass/`), with glass buttons and panels added. Copy-in CSS/JS, a demo page and a headless check script. Vivace keeps its own copy (sweep at 7s).
+
+**Why:** Son wanted the effect reusable on future client sites instead of rebuilt each time. The Chrome rules learned on Vivace (no translate on glass, sRGB filters, no lens folding, inline toggle against cache) live in its SKILL.md.
+
+**Owner:** Son
