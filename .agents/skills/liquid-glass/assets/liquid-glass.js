@@ -3,8 +3,8 @@
 
      LiquidGlass.cursorBall()          glass ball that springs after the mouse
      LiquidGlass.glassify(".lg-glass") rounded-rect glass panels and buttons
-     LiquidGlass.venom("button.lg-glass") glass goo that oozes out of a button,
-                                       crawls to the mouse and latches on
+     LiquidGlass.venom("button.lg-glass") strands of the button's colour that
+                                       reach for the mouse and latch on
      LiquidGlass.lensMap(...)          the displacement map all of these use
 
    The theme switch (toggle + circle-lens transition) lives in head.html, not
@@ -108,7 +108,7 @@
     opt = opt || {};
     if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return null;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return null;
-    var size = opt.size || 112;
+    var size = opt.size || 56;
     var ball = document.createElement("div");
     ball.className = "lg-ball"; ball.setAttribute("aria-hidden", "true");
     ball.style.setProperty("--lg-size", size + "px");
@@ -168,34 +168,111 @@
   }
 
   // ---- glass venom --------------------------------------------------------
-  // Glass goo oozes out of a button once the mouse is within reach, crawls
-  // toward the pointer like a slithering tongue, and latches onto it. The
-  // latched blob takes the cursor's place (the ball hides). When the mouse
-  // leaves reach the goo pulls back into the button. Only the nearest button
-  // in reach is active. Mouse/trackpad only; off with reduced motion.
+  // Like the Venom button: a button sprouts wiry strands of its own colour
+  // along the edge facing the mouse. Once the mouse is within reach the
+  // strands stretch out, sag under gravity and whip toward the pointer. They
+  // gather into a glass head that latches onto the pointer and takes the
+  // cursor's place (the ball hides). When the mouse leaves reach the strands
+  // pull back into the button. Only the nearest button in reach is active.
+  // Mouse/trackpad only; off with reduced motion.
   //   reach     how far from a button's edge the crawl starts, in cursor-ball
-  //             widths (default 5)
-  //   unit      px per cursor-ball width (default 112, match cursorBall size)
-  //   headSize  px, the blob at rest (default 64)
+  //             widths (default 5, i.e. 5 x 56px)
+  //   unit      px per cursor-ball width (default 56, match cursorBall size)
+  //   strands   strands per button (default: from the button's width)
   //   catch     latch when the head is this many widths from the pointer (0.35)
+  //   color     strand and head colour. Default: the button's own colour, from
+  //             --lg-venom on the button, else its solid background, else its text
   function venom(selector, opt) {
     opt = opt || {};
     if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return null;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return null;
     var els = Array.prototype.slice.call(document.querySelectorAll(selector || "button.lg-glass, a.lg-glass"));
     if (!els.length) return null;
-    var unit = opt.unit || 112, reach = (opt.reach || 5) * unit, catchR = (opt.catch || 0.35) * unit;
-    var headSize = opt.headSize || 64, latchScale = unit / headSize;
-    var K = opt.stiffness || 0.07, D = opt.damping || 0.8;
+    var unit = opt.unit || 56, reach = (opt.reach || 5) * unit, catchR = (opt.catch || 0.35) * unit;
+    var headSize = unit, restScale = 0.45, K = 12, PULL = opt.stiffness || 0.07;   // K points per strand
     var lensed = chromium();
-    // one SVG layer for all the tongues; no viewBox, so its units are client px
     var svg = document.createElementNS(SVGNS, "svg");
     svg.setAttribute("class", "lg-venom-svg"); svg.setAttribute("aria-hidden", "true");
     document.body.appendChild(svg);
     var ptr = { x: 0, y: 0, has: false }, active = null, running = false;
+
+    function tintOf(el) {
+      if (opt.color) return opt.color;
+      var cs = getComputedStyle(el), v = cs.getPropertyValue("--lg-venom").trim();
+      if (v) return v;
+      var bg = cs.backgroundColor, m = /rgba?\(([^)]+)\)/.exec(bg);
+      if (m) { var parts = m[1].split(/[\s,\/]+/).filter(Boolean); if (parts.length < 4 || parseFloat(parts[3]) >= 0.5) return bg; }
+      return cs.color;
+    }
+    function makeStrands(s) {
+      var n = opt.strands || Math.min(10, Math.max(4, Math.round(s.r.width / 26)));
+      var out = [];
+      for (var i = 0; i < n; i++) {
+        var path = document.createElementNS(SVGNS, "path");
+        path.setAttribute("class", "lg-venom-strand"); svg.appendChild(path);
+        out.push({ path: path, pts: [], init: false, a: i / n * Math.PI * 2, ph: i * 2.39 });
+      }
+      return out;
+    }
+    // the strand outline: a thin tapered band along the points, with a slow wobble
+    function outline(P, amt, t, ph) {
+      if (amt < 0.01) return "";
+      var n = P.length, L = [], R = [];
+      for (var j = 0; j < n; j++) {
+        var a = P[Math.max(0, j - 1)], b = P[Math.min(n - 1, j + 1)];
+        var tx = b.x - a.x, ty = b.y - a.y, l = Math.hypot(tx, ty) || 1, nx = -ty / l, ny = tx / l;
+        var u = j / (n - 1), w = (1.9 - 1.2 * u) * amt * (1 + 0.15 * Math.sin(t * 0.01 + ph + u * 6));
+        var wob = Math.sin(t * 0.009 + ph + j * 0.8) * 0.6 * u * amt;
+        var x = P[j].x + wob, y = P[j].y + wob * 0.5;
+        L.push(x + nx * w, y + ny * w); R.push(x - nx * w, y - ny * w);
+      }
+      var d = "M" + L[0].toFixed(1) + " " + L[1].toFixed(1);
+      for (var k = 2; k < L.length; k += 2) d += "L" + L[k].toFixed(1) + " " + L[k + 1].toFixed(1);
+      for (var q = R.length - 2; q >= 0; q -= 2) d += "L" + R[q].toFixed(1) + " " + R[q + 1].toFixed(1);
+      return d + "Z";
+    }
+    // Verlet chain per strand: pinned to the button edge, the tip pulled to the
+    // head, gravity sag, a length that gives a little slack so it droops.
+    function step(s, t, on, px, py) {
+      var r = s.r, n = s.strands.length;
+      var tgtX = on ? px : s.cx, tgtY = on ? py : s.cy;
+      var dx = s.hx - s.cx, dy = s.hy - s.cy;
+      var horiz = Math.abs(dx) / (r.width / 2 || 1) > Math.abs(dy) / (r.height / 2 || 1);
+      var side = horiz ? (dx > 0 ? "right" : "left") : (dy > 0 ? "bottom" : "top");
+      var bundle = headSize * 0.5 * s.sc * (s.latched ? 0.75 : 0.3);
+      for (var i = 0; i < n; i++) {
+        var st = s.strands[i], P = st.pts, f = (i + 0.5) / n, rx, ry;
+        if (side === "bottom") { rx = r.left + r.width * f; ry = r.bottom - 2; }
+        else if (side === "top") { rx = r.left + r.width * f; ry = r.top + 2; }
+        else if (side === "right") { rx = r.right - 2; ry = r.top + r.height * f; }
+        else { rx = r.left + 2; ry = r.top + r.height * f; }
+        var ang = st.a + t * 0.0004;
+        var tx = tgtX + Math.cos(ang) * bundle, ty = tgtY + Math.sin(ang) * bundle;
+        if (!st.init) {
+          for (var j0 = 0; j0 < K; j0++) { var q0 = j0 / (K - 1); P[j0] = { x: rx + (tx - rx) * q0, y: ry + (ty - ry) * q0, px: 0, py: 0 }; P[j0].px = P[j0].x; P[j0].py = P[j0].y; }
+          st.init = true;
+        }
+        P[0].x = P[0].px = rx; P[0].y = P[0].py = ry;
+        for (var j = 1; j < K; j++) {
+          var p = P[j], vx = (p.x - p.px) * 0.9, vy = (p.y - p.py) * 0.9;
+          p.px = p.x; p.py = p.y; p.x += vx; p.y += vy + 0.28;
+        }
+        var seg = Math.max(0.5, Math.hypot(tx - rx, ty - ry) * 1.12 / (K - 1));
+        for (var it = 0; it < 6; it++) {
+          P[0].x = rx; P[0].y = ry;
+          for (var c = 0; c < K - 1; c++) {
+            var a = P[c], b = P[c + 1], ddx = b.x - a.x, ddy = b.y - a.y, d = Math.hypot(ddx, ddy) || 1e-6, k = (d - seg) / d;
+            if (c === 0) { b.x -= ddx * k; b.y -= ddy * k; }
+            else { a.x += ddx * k * 0.5; a.y += ddy * k * 0.5; b.x -= ddx * k * 0.5; b.y -= ddy * k * 0.5; }
+          }
+        }
+        P[K - 1].x += (tx - P[K - 1].x) * 0.35; P[K - 1].y += (ty - P[K - 1].y) * 0.35;
+        st.path.setAttribute("d", outline(P, s.amt, t, st.ph));
+        st.path.style.fill = s.col;
+      }
+    }
+
     var list = els.map(function (el) {
-      var path = document.createElementNS(SVGNS, "path");
-      path.setAttribute("class", "lg-venom-tail"); svg.appendChild(path);
       var head = document.createElement("div");
       head.className = "lg-venom-head"; head.setAttribute("aria-hidden", "true");
       head.style.setProperty("--lg-vh", headSize + "px");
@@ -205,37 +282,14 @@
         head.style.backdropFilter = head.style.webkitBackdropFilter = "url(#" + id + ") saturate(1.15)";
         head.classList.add("is-lens");
       }
-      return { el: el, path: path, head: head, r: null, cx: 0, cy: 0, d: Infinity,
-               hx: 0, hy: 0, hvx: 0, hvy: 0, amt: 0, sc: 0.3, latched: false, placed: false };
+      return { el: el, head: head, strands: null, col: tintOf(el), r: null, cx: 0, cy: 0, d: Infinity,
+               hx: 0, hy: 0, hvx: 0, hvy: 0, amt: 0, sc: 0.2, latched: false, placed: false, wasOn: false };
     });
 
     // distance from a point to a rectangle (0 when inside)
     function rectDist(r, x, y) {
       var dx = Math.max(r.left - x, 0, x - r.right), dy = Math.max(r.top - y, 0, y - r.bottom);
       return Math.sqrt(dx * dx + dy * dy);
-    }
-    // the tongue: a tapered band from the button's edge to the head, with a
-    // travelling wave so it slithers. Width and wave scale with amt (0..1).
-    function tongue(s, t) {
-      var r = s.r, hx = s.hx, hy = s.hy;
-      var ax = Math.min(Math.max(hx, r.left), r.right), ay = Math.min(Math.max(hy, r.top), r.bottom);
-      var dx = hx - ax, dy = hy - ay, L = Math.sqrt(dx * dx + dy * dy);
-      if (L < 1.5 || s.amt < 0.01) return "";
-      var ux = dx / L, uy = dy / L, nx = -uy, ny = ux;
-      var neck = Math.min(26, Math.max(12, Math.min(r.width, r.height) * 0.45));
-      var headR = headSize * 0.5 * s.sc * 0.9;
-      var amp = Math.min(24, L * 0.12) * s.amt, N = 24, left = [], right = [];
-      for (var i = 0; i <= N; i++) {
-        var u = i / N, sm = u * u * (3 - 2 * u);
-        var w = (neck + (headR - neck) * sm) * s.amt * (1 + 0.08 * Math.sin(t * 0.02 - u * 9));
-        var b = amp * Math.sin(Math.PI * u) * Math.sin(u * 6.5 - t * 0.009);
-        var px = ax + dx * u + nx * b, py = ay + dy * u + ny * b;
-        left.push(px + nx * w, py + ny * w); right.push(px - nx * w, py - ny * w);
-      }
-      var d = "M" + left[0].toFixed(1) + " " + left[1].toFixed(1);
-      for (var j = 2; j < left.length; j += 2) d += "L" + left[j].toFixed(1) + " " + left[j + 1].toFixed(1);
-      for (var k = right.length - 2; k >= 0; k -= 2) d += "L" + right[k].toFixed(1) + " " + right[k + 1].toFixed(1);
-      return d + "Z";
     }
 
     function frame(t) {
@@ -244,7 +298,7 @@
         s.r = s.el.getBoundingClientRect();
         s.cx = (s.r.left + s.r.right) / 2; s.cy = (s.r.top + s.r.bottom) / 2;
         if (!s.placed) { s.hx = s.cx; s.hy = s.cy; s.placed = true; }   // first sight: the head starts in its button
-        s.d = has ? rectDist(s.r, px, py) : Infinity;   // 0 = pointer is on the button
+        s.d = has ? rectDist(s.r, px, py) : Infinity;                    // 0 = pointer is on the button
       });
       // keep the current button while in reach (with a little hysteresis), else take the nearest in reach
       var next = (active && active.d > 0 && active.d < reach * 1.08) ? active : null;
@@ -253,23 +307,26 @@
 
       list.forEach(function (s) {
         var on = s === active, want = on ? 1 : 0;
+        if (on && !s.wasOn) { s.col = tintOf(s.el); s.head.style.setProperty("--lg-venom-c", s.col); }
+        s.wasOn = on;
+        if (!s.strands && s.r.width > 0) s.strands = makeStrands(s);
         if (!on) s.latched = false;
         else if (!s.latched && Math.hypot(s.hx - px, s.hy - py) < catchR) s.latched = true;
-        s.amt += (want - s.amt) * (on ? 0.14 : 0.1);
+        s.amt += (want - s.amt) * (on ? 0.12 : 0.09);
         if (!on && s.amt < 0.002) s.amt = 0;
         // idle: the head rests in the button, so it starts from the button's current centre
         if (!on && s.amt === 0) { s.hx = s.cx; s.hy = s.cy; s.hvx = s.hvy = 0; }
         var tx = on ? px : s.cx, ty = on ? py : s.cy;
-        var k = s.latched ? 0.22 : (on ? K : 0.1), dmp = s.latched ? 0.7 : D;
+        var k = s.latched ? 0.22 : (on ? PULL : 0.1), dmp = s.latched ? 0.7 : 0.8;
         s.hvx = (s.hvx + (tx - s.hx) * k) * dmp; s.hvy = (s.hvy + (ty - s.hy) * k) * dmp;
         s.hx += s.hvx; s.hy += s.hvy;
-        var scT = s.latched ? latchScale : (on ? 1 : 0.3);
+        var scT = s.latched ? 1 : (on ? restScale : 0.2);
         s.sc += (scT - s.sc) * 0.18;
         s.head.style.left = s.hx.toFixed(1) + "px"; s.head.style.top = s.hy.toFixed(1) + "px";
         s.head.style.transform = "scale(" + s.sc.toFixed(3) + ")";
         s.head.style.opacity = s.amt < 0.002 ? "0" : Math.min(1, s.amt * 2.5).toFixed(3);
-        s.path.setAttribute("d", tongue(s, t));
-        if (Math.abs(want - s.amt) > 0.002 || Math.abs(s.hvx) + Math.abs(s.hvy) > 0.05 ||
+        if (s.strands) step(s, t, on, px, py);
+        if (Math.abs(want - s.amt) > 0.002 || s.amt > 0.002 ||
             Math.abs(tx - s.hx) + Math.abs(ty - s.hy) > 0.5 || Math.abs(scT - s.sc) > 0.002) busy = true;
       });
       var anyLatched = list.some(function (s) { return s.latched; });

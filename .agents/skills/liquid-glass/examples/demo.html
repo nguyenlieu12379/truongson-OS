@@ -156,6 +156,7 @@
       repeating-linear-gradient(115deg, #e84a2c 0 18px, #f2c230 18px 36px, #2350b4 36px 54px, #f1efea 54px 72px);
   }
   .stage .row { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+  .cta { background: var(--accent); color: #fff; }   /* solid button: its strands take this colour */
   .panel { padding: 1.25rem 1.5rem; border-radius: 22px; max-width: 26rem; color: #fff; text-shadow: 0 1px 3px rgb(0 0 0 / .5); }
   p.note { color: var(--soft); max-width: 60ch; }
 </style>
@@ -170,12 +171,15 @@
 </header>
 <main class="wrap">
   <h1>Clear glass,<br><em>bent light.</em></h1>
-  <p class="note">Move the mouse: the ball bends what is under it. Press the moon: the new theme grows from the button behind a glass edge. Bring the mouse near a button below: its glass oozes out, crawls to the pointer and latches on. The panel refracts the stripes behind it.</p>
+  <p class="note">Move the mouse: the ball bends what is under it. Press the moon: the new theme grows from the button behind a glass edge. Bring the mouse near a button below: it sends out strands of its own colour that reach for the pointer and latch on. The panel refracts the stripes behind it.</p>
   <div class="stage">
     <div class="row">
       <button class="lg-glass" type="button">Order ahead</button>
       <a class="lg-glass" href="#top">See the menu</a>
       <div class="lg-glass panel">A glass panel. Text stays on top; the stripes behind it bend toward the rim.</div>
+    </div>
+    <div class="row">
+      <a class="lg-glass cta" href="#top">Book a tasting</a>
     </div>
   </div>
 </main>

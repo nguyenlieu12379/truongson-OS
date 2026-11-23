@@ -95,36 +95,39 @@ const farPoint = (p) => p.evaluate(() => {
     const top = await p.evaluate(([x, y]) => { const e = document.elementFromPoint(x, y); return e && !e.closest(".lg-ball"); }, [bx.x + bx.width / 2, bx.y + bx.height / 2]);
     ok(top, "element under the ball is still the click target");
   }
-  // 4. glass venom: no tongue far away, a tongue within reach, latched on the
-  //    pointer when close, pulled back when the mouse leaves
-  const vbtn = await p.$("button.lg-glass, a.lg-glass");
-  if (vbtn) {
-    const r = await vbtn.boundingBox(), reachPx = 5 * 112;
-    const cy = r.y + r.height / 2;
-    const fp = await farPoint(p), [fx, fy] = [fp.x, fp.y];
-    const right = r.x + r.width + 250 < p.viewportSize().width;
-    const near = right ? [r.x + r.width + 250, cy] : [r.x - 250, cy];
-    const edge = right ? [r.x + r.width + 14, cy] : [r.x - 14, cy];
-    // any head / tongue: the nearest button in reach is the one that answers
+  // 4. glass venom: strands of the button's colour within reach, latch on the
+  //    pointer (ball hides), pull back when the mouse leaves
+  const cta = await p.$("a.cta");
+  if (cta) {
+    const r = await cta.boundingBox(), reachPx = 5 * 56;
+    const cy = r.y + r.height / 2;   // to the right of the CTA: inside the viewport, and nothing else nearer
+    const near = [r.x + r.width + 120, cy], edge = [r.x + r.width + 14, cy];
+    const fp = await farPoint(p);
     const headOp = () => p.evaluate(() => Math.max(0, ...[...document.querySelectorAll(".lg-venom-head")].map(h => parseFloat(h.style.opacity) || 0)));
-    const tongues = () => p.evaluate(() => [...document.querySelectorAll(".lg-venom-tail")].filter(t => (t.getAttribute("d") || "").length > 0).length);
+    const strandsOut = () => p.evaluate(() => [...document.querySelectorAll(".lg-venom-strand")].filter(t => (t.getAttribute("d") || "").length > 0).length);
     const latched = () => p.evaluate(() => document.documentElement.classList.contains("lg-venom-latched"));
     ok(fp.d > reachPx, "far point is outside the venom reach (" + Math.round(fp.d) + "px)");
-    await p.mouse.move(fx, fy, { steps: 4 }); await p.waitForTimeout(1500);
-    ok((await headOp()) === 0, "no glass tongue while the mouse is far");
+    await p.mouse.move(fp.x, fp.y, { steps: 4 }); await p.waitForTimeout(1500);
+    ok((await strandsOut()) === 0 && (await headOp()) === 0, "no strands while the mouse is far");
 
-    await p.mouse.move(near[0], near[1], { steps: 8 }); await p.waitForTimeout(700);
-    ok((await headOp()) > 0.5 && (await tongues()) > 0, "tongue crawls out when the mouse is within reach");
+    await p.mouse.move(near[0], near[1], { steps: 8 }); await p.waitForTimeout(900);
+    ok((await strandsOut()) > 0 && (await headOp()) > 0.5, "strands reach out when the mouse is within reach");
+    const colours = await p.evaluate(() => {
+      const bg = getComputedStyle(document.querySelector("a.cta")).backgroundColor;
+      const fills = [...document.querySelectorAll(".lg-venom-strand")].map(x => x.style.fill);
+      return { bg, match: fills.filter(f => f === bg).length, total: fills.length };
+    });
+    ok(colours.match > 0, "strands take the CTA's own colour (" + colours.bg + ", " + colours.match + "/" + colours.total + " strands)");
     await p.screenshot({ path: out + "/venom-crawl.png" });
 
     await p.mouse.move(edge[0], edge[1], { steps: 10 }); await p.waitForTimeout(2500);
-    ok(await latched(), "tongue latches onto the pointer when it is close");
+    ok(await latched(), "strands latch onto the pointer when it is close");
     ok(await p.evaluate(() => getComputedStyle(document.querySelector(".lg-ball")).opacity) === "0", "latched venom takes over the cursor (ball hidden)");
     await p.screenshot({ path: out + "/venom-latched.png" });
 
-    await p.mouse.move(fx, fy, { steps: 10 }); await p.waitForTimeout(2500);
-    ok(!(await latched()) && (await headOp()) === 0, "tongue pulls back into the button when the mouse leaves");
-  } else console.log("skip venom (no button.lg-glass / a.lg-glass)");
+    await p.mouse.move(fp.x, fp.y, { steps: 10 }); await p.waitForTimeout(2500);
+    ok(!(await latched()) && (await strandsOut()) === 0, "strands pull back into the button when the mouse leaves");
+  } else console.log("skip venom (no a.cta)");
 
   const t = await b.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
   await t.goto(url, { waitUntil: "networkidle" });
