@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "bpf",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": ["-ExecutionPolicy", "Bypass", "-File", "websites/TruongSon-demos/scrollcraft/builds/brazilian-passion-foods/serve.ps1", "-Root", "websites/TruongSon-demos/scrollcraft/builds/brazilian-passion-foods", "-Port", "4502"],
+      "port": 4502
+    }
+  ]
+}
