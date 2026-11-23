@@ -6,4 +6,4 @@
 
 **Sales motion:** Cold calls and Gmail outreach, then sales calls on Google Meet.
 
-**Revenue model:** Pre-revenue. Payments will run through Stripe (not set up yet). Pricing not defined yet.
+**Revenue model:** Pre-revenue. Payments will run through Stripe (not set up yet). Pricing (2026-11-23): $50-$100 to build, $20-$50/mo to maintain.

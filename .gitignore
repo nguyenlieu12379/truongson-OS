@@ -7,3 +7,6 @@ node_modules/
 .claude/settings.local.json
 audits/
 brainstorms/
+
+# Prospect lists (real business data)
+prospects/

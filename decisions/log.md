@@ -406,3 +406,13 @@ Recorded as a must-have checklist in `websites/README.md`.
 
 **Owner:** Son
 
+
+## 2026-11-23 - Harvey (sales agent) removed
+
+**Decision:** Reverses "Outreach tools: sales-agent in, REA out" (2026-11-20). Harvey is removed from the AIOS: the pack in `.claude/skills/sales-agent/` and `.agents/skills/sales-agent/`, its local keys and Gmail token, its handoff note, and its mentions in CLAUDE.md, AGENTS.md, README.md and connections.md. Outreach is done by hand (calls, walk-ins, Gmail). Kept: `scripts/fnb_finder.py` (free OpenStreetMap prospect finder) and the "Boston prospects" tab in the Outreach Inbox sheet.
+
+**Why:** Setup was taking a lot of time for little impact at this stage. Target businesses (no website) rarely publish an email, so Harvey couldn't reach them anyway, and the volume is small enough to handle by hand.
+
+**Revisit when:** emailing dozens of owners a week becomes the bottleneck.
+
+**Owner:** to confirm (Son or Truong)

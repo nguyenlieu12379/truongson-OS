@@ -10,4 +10,3 @@ Read-only vendor copy. Update by re-cloning and re-copying, then bumping the com
 ## Where it's used
 
 - `/no-ai-slop` for any writing: Instagram captions, client emails, cold scripts, site copy.
-- Harvey (sales-agent) email drafting: `writer.humanizer: true` in `.claude/skills/sales-agent/harvey.yaml` runs every draft through `SKILL.md` + `eval.md` as an editing pass. Path lookup is in `.claude/skills/sales-agent/harvey/humanize.py`.
