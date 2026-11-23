@@ -89,7 +89,7 @@ The kit includes setup, ongoing context interviews, routing, verification, a wee
 | Skill | Type | When to run |
 |---|---|---|
 | [`/watch`](.claude/skills/watch/SKILL.md) | Video reader (vendored, MIT) | Watch a YouTube link or video file. Captions plus frames. Cloud sessions get the transcript only. |
-| [`/scroll-craft`](.claude/skills/scroll-craft/SKILL.md) | Website builder (vendored, MIT) | Premium scroll-driven landing pages. Builds go to `websites/TruongSon-demos/scrollcraft/`. |
+| [`/build`](.claude/skills/build/SKILL.md) | Website build: pre-build, scroll-craft, liquid-glass (in that order) | Any website build. Asks preferences first, builds the scroll-driven page, then adds the glass layer. Builds go to `websites/TruongSon-demos/scrollcraft/`. |
 | [`/sales-agent`](.claude/skills/sales-agent/SKILL.md) | Cold-outreach agent (vendored, MIT) | Harvey. Not set up. Sends real email, so confirm list, copy and sending account first. |
 | [`/craft-anything`](.claude/skills/craft-anything/SKILL.md) | Study and rebuild (vendored, MIT/Apache) | Rebuild a site or app we own or may copy. Early alpha. Not set up. |
 | [video-edit-kit](.claude/skills/video-edit-kit/AGENTS.md) | Kit pack (no slash command) | Talking-head edits, Reels and Shorts. Entry: `.claude/skills/video-edit-kit/AGENTS.md`. |
@@ -128,7 +128,7 @@ The complete [skill package](.claude/skills/3d-brain/README.md) includes source 
 
 ### Using the kit in Codex
 
-All skills and packs are also installed under `.agents/skills/`. Use the skill picker (`/skills` in Codex CLI or the IDE extension), or type `$` and select `audit`, `link`, `onboard`, `level-up`, `grill-me`, `3d-brain`, `watch`, `scroll-craft`, `sales-agent`, or `craft-anything`. Codex normally detects skill updates automatically; restart it if the list does not refresh.
+All skills and packs are also installed under `.agents/skills/`. Use the skill picker (`/skills` in Codex CLI or the IDE extension), or type `$` and select `audit`, `link`, `onboard`, `level-up`, `grill-me`, `3d-brain`, `watch`, `build`, `sales-agent`, or `craft-anything`. Codex normally detects skill updates automatically; restart it if the list does not refresh.
 
 `.claude/skills/` remains the authoring source. After editing a skill, run `bash scripts/sync-codex-skills.sh <skill-name>` to regenerate its Codex copy, supporting files, and menu metadata. The onboard intake template and level-up framework travel with their skills; existing projects retain their own canonical context routes.
 
@@ -174,7 +174,7 @@ AIS-OS/
         ├── 3d-brain/                ← Skill, portable app template, docs, and validation scripts
         ├── link/SKILL.md
         ├── watch/                   ← Vendored: YouTube/video reader
-        ├── scroll-craft/            ← Vendored: scroll-driven landing pages
+        ├── build/                   ← Website build: pre-build, scroll-craft, liquid-glass (in order)
         ├── video-edit-kit/          ← Vendored kit pack: video editing
         ├── sales-agent/             ← Vendored: Harvey cold outreach (not set up)
         └── craft-anything/          ← Vendored: study and rebuild (not set up)

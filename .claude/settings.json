@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/skills/pre-build/hooks/pre-build-reminder.sh\"",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/skills/build/hooks/pre-build-reminder.sh\"",
             "timeout": 10
           }
         ]

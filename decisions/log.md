@@ -359,3 +359,13 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Why:** Son wanted the effect reusable on future client sites instead of rebuilt each time. The Chrome rules learned on Vivace (no translate on glass, sRGB filters, no lens folding, inline toggle against cache) live in its SKILL.md.
 
 **Owner:** Son
+
+## 2026-11-23 - One build skill: /build
+
+**Decision:** Merge the three website build skills into one skill, `/build` (`.claude/skills/build/`, mirrored to `.agents/skills/build/`). It runs in order: stage 1 `01-prebuild.md` (pre-build), stage 2 `02-scroll-craft.md` (scroll-craft), stage 3 `03-liquid-glass.md` (liquid-glass). The files are flat-merged into shared folders (`references/`, `scripts/`, `engine/`, `templates/`, `assets/`, `examples/`, `agents/`, `hooks/`). `/pre-build`, `/scroll-craft` and `/liquid-glass` are retired as commands, with no aliases. The pre-build hook moved to `build/hooks/`.
+
+**Why:** Son and Truong build one site at a time, and the three skills always run together in the same order. One entry point keeps the order in one place.
+
+**Alternatives considered:** Keeping three folders under one parent. Rejected: the order would still live in the docs, not in the skill.
+
+**Owner:** to confirm (Son or Truong)

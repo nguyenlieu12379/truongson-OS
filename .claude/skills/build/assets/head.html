@@ -1,0 +1,127 @@
+<!-- liquid-glass: paste into <head>, before any stylesheet that reads
+     data-theme. Inline on purpose: the toggle must not depend on a cached
+     external script. Edit the three values in CONFIG.
+
+     Needs in the page:
+       - CSS tokens for both themes (see liquid-glass.css, "Theme tokens")
+       - a button with class "lg-theme-btn" (markup in 03-liquid-glass.md)
+       - liquid-glass.css loaded
+
+     What it does:
+       - applies the saved theme before first paint (no flash)
+       - toggle click: the new theme grows as a circle out of the button, its
+         edge a glass lens that bends the page behind it (View Transitions +
+         SVG displacement, Chromium/Safari 18+); otherwise a colour fade;
+         reduced motion switches instantly -->
+<script>
+(function (d) {
+  var CONFIG = {
+    key: "site-theme",            // localStorage key, unique per site
+    colors: { light: "#F1EFEA", dark: "#161311" },   // <meta name=theme-color> per theme
+    duration: 1400                // ms for the glass sweep. 1400 reads as deliberate; 4000-7000 as a show
+  };
+  d.classList.add("js");
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+  var t = null; try { t = localStorage.getItem(CONFIG.key); } catch (e) {}
+  if (t === "dark" || t === "light") d.setAttribute("data-theme", t);
+  function now() { var x = d.getAttribute("data-theme"); return x ? x : (mq.matches ? "dark" : "light"); }
+  function render() {
+    var dark = now() === "dark";
+    d.setAttribute("data-theme-now", dark ? "dark" : "light");
+    document.querySelectorAll(".lg-theme-btn").forEach(function (b) { b.setAttribute("aria-pressed", String(dark)); });
+    if (d.hasAttribute("data-theme")) document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute("content", CONFIG.colors[dark ? "dark" : "light"]); });
+  }
+  function apply(next) {
+    d.setAttribute("data-theme", next);
+    try { localStorage.setItem(CONFIG.key, next); } catch (e) {}
+    render();
+  }
+  render();
+  document.addEventListener("DOMContentLoaded", render);
+  if (mq.addEventListener) mq.addEventListener("change", render); else if (mq.addListener) mq.addListener(render);
+
+  // ---- the glass sweep --------------------------------------------------
+  var SVGNS = "http://www.w3.org/2000/svg", filters = null;
+  function ensureFilters() {
+    if (filters) return filters;
+    var svg = document.createElementNS(SVGNS, "svg");
+    svg.setAttribute("aria-hidden", "true");
+    svg.style.cssText = "position:absolute;width:0;height:0;overflow:hidden;pointer-events:none";
+    svg.innerHTML =
+      '<filter id="lg-sweep-new" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-sweep-map-new" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>' +
+      '<feDisplacementMap id="lg-sweep-dm-new" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB" result="bent"/>' +
+      '<feColorMatrix in="map" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0.85 0 0" result="rim"/>' +
+      '<feMerge><feMergeNode in="bent"/><feMergeNode in="rim"/></feMerge></filter>' +
+      '<filter id="lg-sweep-old" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-sweep-map-old" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>' +
+      '<feDisplacementMap id="lg-sweep-dm-old" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB"/></filter>';
+    document.body.appendChild(svg);
+    return (filters = {
+      maps: [document.getElementById("lg-sweep-map-new"), document.getElementById("lg-sweep-map-old")],
+      dms: [document.getElementById("lg-sweep-dm-new"), document.getElementById("lg-sweep-dm-old")]
+    });
+  }
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function glassSwitch(next, cx, cy) {
+    var f = ensureFilters(), W = innerWidth, H = innerHeight, DUR = CONFIG.duration;
+    var band = Math.max(54, Math.min(130, Math.min(W, H) * 0.11)), push = band * 0.42, S = push * 2.2;
+    var end = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy)) + band;
+    var k = W > 900 ? 5 : 4, mw = Math.ceil(W / k), mh = Math.ceil(H / k);
+    var cv = document.createElement("canvas"); cv.width = mw; cv.height = mh;
+    var g = cv.getContext("2d"), img = g.createImageData(mw, mh), px = img.data;
+    f.maps.forEach(function (m) { m.setAttribute("width", W); m.setAttribute("height", H); });
+    f.dms.forEach(function (m) { m.setAttribute("scale", S.toFixed(1)); });
+    function paint(rad) {
+      for (var y = 0; y < mh; y++) {
+        var dy = y * k + k / 2 - cy;
+        for (var x = 0; x < mw; x++) {
+          var dx = x * k + k / 2 - cx, i = (y * mw + x) * 4;
+          var dd = Math.sqrt(dx * dx + dy * dy) || 1, u = (dd - rad) / band, R = 128, G = 128, B = 0;
+          if (u > -1 && u < 1) {
+            var bump = 1 - u * u; bump *= bump;
+            var m = push * bump;
+            R = 128 - (dx / dd) * m / S * 255; G = 128 - (dy / dd) * m / S * 255;
+            var hh = (u + 0.06) / 0.07;
+            B = Math.min(255, 150 * Math.exp(-hh * hh) + 40 * bump);   // bright rim
+          }
+          px[i] = R; px[i + 1] = G; px[i + 2] = B; px[i + 3] = 255;
+        }
+      }
+      g.putImageData(img, 0, 0);
+      var url = cv.toDataURL();
+      f.maps.forEach(function (m) { m.setAttribute("href", url); });
+    }
+    d.style.setProperty("--lg-x", cx + "px"); d.style.setProperty("--lg-y", cy + "px"); d.style.setProperty("--lg-r", "0px");
+    paint(-band);
+    d.classList.add("lg-sweeping");
+    var vt = document.startViewTransition(function () { apply(next); });
+    vt.ready.then(function () {
+      // no-op animation keeps the transition alive; frames are driven below
+      d.animate({ opacity: [1, 1] }, { duration: DUR, pseudoElement: "::view-transition-new(root)" });
+      var t0 = performance.now();
+      (function frame(t) {
+        var p = Math.min(1, (t - t0) / DUR), rad = ease(p) * end;
+        d.style.setProperty("--lg-r", rad + "px"); paint(rad);
+        if (p < 1) requestAnimationFrame(frame);
+      })(t0);
+    }).catch(function () {});
+    function done() { d.classList.remove("lg-sweeping"); ["--lg-x", "--lg-y", "--lg-r"].forEach(function (v) { d.style.removeProperty(v); }); }
+    vt.finished.then(done, done);
+  }
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest && e.target.closest(".lg-theme-btn");
+    if (!btn) return;
+    var next = now() === "dark" ? "light" : "dark";
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { apply(next); return; }
+    if (document.startViewTransition) {
+      var r = btn.getBoundingClientRect();
+      glassSwitch(next, r.left + r.width / 2, r.top + r.height / 2);
+      return;
+    }
+    d.classList.add("lg-fading"); apply(next);
+    setTimeout(function () { d.classList.remove("lg-fading"); }, 760);
+  });
+})(document.documentElement);
+</script>

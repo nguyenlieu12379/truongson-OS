@@ -1,6 +1,0 @@
-interface:
-  display_name: "Pre-build"
-  short_description: "Ask build preferences before every scroll-craft run"
-  default_prompt: "Use $pre-build to ask my build preferences and save them to PREFS.md, then continue with $scroll-craft."
-policy:
-  allow_implicit_invocation: true
