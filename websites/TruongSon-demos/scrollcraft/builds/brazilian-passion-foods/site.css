@@ -115,3 +115,9 @@ p { margin: 0; }
   .timeline ol { display: none; }
   .tl-bar { background: rgb(255 255 255 / .35); }
 }
+
+/* ---- Venom button (vendor/venom-button.js, mounted by venom-mount.js) on the main CTAs ---- */
+.venom-slot { display: inline-block; position: relative; vertical-align: middle; }
+.venom-wrap { position: absolute; pointer-events: none; }
+.venom-wrap .venom-hit, .venom-wrap .venom-fallback { pointer-events: auto; }
+.venom-replaced { display: none !important; }

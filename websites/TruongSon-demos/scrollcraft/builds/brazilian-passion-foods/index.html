@@ -138,8 +138,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/basket.jpg">
-<link rel="stylesheet" href="liquid-glass.css?v=2">
-<link rel="stylesheet" href="site.css?v=2">
+<link rel="stylesheet" href="liquid-glass.css?v=3">
+<link rel="stylesheet" href="site.css?v=3">
 </head>
 <body>
 
@@ -165,7 +165,7 @@
   <section class="cp cp-hero" data-a="0" data-b="0.07">
     <h1>Pastel, fried the minute you order.</h1>
     <p class="lede">A Brazilian food truck around Orlando. Pastel, coxinha and cheese bolinhas, made fresh at the window.</p>
-    <a class="cta lg-glass" href="https://wa.me/16893050044?text=Hi!%20I%27d%20like%20to%20order%20some%20pastel" target="_blank" rel="noopener">Order on WhatsApp</a>
+    <a class="cta" data-venom data-venom-height="54" href="https://wa.me/16893050044?text=Hi!%20I%27d%20like%20to%20order%20some%20pastel" target="_blank" rel="noopener">Order on WhatsApp</a>
   </section>
 
   <section class="cp card lg-glass" data-a="0.085" data-b="0.17"><p class="k">Fresh from the fryer</p><h2>Coxinha and cheese bolinhas.</h2></section>
@@ -183,7 +183,7 @@
   <section class="cp card lg-glass cp-order" data-a="0.935" data-b="1.01">
     <h2>Hungry? Message us.</h2>
     <p>Order ahead for pickup at the truck, or book us for catering, events and festivals.</p>
-    <a class="cta cta-big lg-glass" href="https://wa.me/16893050044?text=Hi!%20I%27d%20like%20to%20order%20some%20pastel" target="_blank" rel="noopener">Order on WhatsApp</a>
+    <a class="cta cta-big" data-venom data-venom-height="58" data-venom-width="244" href="https://wa.me/16893050044?text=Hi!%20I%27d%20like%20to%20order%20some%20pastel" target="_blank" rel="noopener">Order on WhatsApp</a>
     <p class="small">Or call <a href="tel:+16893050044">(689) 305-0044</a></p>
   </section>
 </main>
@@ -205,14 +205,15 @@
   <p class="demo">Spec demo by Son &amp; Truong. Footage and photos from @brazilianpassionfoods.</p>
 </footer>
 
-<script src="liquid-glass.js?v=2" defer></script>
-<script src="site.js?v=2" defer></script>
+<script type="importmap">{"imports":{"react":"https://esm.sh/react@18.3.1","react/jsx-runtime":"https://esm.sh/react@18.3.1/jsx-runtime","react-dom/client":"https://esm.sh/react-dom@18.3.1/client","framer":"./vendor/framer-shim.js"}}</script>
+<script type="module" src="venom-mount.js?v=1"></script>
+<script src="liquid-glass.js?v=3" defer></script>
+<script src="site.js?v=3" defer></script>
 <script>
 addEventListener("DOMContentLoaded", function () {
   if (!window.LiquidGlass) return;
-  LiquidGlass.cursorBall({ size: 26 });
+  LiquidGlass.cursorBall({ size: 40 });
   LiquidGlass.glassify(".lg-glass");
-  LiquidGlass.venom(".cta.lg-glass, .card.lg-glass", { unit: 26, reach: 4 });
 });
 </script>
 </body>
