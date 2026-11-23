@@ -6,6 +6,12 @@
       "runtimeExecutable": "powershell",
       "runtimeArgs": ["-ExecutionPolicy", "Bypass", "-File", "websites/TruongSon-demos/scrollcraft/builds/brazilian-passion-foods/serve.ps1", "-Root", "websites/TruongSon-demos/scrollcraft/builds/brazilian-passion-foods", "-Port", "4502"],
       "port": 4502
+    },
+    {
+      "name": "brazilian-taste",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": ["-ExecutionPolicy", "Bypass", "-File", "websites/TruongSon-demos/scrollcraft/builds/brazilian-taste/serve.ps1", "-Root", "websites/TruongSon-demos/scrollcraft/builds/brazilian-taste", "-Port", "4503"],
+      "port": 4503
     }
   ]
 }
