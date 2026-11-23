@@ -3,7 +3,9 @@
 
      LiquidGlass.cursorBall()          glass ball that springs after the mouse
      LiquidGlass.glassify(".lg-glass") rounded-rect glass panels and buttons
-     LiquidGlass.lensMap(...)          the displacement map both use
+     LiquidGlass.venom("button.lg-glass") glass goo that oozes out of a button,
+                                       crawls to the mouse and latches on
+     LiquidGlass.lensMap(...)          the displacement map all of these use
 
    The theme switch (toggle + circle-lens transition) lives in head.html, not
    here, so a stale cached copy of this file can never leave the toggle dead.
@@ -165,5 +167,126 @@
     return els;
   }
 
-  root.LiquidGlass = { lensMap: lensMap, filterFor: filterFor, cursorBall: cursorBall, glassify: glassify, chromium: chromium };
+  // ---- glass venom --------------------------------------------------------
+  // Glass goo oozes out of a button once the mouse is within reach, crawls
+  // toward the pointer like a slithering tongue, and latches onto it. The
+  // latched blob takes the cursor's place (the ball hides). When the mouse
+  // leaves reach the goo pulls back into the button. Only the nearest button
+  // in reach is active. Mouse/trackpad only; off with reduced motion.
+  //   reach     how far from a button's edge the crawl starts, in cursor-ball
+  //             widths (default 5)
+  //   unit      px per cursor-ball width (default 112, match cursorBall size)
+  //   headSize  px, the blob at rest (default 64)
+  //   catch     latch when the head is this many widths from the pointer (0.35)
+  function venom(selector, opt) {
+    opt = opt || {};
+    if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return null;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return null;
+    var els = Array.prototype.slice.call(document.querySelectorAll(selector || "button.lg-glass, a.lg-glass"));
+    if (!els.length) return null;
+    var unit = opt.unit || 112, reach = (opt.reach || 5) * unit, catchR = (opt.catch || 0.35) * unit;
+    var headSize = opt.headSize || 64, latchScale = unit / headSize;
+    var K = opt.stiffness || 0.07, D = opt.damping || 0.8;
+    var lensed = chromium();
+    // one SVG layer for all the tongues; no viewBox, so its units are client px
+    var svg = document.createElementNS(SVGNS, "svg");
+    svg.setAttribute("class", "lg-venom-svg"); svg.setAttribute("aria-hidden", "true");
+    document.body.appendChild(svg);
+    var ptr = { x: 0, y: 0, has: false }, active = null, running = false;
+    var list = els.map(function (el) {
+      var path = document.createElementNS(SVGNS, "path");
+      path.setAttribute("class", "lg-venom-tail"); svg.appendChild(path);
+      var head = document.createElement("div");
+      head.className = "lg-venom-head"; head.setAttribute("aria-hidden", "true");
+      head.style.setProperty("--lg-vh", headSize + "px");
+      document.body.appendChild(head);
+      if (lensed) {
+        var id = filterFor(lensMap({ width: headSize, height: headSize, band: headSize * 0.25, push: headSize * 0.14, interior: 0.22 }), headSize, headSize);
+        head.style.backdropFilter = head.style.webkitBackdropFilter = "url(#" + id + ") saturate(1.15)";
+        head.classList.add("is-lens");
+      }
+      return { el: el, path: path, head: head, r: null, cx: 0, cy: 0, d: Infinity,
+               hx: 0, hy: 0, hvx: 0, hvy: 0, amt: 0, sc: 0.3, latched: false, placed: false };
+    });
+
+    // distance from a point to a rectangle (0 when inside)
+    function rectDist(r, x, y) {
+      var dx = Math.max(r.left - x, 0, x - r.right), dy = Math.max(r.top - y, 0, y - r.bottom);
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+    // the tongue: a tapered band from the button's edge to the head, with a
+    // travelling wave so it slithers. Width and wave scale with amt (0..1).
+    function tongue(s, t) {
+      var r = s.r, hx = s.hx, hy = s.hy;
+      var ax = Math.min(Math.max(hx, r.left), r.right), ay = Math.min(Math.max(hy, r.top), r.bottom);
+      var dx = hx - ax, dy = hy - ay, L = Math.sqrt(dx * dx + dy * dy);
+      if (L < 1.5 || s.amt < 0.01) return "";
+      var ux = dx / L, uy = dy / L, nx = -uy, ny = ux;
+      var neck = Math.min(26, Math.max(12, Math.min(r.width, r.height) * 0.45));
+      var headR = headSize * 0.5 * s.sc * 0.9;
+      var amp = Math.min(24, L * 0.12) * s.amt, N = 24, left = [], right = [];
+      for (var i = 0; i <= N; i++) {
+        var u = i / N, sm = u * u * (3 - 2 * u);
+        var w = (neck + (headR - neck) * sm) * s.amt * (1 + 0.08 * Math.sin(t * 0.02 - u * 9));
+        var b = amp * Math.sin(Math.PI * u) * Math.sin(u * 6.5 - t * 0.009);
+        var px = ax + dx * u + nx * b, py = ay + dy * u + ny * b;
+        left.push(px + nx * w, py + ny * w); right.push(px - nx * w, py - ny * w);
+      }
+      var d = "M" + left[0].toFixed(1) + " " + left[1].toFixed(1);
+      for (var j = 2; j < left.length; j += 2) d += "L" + left[j].toFixed(1) + " " + left[j + 1].toFixed(1);
+      for (var k = right.length - 2; k >= 0; k -= 2) d += "L" + right[k].toFixed(1) + " " + right[k + 1].toFixed(1);
+      return d + "Z";
+    }
+
+    function frame(t) {
+      var has = ptr.has, px = ptr.x, py = ptr.y, busy = false;
+      list.forEach(function (s) {
+        s.r = s.el.getBoundingClientRect();
+        s.cx = (s.r.left + s.r.right) / 2; s.cy = (s.r.top + s.r.bottom) / 2;
+        if (!s.placed) { s.hx = s.cx; s.hy = s.cy; s.placed = true; }   // first sight: the head starts in its button
+        s.d = has ? rectDist(s.r, px, py) : Infinity;   // 0 = pointer is on the button
+      });
+      // keep the current button while in reach (with a little hysteresis), else take the nearest in reach
+      var next = (active && active.d > 0 && active.d < reach * 1.08) ? active : null;
+      if (!next) { var bestD = Infinity; list.forEach(function (s) { if (s.d > 0 && s.d < reach && s.d < bestD) { next = s; bestD = s.d; } }); }
+      active = next;
+
+      list.forEach(function (s) {
+        var on = s === active, want = on ? 1 : 0;
+        if (!on) s.latched = false;
+        else if (!s.latched && Math.hypot(s.hx - px, s.hy - py) < catchR) s.latched = true;
+        s.amt += (want - s.amt) * (on ? 0.14 : 0.1);
+        if (!on && s.amt < 0.002) s.amt = 0;
+        // idle: the head rests in the button, so it starts from the button's current centre
+        if (!on && s.amt === 0) { s.hx = s.cx; s.hy = s.cy; s.hvx = s.hvy = 0; }
+        var tx = on ? px : s.cx, ty = on ? py : s.cy;
+        var k = s.latched ? 0.22 : (on ? K : 0.1), dmp = s.latched ? 0.7 : D;
+        s.hvx = (s.hvx + (tx - s.hx) * k) * dmp; s.hvy = (s.hvy + (ty - s.hy) * k) * dmp;
+        s.hx += s.hvx; s.hy += s.hvy;
+        var scT = s.latched ? latchScale : (on ? 1 : 0.3);
+        s.sc += (scT - s.sc) * 0.18;
+        s.head.style.left = s.hx.toFixed(1) + "px"; s.head.style.top = s.hy.toFixed(1) + "px";
+        s.head.style.transform = "scale(" + s.sc.toFixed(3) + ")";
+        s.head.style.opacity = s.amt < 0.002 ? "0" : Math.min(1, s.amt * 2.5).toFixed(3);
+        s.path.setAttribute("d", tongue(s, t));
+        if (Math.abs(want - s.amt) > 0.002 || Math.abs(s.hvx) + Math.abs(s.hvy) > 0.05 ||
+            Math.abs(tx - s.hx) + Math.abs(ty - s.hy) > 0.5 || Math.abs(scT - s.sc) > 0.002) busy = true;
+      });
+      var anyLatched = list.some(function (s) { return s.latched; });
+      document.documentElement.classList.toggle("lg-venom-latched", anyLatched);
+      if (busy) requestAnimationFrame(frame); else running = false;
+    }
+    function kick() { if (!running) { running = true; requestAnimationFrame(frame); } }
+
+    document.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse") return;
+      ptr.x = e.clientX; ptr.y = e.clientY; ptr.has = true; kick();
+    }, { passive: true });
+    document.documentElement.addEventListener("pointerleave", function () { ptr.has = false; kick(); });
+    window.addEventListener("blur", function () { ptr.has = false; kick(); });
+    window.addEventListener("scroll", kick, { passive: true });
+    return els;
+  }
+
+  root.LiquidGlass = { lensMap: lensMap, filterFor: filterFor, cursorBall: cursorBall, glassify: glassify, venom: venom, chromium: chromium };
 })(window);

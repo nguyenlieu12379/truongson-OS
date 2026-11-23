@@ -170,7 +170,7 @@
 </header>
 <main class="wrap">
   <h1>Clear glass,<br><em>bent light.</em></h1>
-  <p class="note">Move the mouse: the ball bends what is under it. Press the moon: the new theme grows from the button behind a glass edge. The buttons and panel below refract the stripes behind them.</p>
+  <p class="note">Move the mouse: the ball bends what is under it. Press the moon: the new theme grows from the button behind a glass edge. Bring the mouse near a button below: its glass oozes out, crawls to the pointer and latches on. The panel refracts the stripes behind it.</p>
   <div class="stage">
     <div class="row">
       <button class="lg-glass" type="button">Order ahead</button>
@@ -183,6 +183,7 @@
 <script>
   LiquidGlass.glassify(".lg-glass");
   LiquidGlass.cursorBall();
+  LiquidGlass.venom("button.lg-glass, a.lg-glass");
 </script>
 </body>
 </html>
