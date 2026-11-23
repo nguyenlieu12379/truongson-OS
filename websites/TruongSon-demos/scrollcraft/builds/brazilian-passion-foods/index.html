@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#FFF6DF">
+<meta name="theme-color" content="#F6F2E9">
 <title>Brazilian Passion Foods · Pastel in Orlando</title>
-<meta name="description" content="Brazilian pastel, coxinha and bolinha de queijo, fried fresh at our food truck around Orlando. Order on WhatsApp.">
+<meta name="description" content="Brazilian pastel, coxinha and cheese bolinhas, fried to order at our food truck around Orlando. Order on WhatsApp.">
 <!-- liquid-glass: paste into <head>, before any stylesheet that reads
      data-theme. Inline on purpose: the toggle must not depend on a cached
      external script. Edit the three values in CONFIG.
@@ -26,7 +26,7 @@
 (function (d) {
   var CONFIG = {
     key: "bpf-theme",            // localStorage key, unique per site
-    colors: { light: "#FFF6DF", dark: "#0B1A12" },   // <meta name=theme-color> per theme
+    colors: { light: "#F6F2E9", dark: "#0F1210" },   // <meta name=theme-color> per theme
     duration: 1400                // ms for the glass sweep. 1400 reads as deliberate; 4000-7000 as a show
   };
   d.classList.add("js");
@@ -136,140 +136,84 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="liquid-glass.css?v=1">
-<link rel="stylesheet" href="site.css?v=1">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/basket.jpg">
+<link rel="stylesheet" href="liquid-glass.css?v=2">
+<link rel="stylesheet" href="site.css?v=2">
 </head>
 <body>
 
 <header class="bar">
-  <a class="brand" href="#top" aria-label="Brazilian Passion Foods, back to top">
-    <span class="mark" aria-hidden="true"><b>br</b><i>foods</i></span>
-    <span class="brand-name">Brazilian Passion Foods</span>
-  </a>
+  <a class="brand" href="#" data-go="0" aria-label="Brazilian Passion Foods, back to the start"><i aria-hidden="true"></i><span class="bn">Brazilian Passion Foods</span></a>
   <div class="bar-end">
     <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
       <svg class="lg-i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
       <svg class="lg-i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
     </button>
-    <a class="cta cta-sm lg-glass" href="https://wa.me/16893050044?text=Oi!%20I%27d%20like%20to%20order%20some%20pastel" target="_blank" rel="noopener">Order on WhatsApp</a>
+    <a class="cta cta-sm lg-glass" href="https://wa.me/16893050044?text=Hi!%20I%27d%20like%20to%20order%20some%20pastel" target="_blank" rel="noopener">Order on WhatsApp</a>
   </div>
 </header>
 
-<main id="top">
+<!-- One stage, one camera: their own kitchen clip, scrubbed by the scroll -->
+<div class="stage" aria-hidden="true">
+  <canvas class="ambient" width="27" height="48"></canvas>
+  <div class="reel"><canvas class="reel-canvas"></canvas><div class="loupe"></div></div>
+</div>
 
-  <!-- 1 BITE: the word gets eaten, the truck shows through -->
-  <section class="act bite" data-act="bite" aria-labelledby="h-bite">
-    <div class="stage">
-      <img class="bite-back" src="assets/truck-side.jpg" alt="" width="480" height="854">
-      <svg class="bite-word" viewBox="0 0 1200 360" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-        <defs>
-          <mask id="bites" maskUnits="userSpaceOnUse" x="-4000" y="-4000" width="9200" height="8400">
-            <rect x="-4000" y="-4000" width="9200" height="8400" fill="#fff"/>
-            <g id="bite-holes" fill="#000"></g>
-          </mask>
-        </defs>
-        <g mask="url(#bites)">
-          <rect class="bite-panel" x="-4000" y="-4000" width="9200" height="8400"/>
-          <text x="600" y="300" text-anchor="middle">PASTEL</text>
-        </g>
-      </svg>
-      <figure class="sticker">
-        <img src="assets/pastel-basket.jpg" alt="A pile of golden, bubbly fried pastéis" width="301" height="352">
-      </figure>
-      <div class="bite-copy">
-        <h1 id="h-bite">The best Brazilian pastel in Orlando.</h1>
-        <p class="pt" lang="pt-BR">O melhor pastel do Brasil, agora em Orlando.</p>
-        <a class="cta lg-glass" href="https://wa.me/16893050044?text=Oi!%20I%27d%20like%20to%20order%20some%20pastel" target="_blank" rel="noopener">Order on WhatsApp</a>
-      </div>
-    </div>
+<main class="track" id="track">
+  <!-- copy blocks: data-a / data-b are the scroll range (0..1) where each one shows -->
+  <section class="cp cp-hero" data-a="0" data-b="0.07">
+    <h1>Pastel, fried the minute you order.</h1>
+    <p class="lede">A Brazilian food truck around Orlando. Pastel, coxinha and cheese bolinhas, made fresh at the window.</p>
+    <a class="cta lg-glass" href="https://wa.me/16893050044?text=Hi!%20I%27d%20like%20to%20order%20some%20pastel" target="_blank" rel="noopener">Order on WhatsApp</a>
   </section>
 
-  <!-- 2 TRUCK: quiet, real -->
-  <section class="act truck" data-act="truck" aria-labelledby="h-truck">
-    <div class="truck-media"><img src="assets/truck-window.jpg" alt="The green and yellow br foods truck with its serving window open" width="640" height="886" loading="lazy"></div>
-    <div class="truck-copy">
-      <h2 id="h-truck">Fried to order, right at the window.</h2>
-      <p>Pastel is Brazil's street food. A thin, crisp shell, stuffed and fried the second you ask for it. We park it around Orlando so you don't need a plane ticket to São Paulo.</p>
-    </div>
+  <section class="cp card lg-glass" data-a="0.085" data-b="0.17"><p class="k">Fresh from the fryer</p><h2>Coxinha and cheese bolinhas.</h2></section>
+  <section class="cp card lg-glass" data-a="0.19" data-b="0.30"><p class="k">Made by hand</p><h2>Every pastel is filled one at a time. This one gets shrimp.</h2></section>
+  <section class="cp card lg-glass" data-a="0.32" data-b="0.45"><p class="k">Hot oil</p><h2>In it goes, until the crust bubbles up.</h2></section>
+  <section class="cp card lg-glass" data-a="0.47" data-b="0.56"><p class="k">Out of the oil</p><h2>Golden, crackly, still hot.</h2></section>
+  <section class="cp card lg-glass cp-loupe" data-a="0.585" data-b="0.68"><p class="k">Look closer</p><h2>That's what a real pastel crust looks like.</h2><p class="hint">Move over the photo.</p></section>
+  <section class="cp card lg-glass" data-a="0.70" data-b="0.79"><p class="k">Sweet ones too</p><h2>Nutella with M&amp;Ms. Or Nutella and strawberry.</h2></section>
+  <section class="cp card lg-glass" data-a="0.815" data-b="0.915">
+    <p class="k">Find the truck</p>
+    <h2>Somewhere new around Orlando most days.</h2>
+    <ul class="stops"><li>Lake Nona</li><li>Winter Garden</li><li>Dr Phillips</li><li>Windermere</li><li>Clermont</li><li>Kissimmee</li><li>Davenport</li><li>Lake Buena Vista</li></ul>
+    <p class="small">Today's spot goes up on <a href="https://www.instagram.com/brazilianpassionfoods/" target="_blank" rel="noopener">Instagram</a>.</p>
   </section>
-
-  <!-- 3 FRY: the peak, your scroll is the fryer -->
-  <section class="act fry" data-act="fry" aria-labelledby="h-fry">
-    <div class="stage fry-stage">
-      <div class="pan" aria-hidden="true">
-        <div class="oil"></div>
-        <div class="bubbles"></div>
-      </div>
-      <div class="dough"><img src="assets/pastel-basket.jpg" alt="" width="301" height="352"></div>
-      <div class="cut"><img src="assets/pastel-beef.jpg" alt="A pastel broken open, full of seasoned ground beef" width="713" height="445" loading="lazy"></div>
-      <h2 id="h-fry" class="sr">How a pastel is made</h2>
-      <ol class="fry-steps">
-        <li data-from="0" data-to=".24">Fresh dough, stuffed by hand.</li>
-        <li data-from=".24" data-to=".52">Into the hot oil.</li>
-        <li data-from=".52" data-to=".74">Bubbly. Golden. Loud.</li>
-        <li data-from=".74" data-to="1.1">Now crack it open.</li>
-      </ol>
-      <div class="fry-meter" aria-hidden="true"><span></span></div>
-    </div>
+  <section class="cp card lg-glass cp-order" data-a="0.935" data-b="1.01">
+    <h2>Hungry? Message us.</h2>
+    <p>Order ahead for pickup at the truck, or book us for catering, events and festivals.</p>
+    <a class="cta cta-big lg-glass" href="https://wa.me/16893050044?text=Hi!%20I%27d%20like%20to%20order%20some%20pastel" target="_blank" rel="noopener">Order on WhatsApp</a>
+    <p class="small">Or call <a href="tel:+16893050044">(689) 305-0044</a></p>
   </section>
-
-  <!-- 4 MENU: lateral = options -->
-  <section class="act menu" data-act="menu" aria-labelledby="h-menu">
-    <div class="stage menu-stage">
-      <h2 id="h-menu">Pick your pastel.</h2>
-      <div class="track">
-        <article class="card lg-glass">
-          <img src="assets/pastel-beef.jpg" alt="Beef pastel, cut open" width="713" height="445" loading="lazy">
-          <h3>Savory pastel</h3>
-          <p>Seasoned beef. Melty cheese. The classics Brazilians grew up on.</p>
-        </article>
-        <article class="card lg-glass">
-          <img src="assets/pastel-sweet.jpg" alt="Sweet pastel with chocolate and strawberries" width="418" height="445" loading="lazy">
-          <h3>Sweet pastel</h3>
-          <p>Nutella and strawberry. Or Nutella and M&amp;Ms, if you're feeling it.</p>
-        </article>
-        <article class="card card-type lg-glass">
-          <div class="type-art" aria-hidden="true"><span>coxinha</span><span>bolinha<br>de queijo</span></div>
-          <h3>Coxinha + bolinha de queijo</h3>
-          <p>Crispy chicken coxinha and cheese croquettes. Order a few for the table.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5 BOARD: where the truck goes -->
-  <section class="act board" data-act="board" aria-labelledby="h-board">
-    <h2 id="h-board">Where's the truck?</h2>
-    <p class="board-lede">Every day somewhere new. These are some of our regular stops.</p>
-    <ul class="stops">
-      <li>Lake Nona</li><li>Winter Garden</li><li>Dr Phillips</li><li>Windermere</li>
-      <li>Clermont</li><li>Davenport</li><li>Kissimmee</li><li>Lake Buena Vista</li>
-      <li>Winter Springs</li><li>Oakland</li>
-    </ul>
-    <p class="board-foot">Today's spot goes up on <a href="https://www.instagram.com/brazilianpassionfoods/" target="_blank" rel="noopener">Instagram @brazilianpassionfoods</a>.</p>
-  </section>
-
-  <!-- 6 BOOK: resolve and hold -->
-  <section class="act book" data-act="book" aria-labelledby="h-book">
-    <img class="book-photo" src="assets/truck-side.jpg" alt="Side of the br foods truck: pastel, coxinha, bolinha de queijo" width="480" height="854" loading="lazy">
-    <div class="book-card lg-glass">
-      <h2 id="h-book">Hungry now, or throwing a party?</h2>
-      <p>We bring the truck to catering, events and festivals. Message us for an order or a date.</p>
-      <a class="cta cta-big lg-glass" href="https://wa.me/16893050044?text=Oi!%20I%27d%20like%20to%20order%20some%20pastel" target="_blank" rel="noopener">Order on WhatsApp</a>
-      <p class="book-alt">Or call <a href="tel:+16893050044">(689) 305-0044</a></p>
-    </div>
-  </section>
-
 </main>
+
+<nav class="timeline" aria-label="Jump to">
+  <div class="tl-bar"><span class="tl-fill"></span></div>
+  <ol>
+    <li><button type="button" data-go="0.10">Fryer</button></li>
+    <li><button type="button" data-go="0.36">Hot oil</button></li>
+    <li><button type="button" data-go="0.62">Up close</button></li>
+    <li><button type="button" data-go="0.74">Sweet</button></li>
+    <li><button type="button" data-go="0.86">The truck</button></li>
+    <li><button type="button" data-go="1">Order</button></li>
+  </ol>
+</nav>
 
 <footer class="foot">
   <p>Brazilian Passion Foods · Orlando, FL · <a href="https://www.instagram.com/brazilianpassionfoods/" target="_blank" rel="noopener">@brazilianpassionfoods</a></p>
-  <p class="demo">Spec demo by Son &amp; Truong. Photos from @brazilianpassionfoods.</p>
+  <p class="demo">Spec demo by Son &amp; Truong. Footage and photos from @brazilianpassionfoods.</p>
 </footer>
 
-<script src="liquid-glass.js?v=1" defer></script>
-<script src="site.js?v=1" defer></script>
-<script>addEventListener("DOMContentLoaded", function () { if (window.LiquidGlass) { LiquidGlass.cursorBall(); LiquidGlass.glassify(".lg-glass"); } });</script>
+<script src="liquid-glass.js?v=2" defer></script>
+<script src="site.js?v=2" defer></script>
+<script>
+addEventListener("DOMContentLoaded", function () {
+  if (!window.LiquidGlass) return;
+  LiquidGlass.cursorBall({ size: 26 });
+  LiquidGlass.glassify(".lg-glass");
+  LiquidGlass.venom(".cta.lg-glass, .card.lg-glass", { unit: 26, reach: 4 });
+});
+</script>
 </body>
 </html>

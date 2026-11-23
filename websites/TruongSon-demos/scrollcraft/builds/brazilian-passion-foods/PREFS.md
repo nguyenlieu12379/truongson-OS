@@ -1,23 +1,26 @@
 # Pre-build preferences: Brazilian Passion Foods
 
-Asked 2026-11-23. Not asked: the user said "dont ask me anything, autopilot on". Every answer is a standing default or **authored**.
+Asked 2026-11-23 (after a first build that skipped this step). Answered by: Son.
 
-| # | Topic | Answer | Default used? |
+| # | Topic | Answer (their words) | Default used? |
 |---|---|---|---|
-| 1 | Client and folder | Brazilian Passion Foods ("br foods"), pastel food truck, Orlando FL. `builds/brazilian-passion-foods/` | yes |
-| 2 | Photos | Their Instagram, viewed signed in. No people. Only 2 clean real photos exist (truck); pastel close-ups cropped from their own flyers with the text cut out. No generated images | yes |
-| 3 | Vibe | Match their IG: Brazil green and yellow, chunky poster type, fried and crunchy | yes |
-| 4 | Hero | The pastel. Giant "PASTEL" word, the scroll takes bites out of it, their truck shows through the bites. Pastel photo as a sticker in front | authored |
-| 5 | Journey | Authored, see BRIEF.md | authored |
-| 6 | Feeling + moment | Authored, see BRIEF.md | authored |
-| 7 | Signature move | Scroll fries the pastel | authored |
-| 8 | Style | Playful poster, fit their IG | yes |
-| 9 | World | Separate scenes (their feed is flyers, not one place). Changed from the standing "unbroken" to clear the fingerprint gate against Delícias | no |
-| 10 | UI material | Liquid glass: clear lens, no blur, no frost, cursor ball | yes |
-| 11 | Motion | Smooth first. Real phone before the client sees it | yes |
-| 12 | Facts | Only from their IG and truck wrap. WhatsApp (689) 305-0044 is printed on the truck with the WhatsApp icon | yes |
-| 13 | The one action | Order on WhatsApp | yes |
-| 14 | Deploy | Local only. noindex | yes |
+| 1 | Client and folder | "yes" | yes |
+| 2 | Photos | "ok" (their Instagram, show picks, no people, no generated) | yes |
+| 3 | Vibe | "clean, match brand accent color, but not too obvious like the one u do yourself" | no |
+| 4 | Hero | "their food (must be high res)" | no |
+| 5 | Journey | "you decide" | authored |
+| 6 | Feeling + moment | "street style or whatever u feels right" | authored |
+| 7 | Signature move | "u make one, but always stay away from the plastic graphics objects at all cost" | authored |
+| 8 | Style | "minimal, but not too obvious blank spaces" | no |
+| 9 | World | "unbroken (i usually prefer this)" | yes |
+| 10 | UI material | "use the liquid glass, venom effects for buttons and text boxes, cursor ball (make this small)" | no |
+| 11 | Motion | "yes" | yes |
+| 12 | Facts / language | "plain english" | no |
+| 13 | The one action | "Order on WhatsApp" | yes |
+| 14 | Deploy | "live on github pages" | no |
 
 ## Changes from standing preferences
-- World: separate scenes instead of unbroken (this build only).
+- Never use drawn "plastic" graphic objects (CSS/SVG props like pans, bubbles, fake food). Real photos and footage only. Applies to all builds.
+- Venom on text boxes too, not only buttons.
+- Cursor ball smaller than 56px.
+- Minimal, with brand colour as a quiet accent, not a full-bleed theme.

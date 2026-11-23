@@ -1,16 +1,15 @@
 # Brazilian Passion Foods (spec demo)
 
-Pastel food truck, Orlando. Local only, noindex. Brief: `BRIEF.md`. Answers: `PREFS.md`. Photos: `assets/source/SOURCES.md`.
+Pastel food truck, Orlando. Live (noindex): https://nguyenlieu12379.github.io/truongson-OS/brazilian-passion-foods/ (deploys on push to main).
 
-Run (or start "bpf" from `.claude/launch.json`):
+One unbroken stage: the scroll scrubs their own kitchen clip, holds on full-res photos, ends at the truck and the WhatsApp button. Brief: `BRIEF.md`. Son's answers: `PREFS.md`. Sources: `assets/source/SOURCES.md`.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File serve.ps1 -Root . -Port 4502
-```
+Run locally: `powershell -ExecutionPolicy Bypass -File serve.ps1 -Root . -Port 4502` (or "bpf" in `.claude/launch.json`). Test switch: `?snap` turns off scroll smoothing.
 
-Files: `index.html` (markup + inline theme script), `site.css` (tokens at top), `site.js` (bites, fryer, menu pan, board), `liquid-glass.*` (glass kit copy).
+Edit:
+- Copy: the `.cp` blocks in `index.html`; `data-a`/`data-b` are the scroll range (0 to 1).
+- What the camera shows: `shot()` and the `VK` keyframes in `site.js`.
 
 Before showing the client:
-- Confirm WhatsApp (689) 305-0044 (it's on the truck wrap with the WhatsApp icon). Directories also list (407) 307-4129 and 407-271-3953.
-- Pastel close-ups are crops from their flyers and may be stock. Ask for real photos.
-- Not checked on a real phone yet.
+- Confirm WhatsApp (689) 305-0044.
+- Check on a real phone (frame scrub, 7.9 MB of frames).

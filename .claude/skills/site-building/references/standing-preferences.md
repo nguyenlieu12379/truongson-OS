@@ -10,6 +10,8 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 ## Photos and assets
 - Real photos only, from the client's own Instagram (via Claude in Chrome, signed in). No generated images unless asked.
 - No photos of customers, their families or kids. No graphics with text baked in. No cut-out "stock looking" product shots.
+- Never drawn "plastic" graphic objects (CSS/SVG props such as pans, bubbles, cartoon food). Son, 2026-11-23: "always stay away from the plastic graphics objects at all cost". Effects must come from real photos or footage.
+- Hero food must be high resolution. If the grid only gives 640px, get the full post image or a frame from their video.
 - Keep a `SOURCES.md` with the post URL for every photo.
 
 ## Hero
