@@ -415,7 +415,7 @@ Recorded as a must-have checklist in `websites/README.md`.
 
 **Revisit when:** emailing dozens of owners a week becomes the bottleneck.
 
-**Owner:** to confirm (Son or Truong)
+**Owner:** Son
 
 ## 2026-11-23 - Prospect-finding pipeline shelved
 
@@ -425,4 +425,4 @@ Recorded as a must-have checklist in `websites/README.md`.
 
 **Revisit with:** the spec from this run (WhatsApp required, social-only "websites" count as no site, L2 review, KPI = confirmed WhatsApp prospects per hour).
 
-**Owner:** to confirm (Son or Truong)
+**Owner:** Son
