@@ -25,12 +25,23 @@ from harvey.untrusted import UNTRUSTED_RULE, fence
 
 logger = logging.getLogger("harvey.humanize")
 
-SKILL_PATH = Path(
-    os.getenv(
-        "HARVEY_HUMANIZER_SKILL",
-        str(Path.home() / ".claude" / "skills" / "humanizer" / "SKILL.md"),
-    )
-)
+# TruongSon local change: prefer the repo's vendored no-ai-slop skill
+# (.claude/skills/no-ai-slop, a sibling of this pack), then the operator's
+# ~/.claude/skills/humanizer. HARVEY_HUMANIZER_SKILL overrides both.
+NO_AI_SLOP_PATH = Path(__file__).resolve().parents[2] / "no-ai-slop" / "SKILL.md"
+HOME_HUMANIZER_PATH = Path.home() / ".claude" / "skills" / "humanizer" / "SKILL.md"
+
+
+def _default_skill_path() -> Path:
+    env = os.getenv("HARVEY_HUMANIZER_SKILL")
+    if env:
+        return Path(env)
+    if NO_AI_SLOP_PATH.is_file():
+        return NO_AI_SLOP_PATH
+    return HOME_HUMANIZER_PATH
+
+
+SKILL_PATH = _default_skill_path()
 MERGE_VAR = re.compile(r"\{\{\s*\w+\s*\}\}")
 MAX_GROWTH_WORDS = 2  # a rewrite may not be more than two words longer
 # A rewrite that talks about itself instead of being the email.
@@ -43,16 +54,28 @@ def humanizer_enabled(config) -> bool:
 
 
 def load_skill(path: Path | None = None) -> str:
-    """The skill's instructions without its YAML frontmatter, or ""."""
+    """The skill's instructions without its YAML frontmatter, or "".
+
+    An ``eval.md`` beside the skill (no-ai-slop ships one) is appended as
+    the self-check the skill's workflow asks for.
+    """
+    skill_path = path or SKILL_PATH
     try:
-        text = read_user_text(path or SKILL_PATH)
+        text = read_user_text(skill_path)
     except OSError:
         return ""
     if text.startswith("---"):
         end = text.find("\n---", 3)
         if end != -1:
             text = text[end + 4:]
-    return text.strip()
+    text = text.strip()
+    try:
+        checks = read_user_text(Path(skill_path).with_name("eval.md")).strip()
+    except OSError:
+        checks = ""
+    if text and checks:
+        text += "\n\n" + checks
+    return text
 
 
 def _acceptable(original: dict, rewrite) -> bool:
@@ -105,8 +128,9 @@ async def _humanize_one(brain, skill: str, draft: dict, agent: str) -> dict:
 
 ---
 
-Apply the Humanizer instructions above to the cold-email draft below. It is
-a short plain-text business email, so return email text only.
+Apply the editing instructions above to the cold-email draft below. It is
+a short plain-text business email, so return email text only: no "What
+changed" section, no commentary.
 
 Hard limits on the rewrite, on top of the instructions above:
 - Keep every merge variable such as {{{{first_name}}}} or {{{{company}}}} exactly as written.

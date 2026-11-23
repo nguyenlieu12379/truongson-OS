@@ -377,3 +377,32 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Why:** Son asked for the clearer name.
 
 **Owner:** to confirm (Son or Truong)
+
+## 2026-11-23 - Harvey sends from trgnst1@gmail.com for now
+
+**Decision:** Harvey's Gmail provider is wired to the trg nst Google account (trgnst1@gmail.com) through a Google Cloud project `harvey-sales-agent` on that account. OAuth app stays in Testing mode with that address as the only test user. Approval mode stays on; autopilot off.
+
+**Why:** Fastest way to get Harvey running for testing on an account that isn't the borrowed claude.ai one. Free: no billing account.
+
+**Alternatives considered:** A Google Workspace mailbox on a separate sending domain (about $7/mo plus the domain). Better deliverability and no 7-day re-login; do this before real volume.
+
+**Owner:** to confirm (Son or Truong)
+
+## 2026-11-23 - WhatsApp as an outreach channel, assisted only
+
+**Decision:** WhatsApp is an outreach channel for businesses that list a phone but no email (first use: Delícias, 2026-11-23). Harvey gets an assisted WhatsApp queue: it stages one message per business, a person approves it, opens the wa.me link and presses send, then marks it sent. Cap 15 new chats a day. No automated sending.
+
+**Why:** Many F&B shops take orders only by text or WhatsApp and publish no email. Automating a personal WhatsApp account breaks WhatsApp's terms and gets the number banned; the WhatsApp Business API forbids cold first messages.
+
+**Alternatives considered:** WhatsApp Business API (rejected: opt-in only, no cold outreach). Scripted WhatsApp Web sending (rejected: ban risk on Son's number).
+
+**Owner:** Son
+
+## 2026-11-23 - WhatsApp removed as an outreach channel
+
+**Decision:** Reverses "WhatsApp as an outreach channel, assisted only" (same day). WhatsApp is taken out completely: Harvey's WhatsApp queue, follow-ups and `harvey inbox` command, the WhatsApp guide, the connections row, and the scheduled morning WhatsApp check. Harvey stays email only.
+
+**Why:** Son asked to remove WhatsApp from the repo, the database and the scheduled tasks.
+
+**Owner:** Son
+

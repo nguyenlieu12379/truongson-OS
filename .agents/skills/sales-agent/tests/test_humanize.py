@@ -142,3 +142,9 @@ async def test_rewrite_may_not_grow_past_the_draft(skill):
     draft = {"subject": "closing the loop", "body": " ".join(["word"] * 39)}
     longer = {"subject": "closing the loop", "body": " ".join(["word"] * 45)}
     assert await humanize(FakeBrain(longer), [draft], "writer", path=skill, enabled=True) == [draft]
+
+
+def test_eval_beside_skill_is_appended(skill):
+    # TruongSon: no-ai-slop ships eval.md next to SKILL.md as its self-check.
+    skill.with_name("eval.md").write_text("# Eval\nNo binary contrasts?\n")
+    assert load_skill(skill) == "# Humanizer\nCut the tells.\n\n# Eval\nNo binary contrasts?"

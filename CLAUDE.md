@@ -28,7 +28,7 @@ Read `references/3ms-framework.md` once. It's how Son and Truong think about AI 
 Each pack is a full copy of one Sunaii kit with its own `VENDORED.md` (source and pinned commit). Read the entry point first, then the pack's own files. The website build skills live under `/site-building` above.
 
 - **video-edit-kit:** talking-head editing, Reels and Shorts, HyperFrames motion graphics. Use for video or Instagram content. Path: `.claude/skills/video-edit-kit/`. Entry: `.claude/skills/video-edit-kit/AGENTS.md`, then `docs/WORKFLOW.md`
-- **sales-agent (Harvey), `/sales-agent`:** cold-outreach agent. Every draft gets a no-ai-slop editing pass (`writer.humanizer: true`). Not set up yet. Use only when Son or Truong asks to set it up or run it. It sends real email, so confirm the list, copy, and sending account first. Path: `.claude/skills/sales-agent/`. Entry: `.claude/skills/sales-agent/SKILL.md`, then the pack's `CLAUDE.md`
+- **sales-agent (Harvey), `/sales-agent`:** cold-outreach agent. Every draft gets a no-ai-slop editing pass (`writer.humanizer: true`). Gmail connected (trg nst, Testing mode), not trained yet. Use only when Son or Truong asks to set it up or run it. It sends real email, so confirm the list, copy, and sending account first. Path: `.claude/skills/sales-agent/`. Entry: `.claude/skills/sales-agent/SKILL.md`, then the pack's `CLAUDE.md`
 - **craft-anything (storytold, MIT/Apache), `/craft-anything`:** study a website, web app or app, then rebuild our own version. Early alpha. Not set up. Only for software we own or have permission to copy; never a competitor's. Path: `.claude/skills/craft-anything/`. Entry: `.claude/skills/craft-anything/SKILL.md`, then the pack's `README.md`
 
 ## Where things live

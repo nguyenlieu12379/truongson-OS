@@ -1,6 +1,6 @@
 ---
 name: sales-agent
-description: Use when Son or Truong asks to set up, run, or check Harvey, the cold-outreach agent (finds prospects, writes and sends cold email, sorts replies, books meetings). Also when they say "sales agent", "Harvey", "cold email campaign", or "find prospects". Not set up yet. It sends real email, so never send or turn on autopilot without explicit approval.
+description: Use when Son or Truong asks to set up, run, or check Harvey, the cold-outreach agent (finds prospects, writes and sends cold email, sorts replies, books meetings). Also when they say "sales agent", "Harvey", "cold email campaign", or "find prospects". Gmail connected, not trained yet. It sends real email, so never send or turn on autopilot without explicit approval.
 ---
 
 # sales-agent (Harvey)
@@ -9,7 +9,7 @@ Entry point for the vendored Harvey pack (source and commit in `VENDORED.md`).
 
 ## Status
 
-Added and linked. Not set up: no venv, no `.env`, no mail account. Decision: `decisions/log.md`, 2026-11-20 "Outreach tools: sales-agent in, REA out".
+Partly set up (2026-11-23). Done: venv with Python 3.12 (main checkout only), `.env` with Gmail OAuth keys, `harvey gmail auth` as trgnst1@gmail.com (`harvey gmail test` passes). Google Cloud project `harvey-sales-agent` on that account, OAuth app in Testing mode, so the Gmail login expires every 7 days: re-run `harvey gmail auth`. Not done: product training, signals, discovery, warmup, verifier keys. trgnst1@gmail.com is a personal Gmail, fine for testing; real outreach should move to a Workspace mailbox on a separate domain. Decision: `decisions/log.md`, 2026-11-20 "Outreach tools: sales-agent in, REA out".
 
 ## Rules
 

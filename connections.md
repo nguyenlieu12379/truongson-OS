@@ -13,6 +13,8 @@ Registry of every system your AIOS can reach. Filled by `/onboard` from Q4-Q7 an
 | 5 | Project / task tracking | Notion (assumed, confirm) | not yet connected | — | — |
 | 6 | Meeting intelligence | Google Meet (no recorder yet) | not yet connected | — | — |
 | 7 | Knowledge / files | Notion | not yet connected | — | — |
+| 9 | Cold outreach (Harvey) | Gmail API, trgnst1@gmail.com | script (`.claude/skills/sales-agent/`) | OAuth Desktop client in `.env` + `data/gmail_token.json`; Testing mode, re-auth every 7 days | 2026-11-23 |
+| 10 | Outreach inbox (email) | Google Sheet "Outreach Inbox" in trgnst1@gmail.com Drive: https://docs.google.com/spreadsheets/d/1_rxwslAhU_OJ_2xw9rqN2aEsuCxCVVJyJFbRFVLK6Qo/edit (tab Email) | manual / Claude in Chrome | trg nst Google login | 2026-11-23 |
 | 8 | Video watching (YouTube, files) | yt-dlp + ffmpeg via `.claude/skills/watch/` | script | none (local engine); optional free `GEMINI_API_KEY` for visuals in cloud | 2026-11-20 |
 
 **Mechanism options:** `mcp` (MCP server), `script` (Python/Bash hitting an API, in `scripts/`), `export` (CSV/JSON dump pipeline), `key+ref` (`.env` key + `references/{tool}-api.md` guide), `not yet connected`.

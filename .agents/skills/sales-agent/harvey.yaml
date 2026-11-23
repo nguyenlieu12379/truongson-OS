@@ -145,5 +145,9 @@ compliance:
 # markdown file. When set they replace the built-in shape (email 1 under 75
 # words, an observation and a question, no pitch). The send gate still holds
 # every email to 220 words and one link. skills/email_rules.md is gitignored.
-# writer:
+# TruongSon: humanizer is on. Every draft gets one editing pass with the
+# repo's no-ai-slop skill (.claude/skills/no-ai-slop/SKILL.md + eval.md).
+# Set HARVEY_HUMANIZER_SKILL to use a different skill file.
+writer:
+  humanizer: true
 #   email_rules: "skills/email_rules.md"
