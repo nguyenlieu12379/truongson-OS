@@ -426,3 +426,11 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Revisit with:** the spec from this run (WhatsApp required, social-only "websites" count as no site, L2 review, KPI = confirmed WhatsApp prospects per hour).
 
 **Owner:** Son
+
+## 2026-11-23 - Site builds: 60/30/10 colour split, no venom, no letters on food
+
+**Decision:** Pre-build now asks for a 60/30/10 colour split every time (60% background, 30% most type and objects, 10% the one must-see thing, the CTA), taken from the client's own logo or sign. Glass venom strands are removed from the liquid-glass stage and kit. Food photos are never covered by letters; type sits around them.
+
+**Why:** Son's answers on the Brazilian Taste pre-build, after the Brazilian Passion Foods build was rejected for washed colours and layers with no relationship.
+
+**Owner:** Son

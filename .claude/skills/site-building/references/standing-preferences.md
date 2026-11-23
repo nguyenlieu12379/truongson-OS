@@ -15,16 +15,19 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - Keep a `SOURCES.md` with the post URL for every photo.
 
 ## Hero
+- Food in the hero is never covered by letters. Type can sit around it, not over it (Son, 2026-11-23).
 - The hero is the product the client posts most, a real cutout (not a 3D or low-poly replica).
 - The product sits one layer in front of a giant brand word. The letters it covers animate (Delícias: they wobble with the product).
 - The headline stays readable.
 
 ## Style and world
+- Colour split 60/30/10 (Son, 2026-11-23): 60% background, 30% most type and objects, 10% the one must-see thing (the CTA). Taken from the client's own logo, sign or avatar. Ask it in pre-build every time.
 - Match the client's Instagram vibe (Delícias: "soft, cute, juicy", playful pink).
 - One unbroken world (one fixed stage, the camera travels, no sections).
 - Four must-haves from `websites/README.md`: one engineered peak, layered hero, real photos, no AI tells.
 
 ## UI material
+- No glass venom strands (Son removed them, 2026-11-23).
 - Liquid glass on every block (buttons, text cards, nav): a clear refractive lens that magnifies and bends what's behind it along the edges and corners, with a thin specular rim. No blur, no frost.
 - A lens follows the cursor and bends the light under it; the rim light follows the cursor; buttons lean toward it.
 - Buttons may keep a colour tint so the label reads.
