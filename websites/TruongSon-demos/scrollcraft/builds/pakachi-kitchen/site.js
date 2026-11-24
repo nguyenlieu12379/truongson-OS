@@ -58,7 +58,7 @@
     wm.style.left = wmX + 'px'; wm.style.top = wmY + 'px';
 
     // ---- hero tray: rises from the bottom right corner; its cut edges stay off screen
-    const over = 48;
+    const over = 84;   // room for the cursor tilt and slide, so the cut edges never show
     const tH = mobile ? VH * 0.47 + over : VH * 0.68 + over;
     const tW = tH * TRAY_AR;
     const tX = VW + over * 0.8 - tW, tY = VH + over - tH;
@@ -223,6 +223,7 @@
       const onScreen = s0.y - ch < VH && s0.x + cw > 0;
       show(tray, m < 1 || onScreen);
       tiltOn = m === 0;
+      if (!tiltOn && (gx || gy) && !tiltRun) { tiltRun = true; requestAnimationFrame(tilt); }   // settle back once it leaves
     }
 
     // ---- 2-3. the hand: dealt from below, then doubled
@@ -412,16 +413,22 @@
   const kick = () => { readTarget(); if (!running) { running = true; requestAnimationFrame(frame); } };
 
   // the tray leans toward the cursor while it is the hero
+  // strong on purpose (Son: "react more obvious"): it tilts, slides toward the cursor, a light sheen
+  // follows the pointer across the rice, and PAKACHI drifts the other way for depth
   let tiltOn = true, tx = 0, ty = 0, gx = 0, gy = 0, tiltRun = false;
+  const sheen = $('#traySheen');
   function tilt() {
     if (!tiltOn) { tx = ty = 0; }
-    gx += (tx - gx) * 0.08; gy += (ty - gy) * 0.08;
-    trayTilt.style.transform = `rotateX(${gx.toFixed(2)}deg) rotateY(${gy.toFixed(2)}deg)`;
-    if (Math.abs(tx - gx) > 0.02 || Math.abs(ty - gy) > 0.02) requestAnimationFrame(tilt); else tiltRun = false;
+    gx += (tx - gx) * 0.14; gy += (ty - gy) * 0.14;            // gx, gy: -1..1
+    trayTilt.style.transform = `translate3d(${(gy * 22).toFixed(1)}px,${(-gx * 16).toFixed(1)}px,0) rotateX(${(gx * 16).toFixed(2)}deg) rotateY(${(gy * 22).toFixed(2)}deg)`;
+    sheen.style.transform = `translate3d(${(gy * 34).toFixed(2)}%,${(-gx * 34).toFixed(2)}%,0)`;
+    wm.style.transform = tiltOn ? `translate3d(${(-gy * 18).toFixed(1)}px,${(gx * 10).toFixed(1)}px,0)` : '';
+    if (Math.abs(tx - gx) > 0.002 || Math.abs(ty - gy) > 0.002) requestAnimationFrame(tilt); else tiltRun = false;
   }
   if (!reduced.matches && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    root.classList.add('tilt-on');
     addEventListener('pointermove', (e) => {
-      tx = tiltOn ? -(e.clientY / VH - 0.5) * 10 : 0; ty = tiltOn ? (e.clientX / VW - 0.5) * 14 : 0;
+      tx = tiltOn ? -(e.clientY / VH - 0.5) * 2 : 0; ty = tiltOn ? (e.clientX / VW - 0.5) * 2 : 0;
       if (!tiltRun) { tiltRun = true; requestAnimationFrame(tilt); }
     }, { passive: true });
   }
