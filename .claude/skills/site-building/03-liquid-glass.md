@@ -68,8 +68,8 @@ Not covered by the script: Safari and Firefox fallbacks, real phones and real tr
 | Slower or faster sweep | `CONFIG.duration` in `head.html` |
 | Wider or stronger sweep edge | `band`, `push` in `glassSwitch` (keep `push` at about 0.42 × `band`) |
 | Bigger or smaller ball (default 112, the Vivace size; keep the default unless asked) | `LiquidGlass.cursorBall({ size: 140 })` |
-| Lazier or snappier ball | `stiffness` (0.14), `damping` (0.72) |
-| Longer drag (more stretch on fast moves) | `stretch` (0.018 per px/frame), `maxStretch` (0.42). Tried on Brazilian Taste, then dropped for the default |
+| Lazier or snappier ball | `stiffness` (default 0.055), `damping` (default 0.86): the Brazilian Taste drag is the default. Vivace's original snappy spring was 0.14 / 0.72 |
+| Longer drag (more stretch on fast moves) | `stretch` (default 0.03 per px/frame), `maxStretch` (default 0.7). Tried on Brazilian Taste, then dropped for the default |
 | Ball doesn't grow on links | `hoverGrow: 1` |
 | Buttons pulled toward a nearby cursor | `LiquidGlass.magnet(".cta", { reach: 140, pull: 0.35, max: 26 })`. Moves with left/top so the lens stays aligned. `reach: "page"` follows the cursor anywhere; `curve` (default 1) makes the pull grow faster up close. Brazilian Taste: `{ reach: "page", curve: 2.2, pull: 0.6, max: 46 }` |
 | Flatter or rounder buttons | `glassify(sel, { band, push, interior })`; `interior: 0` keeps the middle flat |
