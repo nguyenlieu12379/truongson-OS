@@ -70,5 +70,6 @@ Not covered by the script: Safari and Firefox fallbacks, real phones and real tr
 | Lazier or snappier ball | `stiffness` (0.14), `damping` (0.72) |
 | Longer drag (more stretch on fast moves) | `stretch` (0.018 per px/frame), `maxStretch` (0.42). Brazilian Taste: `{ size: 104, stiffness: 0.055, damping: 0.86, stretch: 0.03, maxStretch: 0.7 }` |
 | Ball doesn't grow on links | `hoverGrow: 1` |
+| No ball, just the page bending at the pointer | `LiquidGlass.cursorPinch({ size: 150, strength: 2.2 })`: a round area stuck to the pointer (no spring) that pulls the page in toward the cursor, hardest near it, nothing at the edge. Strength above 3 folds content. Use instead of `cursorBall`. Brazilian Taste uses it. |
 | Buttons pulled toward a nearby cursor | `LiquidGlass.magnet(".cta", { reach: 140, pull: 0.35, max: 26 })`. Moves with left/top so the lens stays aligned. `reach: "page"` follows the cursor anywhere; `curve` (default 1) makes the pull grow faster up close. Brazilian Taste: `{ reach: "page", curve: 2.2, pull: 0.6, max: 46 }` |
 | Flatter or rounder buttons | `glassify(sel, { band, push, interior })`; `interior: 0` keeps the middle flat |

@@ -303,9 +303,9 @@
   document.fonts && document.fonts.ready.then(() => { layout(); kick(); });
   document.querySelectorAll('.stage img').forEach((img) => { if (img.decode) img.decode().catch(() => {}); });
 
-  // liquid glass: a bigger ball that trails further behind the mouse (no venom)
+  // liquid glass: pinch lens on the pointer, glass buttons, magnet (no venom)
   if (window.LiquidGlass) {
-    LiquidGlass.cursorBall({ size: 150, stiffness: 0.055, damping: 0.86, stretch: 0.03, maxStretch: 0.7 });
+    LiquidGlass.cursorPinch({ size: 150, strength: 2.2 });   // no ball: a 150px area on the pointer pulls the page in toward it
     LiquidGlass.glassify('.lg-glass');
     LiquidGlass.magnet('.cta-fly .cta', { reach: 'page', curve: 2.2, pull: 0.6, max: 46 });   // the yellow buttons lean toward the cursor wherever it is, harder as it gets close
   }

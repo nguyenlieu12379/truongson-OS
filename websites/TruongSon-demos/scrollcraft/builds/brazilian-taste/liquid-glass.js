@@ -2,6 +2,7 @@
    Load with defer, after head.html is in <head>. No dependencies.
 
      LiquidGlass.cursorBall()          glass ball that springs after the mouse
+     LiquidGlass.cursorPinch()         no ball: the page pinches toward the pointer
      LiquidGlass.glassify(".lg-glass") rounded-rect glass panels and buttons
      LiquidGlass.magnet(".cta")        buttons slide toward a nearby cursor
      LiquidGlass.lensMap(...)          the displacement map all of these use
@@ -217,5 +218,54 @@
     return els;
   }
 
-  root.LiquidGlass = { lensMap: lensMap, filterFor: filterFor, cursorBall: cursorBall, glassify: glassify, magnet: magnet, chromium: chromium };
+  // ---- cursor pinch ---------------------------------------------------------
+  // No ball. A round area glued to the pointer (no spring, no lag) where the
+  // page is pulled in toward the cursor point: hardest close to the cursor,
+  // fading to nothing at the area's edge, so there's no visible rim.
+  //   size:     diameter, px (default 150)
+  //   strength: how hard the centre pulls, 0..2.8 (default 2.2). Above 3 the
+  //             content folds over itself.
+  function pinchMap(size, strength) {
+    var R = size / 2, A = strength * R, n = Math.max(2, Math.round(size));
+    var peak = A * (1 / 3) * (4 / 9), S = peak * 2.2;
+    var cv = document.createElement("canvas"); cv.width = n; cv.height = n;
+    var g = cv.getContext("2d"), img = g.createImageData(n, n), px = img.data;
+    for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) {
+      var X = (x + 0.5) * size / n - R, Y = (y + 0.5) * size / n - R, r = Math.sqrt(X * X + Y * Y), u = r / R;
+      var i = (y * n + x) * 4, Rc = 128, Gc = 128;
+      if (u < 1 && r > 0) {
+        // sample further out than we draw: content looks pulled toward the centre.
+        // d(u) = A u (1-u)^2: zero at the cursor and at the edge, strongest near the cursor
+        var d = A * u * (1 - u) * (1 - u);
+        Rc = 128 + (X / r) * d / S * 255; Gc = 128 + (Y / r) * d / S * 255;
+      }
+      px[i] = Rc; px[i + 1] = Gc; px[i + 2] = 128; px[i + 3] = 255;
+    }
+    g.putImageData(img, 0, 0);
+    return { url: cv.toDataURL(), scale: S };
+  }
+  function cursorPinch(opt) {
+    opt = opt || {};
+    if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return null;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches || !chromium()) return null;
+    var size = opt.size || 150, half = size / 2;
+    var el = document.createElement("div");
+    el.className = "lg-pinch"; el.setAttribute("aria-hidden", "true");
+    el.style.cssText = "position:fixed;left:-9999px;top:-9999px;width:" + size + "px;height:" + size + "px;border-radius:50%;" +
+      "pointer-events:none;z-index:2147483000;opacity:0;transition:opacity 200ms ease";
+    var id = filterFor(pinchMap(size, opt.strength == null ? 2.2 : opt.strength), size, size);
+    el.style.backdropFilter = el.style.webkitBackdropFilter = "url(#" + id + ")";
+    document.body.appendChild(el);
+    // position straight from the event: the area sits exactly on the pointer, every move
+    document.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse") return;
+      el.style.left = (e.clientX - half) + "px"; el.style.top = (e.clientY - half) + "px";
+      if (el.style.opacity !== "1") el.style.opacity = "1";
+    }, { passive: true });
+    document.documentElement.addEventListener("pointerleave", function () { el.style.opacity = "0"; });
+    window.addEventListener("blur", function () { el.style.opacity = "0"; });
+    return el;
+  }
+
+  root.LiquidGlass = { lensMap: lensMap, filterFor: filterFor, cursorBall: cursorBall, cursorPinch: cursorPinch, glassify: glassify, magnet: magnet, chromium: chromium };
 })(window);
