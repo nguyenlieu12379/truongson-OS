@@ -4,7 +4,7 @@ Builds Son or Truong marked as failures, and why. Read the whole file before sta
 
 ## 1. Brazilian Passion Foods, 2026-11-23 (Son): "looks AI slop"
 
-Build: `websites/TruongSon-demos/scrollcraft/builds/brazilian-passion-foods/` (v2, live as a demo, kept as the example of what not to do).
+Build: `websites/TruongSon-demos/scrollcraft/builds/brazilian-passion-foods/` (v2, kept offline as the example of what not to do; not deployed).
 
 What Son called out:
 - **"Just picture + letter on a side."** A tall photo panel on one side and a block of copy on the other, for the whole page. It's the default AI landing layout. Swapping which photo shows doesn't make it a design.

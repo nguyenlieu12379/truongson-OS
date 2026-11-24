@@ -84,12 +84,15 @@ The kit includes setup, ongoing context interviews, routing, verification, a wee
 | [`/level-up`](.claude/skills/level-up/SKILL.md) | Recurring thinking skill | Day 14, then weekly. Three Ms interview (Mindset → Method → Machine). One run = one shipped artifact. |
 | [`/3d-brain`](.claude/skills/3d-brain/SKILL.md) | Interactive knowledge explorer | Choose your brain's name and categories. Builds a local 3D globe from your selected files, with search, note reading, Cinema, and a branching growth replay. |
 
-### Added in this repo — 6 more
+### Added in this repo — 7 more
 
 | Skill | Type | When to run |
 |---|---|---|
 | [`/watch`](.claude/skills/watch/SKILL.md) | Video reader (vendored, MIT) | Watch a YouTube link or video file. Captions plus frames. Cloud sessions get the transcript only. |
+| [`/prospecting`](.claude/skills/prospecting/SKILL.md) | Lead finder | Find US F&B prospects with WhatsApp and no real website. One Google search by default; bulk city lists to `prospects/` (gitignored) only when asked. |
 | [`/site-building`](.claude/skills/site-building/SKILL.md) | Website build: pre-build, scroll-craft, liquid-glass (in that order) | Any website build. Asks preferences first, builds the scroll-driven page, then adds the glass layer. Builds go to `websites/TruongSon-demos/scrollcraft/`. |
+| [`/no-ai-slop`](.claude/skills/no-ai-slop/SKILL.md) | Draft editor (vendored, MIT) | Run on any external copy (Instagram, client emails, cold scripts, site copy) before showing a draft. |
+| [`/handoff` and `/pickup`](.claude/skills/session-handoff/SKILL.md) | Session handoff (vendored, MIT) | Save a handoff note to `session-logs/`, then resume from it in a fresh session. Commands live in `.claude/commands/`. |
 | [`/craft-anything`](.claude/skills/craft-anything/SKILL.md) | Study and rebuild (vendored, MIT/Apache) | Rebuild a site or app we own or may copy. Early alpha. Not set up. |
 | [video-edit-kit](.claude/skills/video-edit-kit/AGENTS.md) | Kit pack (no slash command) | Talking-head edits, Reels and Shorts. Entry: `.claude/skills/video-edit-kit/AGENTS.md`. |
 
@@ -127,7 +130,7 @@ The complete [skill package](.claude/skills/3d-brain/README.md) includes source 
 
 ### Using the kit in Codex
 
-All skills and packs are also installed under `.agents/skills/`. Use the skill picker (`/skills` in Codex CLI or the IDE extension), or type `$` and select `audit`, `link`, `onboard`, `level-up`, `grill-me`, `3d-brain`, `watch`, `build`, or `craft-anything`. Codex normally detects skill updates automatically; restart it if the list does not refresh.
+All skills and packs are also installed under `.agents/skills/`. Use the skill picker (`/skills` in Codex CLI or the IDE extension), or type `$` and select `audit`, `link`, `onboard`, `level-up`, `grill-me`, `3d-brain`, `watch`, `prospecting`, `site-building`, `no-ai-slop`, `session-handoff`, or `craft-anything`. The `/handoff` and `/pickup` commands are Claude-only; in Codex, pick `session-handoff`. Codex normally detects skill updates automatically; restart it if the list does not refresh.
 
 `.claude/skills/` remains the authoring source. After editing a skill, run `bash scripts/sync-codex-skills.sh <skill-name>` to regenerate its Codex copy, supporting files, and menu metadata. The onboard intake template and level-up framework travel with their skills; existing projects retain their own canonical context routes.
 
@@ -173,7 +176,10 @@ AIS-OS/
         ├── 3d-brain/                ← Skill, portable app template, docs, and validation scripts
         ├── link/SKILL.md
         ├── watch/                   ← Vendored: YouTube/video reader
-        ├── build/                   ← Website build: pre-build, scroll-craft, liquid-glass (in order)
+        ├── prospecting/             ← F&B lead finder (WhatsApp, no website)
+        ├── site-building/           ← Website build: pre-build, scroll-craft, liquid-glass (in order)
+        ├── no-ai-slop/              ← Vendored: strip AI-sounding patterns from drafts
+        ├── session-handoff/         ← Vendored: /handoff and /pickup (commands in .claude/commands/)
         ├── video-edit-kit/          ← Vendored kit pack: video editing
         └── craft-anything/          ← Vendored: study and rebuild (not set up)
 ```

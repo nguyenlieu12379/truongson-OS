@@ -4,6 +4,14 @@ Dated notes on what changed in the skill and which build's finding drove it.
 Builds live in `OtherWorlds/Ultimate Websites/builds/`; each carries a
 `BUILD-REPORT.md`.
 
+## 2026-11-24: worldflight carry sheet
+
+- `references/worldflight.md` §0: before generating, every leg boundary names
+  the one object, colour, shape or light that carries the eye across it, plus
+  the camera move. Fixes worlds that crossfade cleanly but still read as
+  separate clips. Idea from feitangyuan/onetake; no code used.
+- `02-scroll-craft.md` Step 2: matching check in the pre-build list.
+
 ## 2026-09-30: security and Windows fixes, release 0.3.1
 
 No change to how pages are planned, built, or animated.

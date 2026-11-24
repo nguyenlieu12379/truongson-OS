@@ -2,9 +2,9 @@
    Load with defer, after head.html is in <head>. No dependencies.
 
      LiquidGlass.cursorBall()          glass ball that springs after the mouse
+     LiquidGlass.cursorPull()          no ball: the page is pulled in toward the pointer (alias cursorPinch)
      LiquidGlass.glassify(".lg-glass") rounded-rect glass panels and buttons
-     LiquidGlass.venom("button.lg-glass") strands of the button's colour that
-                                       reach for the mouse and latch on
+     LiquidGlass.magnet(".cta")        buttons slide toward a nearby cursor
      LiquidGlass.lensMap(...)          the displacement map all of these use
 
    The theme switch (toggle + circle-lens transition) lives in head.html, not
@@ -108,7 +108,7 @@
     opt = opt || {};
     if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return null;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return null;
-    var size = opt.size || 56;
+    var size = opt.size || 112;   // the Espresso Vivace ball: the default
     var ball = document.createElement("div");
     ball.className = "lg-ball"; ball.setAttribute("aria-hidden", "true");
     ball.style.setProperty("--lg-size", size + "px");
@@ -118,12 +118,13 @@
       ball.style.backdropFilter = ball.style.webkitBackdropFilter = "url(#" + id + ") saturate(1.15)";
       ball.classList.add("is-lens");
     }
-    var K = opt.stiffness || 0.14, D = opt.damping || 0.72, hoverGrow = opt.hoverGrow || 1.28;
+    // default drag = the Brazilian Taste trail (Son, 2026-11-24): lazy spring, long stretch
+    var K = opt.stiffness || 0.055, D = opt.damping || 0.86, hoverGrow = opt.hoverGrow || 1.28;
     var tx = -500, ty = -500, x = tx, y = ty, vx = 0, vy = 0, grow = 1, gT = 1, running = false;
     function frame() {
       vx = (vx + (tx - x) * K) * D; vy = (vy + (ty - y) * K) * D; x += vx; y += vy;
       grow += (gT - grow) * 0.18;
-      var sp = Math.sqrt(vx * vx + vy * vy), st = Math.min(0.42, sp * 0.018);
+      var sp = Math.sqrt(vx * vx + vy * vy), st = Math.min(opt.maxStretch || 0.7, sp * (opt.stretch || 0.03));
       var ang = st < 0.004 ? 0 : Math.atan2(vy, vx) * 180 / Math.PI;
       ball.style.left = x.toFixed(1) + "px"; ball.style.top = y.toFixed(1) + "px";   // never translate
       // stretch along the motion with no net rotation, so the round map lines up
@@ -167,183 +168,111 @@
     return els;
   }
 
-  // ---- glass venom --------------------------------------------------------
-  // Like the Venom button: a button sprouts wiry strands of its own colour
-  // along the edge facing the mouse. Once the mouse is within reach the
-  // strands stretch out, sag under gravity and whip toward the pointer. They
-  // gather into a glass head that latches onto the pointer and takes the
-  // cursor's place (the ball hides). When the mouse leaves reach the strands
-  // pull back into the button. Only the nearest button in reach is active.
-  // Mouse/trackpad only; off with reduced motion.
-  //   reach     how far from a button's edge the crawl starts, in cursor-ball
-  //             widths (default 5, i.e. 5 x 56px)
-  //   unit      px per cursor-ball width (default 56, match cursorBall size)
-  //   strands   strands per button (default: from the button's width)
-  //   catch     latch when the head is this many widths from the pointer (0.35)
-  //   color     strand and head colour. Default: the button's own colour, from
-  //             --lg-venom on the button, else its solid background, else its text
-  function venom(selector, opt) {
+  // ---- magnet buttons ------------------------------------------------------
+  // Within reach, a button slides toward the cursor and springs back when it
+  // leaves. Moves with left/top (position: relative), never transform, so a
+  // glass lens on the button stays aligned. Mouse/trackpad only.
+  //   reach: px from the button's edge where the pull starts (default 140),
+  //          or "page": every button follows the cursor anywhere on screen
+  //   curve: how fast the pull grows as the cursor gets closer (1 = linear, 2 = much stronger up close)
+  //   pull:  share of the cursor offset the button follows (default 0.35)
+  //   max:   cap on the travel in px (default 26)
+  function magnet(selector, opt) {
     opt = opt || {};
-    if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return null;
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return null;
-    var els = Array.prototype.slice.call(document.querySelectorAll(selector || "button.lg-glass, a.lg-glass"));
-    if (!els.length) return null;
-    var unit = opt.unit || 56, reach = (opt.reach || 5) * unit, catchR = (opt.catch || 0.35) * unit;
-    var headSize = unit, restScale = 0.45, K = 12, PULL = opt.stiffness || 0.07;   // K points per strand
-    var lensed = chromium();
-    var svg = document.createElementNS(SVGNS, "svg");
-    svg.setAttribute("class", "lg-venom-svg"); svg.setAttribute("aria-hidden", "true");
-    document.body.appendChild(svg);
-    var ptr = { x: 0, y: 0, has: false }, active = null, running = false;
-
-    function tintOf(el) {
-      if (opt.color) return opt.color;
-      var cs = getComputedStyle(el), v = cs.getPropertyValue("--lg-venom").trim();
-      if (v) return v;
-      var bg = cs.backgroundColor, m = /rgba?\(([^)]+)\)/.exec(bg);
-      if (m) { var parts = m[1].split(/[\s,\/]+/).filter(Boolean); if (parts.length < 4 || parseFloat(parts[3]) >= 0.5) return bg; }
-      return cs.color;
-    }
-    function makeStrands(s) {
-      var n = opt.strands || Math.min(10, Math.max(4, Math.round(s.r.width / 26)));
-      var out = [];
-      for (var i = 0; i < n; i++) {
-        var path = document.createElementNS(SVGNS, "path");
-        path.setAttribute("class", "lg-venom-strand"); svg.appendChild(path);
-        out.push({ path: path, pts: [], init: false, a: i / n * Math.PI * 2, ph: i * 2.39 });
-      }
-      return out;
-    }
-    // the strand outline: a thin tapered band along the points, with a slow wobble
-    function outline(P, amt, t, ph) {
-      if (amt < 0.01) return "";
-      var n = P.length, L = [], R = [];
-      for (var j = 0; j < n; j++) {
-        var a = P[Math.max(0, j - 1)], b = P[Math.min(n - 1, j + 1)];
-        var tx = b.x - a.x, ty = b.y - a.y, l = Math.hypot(tx, ty) || 1, nx = -ty / l, ny = tx / l;
-        var u = j / (n - 1), w = (1.9 - 1.2 * u) * amt * (1 + 0.15 * Math.sin(t * 0.01 + ph + u * 6));
-        var wob = Math.sin(t * 0.009 + ph + j * 0.8) * 0.6 * u * amt;
-        var x = P[j].x + wob, y = P[j].y + wob * 0.5;
-        L.push(x + nx * w, y + ny * w); R.push(x - nx * w, y - ny * w);
-      }
-      var d = "M" + L[0].toFixed(1) + " " + L[1].toFixed(1);
-      for (var k = 2; k < L.length; k += 2) d += "L" + L[k].toFixed(1) + " " + L[k + 1].toFixed(1);
-      for (var q = R.length - 2; q >= 0; q -= 2) d += "L" + R[q].toFixed(1) + " " + R[q + 1].toFixed(1);
-      return d + "Z";
-    }
-    // Verlet chain per strand: pinned to the button edge, the tip pulled to the
-    // head, gravity sag, a length that gives a little slack so it droops.
-    function step(s, t, on, px, py) {
-      var r = s.r, n = s.strands.length;
-      var tgtX = on ? px : s.cx, tgtY = on ? py : s.cy;
-      var dx = s.hx - s.cx, dy = s.hy - s.cy;
-      var horiz = Math.abs(dx) / (r.width / 2 || 1) > Math.abs(dy) / (r.height / 2 || 1);
-      var side = horiz ? (dx > 0 ? "right" : "left") : (dy > 0 ? "bottom" : "top");
-      var bundle = headSize * 0.5 * s.sc * (s.latched ? 0.75 : 0.3);
-      for (var i = 0; i < n; i++) {
-        var st = s.strands[i], P = st.pts, f = (i + 0.5) / n, rx, ry;
-        if (side === "bottom") { rx = r.left + r.width * f; ry = r.bottom - 2; }
-        else if (side === "top") { rx = r.left + r.width * f; ry = r.top + 2; }
-        else if (side === "right") { rx = r.right - 2; ry = r.top + r.height * f; }
-        else { rx = r.left + 2; ry = r.top + r.height * f; }
-        var ang = st.a + t * 0.0004;
-        var tx = tgtX + Math.cos(ang) * bundle, ty = tgtY + Math.sin(ang) * bundle;
-        if (!st.init) {
-          for (var j0 = 0; j0 < K; j0++) { var q0 = j0 / (K - 1); P[j0] = { x: rx + (tx - rx) * q0, y: ry + (ty - ry) * q0, px: 0, py: 0 }; P[j0].px = P[j0].x; P[j0].py = P[j0].y; }
-          st.init = true;
-        }
-        P[0].x = P[0].px = rx; P[0].y = P[0].py = ry;
-        for (var j = 1; j < K; j++) {
-          var p = P[j], vx = (p.x - p.px) * 0.9, vy = (p.y - p.py) * 0.9;
-          p.px = p.x; p.py = p.y; p.x += vx; p.y += vy + 0.28;
-        }
-        var seg = Math.max(0.5, Math.hypot(tx - rx, ty - ry) * 1.12 / (K - 1));
-        for (var it = 0; it < 6; it++) {
-          P[0].x = rx; P[0].y = ry;
-          for (var c = 0; c < K - 1; c++) {
-            var a = P[c], b = P[c + 1], ddx = b.x - a.x, ddy = b.y - a.y, d = Math.hypot(ddx, ddy) || 1e-6, k = (d - seg) / d;
-            if (c === 0) { b.x -= ddx * k; b.y -= ddy * k; }
-            else { a.x += ddx * k * 0.5; a.y += ddy * k * 0.5; b.x -= ddx * k * 0.5; b.y -= ddy * k * 0.5; }
-          }
-        }
-        P[K - 1].x += (tx - P[K - 1].x) * 0.35; P[K - 1].y += (ty - P[K - 1].y) * 0.35;
-        st.path.setAttribute("d", outline(P, s.amt, t, st.ph));
-        st.path.style.fill = s.col;
-      }
-    }
-
-    var list = els.map(function (el) {
-      var head = document.createElement("div");
-      head.className = "lg-venom-head"; head.setAttribute("aria-hidden", "true");
-      head.style.setProperty("--lg-vh", headSize + "px");
-      document.body.appendChild(head);
-      if (lensed) {
-        var id = filterFor(lensMap({ width: headSize, height: headSize, band: headSize * 0.25, push: headSize * 0.14, interior: 0.22 }), headSize, headSize);
-        head.style.backdropFilter = head.style.webkitBackdropFilter = "url(#" + id + ") saturate(1.15)";
-        head.classList.add("is-lens");
-      }
-      return { el: el, head: head, strands: null, col: tintOf(el), r: null, cx: 0, cy: 0, d: Infinity,
-               hx: 0, hy: 0, hvx: 0, hvy: 0, amt: 0, sc: 0.2, latched: false, placed: false, wasOn: false };
+    var els = Array.prototype.slice.call(document.querySelectorAll(selector));
+    if (!els.length || !matchMedia("(hover: hover) and (pointer: fine)").matches) return els;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return els;
+    var page = opt.reach === "page", reach = page ? 0 : (opt.reach || 140), curve = opt.curve || 1, pull = opt.pull || 0.35, max = opt.max || 26, K = opt.stiffness || 0.16;
+    var st = els.map(function (el) {
+      if (getComputedStyle(el).position === "static") el.style.position = "relative";
+      return { el: el, x: 0, y: 0, tx: 0, ty: 0 };
     });
-
-    // distance from a point to a rectangle (0 when inside)
-    function rectDist(r, x, y) {
-      var dx = Math.max(r.left - x, 0, x - r.right), dy = Math.max(r.top - y, 0, y - r.bottom);
-      return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    function frame(t) {
-      var has = ptr.has, px = ptr.x, py = ptr.y, busy = false;
-      list.forEach(function (s) {
-        s.r = s.el.getBoundingClientRect();
-        s.cx = (s.r.left + s.r.right) / 2; s.cy = (s.r.top + s.r.bottom) / 2;
-        if (!s.placed) { s.hx = s.cx; s.hy = s.cy; s.placed = true; }   // first sight: the head starts in its button
-        s.d = has ? rectDist(s.r, px, py) : Infinity;                    // 0 = pointer is on the button
+    var mx = -1e4, my = -1e4, running = false;
+    function aim() {
+      st.forEach(function (s) {
+        var r = s.el.getBoundingClientRect();
+        if (!r.width || getComputedStyle(s.el).visibility === "hidden") { s.tx = s.ty = 0; return; }
+        // the resting box: undo our own offset
+        var cx = r.left - s.x + r.width / 2, cy = r.top - s.y + r.height / 2;
+        var ex = Math.max(0, Math.abs(mx - cx) - r.width / 2), ey = Math.max(0, Math.abs(my - cy) - r.height / 2);
+        var d = Math.sqrt(ex * ex + ey * ey), R = page ? Math.sqrt(innerWidth * innerWidth + innerHeight * innerHeight) : reach;
+        if (d >= R) { s.tx = s.ty = 0; return; }
+        // travel grows as the cursor closes in (max at the edge), never past pull x the distance
+        var vx = mx - cx, vy = my - cy, D = Math.sqrt(vx * vx + vy * vy) || 1;
+        var mag = Math.min(max * Math.pow(1 - d / R, curve), D * pull);
+        s.tx = vx / D * mag; s.ty = vy / D * mag;
       });
-      // keep the current button while in reach (with a little hysteresis), else take the nearest in reach
-      var next = (active && active.d > 0 && active.d < reach * 1.08) ? active : null;
-      if (!next) { var bestD = Infinity; list.forEach(function (s) { if (s.d > 0 && s.d < reach && s.d < bestD) { next = s; bestD = s.d; } }); }
-      active = next;
-
-      list.forEach(function (s) {
-        var on = s === active, want = on ? 1 : 0;
-        if (on && !s.wasOn) { s.col = tintOf(s.el); s.head.style.setProperty("--lg-venom-c", s.col); }
-        s.wasOn = on;
-        if (!s.strands && s.r.width > 0) s.strands = makeStrands(s);
-        if (!on) s.latched = false;
-        else if (!s.latched && Math.hypot(s.hx - px, s.hy - py) < catchR) s.latched = true;
-        s.amt += (want - s.amt) * (on ? 0.12 : 0.09);
-        if (!on && s.amt < 0.002) s.amt = 0;
-        // idle: the head rests in the button, so it starts from the button's current centre
-        if (!on && s.amt === 0) { s.hx = s.cx; s.hy = s.cy; s.hvx = s.hvy = 0; }
-        var tx = on ? px : s.cx, ty = on ? py : s.cy;
-        var k = s.latched ? 0.22 : (on ? PULL : 0.1), dmp = s.latched ? 0.7 : 0.8;
-        s.hvx = (s.hvx + (tx - s.hx) * k) * dmp; s.hvy = (s.hvy + (ty - s.hy) * k) * dmp;
-        s.hx += s.hvx; s.hy += s.hvy;
-        var scT = s.latched ? 1 : (on ? restScale : 0.2);
-        s.sc += (scT - s.sc) * 0.18;
-        s.head.style.left = s.hx.toFixed(1) + "px"; s.head.style.top = s.hy.toFixed(1) + "px";
-        s.head.style.transform = "scale(" + s.sc.toFixed(3) + ")";
-        s.head.style.opacity = s.amt < 0.002 ? "0" : Math.min(1, s.amt * 2.5).toFixed(3);
-        if (s.strands) step(s, t, on, px, py);
-        if (Math.abs(want - s.amt) > 0.002 || s.amt > 0.002 ||
-            Math.abs(tx - s.hx) + Math.abs(ty - s.hy) > 0.5 || Math.abs(scT - s.sc) > 0.002) busy = true;
-      });
-      var anyLatched = list.some(function (s) { return s.latched; });
-      document.documentElement.classList.toggle("lg-venom-latched", anyLatched);
-      if (busy) requestAnimationFrame(frame); else running = false;
     }
-    function kick() { if (!running) { running = true; requestAnimationFrame(frame); } }
-
-    document.addEventListener("pointermove", function (e) {
-      if (e.pointerType !== "mouse") return;
-      ptr.x = e.clientX; ptr.y = e.clientY; ptr.has = true; kick();
-    }, { passive: true });
-    document.documentElement.addEventListener("pointerleave", function () { ptr.has = false; kick(); });
-    window.addEventListener("blur", function () { ptr.has = false; kick(); });
+    function frame() {
+      var moving = false;
+      st.forEach(function (s) {
+        s.x += (s.tx - s.x) * K; s.y += (s.ty - s.y) * K;
+        if (Math.abs(s.tx - s.x) < 0.05 && Math.abs(s.ty - s.y) < 0.05) { s.x = s.tx; s.y = s.ty; } else moving = true;
+        s.el.style.left = s.x.toFixed(2) + "px"; s.el.style.top = s.y.toFixed(2) + "px";
+      });
+      if (moving) requestAnimationFrame(frame); else running = false;
+    }
+    function kick() { aim(); if (!running) { running = true; requestAnimationFrame(frame); } }
+    document.addEventListener("pointermove", function (e) { if (e.pointerType !== "mouse") return; mx = e.clientX; my = e.clientY; kick(); }, { passive: true });
     window.addEventListener("scroll", kick, { passive: true });
+    document.documentElement.addEventListener("pointerleave", function () { mx = my = -1e4; kick(); });
     return els;
   }
 
-  root.LiquidGlass = { lensMap: lensMap, filterFor: filterFor, cursorBall: cursorBall, glassify: glassify, venom: venom, chromium: chromium };
+  // ---- cursor pull (cursorPinch) ---------------------------------------------------------
+  // No ball. A round area glued to the pointer (no spring, no lag) where the
+  // page is pulled in toward the cursor point: hardest close to the cursor,
+  // fading to nothing at the area's edge, so there's no visible rim.
+  //   size:     diameter, px (default 150)
+  //   strength: how hard the centre pulls (default 2.2). Clamped just under
+  //             the point where content would fold over itself.
+  //   focus:    2 = pull spread across the area, 3 or 4 = pull bunched close
+  //             to the cursor (default 2)
+  function pinchMap(size, strength, focus) {
+    var R = size / 2, p = focus || 2, n = Math.max(2, Math.round(size));
+    var f = function (u) { return u * Math.pow(1 - u, p); };
+    // fold limit: 1 + strength * min f'(u) must stay > 0
+    var minD = 0, peakF = 0;
+    for (var j = 1; j < 400; j++) { var u0 = j / 400; minD = Math.min(minD, (f(u0 + 0.001) - f(u0)) / 0.001); peakF = Math.max(peakF, f(u0)); }
+    var k = Math.min(strength, 0.9 / -minD), A = k * R, S = A * peakF * 2.2;
+    var cv = document.createElement("canvas"); cv.width = n; cv.height = n;
+    var g = cv.getContext("2d"), img = g.createImageData(n, n), px = img.data;
+    for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) {
+      var X = (x + 0.5) * size / n - R, Y = (y + 0.5) * size / n - R, r = Math.sqrt(X * X + Y * Y), u = r / R;
+      var i = (y * n + x) * 4, Rc = 128, Gc = 128;
+      if (u < 1 && r > 0) {
+        // sample further out than we draw: content looks pulled toward the centre.
+        // d(u) = A u (1-u)^focus: zero at the cursor and at the edge, strongest near the cursor
+        var d = A * f(u);
+        Rc = 128 + (X / r) * d / S * 255; Gc = 128 + (Y / r) * d / S * 255;
+      }
+      px[i] = Rc; px[i + 1] = Gc; px[i + 2] = 128; px[i + 3] = 255;
+    }
+    g.putImageData(img, 0, 0);
+    return { url: cv.toDataURL(), scale: S };
+  }
+  function cursorPinch(opt) {
+    opt = opt || {};
+    if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return null;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches || !chromium()) return null;
+    var size = opt.size || 150, half = size / 2;
+    var el = document.createElement("div");
+    el.className = "lg-pinch"; el.setAttribute("aria-hidden", "true");
+    el.style.cssText = "position:fixed;left:-9999px;top:-9999px;width:" + size + "px;height:" + size + "px;border-radius:50%;" +
+      "pointer-events:none;z-index:2147483000;opacity:0;transition:opacity 200ms ease";
+    var id = filterFor(pinchMap(size, opt.strength == null ? 2.2 : opt.strength, opt.focus), size, size);
+    el.style.backdropFilter = el.style.webkitBackdropFilter = "url(#" + id + ")";
+    document.body.appendChild(el);
+    // position straight from the event: the area sits exactly on the pointer, every move
+    document.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse") return;
+      el.style.left = (e.clientX - half) + "px"; el.style.top = (e.clientY - half) + "px";
+      if (el.style.opacity !== "1") el.style.opacity = "1";
+    }, { passive: true });
+    document.documentElement.addEventListener("pointerleave", function () { el.style.opacity = "0"; });
+    window.addEventListener("blur", function () { el.style.opacity = "0"; });
+    return el;
+  }
+
+  root.LiquidGlass = { lensMap: lensMap, filterFor: filterFor, cursorBall: cursorBall, cursorPinch: cursorPinch, cursorPull: cursorPinch, glassify: glassify, magnet: magnet, chromium: chromium };
 })(window);

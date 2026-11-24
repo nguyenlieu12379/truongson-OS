@@ -47,7 +47,7 @@
 
 /* ---- Cursor ball -------------------------------------------------------- */
 .lg-ball {
-  --lg-size: 56px;
+  --lg-size: 112px;
   position: fixed; left: 0; top: 0; z-index: 2147483000;
   width: var(--lg-size); height: var(--lg-size);
   margin: calc(var(--lg-size) / -2) 0 0 calc(var(--lg-size) / -2);
@@ -61,31 +61,6 @@
   background: radial-gradient(circle at 34% 28%, rgb(255 255 255 / 0.32), rgb(255 255 255 / 0) 34%);
 }
 .lg-ball.is-on { opacity: 1; }
-
-/* ---- Glass venom (strands of the button's colour that reach the mouse) -- */
-.lg-venom-svg {
-  position: fixed; left: 0; top: 0; width: 100%; height: 100%;
-  z-index: 2147482980; pointer-events: none; overflow: visible;
-}
-.lg-venom-strand { stroke: none; }
-.lg-venom-head {
-  --lg-vh: 56px; --lg-venom-c: rgb(20 20 20);
-  position: fixed; left: 0; top: 0; z-index: 2147482990;
-  width: var(--lg-vh); height: var(--lg-vh);
-  margin: calc(var(--lg-vh) / -2) 0 0 calc(var(--lg-vh) / -2);
-  border-radius: 50%; pointer-events: none; opacity: 0;
-  box-shadow:
-    inset 0 0 0 1px rgb(255 255 255 / 0.4),
-    inset 3px 5px 8px -2px rgb(255 255 255 / 0.5),
-    inset -4px -6px 10px -4px rgb(0 0 0 / 0.3),
-    0 10px 24px -8px rgb(20 15 10 / 0.35);
-  /* tinted glass: the button's colour, a little see-through so the lens still bends the page */
-  background:
-    radial-gradient(circle at 34% 28%, rgb(255 255 255 / 0.4), rgb(255 255 255 / 0) 34%),
-    color-mix(in srgb, var(--lg-venom-c) 80%, transparent);
-}
-/* a latched venom head takes over the cursor, so the ball steps aside */
-.lg-venom-latched .lg-ball.is-on { opacity: 0; }
 
 /* ---- Glass panels and buttons ------------------------------------------ */
 .lg-glass {
@@ -114,5 +89,5 @@ button.lg-glass:active, a.lg-glass:active { transform: scale(0.97); }
   .lg-theme-btn svg { animation: none; }
 }
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
-  .lg-ball, .lg-venom-svg, .lg-venom-head { display: none; }
+  .lg-ball { display: none; }
 }

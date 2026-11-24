@@ -10,19 +10,29 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 ## Photos and assets
 - Real photos only, from the client's own Instagram (via Claude in Chrome, signed in). No generated images unless asked.
 - No photos of customers, their families or kids. No graphics with text baked in. No cut-out "stock looking" product shots.
+- Never drawn "plastic" graphic objects (CSS/SVG props such as pans, bubbles, cartoon food). Son, 2026-11-23: "always stay away from the plastic graphics objects at all cost". Effects must come from real photos or footage.
+- Hero food must be high resolution. If the grid only gives 640px, get the full post image or a frame from their video.
 - Keep a `SOURCES.md` with the post URL for every photo.
 
 ## Hero
+- Cut the hero from a high-res photo of their signature item (clip along its real edge), like the Delícias pudim. A flat photo hero reads as "too simple" (Son, 2026-11-24).
+- Food in the hero is never covered by letters. Type can sit around it, not over it (Son, 2026-11-23).
 - The hero is the product the client posts most, a real cutout (not a 3D or low-poly replica).
 - The product sits one layer in front of a giant brand word. The letters it covers animate (Delícias: they wobble with the product).
 - The headline stays readable.
 
 ## Style and world
+- Frame shapes follow the dish: tall frames for dishes shot vertical (lunch boxes, long tables), wide for tray rows, square for bowls. Never crop everything to one landscape shape (Son, 2026-11-24).
+- "Unbroken" means each scene turns into the next (cells fly apart, photos grow into the next layout). A layer that just scrolls up out of view is a break (Son, 2026-11-24).
+- Add related motion so it isn't boring: real cutouts drifting, dish-name lines, counters, lines drawing in. Never drawn props.
+- Colour split 60/30/10 (Son, 2026-11-23): 60% background, 30% most type and objects, 10% the one must-see thing (the CTA). Taken from the client's own logo, sign or avatar. Ask it in pre-build every time.
 - Match the client's Instagram vibe (Delícias: "soft, cute, juicy", playful pink).
 - One unbroken world (one fixed stage, the camera travels, no sections).
 - Four must-haves from `websites/README.md`: one engineered peak, layered hero, real photos, no AI tells.
 
 ## UI material
+- Cursor ball: the Espresso Vivace ball is the default, its size (112px) and its style (rim, highlight, dark inner edge, gloss, drop shadow). Its motion is the Brazilian Taste drag: lazy spring, long stretch (stiffness 0.055, damping 0.86, stretch 0.03, max 0.7). Don't resize, restyle or re-tune it unless asked (Son, 2026-11-24).
+- No glass venom strands (Son removed them, 2026-11-23).
 - Liquid glass on every block (buttons, text cards, nav): a clear refractive lens that magnifies and bends what's behind it along the edges and corners, with a thin specular rim. No blur, no frost.
 - A lens follows the cursor and bends the light under it; the rim light follows the cursor; buttons lean toward it.
 - Buttons may keep a colour tint so the label reads.

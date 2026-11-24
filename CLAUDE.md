@@ -38,7 +38,7 @@ Each pack is a full copy of one Sunaii kit with its own `VENDORED.md` (source an
 - `connections.md` — registry of every system your AIOS can reach
 - `decisions/log.md` — append-only record of decisions and why
 - `brainstorms/` - Dated interview captures and resume points. Read relevant captures on demand; confirmed current context belongs in its canonical page.
-- `session-logs/` - Handoff notes from `/handoff`: the state of one task, for `/pickup` in the next session. Delete once the task is done.
+- `session-logs/` - Handoff notes from `/handoff`: the state of one task, for `/pickup` in the next session. Move to `archives/session-logs/` once the task is done.
 - `audits/` — dated audit reports and finding history; point-in-time evidence, not live business state
 - `websites/` — website projects, one folder per owner (`websites/<owner>/<site-name>/`). Index and rules: `websites/README.md`. Scroll-craft builds: `websites/TruongSon-demos/scrollcraft/builds/`.
 - `archives/` — old stuff. Don't delete. Move here.

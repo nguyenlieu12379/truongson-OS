@@ -8,7 +8,6 @@
 //   2. theme toggle flips <html data-theme-now>, survives reload, and the
 //      sweep finishes
 //   3. clicks pass through the ball; ball hidden on touch
-//   4. glass venom: tongue within reach, latch on pointer, retract away
 // Writes screenshots to outdir for a human look. Exit code 1 on failure.
 const fs = require("fs");
 let pw; try { pw = require("playwright"); } catch (e) { pw = require("playwright-core"); }
@@ -16,17 +15,6 @@ const url = process.argv[2], out = process.argv[3] || "lg-verify";
 if (!url) { console.error("usage: verify.cjs <url> [outdir]"); process.exit(2); }
 fs.mkdirSync(out, { recursive: true });
 const fails = []; const ok = (c, m) => { console.log((c ? "ok   " : "FAIL ") + m); if (!c) fails.push(m); };
-// the viewport point farthest from every glass button (the venom reach test needs it clear of them)
-const farPoint = (p) => p.evaluate(() => {
-  const rs = [...document.querySelectorAll("button.lg-glass, a.lg-glass")].map(e => e.getBoundingClientRect());
-  let best = { x: 20, y: 20, d: -1 };
-  for (let x = 20; x < innerWidth; x += 40) for (let y = 20; y < innerHeight; y += 40) {
-    const d = Math.min(...rs.map(r => Math.hypot(Math.max(r.left - x, 0, x - r.right), Math.max(r.top - y, 0, y - r.bottom))));
-    if (d > best.d) best = { x, y, d };
-  }
-  return best;
-});
-
 (async () => {
   const exe = fs.existsSync("/usr/bin/google-chrome") ? { executablePath: "/usr/bin/google-chrome" } : {};
   const b = await pw.chromium.launch(exe);
@@ -35,10 +23,6 @@ const farPoint = (p) => p.evaluate(() => {
   await p.goto(url, { waitUntil: "networkidle" });
 
   // 1. ball lens alignment on a grid
-  // venom may latch onto the pointer near a button and hide the ball; this
-  // test is about the lens itself, so keep the ball visible here (section 4
-  // checks the hiding)
-  const showBall = await p.addStyleTag({ content: "html.lg-venom-latched .lg-ball.is-on { opacity: 1 !important; }" });
   await p.mouse.move(640, 420); await p.mouse.move(641, 421, { steps: 3 }); await p.waitForTimeout(1200);
   const hasBall = await p.evaluate(() => !!document.querySelector(".lg-ball.is-on"));
   ok(hasBall, "cursor ball appears on mouse move");
@@ -70,7 +54,6 @@ const farPoint = (p) => p.evaluate(() => {
     ok(diff.rim > 8, "rim bends the content under it (rim diff " + diff.rim.toFixed(1) + ")");
     ok(diff.centre < diff.rim * 0.6, "centre stays clearer than the rim (centre " + diff.centre.toFixed(1) + ")");
     await p.evaluate(() => document.getElementById("lg-grid").remove());
-    await showBall.evaluate(el => el.remove());
   } else console.log("skip lens alignment (no lens: not Chromium or no ball)");
 
   // 2. theme toggle
@@ -95,40 +78,6 @@ const farPoint = (p) => p.evaluate(() => {
     const top = await p.evaluate(([x, y]) => { const e = document.elementFromPoint(x, y); return e && !e.closest(".lg-ball"); }, [bx.x + bx.width / 2, bx.y + bx.height / 2]);
     ok(top, "element under the ball is still the click target");
   }
-  // 4. glass venom: strands of the button's colour within reach, latch on the
-  //    pointer (ball hides), pull back when the mouse leaves
-  const cta = await p.$("a.cta");
-  if (cta) {
-    const r = await cta.boundingBox(), reachPx = 5 * 56;
-    const cy = r.y + r.height / 2;   // to the right of the CTA: inside the viewport, and nothing else nearer
-    const near = [r.x + r.width + 120, cy], edge = [r.x + r.width + 14, cy];
-    const fp = await farPoint(p);
-    const headOp = () => p.evaluate(() => Math.max(0, ...[...document.querySelectorAll(".lg-venom-head")].map(h => parseFloat(h.style.opacity) || 0)));
-    const strandsOut = () => p.evaluate(() => [...document.querySelectorAll(".lg-venom-strand")].filter(t => (t.getAttribute("d") || "").length > 0).length);
-    const latched = () => p.evaluate(() => document.documentElement.classList.contains("lg-venom-latched"));
-    ok(fp.d > reachPx, "far point is outside the venom reach (" + Math.round(fp.d) + "px)");
-    await p.mouse.move(fp.x, fp.y, { steps: 4 }); await p.waitForTimeout(1500);
-    ok((await strandsOut()) === 0 && (await headOp()) === 0, "no strands while the mouse is far");
-
-    await p.mouse.move(near[0], near[1], { steps: 8 }); await p.waitForTimeout(900);
-    ok((await strandsOut()) > 0 && (await headOp()) > 0.5, "strands reach out when the mouse is within reach");
-    const colours = await p.evaluate(() => {
-      const bg = getComputedStyle(document.querySelector("a.cta")).backgroundColor;
-      const fills = [...document.querySelectorAll(".lg-venom-strand")].map(x => x.style.fill);
-      return { bg, match: fills.filter(f => f === bg).length, total: fills.length };
-    });
-    ok(colours.match > 0, "strands take the CTA's own colour (" + colours.bg + ", " + colours.match + "/" + colours.total + " strands)");
-    await p.screenshot({ path: out + "/venom-crawl.png" });
-
-    await p.mouse.move(edge[0], edge[1], { steps: 10 }); await p.waitForTimeout(2500);
-    ok(await latched(), "strands latch onto the pointer when it is close");
-    ok(await p.evaluate(() => getComputedStyle(document.querySelector(".lg-ball")).opacity) === "0", "latched venom takes over the cursor (ball hidden)");
-    await p.screenshot({ path: out + "/venom-latched.png" });
-
-    await p.mouse.move(fp.x, fp.y, { steps: 10 }); await p.waitForTimeout(2500);
-    ok(!(await latched()) && (await strandsOut()) === 0, "strands pull back into the button when the mouse leaves");
-  } else console.log("skip venom (no a.cta)");
-
   const t = await b.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
   await t.goto(url, { waitUntil: "networkidle" });
   ok(await t.evaluate(() => { const e = document.querySelector(".lg-ball"); return !e || getComputedStyle(e).display === "none"; }), "no ball on touch screens");

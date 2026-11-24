@@ -17,7 +17,7 @@ Goal: a US F&B business that **has WhatsApp** and **has no real website**, so we
 - **WhatsApp is required:** a `wa.me` link in the bio, a WhatsApp field, or the number in posts.
 - **No real website:** nothing listed, or only Instagram, Facebook, Linktree, WhatsApp, or a DoorDash/UberEats ordering page. A dead or parked domain also counts.
 - Any cuisine, any US city. Don't narrow to one cuisine or state unless Son or Truong asks.
-- Skip anyone already built or rejected (`websites/README.md`, `.claude/skills/site-building/FAILURES.md`).
+- Skip anyone already built or rejected (`websites/README.md`, `.agents/skills/site-building/FAILURES.md`).
 
 ## Fast path (default)
 
