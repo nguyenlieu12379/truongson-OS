@@ -1,6 +1,6 @@
 # Sweets by Carla G (spec demo)
 
-Scroll-craft build, 2026-11-24, for Sweets by Carla G (Homestead, FL: home bakery, custom celebration cakes, desserts, Peruvian alfajores; orders by Instagram DM or WhatsApp, no website). Live (noindex): https://nguyenlieu12379.github.io/truongson-OS/sweets-by-carla-g/ (deployed by `.github/workflows/deploy-pages.yml` on push to main). Not approved yet, so not in the Sites list.
+Scroll-craft build, 2026-11-24, for Sweets by Carla G (Homestead, FL: home bakery, custom celebration cakes, desserts, Peruvian alfajores; orders by Instagram DM or WhatsApp, no website). Live (noindex): https://nguyenlieu12379.github.io/truongson-OS/sweets-by-carla-g/ (deployed by `.github/workflows/deploy-pages.yml` on push to main). Approved 2026-11-24, and in the Sites list.
 
 One fixed stage. Their flamingo cake, cut along its real edge, sits in front of a giant brush-script "Sweets"; the covered letters bob like piped icing. "Sweets" docks in the bar, the cake drops onto a turntable and eight of their custom cakes orbit it. At the peak the turntable spins a full turn and the theme names roll behind it, ending on "Yours." The orbit gathers under the cake, the camera pushes in on the flamingo and the top flowers and the cutout turns into their close-up in place, which shrinks into the first of four treats. The treats fly into the order card's thumbnails while the cake rises back and "Sweets" undocks behind it. Brief, colour split and failure checks: `BRIEF.md`. Answers: `PREFS.md`. Photo sources: `assets/source/SOURCES.md`.
 

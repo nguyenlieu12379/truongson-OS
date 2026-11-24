@@ -474,3 +474,13 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Also:** Sweets by Carla G (Homestead FL) built as a spec demo and deployed noindex; not in the Sites list until approved.
 
 **Owner:** not stated (Son or Truong)
+
+## 2026-11-24 - Sweets by Carla G approved
+
+**Decision:** The Sweets by Carla G spec demo (Homestead FL) is approved and added to the Sites list and the Pages index.
+
+**Why:** Approved after two fixes to the close-up scene (square photo at its own shape; push-in on the flamingo that turns into the close-up in place, no cut).
+
+**Open before the client sees it:** lead times, pickup or delivery, whether to show the Google rating; a real-phone check.
+
+**Owner:** not stated (Son or Truong)
