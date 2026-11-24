@@ -130,9 +130,11 @@
     const orb = { x: oc.x - oW * BOARD[0], y: oc.y - (oW / CAKE_AR) * BOARD[1], w: oW };
 
     // the names band: exactly where the heading was, one line, no taller
-    const nTop = orbitCopy.offsetTop, nH = orbitCopy.offsetHeight + (mobile ? 8 : 12);
+    // it fills the heading's slot and the calm gap under it, right down to the table
+    const nTop = orbitCopy.offsetTop - (mobile ? 2 : 6);
+    const nH = mobile ? Math.min(VW * 0.32, oc.y - upOf(Rx, ch) - nTop - 6) : ocBottom - nTop - 4;
     names.style.top = nTop + 'px'; names.style.height = nH + 'px';
-    const nfs = Math.min(nH * 0.86, mobile ? VW * 0.16 : VW * 0.1);
+    const nfs = Math.min(nH * 1.02, mobile ? VW * 0.19 : VW * 0.13);
     // each name gets a taller line than the band, so the next name's tall script letters never peek in
     const nLine = nH * 1.7;
     nameEls.forEach((b) => { b.style.fontSize = nfs + 'px'; b.style.lineHeight = nLine + 'px'; });

@@ -77,6 +77,7 @@ Food is never under letters: the cake is in front of "Sweets"; captions sit unde
 - 2026-11-24: "the color of the flamingo and the letter make it looks off". On shorter windows the orbit rose under "Your party, in cake." (rose script over the pink flamingo). The orbit is now sized to fit between the heading and the rail at any window height; the heading's second line hides under 640px tall.
 - 2026-11-24: bigger turntable, remove the line under the heading, smaller names frame, slower spin. The line is gone; the turntable grows into that room. The names roll in a one-line band where the heading was. The turntable scenes get about 1.5x the scroll (scroll is remapped, page 1450vh), and the fast turn goes cake by cake with a short hold on each so every name can be read.
 - 2026-11-24: "no not that dramatic, the table just slightly bigger". The table grows only a little: a gap is kept under the heading.
+- 2026-11-24: "make the running letter bigger, i can see some blank spaces above it". The names band now runs from the heading's top down to the table, and the names fill it.
 
 ## UI material
 
