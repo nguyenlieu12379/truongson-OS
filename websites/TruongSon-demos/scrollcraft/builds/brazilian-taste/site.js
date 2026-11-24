@@ -222,8 +222,10 @@
       put(li, 'opacity', String(t));
       put(li, 'transform', `translate3d(${r1((1 - t) * -40)}px,0,0)`);
     });
+    // the lunch box starts below the fold and is dragged up onto the band's edge
     const lp = E(seg(p, 0.82, 0.9));
-    const liftY = bandTop - L.liftH * 0.58 - lp * VH * 0.05;
+    const rise = E(seg(p, 0.775, 0.875));
+    const liftY = lerp(VH + 40, bandTop - L.liftH * 0.58, rise) - lp * VH * 0.05;
     put(lift, 'transform', `translate3d(0,${r1(liftY)}px,0) rotate(${r1(-14 + lp * 8)}deg)`);
     show(lift, b > 0 && liftY + L.liftH > 0);
 
