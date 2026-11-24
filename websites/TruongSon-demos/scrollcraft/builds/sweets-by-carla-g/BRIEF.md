@@ -78,6 +78,7 @@ Food is never under letters: the cake is in front of "Sweets"; captions sit unde
 - 2026-11-24: bigger turntable, remove the line under the heading, smaller names frame, slower spin. The line is gone; the turntable grows into that room. The names roll in a one-line band where the heading was. The turntable scenes get about 1.5x the scroll (scroll is remapped, page 1450vh), and the fast turn goes cake by cake with a short hold on each so every name can be read.
 - 2026-11-24: "no not that dramatic, the table just slightly bigger". The table grows only a little: a gap is kept under the heading.
 - 2026-11-24: "make the running letter bigger, i can see some blank spaces above it". The names band now runs from the heading's top down to the table, and the names fill it.
+- 2026-11-24: "make the spinning and running smooth, not stiff". The stepped turn (turn, hold, turn) is gone. The turntable now glides once from the first turn to the end of the spin: gentle start, builds speed, eases out, and only slows a little (never stops) as each cake reaches the front.
 
 ## UI material
 

@@ -239,11 +239,13 @@
   }
 
   // orbit rotation in card units: slow turn, the fast full turn (peak), then held
-  // the fast turn goes cake by cake: each step turns, then holds so its name can be read
+  // the fast turn never stops: one continuous glide that eases into and out of the turn and only
+  // slows a little as each cake reaches the front (speed 0.45x there, 1.55x between), so it reads without stepping
+  // one glide from the first turn to the end of the spin: starts gently, builds speed, eases out; no stop between
   const rotAt = (p) => {
-    if (p < 0.4) return SPIN_FROM * E(seg(p, 0.15, 0.4));
-    const n = SPIN_TO - SPIN_FROM, t = seg(p, 0.4, 0.6) * n, k = Math.min(n - 1, Math.floor(t));
-    return SPIN_FROM + k + E(clamp((t - k - 0.12) / 0.6));
+    const s = seg(p, 0.15, 0.6), w = 1 - Math.pow(1 - Math.pow(s, 1.6), 2);
+    const t = w * SPIN_TO;
+    return t - Math.sin(t * TAU) / TAU * 0.55;
   };
 
   // scroll -> timeline: the turntable scenes (p 0.36 to 0.64) get about 1.5x the scroll of the rest
