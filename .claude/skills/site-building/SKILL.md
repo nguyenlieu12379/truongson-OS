@@ -13,7 +13,7 @@ Run the stages in order. Each stage's file holds its detail.
 |---|---|---|---|
 | 1 pre-build | `01-prebuild.md` | One message of questions, then saves the answers | `PREFS.md` in the build folder |
 | 2 scroll-craft | `02-scroll-craft.md` | Brief (reusing PREFS), grammar, fingerprint gate, build, Playwright scroll check | page in `websites/TruongSon-demos/scrollcraft/builds/<name>/` |
-| 3 liquid-glass | `03-liquid-glass.md` | Theme sweep, cursor ball (56px) or cursor pull, glass buttons | glass assets copied into the site |
+| 3 liquid-glass | `03-liquid-glass.md` | Theme sweep, cursor ball (112px, the Vivace ball) or cursor pull, glass buttons | glass assets copied into the site |
 
 ## Modes
 

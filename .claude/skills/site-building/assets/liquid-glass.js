@@ -108,7 +108,7 @@
     opt = opt || {};
     if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return null;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return null;
-    var size = opt.size || 56;
+    var size = opt.size || 112;   // the Espresso Vivace ball: the default
     var ball = document.createElement("div");
     ball.className = "lg-ball"; ball.setAttribute("aria-hidden", "true");
     ball.style.setProperty("--lg-size", size + "px");

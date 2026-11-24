@@ -303,9 +303,9 @@
   document.fonts && document.fonts.ready.then(() => { layout(); kick(); });
   document.querySelectorAll('.stage img').forEach((img) => { if (img.decode) img.decode().catch(() => {}); });
 
-  // liquid glass: bare-lens cursor ball, glass buttons, magnet (no venom)
+  // liquid glass: default cursor ball, glass buttons, magnet (no venom)
   if (window.LiquidGlass) {
-    LiquidGlass.cursorBall({ size: 150, stiffness: 0.055, damping: 0.86, stretch: 0.03, maxStretch: 0.7 });   // bare-lens ball, trails the mouse
+    LiquidGlass.cursorBall();   // the default ball (Espresso Vivace: 112px, rim, highlight, gloss, shadow)
     LiquidGlass.glassify('.lg-glass');
     LiquidGlass.magnet('.cta-fly .cta', { reach: 'page', curve: 2.2, pull: 0.6, max: 46 });   // the yellow buttons lean toward the cursor wherever it is, harder as it gets close
   }

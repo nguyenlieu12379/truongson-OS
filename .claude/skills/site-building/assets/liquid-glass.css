@@ -47,7 +47,7 @@
 
 /* ---- Cursor ball -------------------------------------------------------- */
 .lg-ball {
-  --lg-size: 56px;
+  --lg-size: 112px;
   position: fixed; left: 0; top: 0; z-index: 2147483000;
   width: var(--lg-size); height: var(--lg-size);
   margin: calc(var(--lg-size) / -2) 0 0 calc(var(--lg-size) / -2);
