@@ -127,6 +127,16 @@
     const nfs = Math.min(nH * 0.78, mobile ? VW * 0.2 : VW * 0.12);
     nameEls.forEach((b) => { b.style.fontSize = nfs + 'px'; b.style.lineHeight = nH + 'px'; });
 
+    // ---- the macro: a square frame at the photo's own shape (never cropped to the screen)
+    const mS = mobile ? Math.min(VW - 24, VH * 0.58) : Math.min(VH - barH - 110, VW * 0.6);
+    const M = { x: mobile ? (VW - mS) / 2 : Math.min(VW * 0.57 - mS / 2, VW - mS - 24), y: barH + Math.max(0, (VH - barH - 64 - mS) / 2), s: mS };
+    Object.assign(macro.style, { left: M.x + 'px', top: M.y + 'px', width: mS + 'px', height: mS + 'px' });
+    const capW = macroCap.offsetWidth, capH = macroCap.offsetHeight;
+    const cap = mobile
+      ? { x: 12, y: Math.min(M.y + mS - 22, VH - 70 - capH) }
+      : { x: Math.max(16, M.x - capW + 36), y: M.y + mS - capH - 26 };
+    Object.assign(macroCap.style, { left: cap.x + 'px', top: cap.y + 'px' });
+
     // ---- treats: four frames, each at its own photo's shape
     trHead.parentElement.style.top = barH + (mobile ? 4 : 10) + 'px';
     const headBottom = trHead.parentElement.offsetTop + trHead.parentElement.offsetHeight;
@@ -192,7 +202,7 @@
     const railR = $('#rail').getBoundingClientRect();
     const stops = railBtns.map((b) => { const r = b.getBoundingClientRect(); return { p: +b.dataset.p, x: r.left + r.width / 2 - railR.left }; });
 
-    L = { barH, fs, wmX, wmY, wmW, wmH, hero, cH, dock: { x: rw.left, y: rw.top, s: dockS }, oc, Rx, Ry, ch, orb,
+    L = { barH, fs, wmX, wmY, wmW, wmH, hero, cH, M, dock: { x: rw.left, y: rw.top, s: dockS }, oc, Rx, Ry, ch, orb,
       T, od, odH, close, C, thumbR, stops, track: spacer.offsetHeight - innerHeight };
     root.classList.add('ready');
     dirty = true;
@@ -245,6 +255,12 @@
       put(cake, 'transform', tf(ck.x, ck.y));
       put(cake, 'width', r1(ck.w) + 'px'); put(cake, 'height', r1(ck.w / CAKE_AR) + 'px');
       show(cake, p < 0.726 || p > 0.885);
+      // the dive frames itself: the screen edges pull in to the macro's square
+      const fr = E(seg(p, 0.655, 0.7));
+      if (fr > 0 && p < 0.726) {
+        const M = L.M, chh = ck.w / CAKE_AR, c0 = (v) => r1(Math.max(0, v) * fr);
+        put(cake, 'clipPath', `inset(${c0(M.y - ck.y)}px ${c0(ck.x + ck.w - M.x - M.s)}px ${c0(ck.y + chh - M.y - M.s)}px ${c0(M.x - ck.x)}px round ${r1(18 * fr)}px)`);
+      } else put(cake, 'clipPath', 'none');
       const flat = p > 0.645 && p < 0.885;              // no drop shadow on the giant zoomed cake (costly)
       if (cake._flat !== flat) { cake._flat = flat; cake.classList.toggle('flat', flat); }
       tiltOn = p < 0.035 || p > 0.97;
@@ -297,15 +313,19 @@
     {
       const z = zoomAt(p);
       const t = seg(p, 0.675, 0.725);
-      const diag = Math.hypot(Math.max(F.x, VW - F.x), Math.max(F.y, VH - F.y));
+      const M = L.M, fx = F.x - M.x, fy = F.y - M.y;
+      const diag = Math.hypot(Math.max(fx, M.s - fx), Math.max(fy, M.s - fy));
       const rad = lerp(F.r * z * 0.85, diag, E(t));
-      const close = E(seg(p, 0.765, 0.81));          // the macro closes into the first treat's frame
+      const close = E(seg(p, 0.765, 0.81));          // the square shrinks into the first treat's frame
       if (close > 0) {
-        const f = L.T[0];
-        const ins = (v) => r1(v * close);
-        put(macro, 'clipPath', `inset(${ins(f.y)}px ${ins(VW - f.x - f.w)}px ${ins(VH - f.y - f.h)}px ${ins(f.x)}px round ${r1(14 * close)}px)`);
+        const f = L.T[0], s1 = f.h / M.s, sc = lerp(1, s1, close);
+        const cx = lerp(M.x + M.s / 2, f.x + f.w / 2, close), cy = lerp(M.y + M.s / 2, f.y + f.h / 2, close);
+        put(macro, 'transform', `translate3d(${r1(cx - M.s * sc / 2 - M.x)}px,${r1(cy - M.s * sc / 2 - M.y)}px,0) scale(${sc.toFixed(4)})`);
+        const ix = r1(Math.max(0, (M.s - f.w / s1) / 2) * close);
+        put(macro, 'clipPath', `inset(0 ${ix}px round ${r1(18 / sc)}px)`);
       } else {
-        put(macro, 'clipPath', `circle(${r1(rad)}px at ${r1(F.x)}px ${r1(F.y)}px)`);
+        put(macro, 'transform', 'none');
+        put(macro, 'clipPath', t >= 1 ? 'none' : `circle(${r1(rad)}px at ${r1(fx)}px ${r1(fy)}px)`);
       }
       show(macro, t > 0 && p < 0.83);
       const ci = E(seg(p, 0.715, 0.75)), co = E(seg(p, 0.765, 0.79));
