@@ -15,12 +15,12 @@ websites/
 
 Only sites that worked: approved by Son or Truong. No primary demo; pick the one that fits the prospect. Failed builds never go in this table. They are recorded in `.claude/skills/site-building/FAILURES.md` and kept offline (Son, 2026-11-24).
 
-| Owner | Site | Status | Path |
-| --- | --- | --- | --- |
-| TruongSon-demos | **Espresso Vivace**, practical cafe concept (menu, live open-now, maps, ordering). Its style is Vivace-only | Live at https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/ | `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` |
-| TruongSon-demos | **Delícias Cake & Bakery**, Burlington MA prospect. Unbroken pink world: wobbling pudim hero, fly through their front door to the counter | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/delicias-cake/ | `websites/TruongSon-demos/scrollcraft/builds/delicias-cake/` |
-| TruongSon-demos | **Brazilian Taste**, Dallas TX prospect (meal prep, WhatsApp only). White world: their own wordmark splits open on their bowls, then a 7-day grid fills with their trays | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/brazilian-taste/ | `websites/TruongSon-demos/scrollcraft/builds/brazilian-taste/` |
-| TruongSon-demos | **Pakachi Kitchen**, Herndon VA prospect (Pakistani halal, weekly 6-dish deal, WhatsApp only). Black or white and gold: their biryani tray over a giant PAKACHI becomes card 1 of a dealt hand that doubles ($90 to $130), then a catering band and an order ticket | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/pakachi-kitchen/ | `websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen/` |
+| Owner | Site | WhatsApp | Status | Path |
+| --- | --- | --- | --- | --- |
+| TruongSon-demos | **Espresso Vivace**, practical cafe concept (menu, live open-now, maps, ordering). Its style is Vivace-only | None (concept demo, not a WhatsApp business) | Live at https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/ | `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` |
+| TruongSon-demos | **Delícias Cake & Bakery**, Burlington MA prospect. Unbroken pink world: wobbling pudim hero, fly through their front door to the counter | [(781) 365-0181](https://wa.me/17813650181) (used on the site, from their Instagram graphics). Their research also lists (781) 661-8417: to confirm | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/delicias-cake/ | `websites/TruongSon-demos/scrollcraft/builds/delicias-cake/` |
+| TruongSon-demos | **Brazilian Taste**, Dallas TX prospect (meal prep, WhatsApp only). White world: their own wordmark splits open on their bowls, then a 7-day grid fills with their trays | [(682) 862-9545](https://wa.me/16828629545) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/brazilian-taste/ | `websites/TruongSon-demos/scrollcraft/builds/brazilian-taste/` |
+| TruongSon-demos | **Pakachi Kitchen**, Herndon VA prospect (Pakistani halal, weekly 6-dish deal, WhatsApp only). Black or white and gold: their biryani tray over a giant PAKACHI becomes card 1 of a dealt hand that doubles ($90 to $130), then a catering band and an order ticket | [(571) 341-0009](https://wa.me/15713410009) (same number for call/text) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/pakachi-kitchen/ | `websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen/` |
 
 Scroll-craft builds live in `websites/TruongSon-demos/scrollcraft/builds/` (set by `.scrollcraft.json`), next to the skill's `FINGERPRINTS.md` registry.
 
