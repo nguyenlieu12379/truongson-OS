@@ -25,12 +25,14 @@ a { color: inherit; }
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 max(16px, 3vw); background: var(--white);
   border-bottom: 1px solid color-mix(in srgb, var(--green) 22%, transparent);
-  transform: translateY(calc(-100% - 40px)); transition: transform 420ms cubic-bezier(.22,1,.36,1);
+  transform: translateY(calc(-100% - 40px)); will-change: transform;   /* moved by the scroll timeline */
 }
-.bar.on { transform: none; }
 .bar-logo { height: 40px; width: auto; }
 
-/* ---- the one button ---- */
+/* ---- the one button: a single element that travels between its slots ---- */
+.cta-fly { position: fixed; left: 0; top: 0; z-index: 31; transform-origin: 0 0; pointer-events: none; will-change: transform; }
+.cta-fly .cta { pointer-events: auto; white-space: nowrap; }
+.cta-slot { display: inline-block; flex: none; }
 .cta.lg-glass {
   background: color-mix(in srgb, var(--yellow) 90%, transparent);
   color: var(--green); text-shadow: none; font-weight: 600; letter-spacing: .01em;
@@ -184,5 +186,4 @@ a { color: inherit; }
 }
 @media (prefers-reduced-motion: reduce) {
   .l i, .taste i, .tray-drop, .ready .tray-bob, .ready .l.cov, .ready .tray-shadow, .fruit img, .mq-track { animation: none; }
-  .bar { transition: none; }
 }

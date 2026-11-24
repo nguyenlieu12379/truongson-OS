@@ -26,6 +26,7 @@
   const ways = $('#ways'), slots = $$('.slot'), nums = $$('.num'), flyers = $$('.flyer');
   const band = $('#band'), steps = $$('.steps li'), lift = $('#lift');
   const close = $('#close');
+  const ctaFly = $('#ctaFly'), cta = ctaFly.firstElementChild, slotHero = $('#slotHero'), slotClose = $('#slotClose');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
   const clamp = (v, a = 0, b = 1) => (v < a ? a : v > b ? b : v);
@@ -97,8 +98,21 @@
       f._c = {};
     });
 
+    // the travelling button: its full size is the close size; hero and header are scaled-down copies of it
+    const bw = cta.offsetWidth, bh = cta.offsetHeight, bf = parseFloat(getComputedStyle(cta).fontSize);
+    const sHero = 17 / bf, sBar = (mobile ? 13.5 : 14.5) / bf;
+    Object.assign(slotHero.style, { width: bw * sHero + 'px', height: bh * sHero + 'px' });
+    Object.assign(slotClose.style, { width: bw + 'px', height: bh + 'px' });
+    heroCopy.style.transform = 'none'; close.style.transform = 'none';
+    const rh = slotHero.getBoundingClientRect(), rc = slotClose.getBoundingClientRect();
+    const barH = bar.offsetHeight, pad = Math.max(16, VW * 0.03);
+    const C = {
+      hero: { x: rh.left, y: rh.top, s: sHero },
+      bar: { x: VW - pad - bw * sBar, y: (barH - bh * sBar) / 2, s: sBar },
+      close: { x: rc.left, y: rc.top, s: 1 },
+    };
     L = {
-      wmH, gc: wmX + wmW * GAP_C, gh: wmW * GAP_H,
+      wmH, C, barH, gc: wmX + wmW * GAP_C, gh: wmW * GAP_H,
       gT: wmY + wmH * GLYPH_T, gB: VH - (wmY + wmH * GLYPH_B),
       cell: { s, tx: r.left + r.width / 2 - (VW * s) / 2, ty: r.top + r.height / 2 - (VH * s) / 2,
               ix: (VW - r.width / s) / 2, iy: (VH - r.height / s) / 2 },
@@ -106,7 +120,7 @@
       liftH: lift.offsetHeight,
       track: spacer.offsetHeight - innerHeight,
     };
-    for (const el of [wmL, wmR, tray, openPh, ways, band, lift, close, heroCopy, marquee, weekH, ...fruits, ...letters, ...lns, ...steps,
+    for (const el of [ctaFly, bar, wmL, wmR, tray, openPh, ways, band, lift, close, heroCopy, marquee, weekH, ...fruits, ...letters, ...lns, ...steps,
       ...days.map((d) => d.querySelector('.ph img')).filter(Boolean), ...flyers.map((f) => f.querySelector('img'))]) el._c = {};
     moved.forEach((el) => { el._c = {}; });
     root.classList.add('ready');
@@ -234,7 +248,15 @@
     put(close, 'transform', `translate3d(0,${r1((1 - k) * 24)}px,0)`);
     show(close, k > 0);
 
-    bar.classList.toggle('on', p > 0.06 && p < 0.93);
+    // the header bar slides in and out with the scroll, so the button lands in it
+    const bIn = E(seg(p, 0.03, 0.065)), bOut = E(seg(p, 0.925, 0.96));
+    put(bar, 'transform', `translate3d(0,${r1(-(1 - bIn + bOut) * (L.barH + 40))}px,0)`);
+    // one button: hero (bottom right) -> header (top right) -> close (bottom right, growing)
+    const C = L.C, up = E(seg(p, 0.015, 0.07)), down = E(seg(p, 0.925, 0.99));
+    const A = p < 0.5 ? C.hero : C.bar, Z = p < 0.5 ? C.bar : C.close, t = p < 0.5 ? up : down;
+    // arc a little on the way, so it travels instead of sliding on a rail
+    const arc = Math.sin(t * Math.PI) * (p < 0.5 ? -40 : 40);
+    put(ctaFly, 'transform', `translate3d(${r1(lerp(A.x, Z.x, t) + arc)}px,${r1(lerp(A.y, Z.y, t))}px,0) scale(${lerp(A.s, Z.s, t).toFixed(4)})`);
     tiltOn = te < 0.5;
   }
 
@@ -279,6 +301,6 @@
   if (window.LiquidGlass) {
     LiquidGlass.cursorBall({ size: 104, stiffness: 0.055, damping: 0.86, stretch: 0.03, maxStretch: 0.7 });
     LiquidGlass.glassify('.lg-glass');
-    LiquidGlass.magnet('.cta', { reach: 'page', curve: 2.2, pull: 0.6, max: 46 });   // the yellow buttons lean toward the cursor wherever it is, harder as it gets close
+    LiquidGlass.magnet('.cta-fly .cta', { reach: 'page', curve: 2.2, pull: 0.6, max: 46 });   // the yellow buttons lean toward the cursor wherever it is, harder as it gets close
   }
 })();
