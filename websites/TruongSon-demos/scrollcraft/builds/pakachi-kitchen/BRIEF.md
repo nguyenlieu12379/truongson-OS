@@ -1,0 +1,87 @@
+# Pakachi Kitchen: brief
+
+Pre-build answers: [PREFS.md](PREFS.md) (Son, 2026-11-24). Topics 6, 7, 8, 13 and 14 were delegated ("you decide") and are **authored** below.
+
+Spec demo. Goes live with noindex when done (Son: "go live when done"). Not shown to the client yet.
+
+## Who they are (their own IG and FB only)
+
+- Pakachi Kitchen LLC, Herndon, VA 20171. "Soul of Karachi" (their logo). Pakistani, Karachi and Delhi style, halal. Certified Food Protection Manager.
+- Weekly menu deal, posted for Tuesday and Thursday: 6 dishes, single servings $90, double servings $130. Free pickup, or delivery for $5. No minimum for pickup; any dish on its own in single or double servings. Uber Courier outside their delivery zone.
+- Catering for groups (weekend catering posts: biryani trays, haleem, bun kabab sliders, fajita subs, corn soup).
+- Call/text +1 (571) 341-0009. WhatsApp wa.me/15713410009 (same number, from their captions). They also run a WhatsApp community (not linked on the page: it's an invite link).
+- Their look: black meal-prep trays and foil catering trays shot close, warm curry oranges, white basmati. Logo: a gold ring with a wheat sprig and a gold cloche, serif caps.
+
+## Colour split (Son: 60 black or white, 30 gold, 10 saffron)
+
+| Share | Dark mode | Light mode | Where |
+|---|---|---|---|
+| 60 | Black `#0C0B0A` | White `#FBFAF7` | the stage |
+| 30 | Gold `#C4A469` (their logo, sampled `#A2895A` to `#C1A871`) | Deep gold `#86672F` (text on white, 5:1) | the wordmark, all type, hairlines, the ring, the order panel |
+| 10 | Saffron `#F4A000` | Saffron `#F4A000` | "Order on WhatsApp" only |
+
+## Photos
+
+All from their Facebook page (2048px originals; Instagram only serves 1080). Picked for no text on the food. See `assets/source/SOURCES.md`.
+
+## Journey and feeling (authored)
+
+One fixed stage, one scroll timeline. Nothing scrolls in document flow. Nothing pops in or out: every entrance and exit is a move, a wipe or a turn (Son: "no disappear-appear, no single cut").
+
+| # | Beat | On screen | Feeling |
+|---|---|---|---|
+| 1 | Hero | Giant gold PAKACHI. Their full foil tray of Karachi biryani, cut from its photo, rises from the bottom right, one layer in front of "CHI". The letters behind it shimmer like heat off the rice. Their logo ring turns slowly behind the tray. Real lemon slices (cut from their haleem photo) drift. | Appetite, and "this is serious food". |
+| 2 | The deal | The letters part off both sides. The tray flies to the centre and the frame closes around it: it becomes card 1. Five more of their dishes are dealt out of it into a fanned hand, along the arc of their logo ring, which has grown into the fan's rim. | Anticipation building, card by card. |
+| 3 | Double (peak) | Every card slides a twin out from behind it. "Single servings, $90" rolls to "Double servings, $130". | The peak: "the whole hand doubles". |
+| 4 | Catering | The hand turns like a wheel and leaves left. The haleem card opens into a wide band; its lemons fly out of it. The band pans through their catering trays. | Abundance. |
+| 5 | How to order | Their gold rises from below and pushes the band up. Three steps. | Ease. |
+| 6 | Close | The gold panel tightens into an order ticket. The hand fans back in behind it, the tray first. The button lands on the ticket. Holds. | Resolve: "I know exactly what to do". |
+
+**Peak:** "You scroll and the whole hand of dishes doubles, and the price rolls from 90 to 130." Lives in beat 3, which gets the most scroll room with the deal before it.
+
+**Signature move (authored):** the dealt hand that doubles. It shows their actual offer (6 dishes, single or double) and only makes sense for this kitchen.
+
+**Tell-someone sentence:** "It's the site where their biryani tray turns into a hand of six dishes, and the whole hand doubles when you keep scrolling."
+
+**Authored silence:** a short hold after the double (p 0.50 to 0.53) and at the end. Both are intentional.
+
+## Grammar and gate
+
+- Grammar: stage choreography (one fixed 2D stage, layers handed from beat to beat). Not chaptered editorial (Vivace), not a z-camera worldflight (Delícias).
+- Nav: a gold thread down the right edge that fills as you scroll, five clickable stops. Bar with logo, theme toggle and the travelling button.
+- Hero: product cutout in front of a giant wordmark with covered letters animating. **Same as Delícias, on Son's explicit request** ("covering a huge PAKACHI").
+- Act sequence: hero > fan deal > double > wheel exit + band pan > rising panel > ticket with the hand reprised.
+- Close: the order panel tightens into a ticket, the hand fans back in behind it. Holds.
+- Signature: the hand that doubles.
+- Gate: differs from Delícias on grammar, nav, act sequence, close, signature (5 of 6). From Vivace on all 6. From Brazilian Taste (not in the registry yet): its signature was a 7-day grid filling, so the deal here is a fanned hand on an arc, not a grid, and it doubles instead of counting days.
+
+## How this build avoids every pattern in FAILURES.md
+
+| Failure | This build |
+|---|---|
+| One photo panel plus a text column for the whole scroll | No layout repeats: wordmark + cutout, fanned hand, wide band pan, full-width panel, centred ticket. |
+| Blurred-photo or gradient fill backgrounds | Flat black or white. No blur behind anything. The only gradient is a short scrim under each card caption. |
+| Floating cards and pills with no reason | The cards are the deal. They sit on the ring's arc and overlap like a held hand. Lemons come out of the haleem photo they were cut from. |
+| Muted beige palette with a thin brand accent | Their gold carries 30%: the wordmark, every line of type, the ring, the order panel. Saffron only on the button. |
+| Same small label + big sentence every beat | Copy changes shape: wordmark, a price that rolls, captions on cards, a panned caption row, three numbered steps, a ticket. |
+| Plastic drawn props | None. Every object is their photo or their logo. The only drawn things are hairlines and type. |
+| "Would this fit any other business?" | No: their tray, their 6-dish deal and its two prices, their ring. |
+
+Food is never under letters: the tray is in front of PAKACHI; captions sit on a scrim at a card's bottom edge, below the food.
+
+## UI material
+
+- Liquid glass full stack (stage 3): theme toggle with the glass sweep, the default cursor ball (112px Vivace ball, Brazilian Taste drag), glass buttons, the button leans toward the cursor.
+- Two themes: black and gold, white and gold. Device default, toggle remembers.
+
+## Motion budget (Son: "super smooth, no single lag")
+
+- One rAF loop on smoothed scroll. Transforms and clip-path only on moving things, written only when they change. Layout measured once per resize.
+- No opacity fades for entrances or exits. No filters on moving photos.
+- Images decoded before first paint. Cutouts as WebP.
+- Real phone check before the client sees it.
+
+## Facts used
+
+- All from their IG and FB captions: name, Herndon VA 20171, Soul of Karachi, halal, Certified Food Protection Manager, the deal and prices, pickup/delivery/Uber Courier, Tuesday and Thursday menus, the phone and WhatsApp number, dish names on the photos.
+- **To confirm with the client:** delivery zone, order cut-off times, whether the prices still hold.

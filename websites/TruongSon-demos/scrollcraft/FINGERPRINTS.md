@@ -33,6 +33,7 @@ changes only grammar and world will fail it.
 | espresso-vivace v3 (2026-11-20, retires rows above) | Not a scroll-craft page anymore: practical cafe site (menu, open-now, maps, order) | Sticky bar: wordmark, Menu, Locations, Order pill | Headline + live open-now status + Order button + photo | Static sections, no acts | Order cards | None (open-now status is a utility, not a signature) | Paper, Vivace red | 4500 |
 | delicias-cake (2026-11-23) | Continuous world (bespoke stills variant: one fixed stage, page-JS camera along z, photo planes, no video legs) | Route map: floating pink pill of 7 clickable places (Pudim to Counter), current place filled; dots + current label on phones. Wordmark top-left, Order pill top-right | Real pudim cutout (SVG clip on their photo) one layer in front of a giant "Delícias", glow plane behind, sprinkle foreground; covered letters wobble | Worldflight-style track: hero > sweets > morning > parties > authored silence (address + far door) > peak: fly through the storefront into the shop > counter. 7 places, ~10.3vh, one pace | Arrival inside the shop (blurred display case), the same pudim waiting on the counter, card with hours, WhatsApp order, call, directions. Holds | Jelly pudim: scroll speed kicks a spring that wobbles the real pudim and the letters it covers; tap to poke | Real @deliciascakee photos, soft pink / cocoa / hot pink, Bricolage Grotesque + Outfit, playful | 4501 |
 
+| pakachi-kitchen (2026-11-24) | Stage choreography (one fixed 2D stage; layers handed scene to scene, page-JS transforms and clip-path only, no opacity fades) | Bar (logo, theme toggle, travelling button) + a gold thread down the right edge, five clickable stops, fills with scroll | Their biryani tray cut from its photo, bleeding in from the bottom right in front of a giant gold PAKACHI; covered letters shimmer; their logo ring turns behind it (same hero device as Delícias, on Son's request) | hero > tray becomes card 1, five dishes dealt into a fan on the ring's arc > peak: the hand doubles, $90 rolls to $130 > wheel turns the hand away, haleem card opens into a band that pans 5 catering trays > gold panel rises (3 steps) > ticket. ~11.5vh, 6 scenes | The gold panel tightens into an order ticket; the hand fans back in behind it, tray first; button lands on the ticket. Holds | The dealt hand that doubles: every card slides a twin out from behind it while the price rolls single $90 to double $130 | Their Facebook photos (2048px), black or white / their logo gold / saffron CTA, Cinzel + Cormorant Garamond + Manrope, two themes | 4510 |
 
 ---
 
@@ -54,6 +55,9 @@ Nothing is taken yet.
 - **Product cutout in front of a giant wordmark with covered letters animating** as the hero (delicias-cake).
 - **Fly-through-the-storefront** peak into an arrival screen (delicias-cake).
 - **Jelly wobble** driven by scroll velocity (delicias-cake).
+- **Fanned hand of dish cards on an arc that doubles** (twins slide out, price rolls) (pakachi-kitchen).
+- **Order panel that tightens into a ticket** with the hand reprised behind it (pakachi-kitchen).
+- **Right-edge gold thread** nav (pakachi-kitchen).
 
 ---
 

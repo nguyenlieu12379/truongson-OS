@@ -1,0 +1,187 @@
+/* Pakachi Kitchen. 60 black (or white) / 30 their gold / 10 saffron, CTA only.
+   One fixed stage; site.js moves everything with transform and clip-path. */
+
+:root {
+  --bg: #FBFAF7;           /* 60: white */
+  --surface: #EFEBE2;
+  --gold: #86672F;         /* 30: type and lines on white (5:1) */
+  --gold-soft: #9A7C45;
+  --gold-fill: #C4A469;    /* the order panel */
+  --on-gold: #14110C;
+  --ink-soft: #5E5446;
+  --saffron: #F4A000;      /* 10: the button, nothing else */
+  --on-saffron: #1A1206;
+  --shadow: rgb(40 30 15 / 0.28);
+  --scrim: rgb(12 10 8 / 0.62);
+  --f-word: "Cinzel", "Trajan Pro", Georgia, serif;
+  --f-head: "Cormorant Garamond", Georgia, serif;
+  --f-text: "Manrope", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C0B0A; --surface: #17140F; --gold: #C4A469; --gold-soft: #A88C58; --gold-fill: #C4A469;
+    --on-gold: #0C0B0A; --ink-soft: #A39780; --shadow: rgb(0 0 0 / 0.55); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C0B0A; --surface: #17140F; --gold: #C4A469; --gold-soft: #A88C58; --gold-fill: #C4A469;
+  --on-gold: #0C0B0A; --ink-soft: #A39780; --shadow: rgb(0 0 0 / 0.55); color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--gold); font: 400 16px/1.5 var(--f-text); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: fixed; left: 12px; top: -60px; z-index: 50; background: var(--saffron); color: var(--on-saffron); padding: 10px 14px; border-radius: 8px; font-weight: 700; }
+.skip:focus { top: 12px; }
+.spacer { height: 1150vh; }
+@media (max-width: 760px) { .spacer { height: 1000vh; } }
+
+/* ---- bar ---------------------------------------------------------------- */
+.bar { position: fixed; inset: 0 0 auto 0; z-index: 20; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 max(16px, 3vw); pointer-events: none; }
+.bar > * { pointer-events: auto; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 600 15px/1 var(--f-word); letter-spacing: 0.14em; text-transform: uppercase; }
+.brand img { width: 40px; height: 40px; object-fit: contain; }
+.bar-r { display: flex; align-items: center; gap: 12px; }
+.lg-theme-btn { color: var(--gold); }
+.cta-slot { display: block; }
+
+/* ---- the thread (right edge) ------------------------------------------- */
+.thread { position: fixed; right: max(10px, 1.4vw); top: 50%; z-index: 19; transform: translateY(-50%); display: flex; flex-direction: column; gap: 26px; align-items: flex-end; }
+.thread-line { position: absolute; right: 5px; top: 6px; bottom: 6px; width: 1px; background: color-mix(in oklab, var(--gold) 30%, transparent); }
+.thread-line b { position: absolute; inset: 0; background: var(--gold); transform-origin: top; transform: scaleY(0); }
+.thread button { position: relative; display: flex; align-items: center; gap: 10px; padding: 0; border: 0; background: none; color: var(--gold); cursor: pointer; font: 600 10px/1 var(--f-text); letter-spacing: 0.16em; text-transform: uppercase; min-height: 24px; }
+.thread button::after { content: ""; width: 11px; height: 11px; border-radius: 50%; border: 1px solid var(--gold); background: var(--bg); transition: background-color 200ms ease, transform 200ms cubic-bezier(0.23, 1, 0.32, 1); }
+.thread button.on::after { background: var(--gold); transform: scale(1.15); }
+.thread button span { clip-path: inset(0 0 0 100%); transform: translateX(8px); transition: clip-path 260ms cubic-bezier(0.23, 1, 0.32, 1), transform 260ms cubic-bezier(0.23, 1, 0.32, 1); }
+.thread:hover button span, .thread button:focus-visible span, .thread button.on span { clip-path: inset(0); transform: none; }
+.thread button:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 4px; }
+@media (max-width: 760px) { .thread { gap: 18px; } .thread button span { display: none; } }
+
+/* ---- stage -------------------------------------------------------------- */
+.stage { position: fixed; inset: 0; overflow: hidden; height: 100vh; height: 100lvh; }
+.stage > * { position: absolute; }
+.js-hide, html:not(.ready) .stage > :not(.wm):not(.tray):not(.hero-copy) { visibility: hidden; }
+
+.ring { left: 0; top: 0; z-index: 1; will-change: transform; }
+.ring img { width: 100%; height: 100%; animation: spin 120s linear infinite; }
+
+.wm { left: 0; top: 0; z-index: 2; display: flex; white-space: nowrap; font: 600 100px/0.8 var(--f-word); letter-spacing: 0.02em; color: var(--gold); }
+.wm .l { display: block; will-change: transform; }
+.wm .l i { display: block; font-style: normal; }
+.wm .l.cov i { animation: shimmer 3.6s ease-in-out infinite; animation-delay: calc(var(--k, 0) * -0.9s); }
+@keyframes shimmer {
+  0%, 100% { transform: translate3d(0, 0, 0) skewX(0deg); }
+  30% { transform: translate3d(0, -3.5%, 0) skewX(-1.4deg); }
+  60% { transform: translate3d(0, -1%, 0) skewX(1deg); }
+}
+
+.hero-copy { left: max(18px, 4vw); z-index: 6; width: min(430px, 40vw); overflow: hidden; padding-bottom: 8px; }
+.soul { margin: 0 0 10px; font: italic 500 clamp(34px, 4vw, 56px)/1 var(--f-head); }
+.sub { margin: 0 0 22px; color: var(--ink-soft); font-size: 16px; max-width: 34ch; }
+#slotHero { height: 52px; }
+
+.marquee { left: 0; right: 0; bottom: 0; z-index: 6; height: 44px; overflow: hidden; border-top: 1px solid color-mix(in oklab, var(--gold) 35%, transparent); display: flex; align-items: center; }
+.mq-track { display: flex; white-space: nowrap; animation: mq 48s linear infinite; font: 600 12px/1 var(--f-text); letter-spacing: 0.22em; text-transform: uppercase; }
+.mq-track span { padding-right: 0.3em; }
+@keyframes mq { to { transform: translate3d(-50%, 0, 0); } }
+
+/* ---- tray --------------------------------------------------------------- */
+.tray { left: 0; top: 0; z-index: 4; perspective: 1200px; will-change: transform, clip-path; }
+.tray-tilt { width: 100%; height: 100%; transform-style: preserve-3d; }
+.tray-bob { width: 100%; height: 100%; animation: bob 5.5s ease-in-out infinite; }
+.tray img { width: 100%; height: 100%; object-fit: fill; }
+@keyframes bob { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -1.2%, 0); } }
+
+/* ---- lemons ------------------------------------------------------------- */
+.lemon { left: 0; top: 0; width: 200px; height: 200px; z-index: 9; transform-origin: 0 0; will-change: transform; }
+.lemon img { width: 100%; height: 100%; animation: spin 26s linear infinite; filter: drop-shadow(0 10px 14px var(--shadow)); }
+.lemon:nth-of-type(2n) img { animation-duration: 34s; animation-direction: reverse; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---- the deal ----------------------------------------------------------- */
+.deal { left: 0; right: 0; top: 0; z-index: 6; overflow: hidden; text-align: center; padding: 0 16px 6px; }
+.deal h2 { margin: 0; font: 500 clamp(34px, 4.6vw, 68px)/1 var(--f-head); }
+.deal h2 em { font-style: italic; }
+.price { margin: 12px 0 6px; font: 600 clamp(15px, 1.5vw, 19px)/1.2 var(--f-text); letter-spacing: 0.04em; display: flex; justify-content: center; align-items: baseline; gap: 0.32em; flex-wrap: wrap; }
+.roll { display: inline-block; height: 1.2em; overflow: hidden; vertical-align: bottom; }
+.roll-col { display: block; line-height: 1.2em; will-change: transform; }
+.usd { font: 600 1.6em/1 var(--f-word); display: inline-flex; align-items: baseline; }
+.usd .roll { height: 1em; }
+.usd .roll-col { line-height: 1em; }
+.deal-note { margin: 0; color: var(--ink-soft); font-size: 14px; }
+
+.hand { left: 0; top: 0; width: 0; height: 0; z-index: 3; }
+.twin, .card { position: absolute; left: 0; top: 0; border-radius: 14px; overflow: hidden; will-change: transform; background: var(--surface);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--gold) 55%, transparent), 0 18px 34px -16px var(--shadow); }
+.twin img, .card > img { width: 100%; height: 100%; object-fit: cover; }
+.twin::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--gold) 55%, transparent); }
+.cards { margin: 0; padding: 0; list-style: none; left: 0; top: 0; width: 0; height: 0; z-index: 5; }
+.card.c0 { background: transparent; box-shadow: none; }
+.card .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 12px 10px; background: linear-gradient(to top, var(--scrim), rgb(0 0 0 / 0)); color: #F3E6C8; font: 600 11px/1.25 var(--f-text); letter-spacing: 0.12em; text-transform: uppercase; }
+.card.wide { box-shadow: none; background: transparent; }
+.card.wide .cap { bottom: var(--capb, 0px); left: var(--capx, 0px); right: var(--capx, 0px); }
+.band-track { position: absolute; left: 0; top: 0; height: 100%; display: flex; will-change: transform; }
+.band-track figure { margin: 0; height: 100%; flex: none; }
+.band-track img { width: 100%; height: 100%; object-fit: cover; }
+.nums { left: 0; top: 0; width: 0; height: 0; z-index: 6; }
+.nums b { position: absolute; left: 0; top: 0; width: 60px; margin-left: -30px; text-align: center; font: 600 30px/1 var(--f-word); color: var(--gold); will-change: transform; }
+
+.fan-key { display: none; left: 16px; right: 16px; top: 0; z-index: 6; margin: 0; overflow: hidden; text-align: center; font: 600 11px/1.6 var(--f-text); letter-spacing: 0.12em; text-transform: uppercase; }
+.fan-key span { display: block; will-change: transform; }
+
+/* ---- catering ----------------------------------------------------------- */
+.cater { left: 0; top: 0; width: 100%; height: 100%; z-index: 6; pointer-events: none; }
+.cater-h { position: absolute; left: 0; right: 0; overflow: hidden; padding: 0 max(18px, 7vw); }
+.cater h2 { margin: 0; font: 500 clamp(36px, 5vw, 76px)/1 var(--f-head); }
+.cater h2 em { font-style: italic; }
+.cater-p { position: absolute; margin: 0; color: var(--ink-soft); max-width: 36ch; font-size: 16px; }
+.cater-caps { position: absolute; overflow: hidden; height: 20px; }
+.caps-track { display: flex; margin: 0; padding: 0; list-style: none; will-change: transform; }
+.caps-track li { flex: none; font: 600 12px/20px var(--f-text); letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+
+/* ---- the order panel and ticket ---------------------------------------- */
+.panel { left: 0; top: 0; width: 100%; z-index: 8; background: var(--gold-fill); color: var(--on-gold); will-change: transform, clip-path; }
+.steps-wrap { position: absolute; left: max(18px, 7vw); right: max(18px, 7vw); top: 9vh; will-change: transform; }
+.panel h2 { margin: 0 0 4vh; font: 500 clamp(38px, 5vw, 76px)/1 var(--f-head); }
+.steps { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4vw; }
+.steps li { display: grid; gap: 14px; align-content: start; border-top: 1px solid color-mix(in oklab, var(--on-gold) 45%, transparent); padding-top: 18px; font: 500 clamp(18px, 1.7vw, 24px)/1.3 var(--f-text); will-change: transform; }
+.steps b { font: 600 clamp(36px, 3.6vw, 54px)/1 var(--f-word); }
+.steps-note { margin: 5vh 0 0; font-size: 15px; max-width: 60ch; }
+.ticket { position: absolute; left: 0; top: 0; overflow: hidden; }
+.tk-in { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 28px 22px; will-change: transform; }
+.tk-name { margin: 0; font: 600 clamp(26px, 2.6vw, 36px)/1 var(--f-word); letter-spacing: 0.08em; text-transform: uppercase; }
+.tk-soul { margin: 8px 0 18px; font: italic 500 clamp(20px, 2vw, 26px)/1 var(--f-head); }
+.tk-line { margin: 4px 0; font-size: 15px; }
+.tk-line a { font-weight: 700; text-underline-offset: 3px; }
+#slotClose { margin-top: 22px; height: 60px; }
+
+/* ---- the button ----------------------------------------------------------- */
+.cta-fly { position: fixed; left: 0; top: 0; z-index: 30; transform-origin: 0 0; will-change: transform; }
+.cta.lg-glass { min-height: 60px; padding: 0 30px; font: 700 19px/1 var(--f-text); letter-spacing: 0.01em; white-space: nowrap;
+  color: var(--on-saffron); text-shadow: none; background: color-mix(in oklab, var(--saffron) 88%, transparent);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.55), inset 2px 3px 6px -2px rgb(255 255 255 / 0.7), inset -3px -4px 8px -4px rgb(0 0 0 / 0.25), 0 10px 24px -8px var(--shadow); }
+.cta.lg-glass:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+/* ---- phones ------------------------------------------------------------- */
+@media (max-width: 760px) {
+  .bar { height: 60px; }
+  .brand span { display: none; }
+  .hero-copy { width: calc(100vw - 36px); }
+  .sub { font-size: 15px; margin-bottom: 16px; }
+  .marquee { height: 36px; }
+  .steps { grid-template-columns: 1fr; gap: 18px; }
+  .steps li { grid-template-columns: auto 1fr; align-items: baseline; padding-top: 12px; }
+  .steps-wrap { top: 8vh; }
+  .card .cap { display: none; }
+  .fan-key { display: block; }
+  .nums b { font-size: 20px; }
+  .cta.lg-glass { min-height: 54px; padding: 0 24px; font-size: 17px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wm .l.cov i, .tray-bob, .lemon img, .mq-track { animation: none; }
+}

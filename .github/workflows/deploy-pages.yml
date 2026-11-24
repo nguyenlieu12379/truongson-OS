@@ -3,6 +3,7 @@ name: Deploy websites to GitHub Pages
 # /espresso-vivace/ -> websites/TruongSon-demos/scrollcraft/builds/espresso-vivace (concept demo, scroll-craft)
 # /delicias-cake/ -> websites/TruongSon-demos/scrollcraft/builds/delicias-cake (prospect demo, scroll-craft, noindex)
 # /brazilian-taste/ -> websites/TruongSon-demos/scrollcraft/builds/brazilian-taste (prospect demo, scroll-craft, noindex)
+# /pakachi-kitchen/ -> websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen (prospect demo, scroll-craft, noindex; not in the list until approved)
 # /             -> a plain list of the approved sites (no primary demo, noindex)
 # Every push to main that touches these paths redeploys all sites.
 
@@ -41,6 +42,9 @@ jobs:
           mkdir -p _site/brazilian-taste
           cp -R websites/TruongSon-demos/scrollcraft/builds/brazilian-taste/. _site/brazilian-taste/
           rm -rf _site/brazilian-taste/README.md _site/brazilian-taste/BRIEF.md _site/brazilian-taste/PREFS.md _site/brazilian-taste/serve.ps1 _site/brazilian-taste/assets/source
+          mkdir -p _site/pakachi-kitchen
+          cp -R websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen/. _site/pakachi-kitchen/
+          rm -rf _site/pakachi-kitchen/README.md _site/pakachi-kitchen/BRIEF.md _site/pakachi-kitchen/PREFS.md _site/pakachi-kitchen/serve.ps1 _site/pakachi-kitchen/assets/source
           cat > _site/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">

@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0C0B0A">
+<title>Pakachi Kitchen · Soul of Karachi · Herndon, VA</title>
+<meta name="description" content="Home-cooked Pakistani halal food in Herndon, Virginia. A 6-dish weekly menu deal and catering by the tray. Order on WhatsApp.">
+<link rel="icon" type="image/png" href="assets/icon-64.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<script>
+(function (d) {
+  var CONFIG = {
+    key: "pakachi-theme",            // localStorage key, unique per site
+    colors: { light: "#FBFAF7", dark: "#0C0B0A" },   // <meta name=theme-color> per theme
+    duration: 1400                // ms for the glass sweep. 1400 reads as deliberate; 4000-7000 as a show
+  };
+  d.classList.add("js");
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+  var t = null; try { t = localStorage.getItem(CONFIG.key); } catch (e) {}
+  if (t === "dark" || t === "light") d.setAttribute("data-theme", t);
+  function now() { var x = d.getAttribute("data-theme"); return x ? x : (mq.matches ? "dark" : "light"); }
+  function render() {
+    var dark = now() === "dark";
+    d.setAttribute("data-theme-now", dark ? "dark" : "light");
+    document.querySelectorAll(".lg-theme-btn").forEach(function (b) { b.setAttribute("aria-pressed", String(dark)); });
+    if (d.hasAttribute("data-theme")) document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute("content", CONFIG.colors[dark ? "dark" : "light"]); });
+  }
+  function apply(next) {
+    d.setAttribute("data-theme", next);
+    try { localStorage.setItem(CONFIG.key, next); } catch (e) {}
+    render();
+  }
+  render();
+  document.addEventListener("DOMContentLoaded", render);
+  if (mq.addEventListener) mq.addEventListener("change", render); else if (mq.addListener) mq.addListener(render);
+
+  // ---- the glass sweep --------------------------------------------------
+  var SVGNS = "http://www.w3.org/2000/svg", filters = null;
+  function ensureFilters() {
+    if (filters) return filters;
+    var svg = document.createElementNS(SVGNS, "svg");
+    svg.setAttribute("aria-hidden", "true");
+    svg.style.cssText = "position:absolute;width:0;height:0;overflow:hidden;pointer-events:none";
+    svg.innerHTML =
+      '<filter id="lg-sweep-new" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-sweep-map-new" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>' +
+      '<feDisplacementMap id="lg-sweep-dm-new" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB" result="bent"/>' +
+      '<feColorMatrix in="map" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0.85 0 0" result="rim"/>' +
+      '<feMerge><feMergeNode in="bent"/><feMergeNode in="rim"/></feMerge></filter>' +
+      '<filter id="lg-sweep-old" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-sweep-map-old" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>' +
+      '<feDisplacementMap id="lg-sweep-dm-old" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB"/></filter>';
+    document.body.appendChild(svg);
+    return (filters = {
+      maps: [document.getElementById("lg-sweep-map-new"), document.getElementById("lg-sweep-map-old")],
+      dms: [document.getElementById("lg-sweep-dm-new"), document.getElementById("lg-sweep-dm-old")]
+    });
+  }
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function glassSwitch(next, cx, cy) {
+    var f = ensureFilters(), W = innerWidth, H = innerHeight, DUR = CONFIG.duration;
+    var band = Math.max(54, Math.min(130, Math.min(W, H) * 0.11)), push = band * 0.42, S = push * 2.2;
+    var end = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy)) + band;
+    var k = W > 900 ? 5 : 4, mw = Math.ceil(W / k), mh = Math.ceil(H / k);
+    var cv = document.createElement("canvas"); cv.width = mw; cv.height = mh;
+    var g = cv.getContext("2d"), img = g.createImageData(mw, mh), px = img.data;
+    f.maps.forEach(function (m) { m.setAttribute("width", W); m.setAttribute("height", H); });
+    f.dms.forEach(function (m) { m.setAttribute("scale", S.toFixed(1)); });
+    function paint(rad) {
+      for (var y = 0; y < mh; y++) {
+        var dy = y * k + k / 2 - cy;
+        for (var x = 0; x < mw; x++) {
+          var dx = x * k + k / 2 - cx, i = (y * mw + x) * 4;
+          var dd = Math.sqrt(dx * dx + dy * dy) || 1, u = (dd - rad) / band, R = 128, G = 128, B = 0;
+          if (u > -1 && u < 1) {
+            var bump = 1 - u * u; bump *= bump;
+            var m = push * bump;
+            R = 128 - (dx / dd) * m / S * 255; G = 128 - (dy / dd) * m / S * 255;
+            var hh = (u + 0.06) / 0.07;
+            B = Math.min(255, 150 * Math.exp(-hh * hh) + 40 * bump);   // bright rim
+          }
+          px[i] = R; px[i + 1] = G; px[i + 2] = B; px[i + 3] = 255;
+        }
+      }
+      g.putImageData(img, 0, 0);
+      var url = cv.toDataURL();
+      f.maps.forEach(function (m) { m.setAttribute("href", url); });
+    }
+    d.style.setProperty("--lg-x", cx + "px"); d.style.setProperty("--lg-y", cy + "px"); d.style.setProperty("--lg-r", "0px");
+    paint(-band);
+    d.classList.add("lg-sweeping");
+    var vt = document.startViewTransition(function () { apply(next); });
+    vt.ready.then(function () {
+      // no-op animation keeps the transition alive; frames are driven below
+      d.animate({ opacity: [1, 1] }, { duration: DUR, pseudoElement: "::view-transition-new(root)" });
+      var t0 = performance.now();
+      (function frame(t) {
+        var p = Math.min(1, (t - t0) / DUR), rad = ease(p) * end;
+        d.style.setProperty("--lg-r", rad + "px"); paint(rad);
+        if (p < 1) requestAnimationFrame(frame);
+      })(t0);
+    }).catch(function () {});
+    function done() { d.classList.remove("lg-sweeping"); ["--lg-x", "--lg-y", "--lg-r"].forEach(function (v) { d.style.removeProperty(v); }); }
+    vt.finished.then(done, done);
+  }
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest && e.target.closest(".lg-theme-btn");
+    if (!btn) return;
+    var next = now() === "dark" ? "light" : "dark";
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { apply(next); return; }
+    if (document.startViewTransition) {
+      var r = btn.getBoundingClientRect();
+      glassSwitch(next, r.left + r.width / 2, r.top + r.height / 2);
+      return;
+    }
+    d.classList.add("lg-fading"); apply(next);
+    setTimeout(function () { d.classList.remove("lg-fading"); }, 760);
+  });
+})(document.documentElement);
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/cut-tray.webp?v=1">
+<link rel="stylesheet" href="liquid-glass.css?v=1">
+<link rel="stylesheet" href="site.css?v=1">
+</head>
+<body>
+<a class="skip" href="#ticket">Skip to ordering</a>
+
+<header class="bar" id="bar">
+  <a class="brand" href="#" aria-label="Pakachi Kitchen, back to top"><img src="assets/logo-gold.webp?v=1" alt="" width="40" height="40"><span>Pakachi Kitchen</span></a>
+  <div class="bar-r">
+    <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
+      <svg class="lg-i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <svg class="lg-i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <span class="cta-slot bar-slot" id="slotBar" aria-hidden="true"></span>
+  </div>
+</header>
+
+<nav class="thread" id="thread" aria-label="Sections">
+  <span class="thread-line"><b id="threadFill"></b></span>
+  <button type="button" data-p="0"><span>Biryani</span></button>
+  <button type="button" data-p="0.47"><span>The deal</span></button>
+  <button type="button" data-p="0.7"><span>Catering</span></button>
+  <button type="button" data-p="0.85"><span>How to order</span></button>
+  <button type="button" data-p="1"><span>Order</span></button>
+</nav>
+
+<main class="stage" id="stage">
+  <h1 class="sr">Pakachi Kitchen, Soul of Karachi. Pakistani halal home cooking in Herndon, Virginia.</h1>
+
+  <!-- their logo ring: behind the tray, then the rim of the fan, then the ring round the ticket -->
+  <div class="ring" id="ring" aria-hidden="true"><img src="assets/logo-ring.webp?v=1" alt="" decoding="async"></div>
+
+  <!-- giant wordmark. Letters behind the tray shimmer -->
+  <div class="wm" id="wm" aria-hidden="true">
+    <span class="l"><i>P</i></span><span class="l"><i>A</i></span><span class="l"><i>K</i></span><span class="l"><i>A</i></span><span class="l"><i>C</i></span><span class="l"><i>H</i></span><span class="l"><i>I</i></span>
+  </div>
+
+  <div class="hero-copy" id="heroCopy">
+    <div class="hc-in" id="heroIn">
+      <p class="soul">Soul of Karachi.</p>
+      <p class="sub">Home-cooked Pakistani halal food from Herndon, Virginia. A new six-dish menu every week, and catering by the tray.</p>
+      <span class="cta-slot" id="slotHero" aria-hidden="true"></span>
+    </div>
+  </div>
+  <div class="marquee" id="marquee" aria-hidden="true"><div class="mq-track">
+    <span>Biryani · Nihari · Haleem · Daal Gosht · Bun Kabab · Chicken Tikka · Qeema · Jalfrezi · Achari · Handi · Corn Soup · Cutlets · </span><span>Biryani · Nihari · Haleem · Daal Gosht · Bun Kabab · Chicken Tikka · Qeema · Jalfrezi · Achari · Handi · Corn Soup · Cutlets · </span>
+  </div></div>
+
+  <!-- the deal: header -->
+  <section class="deal" id="deal" aria-label="The weekly menu deal">
+    <div class="deal-in" id="dealIn">
+      <h2>Six dishes. <em>One weekly deal.</em></h2>
+      <p class="price"><span class="roll"><span class="roll-col" id="rollWord">Single<br>Double</span></span> servings, <span class="usd">$<span class="roll num"><span class="roll-col" id="rollTen">90<br>130</span></span></span></p>
+      <p class="deal-note">New menu every Tuesday and Thursday. Pick up free, or get it delivered for $5.</p>
+    </div>
+  </section>
+
+  <!-- the hand: twins (behind), cards, numbers. Card 0 is the tray itself -->
+  <div class="hand" id="hand" aria-hidden="true">
+    <div class="twin"><img src="assets/biryani-trays.jpg" alt="" decoding="async"></div>
+    <div class="twin"><img src="assets/nihari.jpg" alt="" decoding="async"></div>
+    <div class="twin"><img src="assets/haleem.jpg" alt="" decoding="async"></div>
+    <div class="twin"><img src="assets/daal-gosht.jpg" alt="" decoding="async"></div>
+    <div class="twin"><img src="assets/cutlets-buns.jpg" alt="" decoding="async"></div>
+    <div class="twin"><img src="assets/crispy-sandwiches.jpg" alt="" decoding="async"></div>
+  </div>
+  <ul class="cards" id="cards" aria-label="Dishes from recent weekly menus">
+    <li class="card c0"><span class="cap">Karachi style chicken biryani</span></li>
+    <li class="card"><img src="assets/nihari.jpg" alt="Trays of beef nihari with ginger, green chilli and lemon" decoding="async"><span class="cap">Pakachi special beef nihari</span></li>
+    <li class="card wide" id="haleemCard"><div class="band-track" id="track">
+        <figure><img src="assets/haleem.jpg" alt="A catering tray of beef haleem with lemon slices, ginger and coriander" decoding="async"></figure>
+        <figure><img src="assets/fajita-subs.jpg" alt="A platter of chicken fajita subs cut in half on lettuce" decoding="async"></figure>
+        <figure><img src="assets/bun-kabab.jpg" alt="Street style bun kabab sliders, close up" decoding="async"></figure>
+        <figure><img src="assets/corn-soup.jpg" alt="Cups of chicken corn soup with coriander" decoding="async"></figure>
+        <figure><img src="assets/tikka-rice-boxes.jpg" alt="Boxes of chicken tikka with masala rice" decoding="async"></figure>
+      </div><span class="cap">Deghi beef haleem</span></li>
+    <li class="card"><img src="assets/daal-gosht.jpg" alt="Trays of Delhi style daal gosht chicken with dried red chillies" decoding="async"><span class="cap">Delhi style daal gosht</span></li>
+    <li class="card"><img src="assets/cutlets-buns.jpg" alt="Chicken potato cutlets and buns in takeaway boxes" decoding="async"><span class="cap">Chicken potato cutlets</span></li>
+    <li class="card"><img src="assets/crispy-sandwiches.jpg" alt="Rows of crispy chicken sandwiches in boxes" decoding="async"><span class="cap">Crispy chicken sandwiches</span></li>
+  </ul>
+  <div class="nums" id="nums" aria-hidden="true"><b>1</b><b>2</b><b>3</b><b>4</b><b>5</b><b>6</b></div>
+  <p class="fan-key" id="fanKey" aria-hidden="true"><span id="fanKeyIn">1 Biryani · 2 Nihari · 3 Haleem · 4 Daal gosht · 5 Cutlets · 6 Crispy chicken sandwiches</span></p>
+
+  <!-- hero: their tray, cut from their photo, one layer in front of the letters. Later it is card 1 -->
+  <div class="tray" id="tray" aria-hidden="true">
+    <div class="tray-tilt" id="trayTilt"><div class="tray-bob"><img src="assets/cut-tray.webp?v=1" alt="" decoding="async"></div></div>
+  </div>
+
+  <div class="lemon" aria-hidden="true"><img src="assets/cut-lemon-a.webp?v=1" alt="" decoding="async"></div>
+  <div class="lemon" aria-hidden="true"><img src="assets/cut-lemon-b.webp?v=1" alt="" decoding="async"></div>
+  <div class="lemon" aria-hidden="true"><img src="assets/cut-lemon-a.webp?v=1" alt="" decoding="async"></div>
+
+  <!-- catering copy -->
+  <section class="cater" id="cater" aria-label="Catering">
+    <div class="cater-h"><h2 id="caterH">Catering, <em>by the tray.</em></h2></div>
+    <p class="cater-p" id="caterP">Parties, offices, family dinners. Tell us the headcount and the date.</p>
+    <div class="cater-caps"><ol class="caps-track" id="caps">
+      <li>Deghi beef haleem</li><li>Chicken fajita subs</li><li>Street style bun kabab sliders</li><li>Chicken corn soup</li><li>Chicken tikka with masala rice</li>
+    </ol></div>
+  </section>
+
+  <!-- how to order: their gold rises, then tightens into the ticket -->
+  <section class="panel" id="panel" aria-label="How to order">
+    <div class="steps-wrap" id="stepsWrap">
+      <h2>How to order</h2>
+      <ol class="steps">
+        <li><b>1</b><span>Message us on WhatsApp.</span></li>
+        <li><b>2</b><span>Pick six dishes from this week's menu, or any dish on its own.</span></li>
+        <li><b>3</b><span>Pick up free in Herndon, or get it delivered for $5.</span></li>
+      </ol>
+      <p class="steps-note">No minimum for pickup. Outside our delivery zone, we send it by Uber Courier.</p>
+    </div>
+    <div class="ticket" id="ticket">
+      <div class="tk-in" id="tkIn">
+        <p class="tk-name">Pakachi Kitchen</p>
+        <p class="tk-soul">Soul of Karachi</p>
+        <p class="tk-line"><a href="tel:+15713410009">Call or text (571) 341-0009</a></p>
+        <p class="tk-line">Herndon, VA 20171 · Halal · Certified Food Protection Manager</p>
+        <p class="tk-line"><a href="https://www.instagram.com/pakachikitchen/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.facebook.com/pakachikitchen" target="_blank" rel="noopener">Facebook</a></p>
+        <span class="cta-slot" id="slotClose" aria-hidden="true"></span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- one button for the whole page: hero -> bar -> ticket -->
+<div class="cta-fly" id="ctaFly"><a class="cta lg-glass" href="https://wa.me/15713410009?text=Hi%21%20Can%20I%20see%20this%20week%27s%20menu%3F" target="_blank" rel="noopener">Order on WhatsApp</a></div>
+
+<div class="spacer" id="spacer" aria-hidden="true"></div>
+
+<script src="liquid-glass.js?v=1" defer></script>
+<script src="site.js?v=1" defer></script>
+</body>
+</html>
