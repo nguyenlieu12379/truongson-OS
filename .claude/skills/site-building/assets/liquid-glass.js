@@ -3,6 +3,7 @@
 
      LiquidGlass.cursorBall()          glass ball that springs after the mouse
      LiquidGlass.glassify(".lg-glass") rounded-rect glass panels and buttons
+     LiquidGlass.magnet(".cta")        buttons slide toward a nearby cursor
      LiquidGlass.lensMap(...)          the displacement map all of these use
 
    The theme switch (toggle + circle-lens transition) lives in head.html, not
@@ -165,5 +166,53 @@
     return els;
   }
 
-  root.LiquidGlass = { lensMap: lensMap, filterFor: filterFor, cursorBall: cursorBall, glassify: glassify, chromium: chromium };
+  // ---- magnet buttons ------------------------------------------------------
+  // Within reach, a button slides toward the cursor and springs back when it
+  // leaves. Moves with left/top (position: relative), never transform, so a
+  // glass lens on the button stays aligned. Mouse/trackpad only.
+  //   reach: px from the button's edge where the pull starts (default 140)
+  //   pull:  share of the cursor offset the button follows (default 0.35)
+  //   max:   cap on the travel in px (default 26)
+  function magnet(selector, opt) {
+    opt = opt || {};
+    var els = Array.prototype.slice.call(document.querySelectorAll(selector));
+    if (!els.length || !matchMedia("(hover: hover) and (pointer: fine)").matches) return els;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return els;
+    var reach = opt.reach || 140, pull = opt.pull || 0.35, max = opt.max || 26, K = opt.stiffness || 0.16;
+    var st = els.map(function (el) {
+      if (getComputedStyle(el).position === "static") el.style.position = "relative";
+      return { el: el, x: 0, y: 0, tx: 0, ty: 0 };
+    });
+    var mx = -1e4, my = -1e4, running = false;
+    function aim() {
+      st.forEach(function (s) {
+        var r = s.el.getBoundingClientRect();
+        if (!r.width || getComputedStyle(s.el).visibility === "hidden") { s.tx = s.ty = 0; return; }
+        // the resting box: undo our own offset
+        var cx = r.left - s.x + r.width / 2, cy = r.top - s.y + r.height / 2;
+        var ex = Math.max(0, Math.abs(mx - cx) - r.width / 2), ey = Math.max(0, Math.abs(my - cy) - r.height / 2);
+        var d = Math.sqrt(ex * ex + ey * ey);
+        if (d >= reach) { s.tx = s.ty = 0; return; }
+        var k = pull * (1 - d / reach), dx = (mx - cx) * k, dy = (my - cy) * k, n = Math.sqrt(dx * dx + dy * dy);
+        if (n > max) { dx *= max / n; dy *= max / n; }
+        s.tx = dx; s.ty = dy;
+      });
+    }
+    function frame() {
+      var moving = false;
+      st.forEach(function (s) {
+        s.x += (s.tx - s.x) * K; s.y += (s.ty - s.y) * K;
+        if (Math.abs(s.tx - s.x) < 0.05 && Math.abs(s.ty - s.y) < 0.05) { s.x = s.tx; s.y = s.ty; } else moving = true;
+        s.el.style.left = s.x.toFixed(2) + "px"; s.el.style.top = s.y.toFixed(2) + "px";
+      });
+      if (moving) requestAnimationFrame(frame); else running = false;
+    }
+    function kick() { aim(); if (!running) { running = true; requestAnimationFrame(frame); } }
+    document.addEventListener("pointermove", function (e) { if (e.pointerType !== "mouse") return; mx = e.clientX; my = e.clientY; kick(); }, { passive: true });
+    window.addEventListener("scroll", kick, { passive: true });
+    document.documentElement.addEventListener("pointerleave", function () { mx = my = -1e4; kick(); });
+    return els;
+  }
+
+  root.LiquidGlass = { lensMap: lensMap, filterFor: filterFor, cursorBall: cursorBall, glassify: glassify, magnet: magnet, chromium: chromium };
 })(window);
