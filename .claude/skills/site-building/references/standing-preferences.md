@@ -20,6 +20,7 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - The hero is the product the client posts most, a real cutout (not a 3D or low-poly replica).
 - The product sits one layer in front of a giant brand word. The letters it covers animate (Delícias: they wobble with the product).
 - The headline stays readable.
+- Hero cutout and the cursor (Son, 2026-11-24, Pakachi): it leans toward the pointer around its own centre, about 8deg up/down and 11deg sideways. Direct: no inertia or spring, no light sheen, no slide, and the wordmark behind it stays still. Keep enough overscan that cut edges never show.
 
 ## Style and world
 - Frame shapes follow the dish: tall frames for dishes shot vertical (lunch boxes, long tables), wide for tray rows, square for bowls. Never crop everything to one landscape shape (Son, 2026-11-24).
