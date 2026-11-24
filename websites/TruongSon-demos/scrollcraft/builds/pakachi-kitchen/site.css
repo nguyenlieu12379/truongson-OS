@@ -1,4 +1,4 @@
-/* Pakachi Kitchen. 60 black (or white) / 30 their gold / 10 Guards Red, CTA only.
+/* Pakachi Kitchen. 60 black (or white) / 30 their gold / 10 Pakistan green, CTA only.
    One fixed stage; site.js moves everything with transform and clip-path. */
 
 :root {
@@ -9,8 +9,8 @@
   --gold-fill: #C4A469;    /* the order panel */
   --on-gold: #14110C;
   --ink-soft: #5E5446;
-  --saffron: #D2001F;      /* 10: Guards Red, the button, nothing else (Son, 2026-11-24) */
-  --on-saffron: #FFFFFF;
+  --saffron: #0F7A46;      /* 10: Pakistan green, the button, nothing else (Son, 2026-11-24: red looked wrong) */
+  --on-saffron: #FBF3DF;
   --shadow: rgb(40 30 15 / 0.28);
   --scrim: rgb(12 10 8 / 0.62);
   --f-word: "Cinzel", "Trajan Pro", Georgia, serif;

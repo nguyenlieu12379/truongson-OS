@@ -7,7 +7,7 @@ One fixed stage. Their biryani tray, cut from their photo, sits in front of a gi
 ## Files
 
 - `index.html`: markup, theme toggle script inline in the head (key `pakachi-theme`).
-- `site.css`: tokens at the top. Dark: black `#0C0B0A` 60, gold `#C4A469` 30, Guards Red `#D2001F` 10 (button only). Light: white `#FBFAF7`, deep gold `#86672F`, Guards Red. Cinzel, Cormorant Garamond, Manrope.
+- `site.css`: tokens at the top. Dark: black `#0C0B0A` 60, gold `#C4A469` 30, Pakistan green `#0F7A46` 10 (button only). Light: white `#FBFAF7`, deep gold `#86672F`, Pakistan green. Cinzel, Cormorant Garamond, Manrope.
 - `site.js`: one timeline `p` (0..1) from smoothed scroll; transforms and clip-path only, written on change. No opacity fades.
 - `liquid-glass.css`, `liquid-glass.js`: stage 3 kit (default cursor ball, glass button, magnet, theme sweep).
 - `assets/`: web photos (from their Facebook, 2048px originals in `source/`), `cut-tray.webp`, two lemon cutouts, `logo-gold.webp`, `logo-ring.webp`, icons.

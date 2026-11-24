@@ -12,13 +12,13 @@ Spec demo. Goes live with noindex when done (Son: "go live when done"). Not show
 - Call/text +1 (571) 341-0009. WhatsApp wa.me/15713410009 (same number, from their captions). They also run a WhatsApp community (not linked on the page: it's an invite link).
 - Their look: black meal-prep trays and foil catering trays shot close, warm curry oranges, white basmati. Logo: a gold ring with a wheat sprig and a gold cloche, serif caps.
 
-## Colour split (Son: 60 black or white, 30 gold, 10 saffron, then Guards Red)
+## Colour split (Son: 60 black or white, 30 gold, 10 the button)
 
 | Share | Dark mode | Light mode | Where |
 |---|---|---|---|
 | 60 | Black `#0C0B0A` | White `#FBFAF7` | the stage |
 | 30 | Gold `#C4A469` (their logo, sampled `#A2895A` to `#C1A871`) | Deep gold `#86672F` (text on white, 5:1) | the wordmark, all type, hairlines, the ring, the order panel |
-| 10 | Guards Red `#D2001F`, white label | Guards Red `#D2001F`, white label | "Order on WhatsApp" only (Son, 2026-11-24: "CTA button guards red"; was saffron) |
+| 10 | Pakistan green `#0F7A46`, cream label `#FBF3DF` (4.9:1) | same | "Order on WhatsApp" only. Saffron, then Guards Red, then green (Son, 2026-11-24: "red looks ugly in this site") |
 
 ## Photos
 
@@ -91,3 +91,5 @@ Food is never under letters: the tray is in front of PAKACHI; captions sit on a 
 - 2026-11-24 (Son): "just need the CTA button guards red. and in the end frame, i can see it sitting on other letters"
   - The button is Guards Red `#D2001F` with a white label, everywhere it travels (hero, bar, ticket).
   - The ticket is now measured from its own content, button slot included, and the button lands in that slot. Checked at 1280x720, 1440x900, 1920x1080, 390x844 and 360x640: no ticket line under the button.
+- 2026-11-24 (Son): "red looks ugly in this site. so pick another color, contrast, but still links to this accent"
+  - The button is Pakistan green `#0F7A46` with a cream label `#FBF3DF` (4.9:1). Why green: green and gold is the classic luxury pair, it's the flag of the "Soul of Karachi", and it's the green of the chillies and coriander on their food. It still stands apart from black (3.7:1), white (5.2:1) and the gold ticket.
