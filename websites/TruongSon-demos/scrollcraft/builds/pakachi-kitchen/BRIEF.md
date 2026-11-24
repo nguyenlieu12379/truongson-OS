@@ -101,3 +101,5 @@ Food is never under letters: the tray is in front of PAKACHI; captions sit on a 
 - 2026-11-24 (Son): "i saw the tray rotate, up, down, side, circle or whatever the cursor's direction move, i need you to make that more dramatically"
   - The tray now reacts to how the cursor moves, not only where it is: each move kicks a spring (stiffness 0.07, damping 0.16) that overshoots and settles, so flicks swing it and circling the cursor rolls it round. Range up to 32deg back, 38deg sideways, 8deg roll; tipping toward the viewer is capped at 14deg so it never covers the copy.
   - It pivots on its own bottom-right corner (off screen, perspective from that corner), so the photo's cut edges stay hidden in every pose. PAKACHI counter-drifts up to 30px.
+- 2026-11-24 (Son): "nah, less dramatic" and "the pakachi hero dont move"
+  - About half: lean 13deg / 16deg, max 18deg back, 20deg sideways, 4deg roll, 8deg toward the viewer; kicks halved, damping 0.22 (less bounce), slide 14px. PAKACHI no longer drifts: it stays still while the tray moves.

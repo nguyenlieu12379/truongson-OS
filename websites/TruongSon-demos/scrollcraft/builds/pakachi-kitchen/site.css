@@ -97,7 +97,7 @@ a { color: inherit; }
 .tray-bob { position: relative; }
 /* light that follows the cursor, only on the tray itself (masked by its own cutout) */
 .tray-glare { position: absolute; inset: 0; overflow: hidden; pointer-events: none; display: none;
-  -webkit-mask: url(assets/cut-tray.webp?v=6) center / 100% 100% no-repeat; mask: url(assets/cut-tray.webp?v=6) center / 100% 100% no-repeat; }
+  -webkit-mask: url(assets/cut-tray.webp?v=7) center / 100% 100% no-repeat; mask: url(assets/cut-tray.webp?v=7) center / 100% 100% no-repeat; }
 .tilt-on .tray-glare { display: block; }
 .tray-glare i { position: absolute; left: -50%; top: -50%; width: 200%; height: 200%; mix-blend-mode: soft-light; will-change: transform;
   background: radial-gradient(circle at 50% 50%, rgb(255 248 230 / 0.85), rgb(255 248 230 / 0.25) 18%, rgb(0 0 0 / 0) 34%); }
