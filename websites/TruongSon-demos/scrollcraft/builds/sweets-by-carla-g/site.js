@@ -110,10 +110,11 @@
 
     // ---- the turntable and orbit: always fits under the heading (nothing of the orbit sits under its type)
     orbitCopy.style.top = barH + (mobile ? 4 : 10) + 'px';
-    const ocBottom = orbitCopy.offsetTop + orbitCopy.offsetHeight + (mobile ? 14 : 18);
+    // keep a calm gap under the heading: the table only grows slightly into the room the removed line left
+    const ocBottom = orbitCopy.offsetTop + orbitCopy.offsetHeight + (mobile ? 14 : 18 + Math.min(40, VH * 0.05));
     const floor = VH - 64 - 26;                     // above the rail, room for the front label
-    let Rx = mobile ? VW * 0.41 : Math.min(VW * 0.4, 620);
-    let ch = mobile ? Math.min(VH * 0.125, 104) : Math.min(VH * 0.26, 250);
+    let Rx = mobile ? VW * 0.395 : Math.min(VW * 0.375, 565);
+    let ch = mobile ? Math.min(VH * 0.125, 104) : Math.min(VH * 0.235, 222);
     const ryK = mobile ? 0.98 : 0.4, oK = mobile ? 1.45 : 0.95;
     const upOf = (rx, c) => Math.max(rx * oK / CAKE_AR * BOARD[1], rx * ryK + c * 0.52);   // above the centre
     const downOf = (rx) => rx * ryK + 10;                                                 // below the centre
