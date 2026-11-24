@@ -39,6 +39,8 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - Buttons may keep a colour tint so the label reads.
 
 ## Motion and performance
+- Spins, rolls and carousels glide continuously: ease in, build, ease out, at most a slight slow-down at each item. Never turn-stop-turn steps ("stiff"). Give a fast peak more scroll room so it reads at normal scroll speed (Sweets by Carla G, 2026-11-24).
+- Size tweaks asked as "bigger" mean a little, not a redesign ("no not that dramatic, just slightly bigger", 2026-11-24).
 - Smooth beats effects. If it lags, cut the effect's cost before cutting the effect.
 - No per-frame layout reads after style writes; no animated SVG filters; no backdrop filters on moving elements.
 - Check on a real phone before the client sees it.
