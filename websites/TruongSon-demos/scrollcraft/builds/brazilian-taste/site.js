@@ -262,10 +262,16 @@
 
   // smoothed scroll
   let cur = 0, target = 0, last = 0, dirty = true, running = false;
-  const readTarget = () => { target = L.track > 0 ? clamp(scrollY / L.track) : 0; };
+  // scroll -> timeline. The first 77% of the story keeps its old pace; "how to order" to the
+  // close gets 2.7x more scroll (Son: "much slower"). S0 = share of the scroll before that part.
+  const P0 = 0.77, S0 = 0.55;
+  const toP = (s) => (s < S0 ? (s / S0) * P0 : P0 + ((s - S0) / (1 - S0)) * (1 - P0));
+  const toS = (q) => (q < P0 ? (q / P0) * S0 : S0 + ((q - P0) / (1 - P0)) * (1 - S0));
+  const REC = /[?&]rec(?:[&=]|$)/.test(location.search);   // recording switch: no smoothing, the recorder drives the scroll
+  const readTarget = () => { target = L.track > 0 ? toP(clamp(scrollY / L.track)) : 0; };
   function frame(t) {
     const dt = last ? Math.min(64, t - last) : 16.7; last = t;
-    const k = reduced.matches ? 1 : 1 - Math.pow(1 - 0.12, dt / 16.7);
+    const k = reduced.matches || REC ? 1 : 1 - Math.pow(1 - 0.12, dt / 16.7);
     const d = target - cur;
     cur = Math.abs(d) < 0.00002 ? target : cur + d * k;
     if (dirty || d !== 0) { render(cur); dirty = false; }
@@ -290,7 +296,7 @@
 
   layout();
   const qp = /[?&]p=([\d.]+)/.exec(location.search);
-  if (qp) { scrollTo(0, clamp(+qp[1]) * L.track); readTarget(); cur = target; }
+  if (qp) { scrollTo(0, toS(clamp(+qp[1])) * L.track); readTarget(); cur = target; }
   render(cur);
   addEventListener('scroll', kick, { passive: true });
   addEventListener('resize', () => { layout(); kick(); });
@@ -299,7 +305,7 @@
 
   // liquid glass: a bigger ball that trails further behind the mouse (no venom)
   if (window.LiquidGlass) {
-    LiquidGlass.cursorBall({ size: 104, stiffness: 0.055, damping: 0.86, stretch: 0.03, maxStretch: 0.7 });
+    LiquidGlass.cursorBall({ size: 150, stiffness: 0.055, damping: 0.86, stretch: 0.03, maxStretch: 0.7 });
     LiquidGlass.glassify('.lg-glass');
     LiquidGlass.magnet('.cta-fly .cta', { reach: 'page', curve: 2.2, pull: 0.6, max: 46 });   // the yellow buttons lean toward the cursor wherever it is, harder as it gets close
   }

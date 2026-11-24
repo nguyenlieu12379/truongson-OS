@@ -46,7 +46,7 @@ a { color: inherit; }
 
 /* ---- stage ---- */
 .stage { position: fixed; inset: 0; height: 100vh; height: 100lvh; overflow: hidden; }
-.spacer { height: 1000vh; }
+.spacer { height: 1400vh; }
 .stage > * { position: absolute; }
 
 /* wordmark */
@@ -187,3 +187,6 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   .l i, .taste i, .tray-drop, .ready .tray-bob, .ready .l.cov, .ready .tray-shadow, .fruit img, .mq-track { animation: none; }
 }
+
+/* cursor ball: a bare lens. No drop shadow, no gloss, no rim, so all you see is the page bending under it (Son, 2026-11-24) */
+.lg-ball { box-shadow: none; background: none; }
