@@ -170,7 +170,9 @@
   // Within reach, a button slides toward the cursor and springs back when it
   // leaves. Moves with left/top (position: relative), never transform, so a
   // glass lens on the button stays aligned. Mouse/trackpad only.
-  //   reach: px from the button's edge where the pull starts (default 140)
+  //   reach: px from the button's edge where the pull starts (default 140),
+  //          or "page": every button follows the cursor anywhere on screen
+  //   curve: how fast the pull grows as the cursor gets closer (1 = linear, 2 = much stronger up close)
   //   pull:  share of the cursor offset the button follows (default 0.35)
   //   max:   cap on the travel in px (default 26)
   function magnet(selector, opt) {
@@ -178,7 +180,7 @@
     var els = Array.prototype.slice.call(document.querySelectorAll(selector));
     if (!els.length || !matchMedia("(hover: hover) and (pointer: fine)").matches) return els;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return els;
-    var reach = opt.reach || 140, pull = opt.pull || 0.35, max = opt.max || 26, K = opt.stiffness || 0.16;
+    var page = opt.reach === "page", reach = page ? 0 : (opt.reach || 140), curve = opt.curve || 1, pull = opt.pull || 0.35, max = opt.max || 26, K = opt.stiffness || 0.16;
     var st = els.map(function (el) {
       if (getComputedStyle(el).position === "static") el.style.position = "relative";
       return { el: el, x: 0, y: 0, tx: 0, ty: 0 };
@@ -191,11 +193,12 @@
         // the resting box: undo our own offset
         var cx = r.left - s.x + r.width / 2, cy = r.top - s.y + r.height / 2;
         var ex = Math.max(0, Math.abs(mx - cx) - r.width / 2), ey = Math.max(0, Math.abs(my - cy) - r.height / 2);
-        var d = Math.sqrt(ex * ex + ey * ey);
-        if (d >= reach) { s.tx = s.ty = 0; return; }
-        var k = pull * (1 - d / reach), dx = (mx - cx) * k, dy = (my - cy) * k, n = Math.sqrt(dx * dx + dy * dy);
-        if (n > max) { dx *= max / n; dy *= max / n; }
-        s.tx = dx; s.ty = dy;
+        var d = Math.sqrt(ex * ex + ey * ey), R = page ? Math.sqrt(innerWidth * innerWidth + innerHeight * innerHeight) : reach;
+        if (d >= R) { s.tx = s.ty = 0; return; }
+        // travel grows as the cursor closes in (max at the edge), never past pull x the distance
+        var vx = mx - cx, vy = my - cy, D = Math.sqrt(vx * vx + vy * vy) || 1;
+        var mag = Math.min(max * Math.pow(1 - d / R, curve), D * pull);
+        s.tx = vx / D * mag; s.ty = vy / D * mag;
       });
     }
     function frame() {

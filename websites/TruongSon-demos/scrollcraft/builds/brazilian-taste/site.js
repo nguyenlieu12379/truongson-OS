@@ -279,6 +279,6 @@
   if (window.LiquidGlass) {
     LiquidGlass.cursorBall({ size: 104, stiffness: 0.055, damping: 0.86, stretch: 0.03, maxStretch: 0.7 });
     LiquidGlass.glassify('.lg-glass');
-    LiquidGlass.magnet('.cta', { reach: 200, pull: 0.38, max: 28 });   // the yellow buttons lean out to meet the cursor
+    LiquidGlass.magnet('.cta', { reach: 'page', curve: 2.2, pull: 0.6, max: 46 });   // the yellow buttons lean toward the cursor wherever it is, harder as it gets close
   }
 })();
