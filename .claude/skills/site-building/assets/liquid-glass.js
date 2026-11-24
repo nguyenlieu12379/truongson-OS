@@ -118,13 +118,13 @@
       ball.style.backdropFilter = ball.style.webkitBackdropFilter = "url(#" + id + ") saturate(1.15)";
       ball.classList.add("is-lens");
     }
-    // default drag = the Brazilian Taste trail (Son, 2026-11-24): lazy spring, long stretch
-    var K = opt.stiffness || 0.055, D = opt.damping || 0.86, hoverGrow = opt.hoverGrow || 1.28;
+    // default motion = the Espresso Vivace ball, exactly (2026-11-24: the Brazilian Taste drag was "too fluid")
+    var K = opt.stiffness || 0.14, D = opt.damping || 0.72, hoverGrow = opt.hoverGrow || 1.28;
     var tx = -500, ty = -500, x = tx, y = ty, vx = 0, vy = 0, grow = 1, gT = 1, running = false;
     function frame() {
       vx = (vx + (tx - x) * K) * D; vy = (vy + (ty - y) * K) * D; x += vx; y += vy;
       grow += (gT - grow) * 0.18;
-      var sp = Math.sqrt(vx * vx + vy * vy), st = Math.min(opt.maxStretch || 0.7, sp * (opt.stretch || 0.03));
+      var sp = Math.sqrt(vx * vx + vy * vy), st = Math.min(opt.maxStretch || 0.42, sp * (opt.stretch || 0.018));
       var ang = st < 0.004 ? 0 : Math.atan2(vy, vx) * 180 / Math.PI;
       ball.style.left = x.toFixed(1) + "px"; ball.style.top = y.toFixed(1) + "px";   // never translate
       // stretch along the motion with no net rotation, so the round map lines up

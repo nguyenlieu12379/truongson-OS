@@ -464,3 +464,13 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Open before the client sees it:** delivery zone, order cut-off times, whether $90 / $130 still hold; a real-phone check.
 
 **Owner:** Son
+
+## 2026-11-24 - Cursor ball: Vivace's motion is the default again
+
+**Decision:** The cursor ball copies Espresso Vivace exactly, size, style and motion (spring 0.14 / 0.72, stretch 0.018, max 0.42). The Brazilian Taste drag (0.055 / 0.86) is no longer the default. Set in the kit (`liquid-glass.js`) and `standing-preferences.md`.
+
+**Why:** "cursor ball exactly like vivace (set this as default too, because the one in Brazilian taste is too fluid)" (Sweets by Carla G pre-build).
+
+**Also:** Sweets by Carla G (Homestead FL) built as a spec demo and deployed noindex; not in the Sites list until approved.
+
+**Owner:** not stated (Son or Truong)

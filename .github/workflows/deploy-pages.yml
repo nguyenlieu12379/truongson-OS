@@ -4,6 +4,7 @@ name: Deploy websites to GitHub Pages
 # /delicias-cake/ -> websites/TruongSon-demos/scrollcraft/builds/delicias-cake (prospect demo, scroll-craft, noindex)
 # /brazilian-taste/ -> websites/TruongSon-demos/scrollcraft/builds/brazilian-taste (prospect demo, scroll-craft, noindex)
 # /pakachi-kitchen/ -> websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen (prospect demo, scroll-craft, noindex)
+# /sweets-by-carla-g/ -> websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g (prospect demo, scroll-craft, noindex; not approved yet, so not in the list)
 # /             -> a plain list of the approved sites (no primary demo, noindex)
 # Every push to main that touches these paths redeploys all sites.
 
@@ -45,6 +46,9 @@ jobs:
           mkdir -p _site/pakachi-kitchen
           cp -R websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen/. _site/pakachi-kitchen/
           rm -rf _site/pakachi-kitchen/README.md _site/pakachi-kitchen/BRIEF.md _site/pakachi-kitchen/PREFS.md _site/pakachi-kitchen/serve.ps1 _site/pakachi-kitchen/assets/source
+          mkdir -p _site/sweets-by-carla-g
+          cp -R websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g/. _site/sweets-by-carla-g/
+          rm -rf _site/sweets-by-carla-g/README.md _site/sweets-by-carla-g/BRIEF.md _site/sweets-by-carla-g/PREFS.md _site/sweets-by-carla-g/serve.ps1 _site/sweets-by-carla-g/assets/source
           cat > _site/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">

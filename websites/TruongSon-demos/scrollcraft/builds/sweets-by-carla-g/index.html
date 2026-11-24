@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FBF1F0">
+<title>Sweets by Carla G · Custom cakes · Homestead, FL</title>
+<meta name="description" content="Custom celebration cakes, artisanal desserts, handcrafted cookies and Peruvian alfajores from a home bakery in Homestead, Florida. Order on WhatsApp.">
+<link rel="icon" type="image/png" href="assets/icon-64.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<script>
+(function (d) {
+  var CONFIG = {
+    key: "sweets-carla-theme",
+    colors: { light: "#FBF1F0", dark: "#1D1112" },
+    duration: 1400
+  };
+  d.classList.add("js");
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+  var t = null; try { t = localStorage.getItem(CONFIG.key); } catch (e) {}
+  if (t === "dark" || t === "light") d.setAttribute("data-theme", t);
+  function now() { var x = d.getAttribute("data-theme"); return x ? x : (mq.matches ? "dark" : "light"); }
+  function render() {
+    var dark = now() === "dark";
+    d.setAttribute("data-theme-now", dark ? "dark" : "light");
+    document.querySelectorAll(".lg-theme-btn").forEach(function (b) { b.setAttribute("aria-pressed", String(dark)); });
+    if (d.hasAttribute("data-theme")) document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute("content", CONFIG.colors[dark ? "dark" : "light"]); });
+  }
+  function apply(next) {
+    d.setAttribute("data-theme", next);
+    try { localStorage.setItem(CONFIG.key, next); } catch (e) {}
+    render();
+  }
+  render();
+  document.addEventListener("DOMContentLoaded", render);
+  if (mq.addEventListener) mq.addEventListener("change", render); else if (mq.addListener) mq.addListener(render);
+
+  var SVGNS = "http://www.w3.org/2000/svg", filters = null;
+  function ensureFilters() {
+    if (filters) return filters;
+    var svg = document.createElementNS(SVGNS, "svg");
+    svg.setAttribute("aria-hidden", "true");
+    svg.style.cssText = "position:absolute;width:0;height:0;overflow:hidden;pointer-events:none";
+    svg.innerHTML =
+      '<filter id="lg-sweep-new" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-sweep-map-new" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>' +
+      '<feDisplacementMap id="lg-sweep-dm-new" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB" result="bent"/>' +
+      '<feColorMatrix in="map" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0.85 0 0" result="rim"/>' +
+      '<feMerge><feMergeNode in="bent"/><feMergeNode in="rim"/></feMerge></filter>' +
+      '<filter id="lg-sweep-old" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-sweep-map-old" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>' +
+      '<feDisplacementMap id="lg-sweep-dm-old" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB"/></filter>';
+    document.body.appendChild(svg);
+    return (filters = {
+      maps: [document.getElementById("lg-sweep-map-new"), document.getElementById("lg-sweep-map-old")],
+      dms: [document.getElementById("lg-sweep-dm-new"), document.getElementById("lg-sweep-dm-old")]
+    });
+  }
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function glassSwitch(next, cx, cy) {
+    var f = ensureFilters(), W = innerWidth, H = innerHeight, DUR = CONFIG.duration;
+    var band = Math.max(54, Math.min(130, Math.min(W, H) * 0.11)), push = band * 0.42, S = push * 2.2;
+    var end = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy)) + band;
+    var k = W > 900 ? 5 : 4, mw = Math.ceil(W / k), mh = Math.ceil(H / k);
+    var cv = document.createElement("canvas"); cv.width = mw; cv.height = mh;
+    var g = cv.getContext("2d"), img = g.createImageData(mw, mh), px = img.data;
+    f.maps.forEach(function (m) { m.setAttribute("width", W); m.setAttribute("height", H); });
+    f.dms.forEach(function (m) { m.setAttribute("scale", S.toFixed(1)); });
+    function paint(rad) {
+      for (var y = 0; y < mh; y++) {
+        var dy = y * k + k / 2 - cy;
+        for (var x = 0; x < mw; x++) {
+          var dx = x * k + k / 2 - cx, i = (y * mw + x) * 4;
+          var dd = Math.sqrt(dx * dx + dy * dy) || 1, u = (dd - rad) / band, R = 128, G = 128, B = 0;
+          if (u > -1 && u < 1) {
+            var bump = 1 - u * u; bump *= bump;
+            var m = push * bump;
+            R = 128 - (dx / dd) * m / S * 255; G = 128 - (dy / dd) * m / S * 255;
+            var hh = (u + 0.06) / 0.07;
+            B = Math.min(255, 150 * Math.exp(-hh * hh) + 40 * bump);
+          }
+          px[i] = R; px[i + 1] = G; px[i + 2] = B; px[i + 3] = 255;
+        }
+      }
+      g.putImageData(img, 0, 0);
+      var url = cv.toDataURL();
+      f.maps.forEach(function (m) { m.setAttribute("href", url); });
+    }
+    d.style.setProperty("--lg-x", cx + "px"); d.style.setProperty("--lg-y", cy + "px"); d.style.setProperty("--lg-r", "0px");
+    paint(-band);
+    d.classList.add("lg-sweeping");
+    var vt = document.startViewTransition(function () { apply(next); });
+    vt.ready.then(function () {
+      d.animate({ opacity: [1, 1] }, { duration: DUR, pseudoElement: "::view-transition-new(root)" });
+      var t0 = performance.now();
+      (function frame(t) {
+        var p = Math.min(1, (t - t0) / DUR), rad = ease(p) * end;
+        d.style.setProperty("--lg-r", rad + "px"); paint(rad);
+        if (p < 1) requestAnimationFrame(frame);
+      })(t0);
+    }).catch(function () {});
+    function done() { d.classList.remove("lg-sweeping"); ["--lg-x", "--lg-y", "--lg-r"].forEach(function (v) { d.style.removeProperty(v); }); }
+    vt.finished.then(done, done);
+  }
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest && e.target.closest(".lg-theme-btn");
+    if (!btn) return;
+    var next = now() === "dark" ? "light" : "dark";
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { apply(next); return; }
+    if (document.startViewTransition) {
+      var r = btn.getBoundingClientRect();
+      glassSwitch(next, r.left + r.width / 2, r.top + r.height / 2);
+      return;
+    }
+    d.classList.add("lg-fading"); apply(next);
+    setTimeout(function () { d.classList.remove("lg-fading"); }, 760);
+  });
+})(document.documentElement);
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/cut-hero.webp?v=1">
+<link rel="stylesheet" href="liquid-glass.css?v=1">
+<link rel="stylesheet" href="site.css?v=1">
+</head>
+<body>
+<a class="skip" href="#order">Skip to ordering</a>
+
+<header class="bar" id="bar">
+  <a class="brand" href="#" aria-label="Sweets by Carla G, back to top">
+    <img src="assets/logo.jpg" alt="" width="38" height="38">
+    <span class="word-slot" id="slotWord" aria-hidden="true"></span>
+    <span class="brand-by">by Carla G</span>
+  </a>
+  <div class="bar-r">
+    <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
+      <svg class="lg-i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <svg class="lg-i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <span class="cta-slot bar-slot" id="slotBar" aria-hidden="true"></span>
+  </div>
+</header>
+
+<nav class="rail" id="rail" aria-label="Sections">
+  <span class="rail-line"></span>
+  <span class="roller" id="roller" aria-hidden="true"><img src="assets/logo.jpg" alt=""></span>
+  <button type="button" data-p="0"><span>Cake</span></button>
+  <button type="button" data-p="0.3"><span>Themes</span></button>
+  <button type="button" data-p="0.72"><span>Details</span></button>
+  <button type="button" data-p="0.84"><span>Treats</span></button>
+  <button type="button" data-p="1"><span>Order</span></button>
+</nav>
+
+<main class="stage" id="stage">
+  <h1 class="sr">Sweets by Carla G. Custom celebration cakes and artisanal desserts from a home bakery in Homestead, Florida.</h1>
+
+  <!-- the turntable: a flat rose ellipse under the orbit -->
+  <div class="turn" id="turn" aria-hidden="true"></div>
+
+  <!-- the peak: theme names roll behind the orbit -->
+  <div class="names" id="names" aria-hidden="true"><div class="names-col" id="namesCol"></div></div>
+
+  <!-- giant wordmark. Letters behind the cake bob like piped icing; later it docks in the bar -->
+  <div class="wm" id="wm" aria-hidden="true"><span class="l">S</span><span class="l">w</span><span class="l">e</span><span class="l">e</span><span class="l">t</span><span class="l">s</span></div>
+
+  <div class="hero-copy" id="heroCopy">
+    <div class="hc-in" id="heroIn">
+      <p class="lede">Custom cakes, <em>baked with love.</em></p>
+      <p class="sub">Artisanal cakes and desserts from a home bakery in Homestead, Florida. Made to order by a certified baker.</p>
+      <span class="cta-slot" id="slotHero" aria-hidden="true"></span>
+    </div>
+  </div>
+
+  <!-- the orbit: eight of their custom cakes -->
+  <section class="orbit-copy" id="orbitCopy" aria-label="Custom cakes">
+    <div class="oc-in" id="ocIn">
+      <h2>Your party, <em>in cake.</em></h2>
+      <p>Every cake is made to order for one celebration. Send the theme, the name and the date.</p>
+    </div>
+  </section>
+  <ul class="cards" id="cards" aria-label="Custom cakes from their Instagram">
+    <li class="card" data-name="Cowboy"><img src="assets/cake-cowboy.jpg" alt="White cake with black cow spots, a fondant cowboy hat and a red bandana" decoding="async"><span>Cowboy</span></li>
+    <li class="card" data-name="Checkmate"><img src="assets/cake-chess.jpg" alt="Chessboard cake with chocolate drips and white and dark chocolate chess pieces" decoding="async"><span>Checkmate</span></li>
+    <li class="card" data-name="Game on"><img src="assets/cake-gamer.jpg" alt="Silver drip cake with a white chocolate game controller and silver spheres" decoding="async"><span>Game on</span></li>
+    <li class="card" data-name="Ninety"><img src="assets/cake-ninety.jpg" alt="Two-tier pink marble cake with a rose gold 90 topper" decoding="async"><span>Ninety</span></li>
+    <li class="card" data-name="Minnie"><img src="assets/cake-minnie.jpg" alt="White cake with pink polka dots, gold ears and a pink bow, number 2" decoding="async"><span>Minnie</span></li>
+    <li class="card" data-name="Valerie"><img src="assets/cake-valerie.jpg" alt="Tall white buttercream cake with Valerie piped on the side and a candle" decoding="async"><span>Valerie</span></li>
+    <li class="card" data-name="Florals"><img src="assets/cake-florals.jpg" alt="White textured cake topped with peonies, palm leaves and gold spheres" decoding="async"><span>Florals</span></li>
+    <li class="card" data-name="Sweet 16"><img src="assets/cake-sweet16.jpg" alt="Round buttercream cake with a Sweet 16 message piped on top" decoding="async"><span>Sweet 16</span></li>
+  </ul>
+
+  <!-- hero: their flamingo cake, cut along its real edge with its board -->
+  <div class="cake" id="cake" aria-hidden="true">
+    <div class="cake-tilt" id="cakeTilt"><div class="cake-bob"><img src="assets/cut-hero.webp?v=1" alt="" decoding="async"></div></div>
+  </div>
+
+  <div class="fl" aria-hidden="true"><img src="assets/cut-flower.webp?v=1" alt="" decoding="async"></div>
+  <div class="fl" aria-hidden="true"><img src="assets/cut-flower.webp?v=1" alt="" decoding="async"></div>
+  <div class="fl" aria-hidden="true"><img src="assets/cut-flower.webp?v=1" alt="" decoding="async"></div>
+
+  <!-- detail: an iris opens on their sugar hibiscus -->
+  <figure class="macro" id="macro">
+    <img src="assets/hibiscus-macro.jpg" alt="Close up of a pink sugar hibiscus and the fondant flamingo on the cake" decoding="async">
+  </figure>
+  <p class="macro-cap" id="macroCap"><span id="macroIn">Artisanal cakes.<br><em>Handcrafted details.</em></span></p>
+
+  <!-- treats -->
+  <section class="treats" id="treats" aria-label="Desserts">
+    <div class="tr-head" id="trHead"><h2>Beyond <em>the cake.</em></h2><p>Desserts, handcrafted cookies and Peruvian alfajores.</p></div>
+  </section>
+  <figure class="treat" data-ar="0.936"><img src="assets/red-velvet.jpg" alt="Naked red velvet cake topped with strawberries and cherries" decoding="async"><figcaption>Red velvet</figcaption></figure>
+  <figure class="treat" data-ar="1"><img src="assets/choc-strawberry.jpg" alt="Layered chocolate cake with cream and strawberries" decoding="async"><figcaption>Chocolate strawberry</figcaption></figure>
+  <figure class="treat" data-ar="0.75"><img src="assets/rum-cake.jpg" alt="Rum cake ring with walnuts and whipped cream rosettes" decoding="async"><figcaption>Rum cake</figcaption></figure>
+  <figure class="treat" data-ar="1.071"><img src="assets/alfajores.jpg" alt="Rows of strawberry jam alfajores dusted with sugar" decoding="async"><figcaption>Peruvian alfajores</figcaption></figure>
+
+  <!-- order -->
+  <section class="order" id="order" aria-label="Order">
+    <div class="od-in" id="odIn">
+      <h2>Let's make <em>your cake.</em></h2>
+      <p class="od-p">Message Carla with the date, how many guests, and your theme.</p>
+      <div class="thumbs" id="thumbs"><i></i><i></i><i></i><i></i></div>
+      <p class="od-line"><a href="https://wa.me/13053991386" target="_blank" rel="noopener">WhatsApp (305) 399-1386</a></p>
+      <div class="map-row">
+        <p class="od-place">Homestead, FL<br><span>Home bakery</span></p>
+        <div class="map" id="map"><iframe id="mapFrame" title="Map of Homestead, Florida" loading="lazy" referrerpolicy="no-referrer-when-downgrade" data-src="https://www.google.com/maps?q=Homestead,+FL&amp;z=11&amp;output=embed"></iframe></div>
+      </div>
+      <span class="cta-slot" id="slotClose" aria-hidden="true"></span>
+      <p class="od-small">5.0 on Google, 12 reviews · <a href="https://www.instagram.com/sweetsby_carlag/" target="_blank" rel="noopener">Instagram</a></p>
+    </div>
+  </section>
+</main>
+
+<!-- one button for the whole page: hero -> bar -> order card -->
+<div class="cta-fly" id="ctaFly"><a class="cta lg-glass" href="https://wa.me/13053991386?text=Hi%20Carla%21%20I%27d%20love%20to%20order%20a%20cake." target="_blank" rel="noopener">Order on WhatsApp</a></div>
+
+<div class="spacer" id="spacer" aria-hidden="true"></div>
+
+<script src="liquid-glass.js?v=1" defer></script>
+<script src="site.js?v=1" defer></script>
+</body>
+</html>

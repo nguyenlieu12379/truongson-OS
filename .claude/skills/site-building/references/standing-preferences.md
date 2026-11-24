@@ -32,7 +32,7 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - Four must-haves from `websites/README.md`: one engineered peak, layered hero, real photos, no AI tells.
 
 ## UI material
-- Cursor ball: the Espresso Vivace ball is the default, its size (112px) and its style (rim, highlight, dark inner edge, gloss, drop shadow). Its motion is the Brazilian Taste drag: lazy spring, long stretch (stiffness 0.055, damping 0.86, stretch 0.03, max 0.7). Don't resize, restyle or re-tune it unless asked (Son, 2026-11-24).
+- Cursor ball: the Espresso Vivace ball, exactly: its size (112px), its style (rim, highlight, dark inner edge, gloss, drop shadow) and its motion (spring stiffness 0.14, damping 0.72, stretch speed x 0.018, max 0.42; see `builds/espresso-vivace/site.js`). The Brazilian Taste drag is no longer the default: "too fluid" (2026-11-24, Sweets by Carla G pre-build). Don't resize, restyle or re-tune it unless asked.
 - No glass venom strands (Son removed them, 2026-11-23).
 - Liquid glass on every block (buttons, text cards, nav): a clear refractive lens that magnifies and bends what's behind it along the edges and corners, with a thin specular rim. No blur, no frost.
 - A lens follows the cursor and bends the light under it; the rim light follows the cursor; buttons lean toward it.

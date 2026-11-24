@@ -12,6 +12,12 @@
       "runtimeExecutable": "powershell",
       "runtimeArgs": ["-ExecutionPolicy", "Bypass", "-File", "websites/TruongSon-demos/scrollcraft/builds/brazilian-taste/serve.ps1", "-Root", "websites/TruongSon-demos/scrollcraft/builds/brazilian-taste", "-Port", "4503"],
       "port": 4503
+    },
+    {
+      "name": "sweets-by-carla-g",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": ["-ExecutionPolicy", "Bypass", "-File", "websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g/serve.ps1", "-Root", "websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g", "-Port", "4511"],
+      "port": 4511
     }
   ]
 }
