@@ -442,3 +442,13 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Why:** Son: "remove the vivace as the primary", "the Sites table only shows the successful one... dont show the fails".
 
 **Owner:** Son
+
+## 2026-11-24 - Prospecting skill revived, with Scrapling
+
+**Decision:** Reverses the "Prospect-finding pipeline shelved" decision (2026-11-23). New `/prospecting` skill in `.claude/skills/prospecting/`. It's built from Son's lead prompts across past sessions: a US F&B business with WhatsApp and no real website, confirmed before any build. Steps: OpenStreetMap list, Scrapling checks every listed site and link-in-bio page (dead, parked or social-only counts as no site; pulls `wa.me` links), then a read-only Instagram/Google pass in the browser. Output: a few confirmed leads in chat plus a ranked spreadsheet in `prospects/` (gitignored). Scrapling is installed from PyPI into a gitignored `.venv`, not vendored.
+
+**Why:** Son asked for a "prospecting" skill that does what his lead prompts did, with Scrapling in the process. Scrapling gets past Cloudflare walls on business sites; it doesn't get into Instagram or logins, so that stays a browser step.
+
+**Owner:** Son
+
+**Update (same day):** after the first test, Son said the skill was far slower than a plain prompt for one prospect. The default is now the fast path (one Google search for Instagram bios with `wa.me`, a quick no-website check, report). Scrapling only checks a single link or runs a bulk city list when asked.

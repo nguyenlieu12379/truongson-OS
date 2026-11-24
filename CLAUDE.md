@@ -22,6 +22,7 @@ Read `references/3ms-framework.md` once. It's how Son and Truong think about AI 
 - `/site-building`: one build skill for websites, run in order. (1) pre-build asks Son or Truong their build preferences in one message and saves them to the build's `PREFS.md`. (2) scroll-craft (Nate Herk, MIT) builds the scroll-driven landing page: layered heroes, scrollytelling, one bespoke signature move. (3) liquid-glass adds the glass layer: theme toggle, 112px cursor ball or cursor pull, glass buttons. Stage 1 always runs before stage 2 (a UserPromptSubmit hook in `.claude/settings.json` reminds Claude). Path: `.claude/skills/site-building/`. Entry: `FAILURES.md` (must read first), then `SKILL.md`, then the stage file. Not frosted glassmorphism.
 - `/level-up` — Weekly 3Ms interview. Find one automation, scope it, ship it. One per week.
 - `/no-ai-slop` (Peter Yang, MIT): edit a draft to strip AI-sounding patterns while keeping our voice, or say "is this slop?" to just flag them. Run it on anything external (Instagram, client emails, cold scripts, site copy) before showing a draft. Path: `.claude/skills/no-ai-slop/`.
+- `/prospecting`: find US F&B prospects with WhatsApp and no real website. Fast by default: one Google search for Instagram bios with wa.me links, a quick no-website check, a short report. Scrapling checks a link (gets past Cloudflare) or pulls a bulk city list to `prospects/` (gitignored) only when asked. Confirm a pick before `/site-building`. Path: `.claude/skills/prospecting/` (setup steps in its `SKILL.md`).
 
 ### Kit packs (whole repos, in `.claude/skills/`)
 
@@ -59,7 +60,7 @@ Match the register in `references/voice.md`. Casual but professional. Short sent
 
 ## Connections
 
-Full registry: `connections.md`. Only `/watch` (local script) is wired. Business tools are not connected yet.
+Full registry: `connections.md`. Only `/watch` and `/prospecting` (local scripts) are wired. Business tools are not connected yet.
 
 **Temporary account:** this repo runs on a borrowed claude.ai account until Son and Truong move it to their own plan. Do not use that account's Gmail, Drive, Calendar or other connectors for business work. Connections, automation, outreach and Instagram get set up after the move.
 

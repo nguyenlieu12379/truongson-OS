@@ -13,3 +13,6 @@ prospects/
 
 # local screen recordings (test videos), never committed
 recordings/
+
+# Prospecting skill Python env
+.claude/skills/prospecting/.venv/
