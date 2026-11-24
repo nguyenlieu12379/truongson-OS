@@ -12,13 +12,13 @@ Spec demo. Goes live with noindex when done (Son: "go live when done"). Not show
 - Call/text +1 (571) 341-0009. WhatsApp wa.me/15713410009 (same number, from their captions). They also run a WhatsApp community (not linked on the page: it's an invite link).
 - Their look: black meal-prep trays and foil catering trays shot close, warm curry oranges, white basmati. Logo: a gold ring with a wheat sprig and a gold cloche, serif caps.
 
-## Colour split (Son: 60 black or white, 30 gold, 10 saffron)
+## Colour split (Son: 60 black or white, 30 gold, 10 saffron, then Guards Red)
 
 | Share | Dark mode | Light mode | Where |
 |---|---|---|---|
 | 60 | Black `#0C0B0A` | White `#FBFAF7` | the stage |
 | 30 | Gold `#C4A469` (their logo, sampled `#A2895A` to `#C1A871`) | Deep gold `#86672F` (text on white, 5:1) | the wordmark, all type, hairlines, the ring, the order panel |
-| 10 | Saffron `#F4A000` | Saffron `#F4A000` | "Order on WhatsApp" only |
+| 10 | Guards Red `#D2001F`, white label | Guards Red `#D2001F`, white label | "Order on WhatsApp" only (Son, 2026-11-24: "CTA button guards red"; was saffron) |
 
 ## Photos
 
@@ -85,3 +85,9 @@ Food is never under letters: the tray is in front of PAKACHI; captions sit on a 
 
 - All from their IG and FB captions: name, Herndon VA 20171, Soul of Karachi, halal, Certified Food Protection Manager, the deal and prices, pickup/delivery/Uber Courier, Tuesday and Thursday menus, the phone and WhatsApp number, dish names on the photos.
 - **To confirm with the client:** delivery zone, order cut-off times, whether the prices still hold.
+
+## Revisions
+
+- 2026-11-24 (Son): "just need the CTA button guards red. and in the end frame, i can see it sitting on other letters"
+  - The button is Guards Red `#D2001F` with a white label, everywhere it travels (hero, bar, ticket).
+  - The ticket is now measured from its own content, button slot included, and the button lands in that slot. Checked at 1280x720, 1440x900, 1920x1080, 390x844 and 360x640: no ticket line under the button.

@@ -132,23 +132,27 @@
     // order panel and ticket
     const panelH = VH - barH + 2;
     panel.style.top = '0px'; panel.style.height = panelH + 'px';
-    const tw = mobile ? VW - 32 : Math.min(540, VW * 0.42);
-    const th = mobile ? Math.min(VH * 0.5, 400) : Math.min(VH * 0.5, 430);
-    const tcy = mobile ? VH * 0.66 : VH * 0.63;
-    const tLocal = { x: (VW - tw) / 2, y: tcy - th / 2 - barH, w: tw, h: th };
-    box(ticket, tLocal.x, tLocal.y, tw, th);
-
-    // the travelling button
+    // the travelling button: its slots are sized first, so the ticket can be measured with the button in it
     const bwid = cta.offsetWidth, bhei = cta.offsetHeight;
     const sHero = mobile ? 0.92 : 1, sBar = mobile ? 0.6 : 0.66, sClose = 1;
     Object.assign(slotHero.style, { width: bwid * sHero + 'px', height: bhei * sHero + 'px' });
     Object.assign(slotBar.style, { width: bwid * sBar + 'px', height: bhei * sBar + 'px' });
     Object.assign(slotClose.style, { width: bwid * sClose + 'px', height: bhei * sClose + 'px' });
+
+    // ticket: as tall as its own content (with the button's slot), never squeezed
+    const tw = mobile ? VW - 32 : Math.min(560, Math.max(VW * 0.42, 480));
+    ticket.style.width = tw + 'px';
+    tkIn.style.position = 'relative'; tkIn.style.inset = 'auto';
+    const th = Math.min(VH - barH - 24, tkIn.offsetHeight + 8);
+    tkIn.style.position = ''; tkIn.style.inset = '';
+    const tcy = Math.min(mobile ? VH * 0.66 : VH * 0.63, VH - 12 - th / 2);
+    const tLocal = { x: (VW - tw) / 2, y: tcy - th / 2 - barH, w: tw, h: th };
+    box(ticket, tLocal.x, tLocal.y, tw, th);
+
     heroIn.style.transform = 'none'; tkIn.style.transform = 'none'; panel.style.transform = 'none'; panel.style.clipPath = 'none';
-    const rh = slotHero.getBoundingClientRect(), rb = slotBar.getBoundingClientRect();
-    const rcx = (VW - bwid) / 2, rcy = tcy + th / 2 - (mobile ? 30 : 40) - bhei;
-    // put the close slot where the ticket will hold it
-    const C = { hero: { x: rh.left, y: rh.top, s: sHero }, bar: { x: rb.left, y: rb.top, s: sBar }, close: { x: rcx, y: rcy, s: sClose } };
+    const rh = slotHero.getBoundingClientRect(), rb = slotBar.getBoundingClientRect(), rc = slotClose.getBoundingClientRect();
+    // the close slot, read where the ticket really holds it (the panel rests at the bar's height)
+    const C = { hero: { x: rh.left, y: rh.top, s: sHero }, bar: { x: rb.left, y: rb.top, s: sBar }, close: { x: rc.left, y: rc.top + barH, s: sClose } };
 
     // ring: base size, scaled per scene
     const ringBase = 1000;
