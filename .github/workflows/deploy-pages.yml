@@ -4,6 +4,7 @@ name: Deploy websites to GitHub Pages
 # /delicias-cake/ -> websites/TruongSon-demos/scrollcraft/builds/delicias-cake (prospect demo, scroll-craft, noindex)
 # /brazilian-taste/ -> websites/TruongSon-demos/scrollcraft/builds/brazilian-taste (prospect demo, scroll-craft, noindex)
 # /             -> redirects to /espresso-vivace/
+# Every push to main that touches these paths redeploys all sites.
 
 on:
   push:
