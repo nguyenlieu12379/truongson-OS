@@ -1,6 +1,6 @@
 # Pakachi Kitchen (spec demo)
 
-Scroll-craft build, 2026-11-24, for Pakachi Kitchen LLC (Herndon, VA: Pakistani halal home cooking, a 6-dish weekly menu deal, catering; orders by WhatsApp and phone, no website). Live (noindex): https://nguyenlieu12379.github.io/truongson-OS/pakachi-kitchen/ (deployed by `.github/workflows/deploy-pages.yml` on push to main). Not in the approved Sites list until Son or Truong approves it.
+Scroll-craft build, 2026-11-24, for Pakachi Kitchen LLC (Herndon, VA: Pakistani halal home cooking, a 6-dish weekly menu deal, catering; orders by WhatsApp and phone, no website). Live (noindex): https://nguyenlieu12379.github.io/truongson-OS/pakachi-kitchen/ (deployed by `.github/workflows/deploy-pages.yml` on push to main). Approved by Son, 2026-11-24, and in the Sites list.
 
 One fixed stage. Their biryani tray, cut from their photo, sits in front of a giant gold PAKACHI. It becomes card 1 of a hand of six of their dishes dealt along the arc of their logo ring; the whole hand doubles as "$90" rolls to "$130". The hand turns away, the haleem card opens into a catering band that pans through their trays, their gold rises with three steps, then tightens into an order ticket with the hand fanned behind it. Brief, colour split and failure checks: `BRIEF.md`. Answers: `PREFS.md`. Photo sources: `assets/source/SOURCES.md`.
 
