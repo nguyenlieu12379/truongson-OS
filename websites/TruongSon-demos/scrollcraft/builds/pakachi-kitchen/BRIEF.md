@@ -107,3 +107,5 @@ Food is never under letters: the tray is in front of PAKACHI; captions sit on a 
   - The tray only leans toward where the cursor is: up to 4deg up/down and 6deg sideways, set on the next frame (no spring, no lag, no roll, no slide). The light sheen is removed. Still pivots on the hidden bottom-right corner; flat as soon as the page scrolls.
 - 2026-11-24 (Son): "the animation looks good now, but the its center rotation"
   - The lean now turns around the tray's centre (transform and perspective origin 50% 50%) instead of its hidden corner. At 4deg / 6deg the edges move about 6px, well inside the 84px overscan, so the cut edges stay off screen.
+- 2026-11-24 (Son): "yes, i mean this since start, make it slightly more dramatic"
+  - Centre lean raised to 8deg up/down and 11deg sideways (was 4 / 6). Still direct, no inertia, no sheen. Edges move about 20px, inside the 84px overscan.

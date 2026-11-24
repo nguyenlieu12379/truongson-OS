@@ -414,12 +414,12 @@
 
   // the tray leans slightly toward the cursor while it is the hero (Son: "no inertia, no glossing,
   // just slightly moving"): position only, applied on the next frame, no spring, no sheen.
-  // It turns around its own centre (Son); at 4-6deg the cut edges stay inside the 84px overscan.
+  // It turns around its own centre (Son); at 8deg / 11deg the edges move about 20px, inside the 84px overscan.
   let tiltOn = true, tx = 0, ty = 0, tiltRun = false;
   function tilt() {
     tiltRun = false;
     const x = tiltOn ? tx : 0, y = tiltOn ? ty : 0;
-    trayTilt.style.transform = `rotateX(${(x * 4).toFixed(2)}deg) rotateY(${(y * 6).toFixed(2)}deg)`;
+    trayTilt.style.transform = `rotateX(${(x * 8).toFixed(2)}deg) rotateY(${(y * 11).toFixed(2)}deg)`;
   }
   const kickTilt = () => { if (!tiltRun) { tiltRun = true; requestAnimationFrame(tilt); } };
   if (!reduced.matches && matchMedia('(hover: hover) and (pointer: fine)').matches) {
