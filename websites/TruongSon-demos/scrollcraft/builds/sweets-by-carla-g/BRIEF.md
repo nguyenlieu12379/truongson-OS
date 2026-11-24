@@ -34,7 +34,7 @@ One fixed stage, one scroll timeline. Every scene hands its layers to the next (
 | 2 | Dock | "Sweets" shrinks and flies into the top bar, where it stays as the logo. The cake drops to the centre and the stage tilts: its board becomes the centre of a turntable ellipse. | Settling in. |
 | 3 | Orbit | Eight of their custom cakes rise onto the ellipse around the flamingo cake and the turntable turns with the scroll. The front card's theme name sits under it. | Curiosity: what comes round next. |
 | 4 | Any theme (peak) | The turntable spins a full turn fast; each cake that passes the front throws its name into a giant script line behind the orbit ("Cowboy", "Checkmate", "Game on"...). Ends on "Yours." | The peak: "the cakes spin past like on a cake turntable, and the names flip by". |
-| 5 | Detail | The orbit sinks; the flamingo cake grows until its sugar hibiscus fills the screen and an iris opens into their macro photo of it. "Artisanal cakes. Handcrafted details." | Closeness, quiet. |
+| 5 | Detail | The orbit gathers under the cake; the camera pushes in on the flamingo and the top hibiscus while the screen edges close to a square at the close-up photo's own shape. The cutout is lined up with their close-up (matched on the flamingo's eye and the flower's stamen) and turns into it in place. "Artisanal cakes. Handcrafted details." | Closeness, quiet. |
 | 6 | Treats | The iris shrinks into the first of four frames (red velvet, chocolate strawberry, rum cake, Peruvian alfajores), each at its own photo's shape; the others are served in from the right and settle. | Appetite. |
 | 7 | Order | The treats slide down into a low row; the flamingo cake comes back to the centre; "Sweets" undocks from the bar and drops back behind it. The order card (WhatsApp, Homestead FL, Google map) lands beside. Holds. | Resolve: "I know how to order". |
 
@@ -69,6 +69,11 @@ One fixed stage, one scroll timeline. Every scene hands its layers to the next (
 | "Would this fit any other business?" | No: their flamingo cake, their themed custom cakes spinning on a turntable, their alfajores. |
 
 Food is never under letters: the cake is in front of "Sweets"; captions sit under frames.
+
+## Revisions
+
+- 2026-11-24: "the image in this scene looks off". The close-up was stretched full-bleed (beak cropped, photo upscaled). It now keeps its square shape at the full 1440px source.
+- 2026-11-24: "why zooming at the flower instead of the flamingo & flower above, and ... a scene cut is clear as day, not unbroken". The push-in now targets the flamingo and the top flowers, exactly the area their close-up shows, and the circle iris onto a different picture is gone: the cutout is aligned to the close-up and turns into it in place while the frame closes to the square.
 
 ## UI material
 

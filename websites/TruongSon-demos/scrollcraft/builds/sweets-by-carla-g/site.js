@@ -9,7 +9,9 @@
 (() => {
   const CAKE_AR = 1328 / 997;                  // cut-hero.webp
   const BOARD = [0.498, 0.846];                // centre of the cake board inside the cutout
-  const FLOWER = [0.198, 0.755, 0.12];         // the sugar hibiscus inside the cutout (x, y, radius share of width)
+  // where their close-up photo sits on the cutout (matched on the flamingo's eye and the top flower's stamen):
+  // left, top and size of the square, all as shares of the cutout's width
+  const MAC = { u: 0.3652, v: -0.0023, k: 0.4187 };
 
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => [...document.querySelectorAll(s)];
@@ -213,19 +215,17 @@
     const { hero, orb, close } = L;
     const d = E(seg(p, 0.05, 0.15));
     let x = lerp(hero.x, orb.x, d), y = lerp(hero.y, orb.y, d), w = lerp(hero.w, orb.w, d);
-    // the dive: grow around the hibiscus
-    const z = zoomAt(p);
-    if (z > 1) {
-      const F = flowerPt(orb);
-      x = F.x + (x - F.x) * z; y = F.y + (y - F.y) * z; w *= z;
+    // the push-in: the flamingo and the top flowers grow until they fill the close-up's square exactly
+    const z = E(seg(p, 0.645, 0.735));
+    if (z > 0) {
+      const M = L.M, tw = M.s / MAC.k;
+      x = lerp(x, M.x - MAC.u * tw, z); y = lerp(y, M.y - MAC.v * tw, z); w = lerp(w, tw, z);
     }
     // the close: rises back from below
     const c = E(seg(p, 0.885, 0.955));
     if (c > 0) { x = close.cake.x; w = close.cake.w; y = lerp(VH + 40, close.cake.y, c); }
     return { x, y, w };
   }
-  const flowerPt = (r) => ({ x: r.x + r.w * FLOWER[0], y: r.y + (r.w / CAKE_AR) * FLOWER[1], r: r.w * FLOWER[2] });
-  const zoomAt = (p) => { const t = seg(p, 0.655, 0.725); return 1 + Math.pow(t, 2.2) * (Math.hypot(VW, VH) / (L.orb.w * FLOWER[2]) - 1) * 0.9; };
 
   // orbit rotation in card units: slow turn, the fast full turn (peak), then held
   const rotAt = (p) => (p < 0.4 ? SPIN_FROM * E(seg(p, 0.15, 0.4)) : SPIN_FROM + (SPIN_TO - SPIN_FROM) * E(seg(p, 0.4, 0.6)));
@@ -254,10 +254,10 @@
     {
       put(cake, 'transform', tf(ck.x, ck.y));
       put(cake, 'width', r1(ck.w) + 'px'); put(cake, 'height', r1(ck.w / CAKE_AR) + 'px');
-      show(cake, p < 0.726 || p > 0.885);
-      // the dive frames itself: the screen edges pull in to the macro's square
-      const fr = E(seg(p, 0.655, 0.7));
-      if (fr > 0 && p < 0.726) {
+      show(cake, p < 0.745 || p > 0.885);
+      // the push-in frames itself: the screen edges pull in to the close-up's square
+      const fr = E(seg(p, 0.645, 0.735));
+      if (fr > 0 && p < 0.745) {
         const M = L.M, chh = ck.w / CAKE_AR, c0 = (v) => r1(Math.max(0, v) * fr);
         put(cake, 'clipPath', `inset(${c0(M.y - ck.y)}px ${c0(ck.x + ck.w - M.x - M.s)}px ${c0(ck.y + chh - M.y - M.s)}px ${c0(M.x - ck.x)}px round ${r1(18 * fr)}px)`);
       } else put(cake, 'clipPath', 'none');
@@ -308,14 +308,11 @@
       show(names, a > 0 && b < 1);
     }
 
-    // ---- 5. the dive: iris into their hibiscus
-    const F = flowerPt(L.orb);
+    // ---- 5. the push-in: the cutout, now lined up with their close-up, turns into it in place
     {
-      const z = zoomAt(p);
-      const t = seg(p, 0.675, 0.725);
-      const M = L.M, fx = F.x - M.x, fy = F.y - M.y;
-      const diag = Math.hypot(Math.max(fx, M.s - fx), Math.max(fy, M.s - fy));
-      const rad = lerp(F.r * z * 0.85, diag, E(t));
+      const M = L.M;
+      const t = E(seg(p, 0.712, 0.742));
+      put(macro, 'opacity', t.toFixed(3));
       const close = E(seg(p, 0.765, 0.81));          // the square shrinks into the first treat's frame
       if (close > 0) {
         const f = L.T[0], s1 = f.h / M.s, sc = lerp(1, s1, close);
@@ -325,7 +322,7 @@
         put(macro, 'clipPath', `inset(0 ${ix}px round ${r1(18 / sc)}px)`);
       } else {
         put(macro, 'transform', 'none');
-        put(macro, 'clipPath', t >= 1 ? 'none' : `circle(${r1(rad)}px at ${r1(fx)}px ${r1(fy)}px)`);
+        put(macro, 'clipPath', 'none');
       }
       show(macro, t > 0 && p < 0.83);
       const ci = E(seg(p, 0.715, 0.75)), co = E(seg(p, 0.765, 0.79));
