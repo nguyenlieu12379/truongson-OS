@@ -414,7 +414,7 @@
 
   // the tray leans slightly toward the cursor while it is the hero (Son: "no inertia, no glossing,
   // just slightly moving"): position only, applied on the next frame, no spring, no sheen.
-  // It pivots on its own bottom-right corner (off screen), so the cut edges stay hidden.
+  // It turns around its own centre (Son); at 4-6deg the cut edges stay inside the 84px overscan.
   let tiltOn = true, tx = 0, ty = 0, tiltRun = false;
   function tilt() {
     tiltRun = false;

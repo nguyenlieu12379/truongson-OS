@@ -91,8 +91,8 @@ a { color: inherit; }
 @keyframes mq { to { transform: translate3d(-50%, 0, 0); } }
 
 /* ---- tray --------------------------------------------------------------- */
-.tray { left: 0; top: 0; z-index: 4; perspective: 1000px; perspective-origin: 100% 100%; will-change: transform, clip-path; }
-.tray-tilt { width: 100%; height: 100%; transform-style: preserve-3d; transform-origin: 100% 100%; }
+.tray { left: 0; top: 0; z-index: 4; perspective: 1000px; perspective-origin: 50% 50%; will-change: transform, clip-path; }
+.tray-tilt { width: 100%; height: 100%; transform-style: preserve-3d; transform-origin: 50% 50%; }
 .tray-bob { width: 100%; height: 100%; animation: bob 5.5s ease-in-out infinite; }
 .tray-bob { position: relative; }
 .tray img { width: 100%; height: 100%; object-fit: fill; }
