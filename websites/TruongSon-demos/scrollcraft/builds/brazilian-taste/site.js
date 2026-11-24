@@ -305,7 +305,7 @@
 
   // liquid glass: pinch lens on the pointer, glass buttons, magnet (no venom)
   if (window.LiquidGlass) {
-    LiquidGlass.cursorPinch({ size: 150, strength: 2.2 });   // no ball: a 150px area on the pointer pulls the page in toward it
+    LiquidGlass.cursorPinch({ size: 240, strength: 4, focus: 3 });   // no ball: a 240px area on the pointer pulls the page in, hardest right at the cursor
     LiquidGlass.glassify('.lg-glass');
     LiquidGlass.magnet('.cta-fly .cta', { reach: 'page', curve: 2.2, pull: 0.6, max: 46 });   // the yellow buttons lean toward the cursor wherever it is, harder as it gets close
   }

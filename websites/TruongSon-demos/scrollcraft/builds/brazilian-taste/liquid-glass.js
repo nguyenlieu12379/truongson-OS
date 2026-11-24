@@ -223,11 +223,17 @@
   // page is pulled in toward the cursor point: hardest close to the cursor,
   // fading to nothing at the area's edge, so there's no visible rim.
   //   size:     diameter, px (default 150)
-  //   strength: how hard the centre pulls, 0..2.8 (default 2.2). Above 3 the
-  //             content folds over itself.
-  function pinchMap(size, strength) {
-    var R = size / 2, A = strength * R, n = Math.max(2, Math.round(size));
-    var peak = A * (1 / 3) * (4 / 9), S = peak * 2.2;
+  //   strength: how hard the centre pulls (default 2.2). Clamped just under
+  //             the point where content would fold over itself.
+  //   focus:    2 = pull spread across the area, 3 or 4 = pull bunched close
+  //             to the cursor (default 2)
+  function pinchMap(size, strength, focus) {
+    var R = size / 2, p = focus || 2, n = Math.max(2, Math.round(size));
+    var f = function (u) { return u * Math.pow(1 - u, p); };
+    // fold limit: 1 + strength * min f'(u) must stay > 0
+    var minD = 0, peakF = 0;
+    for (var j = 1; j < 400; j++) { var u0 = j / 400; minD = Math.min(minD, (f(u0 + 0.001) - f(u0)) / 0.001); peakF = Math.max(peakF, f(u0)); }
+    var k = Math.min(strength, 0.9 / -minD), A = k * R, S = A * peakF * 2.2;
     var cv = document.createElement("canvas"); cv.width = n; cv.height = n;
     var g = cv.getContext("2d"), img = g.createImageData(n, n), px = img.data;
     for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) {
@@ -235,8 +241,8 @@
       var i = (y * n + x) * 4, Rc = 128, Gc = 128;
       if (u < 1 && r > 0) {
         // sample further out than we draw: content looks pulled toward the centre.
-        // d(u) = A u (1-u)^2: zero at the cursor and at the edge, strongest near the cursor
-        var d = A * u * (1 - u) * (1 - u);
+        // d(u) = A u (1-u)^focus: zero at the cursor and at the edge, strongest near the cursor
+        var d = A * f(u);
         Rc = 128 + (X / r) * d / S * 255; Gc = 128 + (Y / r) * d / S * 255;
       }
       px[i] = Rc; px[i + 1] = Gc; px[i + 2] = 128; px[i + 3] = 255;
@@ -253,7 +259,7 @@
     el.className = "lg-pinch"; el.setAttribute("aria-hidden", "true");
     el.style.cssText = "position:fixed;left:-9999px;top:-9999px;width:" + size + "px;height:" + size + "px;border-radius:50%;" +
       "pointer-events:none;z-index:2147483000;opacity:0;transition:opacity 200ms ease";
-    var id = filterFor(pinchMap(size, opt.strength == null ? 2.2 : opt.strength), size, size);
+    var id = filterFor(pinchMap(size, opt.strength == null ? 2.2 : opt.strength, opt.focus), size, size);
     el.style.backdropFilter = el.style.webkitBackdropFilter = "url(#" + id + ")";
     document.body.appendChild(el);
     // position straight from the event: the area sits exactly on the pointer, every move
