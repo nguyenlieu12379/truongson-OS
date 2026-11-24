@@ -95,12 +95,6 @@ a { color: inherit; }
 .tray-tilt { width: 100%; height: 100%; transform-style: preserve-3d; transform-origin: 100% 100%; }
 .tray-bob { width: 100%; height: 100%; animation: bob 5.5s ease-in-out infinite; }
 .tray-bob { position: relative; }
-/* light that follows the cursor, only on the tray itself (masked by its own cutout) */
-.tray-glare { position: absolute; inset: 0; overflow: hidden; pointer-events: none; display: none;
-  -webkit-mask: url(assets/cut-tray.webp?v=7) center / 100% 100% no-repeat; mask: url(assets/cut-tray.webp?v=7) center / 100% 100% no-repeat; }
-.tilt-on .tray-glare { display: block; }
-.tray-glare i { position: absolute; left: -50%; top: -50%; width: 200%; height: 200%; mix-blend-mode: soft-light; will-change: transform;
-  background: radial-gradient(circle at 50% 50%, rgb(255 248 230 / 0.85), rgb(255 248 230 / 0.25) 18%, rgb(0 0 0 / 0) 34%); }
 .tray img { width: 100%; height: 100%; object-fit: fill; }
 @keyframes bob { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -1.2%, 0); } }
 

@@ -103,3 +103,5 @@ Food is never under letters: the tray is in front of PAKACHI; captions sit on a 
   - It pivots on its own bottom-right corner (off screen, perspective from that corner), so the photo's cut edges stay hidden in every pose. PAKACHI counter-drifts up to 30px.
 - 2026-11-24 (Son): "nah, less dramatic" and "the pakachi hero dont move"
   - About half: lean 13deg / 16deg, max 18deg back, 20deg sideways, 4deg roll, 8deg toward the viewer; kicks halved, damping 0.22 (less bounce), slide 14px. PAKACHI no longer drifts: it stays still while the tray moves.
+- 2026-11-24 (Son): "no inertia, no glossing, just slightly moving"
+  - The tray only leans toward where the cursor is: up to 4deg up/down and 6deg sideways, set on the next frame (no spring, no lag, no roll, no slide). The light sheen is removed. Still pivots on the hidden bottom-right corner; flat as soon as the page scrolls.
