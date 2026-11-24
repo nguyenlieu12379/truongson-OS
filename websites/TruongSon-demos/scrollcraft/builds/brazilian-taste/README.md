@@ -9,7 +9,8 @@ One unbroken white world. Their real "Brazilian" wordmark splits open, their bow
 - `index.html`: markup. The wordmark is 9 letters + "TASTE" cut from their avatar (`assets/wm-*.png`, used as masks, coloured by CSS).
 - `site.css`: tokens at the top (white 60, green `#29400E` 30, yellow `#F8E04A` 10 on the CTA only). Instrument Serif + Inter Tight.
 - `site.js`: one timeline `p` (0..1) from smoothed scroll; transforms, opacity and clip-path only, written on change.
-- `liquid-glass.css`, `liquid-glass.js`: the stage 3 kit (cursor lens, glass buttons). No venom, no theme toggle.
+- `liquid-glass.css`, `liquid-glass.js`: the stage 3 kit (cursor lens, glass buttons). No venom, no theme toggle. Ball: 104px, long trail.
+- `assets/cut-*.webp`: real cutouts (tray, orange slice, lunch box). `assets/logo/`: their logo set.
 
 ## Run it
 

@@ -7,26 +7,28 @@
 <meta name="theme-color" content="#FFFFFF">
 <title>Brazilian Taste · Brazilian home cooking in Dallas</title>
 <meta name="description" content="Premade Brazilian meals, catering and a personal chef in Dallas, Texas. Order on WhatsApp.">
+<link rel="icon" type="image/png" href="assets/logo/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/cut-tray.webp">
 <link rel="preload" as="image" href="assets/126-bowls-overhead.jpg">
-<link rel="stylesheet" href="liquid-glass.css?v=1">
-<link rel="stylesheet" href="site.css?v=1">
+<link rel="stylesheet" href="liquid-glass.css?v=2">
+<link rel="stylesheet" href="site.css?v=2">
 </head>
 <body>
 <a class="skip" href="#close">Skip to ordering</a>
 
 <header class="bar" id="bar">
-  <span class="bar-mark" aria-hidden="true"></span>
-  <span class="sr">Brazilian Taste</span>
+  <img class="bar-logo" src="assets/logo/brazilian-taste-logo-green.png" alt="Brazilian Taste" width="160" height="60">
   <a class="cta cta-sm lg-glass" href="https://wa.me/16828629545?text=Hi%21%20Can%20I%20see%20this%20week%27s%20menu%3F" target="_blank" rel="noopener">Order on WhatsApp</a>
 </header>
 
 <main class="stage" id="stage" aria-label="Brazilian Taste">
-
-  <!-- 1 + 2 + 6: their real wordmark, cut from their avatar -->
   <h1 class="sr">Brazilian Taste</h1>
+
+  <!-- their wordmark, cut from their avatar. Letters behind the tray wobble with it -->
   <div class="wm" id="wm" aria-hidden="true">
     <div class="grp" id="wmL">
       <span class="l" style="--i:0;left:0.654%;width:10.405%"><i style="--m:url(assets/wm-brazilian-0.png)"></i></span>
@@ -44,50 +46,60 @@
     </div>
   </div>
 
-  <div class="hero-copy" id="heroCopy">
-    <p class="quote">More time for what matters.</p>
-    <p class="sub">Brazilian home cooking in Dallas. Premade meals, catering and a personal chef.</p>
-    <a class="cta lg-glass" href="https://wa.me/16828629545?text=Hi%21%20Can%20I%20see%20this%20week%27s%20menu%3F" target="_blank" rel="noopener">Order on WhatsApp</a>
+  <!-- hero: their real tray, cut from their photo, one layer in front of the letters -->
+  <div class="tray" id="tray" aria-hidden="true">
+    <div class="tray-shadow"></div>
+    <div class="tray-drop"><div class="tray-tilt" id="trayTilt"><div class="tray-bob">
+      <img src="assets/cut-tray.webp" alt="" decoding="async">
+    </div></div></div>
   </div>
+  <div class="fruit f0" aria-hidden="true"><img src="assets/cut-orange.webp" alt="" decoding="async"></div>
+  <div class="fruit f1" aria-hidden="true"><img src="assets/cut-orange.webp" alt="" decoding="async"></div>
+  <div class="fruit f2" aria-hidden="true"><img src="assets/cut-orange.webp" alt="" decoding="async"></div>
 
-  <!-- the photo that opens inside the split wordmark, then becomes Monday -->
-  <div class="open-ph" id="openPh"><img src="assets/126-bowls-overhead.jpg" alt="Twenty black bowls of pork tenderloin, black beans, farofa and collard greens, from above" decoding="async"></div>
+  <div class="hero-copy" id="heroCopy">
+    <p class="quote">More time for what&nbsp;matters.</p>
+    <div class="hc-r">
+      <p class="sub">Brazilian home cooking in Dallas. Premade meals, catering and a personal chef.</p>
+      <a class="cta lg-glass" href="https://wa.me/16828629545?text=Hi%21%20Can%20I%20see%20this%20week%27s%20menu%3F" target="_blank" rel="noopener">Order on WhatsApp</a>
+    </div>
+  </div>
+  <div class="marquee" id="marquee" aria-hidden="true"><div class="mq-track">
+    <span>Feijão · Farofa · Couve · Arroz · Strogonoff · Moqueca · Coxinha · Empadão · Caldos · </span><span>Feijão · Farofa · Couve · Arroz · Strogonoff · Moqueca · Coxinha · Empadão · Caldos · </span>
+  </div></div>
 
-  <!-- 3: the week -->
+  <!-- the photo that opens inside the split, then becomes Monday -->
+  <div class="open-ph" id="openPh"><img src="assets/126-bowls-overhead.jpg" alt="Twenty bowls of pork tenderloin, black beans, farofa and collard greens, from above" decoding="async"></div>
+
+  <!-- the week: a mosaic in the shapes of their dishes -->
   <section class="week-layer" id="week" aria-label="A week of meals">
-    <h2 class="week-h">One week,<br><em>cooked.</em></h2>
+    <h2 class="week-h" id="weekH">One week,<br><em>cooked.</em></h2>
     <div class="week">
-      <div class="day" data-d="0"><span class="lab">Mon</span><div class="ph ph0"></div></div>
-      <div class="day" data-d="1"><span class="lab">Tue</span><div class="ph"><img src="assets/007-trays-chicken-sweetpotato.jpg" alt="Trays of chicken thigh in chef's sauce, white rice, black bean stew and baked sweet potato" decoding="async"></div></div>
-      <div class="day" data-d="2"><span class="lab">Wed</span><div class="ph"><img src="assets/002-tray-beef.jpg" alt="A tray of beef stew with rice, farofa and black beans" decoding="async"></div></div>
-      <div class="day" data-d="3"><span class="lab">Thu</span><div class="ph"><img src="assets/109-trays-stroganoff.jpg" alt="Trays of stroganoff with rice, potato sticks and carrots" decoding="async"></div></div>
-      <div class="day" data-d="4"><span class="lab">Fri</span><div class="ph"><img src="assets/060-lunchbox-orange.jpg" alt="A lunch box with chicken, black beans, greens, farofa and an orange slice" decoding="async"></div></div>
-      <div class="day" data-d="5"><span class="lab">Sat</span><div class="ph"><img src="assets/045-bowl-greens-fish.jpg" alt="A bowl of crispy pork belly over beans and collard greens" decoding="async"></div></div>
-      <div class="day" data-d="6"><span class="lab">Sun</span><div class="ph"><img src="assets/013-soup-bowl.jpg" alt="A bowl of golden Brazilian soup on a checked tablecloth" decoding="async"></div></div>
-      <div class="day note">
-        <p class="count"><span id="cnt">1</span> of 7 days<br>cooked.</p>
+      <div class="day" style="grid-area:mon" data-dir="0"><span class="lab"><b class="ln"></b>Mon</span><div class="ph ph0"></div></div>
+      <div class="day" style="grid-area:tue" data-dir="2"><span class="lab"><b class="ln"></b>Tue</span><div class="ph"><img src="assets/060-lunchbox-orange.jpg" alt="A lunch box of chicken, black beans, greens, farofa and an orange slice" decoding="async"></div></div>
+      <div class="day" style="grid-area:wed" data-dir="1" data-way="0"><span class="lab"><b class="ln"></b>Wed</span><div class="ph"><img src="assets/007-trays-chicken-sweetpotato.jpg" alt="Trays of chicken thigh in chef's sauce, white rice, black bean stew and baked sweet potato" decoding="async"></div></div>
+      <div class="day" style="grid-area:thu" data-dir="0"><span class="lab"><b class="ln"></b>Thu</span><div class="ph"><img src="assets/078-table-of-trays.jpg" alt="A long table covered in meal-prep trays" decoding="async" style="object-position:50% 70%"></div></div>
+      <div class="day" style="grid-area:fri" data-dir="3"><span class="lab"><b class="ln"></b>Fri</span><div class="ph"><img src="assets/109-trays-stroganoff.jpg" alt="Trays of stroganoff with rice, potato sticks and carrots" decoding="async"></div></div>
+      <div class="day" style="grid-area:sat" data-dir="1" data-way="1"><span class="lab"><b class="ln"></b>Sat</span><div class="ph"><img src="assets/128-coxinha-stand.jpg" alt="A wooden stand stacked with coxinhas and pastéis" decoding="async" style="object-position:50% 60%"></div></div>
+      <div class="day" style="grid-area:sun" data-dir="2" data-way="2"><span class="lab"><b class="ln"></b>Sun</span><div class="ph"><img src="assets/047-plate-chicken-rice.jpg" alt="A plate of shrimp over creamy polenta with rice and vinaigrette" decoding="async"></div></div>
+      <div class="day note" style="grid-area:note">
+        <p class="count"><span class="odo"><span class="odo-col" id="odo">1<br>2<br>3<br>4<br>5<br>6<br>7</span></span> of 7 days cooked.</p>
         <p class="note-t">Brazilian food for every day of your week. Cooked in Dallas by Chef Clécia, packed and ready to heat.</p>
       </div>
     </div>
   </section>
 
-  <!-- 4: three ways -->
+  <!-- three ways: Wed, Sat and Sun fly out of the week and become these strips -->
   <section class="ways" id="ways" aria-label="Three ways to order">
-    <div class="way w0">
-      <div class="num"><span>01</span><p><b>Premade meals</b>Your week, cooked and packed.</p></div>
-      <div class="strip"><img src="assets/090-trays-overhead.jpg" alt="A long table of meal-prep trays: fish, rice, pasta and salads" decoding="async" style="object-position:50% 62%"></div>
-    </div>
-    <div class="way w1">
-      <div class="num"><span>02</span><p><b>Catering</b>Brazilian food for your event.</p></div>
-      <div class="strip"><img src="assets/128-coxinha-stand.jpg" alt="A wooden stand stacked with coxinhas and pastéis" decoding="async" style="object-position:50% 58%"></div>
-    </div>
-    <div class="way w2">
-      <div class="num"><span>03</span><p><b>Personal chef</b>Chef Clécia cooks in your home.</p></div>
-      <div class="strip"><img src="assets/047-plate-chicken-rice.jpg" alt="A plate of shrimp over creamy polenta with rice and vinaigrette" decoding="async" style="object-position:50% 45%"></div>
-    </div>
+    <div class="way w0"><div class="num"><span>01</span><p><b>Premade meals</b>Your week, cooked and packed.</p></div><div class="slot"></div></div>
+    <div class="way w1"><div class="num"><span>02</span><p><b>Catering</b>Brazilian food for your event.</p></div><div class="slot"></div></div>
+    <div class="way w2"><div class="num"><span>03</span><p><b>Personal chef</b>Chef Clécia cooks in your home.</p></div><div class="slot"></div></div>
   </section>
+  <div class="flyer" data-i="0" aria-hidden="true"><img src="assets/007-trays-chicken-sweetpotato.jpg" alt="" decoding="async"></div>
+  <div class="flyer" data-i="1" aria-hidden="true"><img src="assets/128-coxinha-stand.jpg" alt="" decoding="async" style="object-position:50% 60%"></div>
+  <div class="flyer" data-i="2" aria-hidden="true"><img src="assets/047-plate-chicken-rice.jpg" alt="" decoding="async"></div>
 
-  <!-- 5: how to order -->
+  <!-- how to order: their green rises, their lunch box rides its edge -->
   <section class="band" id="band" aria-label="How to order">
     <div class="band-in">
       <p class="band-k">How to order</p>
@@ -98,20 +110,22 @@
       </ol>
     </div>
   </section>
-  <div class="lift" id="lift"><img src="assets/064-lunchbox-orange-2.jpg" alt="A hand holding a lunch box of chicken, black beans, greens and farofa" decoding="async"></div>
+  <div class="lift" id="lift" aria-hidden="true"><div class="lift-sh"></div><img src="assets/cut-lunchbox.webp" alt="" decoding="async"></div>
 
-  <!-- 6: close -->
+  <!-- close -->
   <section class="close" id="close" aria-label="Order">
+    <div class="close-l">
+      <p class="close-n"><a href="https://wa.me/16828629545">(682) 862-9545</a></p>
+      <p class="close-m">Dallas, Texas · Premade meals · Catering · Personal chef</p>
+      <p class="close-m"><a href="https://www.instagram.com/braziliantastetx/" target="_blank" rel="noopener">@braziliantastetx</a></p>
+    </div>
     <a class="cta cta-xl lg-glass" href="https://wa.me/16828629545?text=Hi%21%20Can%20I%20see%20this%20week%27s%20menu%3F" target="_blank" rel="noopener">Order on WhatsApp</a>
-    <p class="close-n"><a href="https://wa.me/16828629545">(682) 862-9545</a></p>
-    <p class="close-m">Dallas, Texas · Premade meals · Catering · Personal chef</p>
-    <p class="close-m"><a href="https://www.instagram.com/braziliantastetx/" target="_blank" rel="noopener">@braziliantastetx</a></p>
   </section>
 </main>
 
 <div class="spacer" id="spacer" aria-hidden="true"></div>
 
-<script src="liquid-glass.js?v=1" defer></script>
-<script src="site.js?v=1" defer></script>
+<script src="liquid-glass.js?v=2" defer></script>
+<script src="site.js?v=2" defer></script>
 </body>
 </html>

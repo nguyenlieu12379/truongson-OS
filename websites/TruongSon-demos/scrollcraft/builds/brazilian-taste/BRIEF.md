@@ -68,3 +68,15 @@ Son's extra rule: **food is never covered by letters.** Type sits around photos,
 - WhatsApp (682) 862-9545, wa.me/16828629545 (their captions). Dallas, Texas. Premade meals, catering, personal chef (bio). Chef Clécia (captions). "More time for what matters" (captions).
 - Dish line for the Monday tray from their own caption: chicken thigh in chef's sauce, white rice, black bean stew, baked sweet potatoes.
 - No prices, hours or delivery area: their IG doesn't state them. **To confirm with the client:** delivery or pickup, weekly order cut-off.
+
+## Revisions
+
+- 2026-11-24 (Son): "it's too simple at the first scene, i prefer 3d model cut from a high res image, like what you did in Delicias. make the ball bigger and drag longer when i move the cursor. make the letter "taste" at the first scene colored like in their IG avatar. add more related motion graphics to make it "less boring". make a logo for them, it might be the IG avatar. i saw there are alot of dishes are in vertical, but the images on the site are all horizontal, make some vertical images to fit the dishes, so there'll be in different shapes, so manage to organise and rearchitecture all of them. from the "one week cook" scene to the "01 premade meal", its scrolling, not unbreak motion graphics"
+  - Hero: their beef stew tray, cut from the 2048px photo (`assets/cut-tray.webp`), sits one layer in front of "Brazilian", over the lower half of the middle letters so the word still reads. It drops in on load, bobs, leans toward the cursor in 3D, and the letters it covers wobble with it.
+  - "TASTE" is their avatar yellow.
+  - Motion: real orange slices cut from their lunch box photo drift and spin; a line of their dishes (feijão, farofa, couve, strogonoff, moqueca, coxinha) runs along the bottom; day lines draw in; each day's photo reveals from its own side; the day counter rolls; the numerals 01 to 03 rise out of their baseline; the lunch box (cut out) rides the green band's edge.
+  - Logo: `assets/logo/` (their avatar rebuilt at 1024px, green and white lockups, favicon). The bar uses the green lockup.
+  - Mosaic: the week is now a mosaic in the shapes of the dishes. Tall frames for the lunch box and the long table, wide frames for tray rows, a big square for the bowls, a small square for the Sunday plate.
+  - Unbroken: the week no longer scrolls up. The mosaic flies apart and Wed, Sat and Sun grow out of their cells into the three strips (premade meals, catering, personal chef).
+  - Cursor ball: 104px, trails further and stretches more (`stiffness 0.055, damping 0.86, stretch 0.03`).
+  - Yellow is now on two things: the CTA and "TASTE" (Son's call). Still nothing else.

@@ -68,5 +68,6 @@ Not covered by the script: Safari and Firefox fallbacks, real phones and real tr
 | Wider or stronger sweep edge | `band`, `push` in `glassSwitch` (keep `push` at about 0.42 × `band`) |
 | Bigger ball | `LiquidGlass.cursorBall({ size: 140 })` |
 | Lazier or snappier ball | `stiffness` (0.14), `damping` (0.72) |
+| Longer drag (more stretch on fast moves) | `stretch` (0.018 per px/frame), `maxStretch` (0.42). Brazilian Taste: `{ size: 104, stiffness: 0.055, damping: 0.86, stretch: 0.03, maxStretch: 0.7 }` |
 | Ball doesn't grow on links | `hoverGrow: 1` |
 | Flatter or rounder buttons | `glassify(sel, { band, push, interior })`; `interior: 0` keeps the middle flat |

@@ -121,7 +121,7 @@
     function frame() {
       vx = (vx + (tx - x) * K) * D; vy = (vy + (ty - y) * K) * D; x += vx; y += vy;
       grow += (gT - grow) * 0.18;
-      var sp = Math.sqrt(vx * vx + vy * vy), st = Math.min(0.42, sp * 0.018);
+      var sp = Math.sqrt(vx * vx + vy * vy), st = Math.min(opt.maxStretch || 0.42, sp * (opt.stretch || 0.018));
       var ang = st < 0.004 ? 0 : Math.atan2(vy, vx) * 180 / Math.PI;
       ball.style.left = x.toFixed(1) + "px"; ball.style.top = y.toFixed(1) + "px";   // never translate
       // stretch along the motion with no net rotation, so the round map lines up

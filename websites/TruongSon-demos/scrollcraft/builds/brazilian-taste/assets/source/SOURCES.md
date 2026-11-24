@@ -29,3 +29,9 @@ Files are named by position in the grid as loaded on 2026-11-23. Web copies (max
 The hero wordmark (`../wm-*.png`) is cut from the avatar: their own "Brazilian" letters, upscaled 3x and used as a mask, so it stays their type, not a lookalike font.
 
 Not used on purpose: AI-made promo graphics in their feed (soup "festival", handshake, "Mais tempo" table); posts with text baked in; reels (360 to 720px video, too soft for full-bleed); posts with people.
+
+## Cutouts and logo (2026-11-24)
+
+- `cut-tray.webp`: the tray in bt-002-tray-beef.jpg, clipped along its rim (rounded quad, traced by hand, no AI fill).
+- `cut-orange.webp`, `cut-lunchbox.webp`: the orange slice and the kraft box in bt-064-lunchbox-orange-2.jpg.
+- `logo/`: their avatar lettering (from bt-avatar.jpg) rebuilt at 3x on their green, plus green and white lockups and favicons.
