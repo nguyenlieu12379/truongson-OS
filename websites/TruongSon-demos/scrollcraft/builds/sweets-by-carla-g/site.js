@@ -112,14 +112,14 @@
     orbitCopy.style.top = barH + (mobile ? 4 : 10) + 'px';
     const ocBottom = orbitCopy.offsetTop + orbitCopy.offsetHeight + (mobile ? 14 : 18);
     const floor = VH - 64 - 26;                     // above the rail, room for the front label
-    let Rx = mobile ? VW * 0.38 : Math.min(VW * 0.36, 540);
-    let ch = mobile ? Math.min(VH * 0.13, 112) : Math.min(VH * 0.22, 210);
-    const ryK = mobile ? 0.8 : 0.4, oK = mobile ? 1.45 : 0.95;
+    let Rx = mobile ? VW * 0.41 : Math.min(VW * 0.4, 620);
+    let ch = mobile ? Math.min(VH * 0.125, 104) : Math.min(VH * 0.26, 250);
+    const ryK = mobile ? 0.98 : 0.4, oK = mobile ? 1.45 : 0.95;
     const upOf = (rx, c) => Math.max(rx * oK / CAKE_AR * BOARD[1], rx * ryK + c * 0.52);   // above the centre
     const downOf = (rx) => rx * ryK + 10;                                                 // below the centre
     for (let k = 0; k < 40 && upOf(Rx, ch) + downOf(Rx) > floor - ocBottom; k++) { Rx *= 0.96; ch *= 0.96; }
     const Ry = Rx * ryK;
-    const oc = { x: VW / 2, y: Math.max(ocBottom + upOf(Rx, ch), Math.min(VH * 0.56, floor - downOf(Rx))) };
+    const oc = { x: VW / 2, y: Math.max(ocBottom + upOf(Rx, ch), mobile ? floor - downOf(Rx) : Math.min(VH * 0.56, floor - downOf(Rx))) };
     cards.forEach((c) => {
       const im = c.querySelector('img');
       const ar = im.naturalWidth ? im.naturalWidth / im.naturalHeight : 1;
@@ -128,12 +128,14 @@
     const oW = Rx * oK;
     const orb = { x: oc.x - oW * BOARD[0], y: oc.y - (oW / CAKE_AR) * BOARD[1], w: oW };
 
-    // the names band above the orbit
-    const backTop = oc.y - Ry - ch * 0.54;
-    const nTop = barH + (mobile ? 8 : 12), nH = Math.max(60, backTop - nTop + ch * 0.12);
+    // the names band: exactly where the heading was, one line, no taller
+    const nTop = orbitCopy.offsetTop, nH = orbitCopy.offsetHeight + (mobile ? 8 : 12);
     names.style.top = nTop + 'px'; names.style.height = nH + 'px';
-    const nfs = Math.min(nH * 0.78, mobile ? VW * 0.2 : VW * 0.12);
-    nameEls.forEach((b) => { b.style.fontSize = nfs + 'px'; b.style.lineHeight = nH + 'px'; });
+    const nfs = Math.min(nH * 0.86, mobile ? VW * 0.16 : VW * 0.1);
+    // each name gets a taller line than the band, so the next name's tall script letters never peek in
+    const nLine = nH * 1.7;
+    nameEls.forEach((b) => { b.style.fontSize = nfs + 'px'; b.style.lineHeight = nLine + 'px'; });
+    namesCol.style.marginTop = -(nLine - nH) / 2 + 'px';
 
     // ---- the macro: a square frame at the photo's own shape (never cropped to the screen)
     const mS = mobile ? Math.min(VW - 24, VH * 0.58) : Math.min(VH - barH - 110, VW * 0.6);
@@ -234,7 +236,17 @@
   }
 
   // orbit rotation in card units: slow turn, the fast full turn (peak), then held
-  const rotAt = (p) => (p < 0.4 ? SPIN_FROM * E(seg(p, 0.15, 0.4)) : SPIN_FROM + (SPIN_TO - SPIN_FROM) * E(seg(p, 0.4, 0.6)));
+  // the fast turn goes cake by cake: each step turns, then holds so its name can be read
+  const rotAt = (p) => {
+    if (p < 0.4) return SPIN_FROM * E(seg(p, 0.15, 0.4));
+    const n = SPIN_TO - SPIN_FROM, t = seg(p, 0.4, 0.6) * n, k = Math.min(n - 1, Math.floor(t));
+    return SPIN_FROM + k + E(clamp((t - k - 0.12) / 0.6));
+  };
+
+  // scroll -> timeline: the turntable scenes (p 0.36 to 0.64) get about 1.5x the scroll of the rest
+  const KS = [0, 0.28, 0.62, 1], KP = [0, 0.36, 0.64, 1];
+  const mapK = (v, A, B) => { let i = 0; while (i < A.length - 2 && v > A[i + 1]) i++; return B[i] + (B[i + 1] - B[i]) * clamp((v - A[i]) / (A[i + 1] - A[i])); };
+  const sToP = (s) => mapK(s, KS, KP), pToS = (p) => mapK(p, KP, KS);
 
   function render(p) {
     const { oc, Rx, Ry, ch, barH } = L;
@@ -310,7 +322,7 @@
       const a = E(seg(p, 0.385, 0.42)), b = E(seg(p, 0.64, 0.68));
       const k = p < 0.6 ? Math.max(0, r - SPIN_FROM) + SPIN_FROM : SPIN_TO + E(seg(p, 0.6, 0.625));
       const lineH = parseFloat(nameEls[0].style.lineHeight) || 100;
-      put(namesCol, 'transform', `translate3d(0,${r1(-k * lineH + (1 - a) * lineH - b * lineH * 1.2)}px,0)`);
+      put(namesCol, 'transform', `translate3d(0,${r1(-k * lineH + (1 - a) * lineH - b * lineH)}px,0)`);
       show(names, a > 0 && b < 1);
     }
 
@@ -442,7 +454,7 @@
 
   // smoothed scroll
   let cur = 0, target = 0, last = 0, running = false;
-  const readTarget = () => { target = L.track > 0 ? clamp(scrollY / L.track) : 0; };
+  const readTarget = () => { target = L.track > 0 ? sToP(clamp(scrollY / L.track)) : 0; };
   function frame(t) {
     const dt = last ? Math.min(64, t - last) : 16.7; last = t;
     const kk = reduced.matches ? 1 : 1 - Math.pow(1 - 0.1, dt / 16.7);
@@ -471,7 +483,7 @@
   function start() {
     layout();
     const qp = /[?&]p=([\d.]+)/.exec(location.search);
-    if (qp) { scrollTo(0, clamp(+qp[1]) * L.track); readTarget(); cur = target; }
+    if (qp) { scrollTo(0, pToS(clamp(+qp[1])) * L.track); readTarget(); cur = target; }
     render(cur);
   }
   start();
@@ -483,7 +495,7 @@
   addEventListener('load', relayout);
   $$('.stage img').forEach((img) => { if (img.decode) img.decode().catch(() => {}); });
   $('.brand').addEventListener('click', (e) => { e.preventDefault(); scrollTo({ top: 0, behavior: reduced.matches ? 'auto' : 'smooth' }); });
-  railBtns.forEach((b) => b.addEventListener('click', () => scrollTo({ top: +b.dataset.p * L.track, behavior: reduced.matches ? 'auto' : 'smooth' })));
+  railBtns.forEach((b) => b.addEventListener('click', () => scrollTo({ top: pToS(+b.dataset.p) * L.track, behavior: reduced.matches ? 'auto' : 'smooth' })));
 
   // liquid glass: the Vivace cursor ball, glass button, the button leans toward the cursor
   if (window.LiquidGlass) {

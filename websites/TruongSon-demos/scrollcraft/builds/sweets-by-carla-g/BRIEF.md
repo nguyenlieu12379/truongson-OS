@@ -75,6 +75,7 @@ Food is never under letters: the cake is in front of "Sweets"; captions sit unde
 - 2026-11-24: "the image in this scene looks off". The close-up was stretched full-bleed (beak cropped, photo upscaled). It now keeps its square shape at the full 1440px source.
 - 2026-11-24: "why zooming at the flower instead of the flamingo & flower above, and ... a scene cut is clear as day, not unbroken". The push-in now targets the flamingo and the top flowers, exactly the area their close-up shows, and the circle iris onto a different picture is gone: the cutout is aligned to the close-up and turns into it in place while the frame closes to the square.
 - 2026-11-24: "the color of the flamingo and the letter make it looks off". On shorter windows the orbit rose under "Your party, in cake." (rose script over the pink flamingo). The orbit is now sized to fit between the heading and the rail at any window height; the heading's second line hides under 640px tall.
+- 2026-11-24: bigger turntable, remove the line under the heading, smaller names frame, slower spin. The line is gone; the turntable grows into that room. The names roll in a one-line band where the heading was. The turntable scenes get about 1.5x the scroll (scroll is remapped, page 1450vh), and the fast turn goes cake by cake with a short hold on each so every name can be read.
 
 ## UI material
 
