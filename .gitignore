@@ -10,3 +10,6 @@ brainstorms/
 
 # Prospect lists (real business data)
 prospects/
+
+# local screen recordings (test videos), never committed
+recordings/

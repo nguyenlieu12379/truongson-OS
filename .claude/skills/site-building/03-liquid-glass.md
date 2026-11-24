@@ -10,6 +10,7 @@ How to describe it to anyone (designer, client, another AI): *"Liquid glass effe
 |---|---|---|
 | Theme toggle + glass sweep | `assets/head.html` (inline in `<head>`) | Saved theme applied before first paint. Toggle click: the new theme grows as a circle from the button; its edge is a lens ring that bends the page, with a bright rim. |
 | Cursor ball | `assets/liquid-glass.js` `LiquidGlass.cursorBall()` | Glass ball (56px, half the Vivace ball) springs after the mouse, stretches along its motion, wobbles back to round, grows over links. Clicks pass through. |
+| Cursor pull | `LiquidGlass.cursorPull()` | No ball. A round area (150px default) stuck to the pointer, no spring or lag, no rim or shadow: the page under it is pulled in toward the cursor, hardest right at the cursor, fading to nothing at the edge. `size`, `strength` (clamped below the fold point), `focus` (2 spread, 3 to 4 bunched at the cursor). Use it instead of the ball, not with it. First used on Brazilian Taste: `{ size: 240, strength: 4, focus: 3 }`. Chromium only. |
 | Glass buttons / panels | `LiquidGlass.glassify(".lg-glass")` | Any element gets a lens fitted to its own size and border-radius. |
 | The lens itself | `LiquidGlass.lensMap()` | The displacement map all of the above use. |
 | Styles | `assets/liquid-glass.css` | Toggle, sweep, ball, glass button styles; theme-token pattern. |
@@ -18,7 +19,7 @@ How to describe it to anyone (designer, client, another AI): *"Liquid glass effe
 
 ## The prompt (do this, in order)
 
-1. **Ask only what you can't default.** Which site (path)? Which pieces (sweep, ball, buttons; default all three)? Sweep length (default 1400ms; 4000 to 7000 is a "show" and blocks the page while it runs, say so)? If the site has no dark theme yet, say you'll add one.
+1. **Ask only what you can't default.** Which site (path)? Which pieces (sweep, cursor ball or cursor pull, buttons; default all three, with the ball)? Sweep length (default 1400ms; 4000 to 7000 is a "show" and blocks the page while it runs, say so)? If the site has no dark theme yet, say you'll add one.
 2. **Read the site first.** Its CSS colours, its head, where the bar/nav is, what's behind any element that will become glass. Glass over a flat colour shows nothing; it needs type, a photo, or a pattern behind it.
 3. **Tokens before effects.** Every colour the page uses becomes a CSS custom property with a dark set (pattern at the top of `liquid-glass.css`). Hard-coded hex values are the usual misses (card backgrounds, hover colours, shadows, video backgrounds). Text-red on dark needs its own lighter token, separate from fill-red, to keep 4.5:1.
 4. **Copy, don't link.** Copy `assets/liquid-glass.css` and `assets/liquid-glass.js` into the site. Paste `assets/head.html` into `<head>` and set `CONFIG.key` (unique per site), `CONFIG.colors`, `CONFIG.duration`. Then:
@@ -70,6 +71,5 @@ Not covered by the script: Safari and Firefox fallbacks, real phones and real tr
 | Lazier or snappier ball | `stiffness` (0.14), `damping` (0.72) |
 | Longer drag (more stretch on fast moves) | `stretch` (0.018 per px/frame), `maxStretch` (0.42). Brazilian Taste: `{ size: 104, stiffness: 0.055, damping: 0.86, stretch: 0.03, maxStretch: 0.7 }` |
 | Ball doesn't grow on links | `hoverGrow: 1` |
-| No ball, just the page bending at the pointer | `LiquidGlass.cursorPinch({ size: 150, strength: 2.2 })`: a round area stuck to the pointer (no spring) that pulls the page in toward the cursor, hardest near it, nothing at the edge. `focus` (2 to 4) bunches the pull close to the cursor; strength is clamped below the fold point. Use instead of `cursorBall`. Brazilian Taste: `{ size: 240, strength: 4, focus: 3 }`. |
 | Buttons pulled toward a nearby cursor | `LiquidGlass.magnet(".cta", { reach: 140, pull: 0.35, max: 26 })`. Moves with left/top so the lens stays aligned. `reach: "page"` follows the cursor anywhere; `curve` (default 1) makes the pull grow faster up close. Brazilian Taste: `{ reach: "page", curve: 2.2, pull: 0.6, max: 46 }` |
 | Flatter or rounder buttons | `glassify(sel, { band, push, interior })`; `interior: 0` keeps the middle flat |

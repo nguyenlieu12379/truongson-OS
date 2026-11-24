@@ -2,7 +2,7 @@
    Load with defer, after head.html is in <head>. No dependencies.
 
      LiquidGlass.cursorBall()          glass ball that springs after the mouse
-     LiquidGlass.cursorPinch()         no ball: the page pinches toward the pointer
+     LiquidGlass.cursorPull()          no ball: the page is pulled in toward the pointer (alias cursorPinch)
      LiquidGlass.glassify(".lg-glass") rounded-rect glass panels and buttons
      LiquidGlass.magnet(".cta")        buttons slide toward a nearby cursor
      LiquidGlass.lensMap(...)          the displacement map all of these use
@@ -218,7 +218,7 @@
     return els;
   }
 
-  // ---- cursor pinch ---------------------------------------------------------
+  // ---- cursor pull (cursorPinch) ---------------------------------------------------------
   // No ball. A round area glued to the pointer (no spring, no lag) where the
   // page is pulled in toward the cursor point: hardest close to the cursor,
   // fading to nothing at the area's edge, so there's no visible rim.
@@ -273,5 +273,5 @@
     return el;
   }
 
-  root.LiquidGlass = { lensMap: lensMap, filterFor: filterFor, cursorBall: cursorBall, cursorPinch: cursorPinch, glassify: glassify, magnet: magnet, chromium: chromium };
+  root.LiquidGlass = { lensMap: lensMap, filterFor: filterFor, cursorBall: cursorBall, cursorPinch: cursorPinch, cursorPull: cursorPinch, glassify: glassify, magnet: magnet, chromium: chromium };
 })(window);

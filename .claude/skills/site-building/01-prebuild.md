@@ -27,7 +27,7 @@ Start with **"Son or Truong?"** unless the session already says. Then ask the re
 8. **Signature move.** The one thing no other site does. Or "u decide". [u decide]
 9. **Style.** How far from premium-minimal: playful, maximalist, editorial, retro, brutalist, dense, minimal? Or "fit their IG". [fit their IG]
 10. **World.** One unbroken world, or separate scenes? [unbroken]
-11. **UI material.** Liquid glass (clear lens, no blur, no frost, thin rim, bends at edges, cursor lens), solid cards, or something else? Cursor effects? [liquid glass, clear lens, cursor lens and rim light]
+11. **UI material.** Liquid glass (clear lens, no blur, no frost, thin rim, bends at edges, cursor lens), solid cards, or something else? Cursor effect: glass ball that follows, or cursor pull (no ball, the page bends in toward the pointer)? [liquid glass, clear lens, cursor ball]
 12. **Motion and speed.** Smooth first, or effects first? Must it be checked on a real phone? [smooth first; real phone before the client sees it]
 13. **Facts to confirm.** Phone or WhatsApp, hours, owner's name, languages on the page (English, Portuguese, Vietnamese...). [use only what their own listing or IG says; flag any conflict]
 14. **The one action.** One button label used everywhere. [Order on WhatsApp]
