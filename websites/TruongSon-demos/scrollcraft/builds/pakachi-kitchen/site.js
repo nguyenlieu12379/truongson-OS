@@ -223,7 +223,7 @@
       const onScreen = s0.y - ch < VH && s0.x + cw > 0;
       show(tray, m < 1 || onScreen);
       tiltOn = m === 0;
-      if (!tiltOn && (gx || gy) && !tiltRun) { tiltRun = true; requestAnimationFrame(tilt); }   // settle back once it leaves
+      if (!tiltOn) kickTilt();   // settle back once it leaves
     }
 
     // ---- 2-3. the hand: dealt from below, then doubled
@@ -415,21 +415,43 @@
   // the tray leans toward the cursor while it is the hero
   // strong on purpose (Son: "react more obvious"): it tilts, slides toward the cursor, a light sheen
   // follows the pointer across the rice, and PAKACHI drifts the other way for depth
+  // Son, round 2: "rotate up, down, side, circle with the cursor's direction, more dramatically".
+  // Two parts: where the cursor is (a big lean) and how it moves (a kick that springs, overshoots and
+  // settles, so circling the cursor rolls the tray round). It pivots on its own bottom-right corner,
+  // which is off screen, so the cut edges stay hidden however far it swings.
   let tiltOn = true, tx = 0, ty = 0, gx = 0, gy = 0, tiltRun = false;
+  let ax = 0, ay = 0, az = 0, vx = 0, vy = 0, vz = 0, lastX = null, lastY = null;
   const sheen = $('#traySheen');
+  const K = 0.07, D = 0.16;                                 // spring stiffness, damping (bouncy on purpose)
+  const cl = (v, m) => (v < -m ? -m : v > m ? m : v);
   function tilt() {
     if (!tiltOn) { tx = ty = 0; }
-    gx += (tx - gx) * 0.14; gy += (ty - gy) * 0.14;            // gx, gy: -1..1
-    trayTilt.style.transform = `translate3d(${(gy * 22).toFixed(1)}px,${(-gx * 16).toFixed(1)}px,0) rotateX(${(gx * 16).toFixed(2)}deg) rotateY(${(gy * 22).toFixed(2)}deg)`;
-    sheen.style.transform = `translate3d(${(gy * 34).toFixed(2)}%,${(-gx * 34).toFixed(2)}%,0)`;
-    wm.style.transform = tiltOn ? `translate3d(${(-gy * 18).toFixed(1)}px,${(gx * 10).toFixed(1)}px,0)` : '';
-    if (Math.abs(tx - gx) > 0.002 || Math.abs(ty - gy) > 0.002) requestAnimationFrame(tilt); else tiltRun = false;
+    gx += (tx - gx) * 0.16; gy += (ty - gy) * 0.16;           // where the cursor is: -1..1
+    vx += (gx * 24 - ax) * K - vx * D; ax = Math.max(-14, Math.min(32, ax + vx));  // rotateX: tipping toward you is capped so it never swallows the copy
+    vy += (gy * 30 - ay) * K - vy * D; ay = cl(ay + vy, 38);  // rotateY
+    vz += (0 - az) * K - vz * D;       az = cl(az + vz, 8);   // roll
+    const sx = cl(gy * 26, 26), sy = cl(-gx * 22, 22);
+    trayTilt.style.transform = `translate3d(${sx.toFixed(1)}px,${sy.toFixed(1)}px,0) rotateX(${ax.toFixed(2)}deg) rotateY(${ay.toFixed(2)}deg) rotateZ(${az.toFixed(2)}deg)`;
+    sheen.style.transform = `translate3d(${(gy * 34 + ay * 0.4).toFixed(2)}%,${(-gx * 34 - ax * 0.4).toFixed(2)}%,0)`;
+    wm.style.transform = tiltOn ? `translate3d(${(-gy * 30).toFixed(1)}px,${(gx * 16).toFixed(1)}px,0)` : '';
+    const still = Math.abs(tx - gx) < 0.002 && Math.abs(ty - gy) < 0.002 && Math.abs(vx) + Math.abs(vy) + Math.abs(vz) < 0.01
+      && Math.abs(gx * 24 - ax) + Math.abs(gy * 30 - ay) + Math.abs(az) < 0.05;
+    if (!still) requestAnimationFrame(tilt); else tiltRun = false;
   }
+  const kickTilt = () => { if (!tiltRun) { tiltRun = true; requestAnimationFrame(tilt); } };
   if (!reduced.matches && matchMedia('(hover: hover) and (pointer: fine)').matches) {
     root.classList.add('tilt-on');
     addEventListener('pointermove', (e) => {
-      tx = tiltOn ? -(e.clientY / VH - 0.5) * 2 : 0; ty = tiltOn ? (e.clientX / VW - 0.5) * 2 : 0;
-      if (!tiltRun) { tiltRun = true; requestAnimationFrame(tilt); }
+      if (tiltOn) {
+        tx = -(e.clientY / VH - 0.5) * 2; ty = (e.clientX / VW - 0.5) * 2;
+        if (lastX !== null) {
+          // the way it moves: a flick right swings it right, up tips it back, and the sideways part rolls it
+          const dx = cl(e.clientX - lastX, 80), dy = cl(e.clientY - lastY, 80);
+          vy += dx * 0.09; vx -= dy * 0.08; vz += dx * 0.03 - dy * 0.02;
+        }
+      }
+      lastX = e.clientX; lastY = e.clientY;
+      kickTilt();
     }, { passive: true });
   }
 
