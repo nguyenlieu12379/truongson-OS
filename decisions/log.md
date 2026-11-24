@@ -434,3 +434,11 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Why:** Son's answers on the Brazilian Taste pre-build, after the Brazilian Passion Foods build was rejected for washed colours and layers with no relationship.
 
 **Owner:** Son
+
+## 2026-11-24 - No primary demo; the Sites table lists approved sites only
+
+**Decision:** Espresso Vivace is no longer the primary demo. This replaces the "primary demo" part of the 2026-11-20 and 2026-11-22 Vivace decisions. The Sites table in `websites/README.md` shows only sites Son or Truong approved; failed builds stay out of it and offline (they live in `.claude/skills/site-building/FAILURES.md`). The GitHub Pages root no longer redirects to Vivace; it lists the approved sites.
+
+**Why:** Son: "remove the vivace as the primary", "the Sites table only shows the successful one... dont show the fails".
+
+**Owner:** Son

@@ -11,19 +11,13 @@ websites/
       assets/
 ```
 
-## Primary demo
-
-**Espresso Vivace** is the primary demo we show prospects (Son, 2026-11-20: "the best site I've built"). Its style belongs to Vivace only: don't copy it to other sites.
-
-- Live: https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/
-- Folder: `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` (its README lists sources and what to update each season)
-- Its style (Vivace only): short and practical. Hero with live open-now status and Order, then menu, locations with storefront photo and maps, ordering. Looping pour video, vector logo, subtle appear-on-scroll. Facts only from the business's own site or listings; no invented prices.
-
 ## Sites
+
+Only sites that worked: approved by Son or Truong. No primary demo; pick the one that fits the prospect. Failed builds never go in this table. They are recorded in `.claude/skills/site-building/FAILURES.md` and kept offline (Son, 2026-11-24).
 
 | Owner | Site | Status | Path |
 | --- | --- | --- | --- |
-| TruongSon-demos | **Espresso Vivace (primary demo)**, practical cafe concept (menu, live open-now, maps, ordering) | Live at https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/ | `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` |
+| TruongSon-demos | **Espresso Vivace**, practical cafe concept (menu, live open-now, maps, ordering). Its style is Vivace-only | Live at https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/ | `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` |
 | TruongSon-demos | **Delícias Cake & Bakery**, Burlington MA prospect. Unbroken pink world: wobbling pudim hero, fly through their front door to the counter | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/delicias-cake/ | `websites/TruongSon-demos/scrollcraft/builds/delicias-cake/` |
 | TruongSon-demos | **Brazilian Taste**, Dallas TX prospect (meal prep, WhatsApp only). White world: their own wordmark splits open on their bowls, then a 7-day grid fills with their trays | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/brazilian-taste/ | `websites/TruongSon-demos/scrollcraft/builds/brazilian-taste/` |
 
@@ -44,6 +38,6 @@ Son, 2026-11-22. Check all four before a client sees the site.
 
 ## Add a site
 
-Create `websites/<owner>/<site-name>/`, add a row above, and give the site its own README.
+Create `websites/<owner>/<site-name>/` and give the site its own README. Add it to the Sites table only once Son or Truong approve it.
 
 Deploys: `.github/workflows/deploy-pages.yml` builds GitHub Pages from `main`. Add a copy step there to publish another site.

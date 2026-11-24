@@ -3,7 +3,7 @@ name: Deploy websites to GitHub Pages
 # /espresso-vivace/ -> websites/TruongSon-demos/scrollcraft/builds/espresso-vivace (concept demo, scroll-craft)
 # /delicias-cake/ -> websites/TruongSon-demos/scrollcraft/builds/delicias-cake (prospect demo, scroll-craft, noindex)
 # /brazilian-taste/ -> websites/TruongSon-demos/scrollcraft/builds/brazilian-taste (prospect demo, scroll-craft, noindex)
-# /             -> redirects to /espresso-vivace/
+# /             -> a plain list of the approved sites (no primary demo, noindex)
 # Every push to main that touches these paths redeploys all sites.
 
 on:
@@ -44,10 +44,16 @@ jobs:
           cat > _site/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">
-          <title>Espresso Vivace</title>
-          <meta http-equiv="refresh" content="0; url=espresso-vivace/">
-          <link rel="canonical" href="espresso-vivace/">
-          <a href="espresso-vivace/">Espresso Vivace</a>
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <meta name="robots" content="noindex, nofollow">
+          <title>Sites</title>
+          <style>body{font:16px/1.5 system-ui,sans-serif;max-width:560px;margin:12vh auto;padding:0 20px;color:#1c1c1c}h1{font-size:20px}a{color:inherit}li{margin:.4em 0}</style>
+          <h1>Sites</h1>
+          <ul>
+            <li><a href="espresso-vivace/">Espresso Vivace</a></li>
+            <li><a href="delicias-cake/">Delícias Cake &amp; Bakery</a></li>
+            <li><a href="brazilian-taste/">Brazilian Taste</a></li>
+          </ul>
           HTML
           touch _site/.nojekyll
       - uses: actions/configure-pages@v6

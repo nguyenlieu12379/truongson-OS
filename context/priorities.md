@@ -8,5 +8,5 @@
 - **Clients signed:** 0/10. Pre-revenue.
 - **Pipeline:** no lead tracker yet. Outreach is done by hand (calls, walk-ins, Gmail). Until then, "where are we on 10 clients" is answered here.
 - **Instagram:** 0 posts. Starts after the account move.
-- **Portfolio:** 1 live demo, Espresso Vivace (`websites/README.md`).
+- **Portfolio:** 3 live demos: Espresso Vivace, Delícias Cake, Brazilian Taste (Sites table in `websites/README.md`, approved sites only). No primary demo.
 - **Setup phase:** the repo runs on a temporary claude.ai account. Connections, automation, outreach and Instagram get set up once we move it to our own plan. Update this section when that happens.
