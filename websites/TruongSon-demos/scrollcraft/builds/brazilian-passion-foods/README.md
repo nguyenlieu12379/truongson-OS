@@ -2,7 +2,7 @@
 
 **Marked a failure by Son, 2026-11-23: "looks AI slop".** Kept as a reference for what not to do. See `.claude/skills/site-building/FAILURES.md`.
 
-Pastel food truck, Orlando. Live (noindex): https://nguyenlieu12379.github.io/truongson-OS/brazilian-passion-foods/ (deploys on push to main).
+Pastel food truck, Orlando. Taken offline and all Instagram images deleted on 2026-11-23 at Son's request. The code stays as a reference; the page will not render without the images.
 
 One unbroken stage: the scroll scrubs their own kitchen clip, holds on full-res photos, ends at the truck and the WhatsApp button. Brief: `BRIEF.md`. Son's answers: `PREFS.md`. Sources: `assets/source/SOURCES.md`.
 
