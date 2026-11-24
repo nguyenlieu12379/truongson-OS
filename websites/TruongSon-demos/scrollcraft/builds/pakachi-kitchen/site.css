@@ -11,6 +11,7 @@
   --ink-soft: #5E5446;
   --saffron: #0F7A46;      /* 10: Pakistan green, the button, nothing else (Son, 2026-11-24: red looked wrong) */
   --on-saffron: #FBF3DF;
+  --green: #0F7A46;        /* green as type and lines: the thread, Karachi, the price (5.2:1 on white) */
   --shadow: rgb(40 30 15 / 0.28);
   --scrim: rgb(12 10 8 / 0.62);
   --f-word: "Cinzel", "Trajan Pro", Georgia, serif;
@@ -21,12 +22,12 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0C0B0A; --surface: #17140F; --gold: #C4A469; --gold-soft: #A88C58; --gold-fill: #C4A469;
-    --on-gold: #0C0B0A; --ink-soft: #A39780; --shadow: rgb(0 0 0 / 0.55); color-scheme: dark;
+    --on-gold: #0C0B0A; --ink-soft: #A39780; --shadow: rgb(0 0 0 / 0.55); --green: #33A86B; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0C0B0A; --surface: #17140F; --gold: #C4A469; --gold-soft: #A88C58; --gold-fill: #C4A469;
-  --on-gold: #0C0B0A; --ink-soft: #A39780; --shadow: rgb(0 0 0 / 0.55); color-scheme: dark;
+  --on-gold: #0C0B0A; --ink-soft: #A39780; --shadow: rgb(0 0 0 / 0.55); --green: #33A86B; color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -51,14 +52,14 @@ a { color: inherit; }
 
 /* ---- the thread (right edge) ------------------------------------------- */
 .thread { position: fixed; right: max(10px, 1.4vw); top: 50%; z-index: 19; transform: translateY(-50%); display: flex; flex-direction: column; gap: 26px; align-items: flex-end; }
-.thread-line { position: absolute; right: 5px; top: 6px; bottom: 6px; width: 1px; background: color-mix(in oklab, var(--gold) 30%, transparent); }
-.thread-line b { position: absolute; inset: 0; background: var(--gold); transform-origin: top; transform: scaleY(0); }
-.thread button { position: relative; display: flex; align-items: center; gap: 10px; padding: 0; border: 0; background: none; color: var(--gold); cursor: pointer; font: 600 10px/1 var(--f-text); letter-spacing: 0.16em; text-transform: uppercase; min-height: 24px; }
-.thread button::after { content: ""; width: 11px; height: 11px; border-radius: 50%; border: 1px solid var(--gold); background: var(--bg); transition: background-color 200ms ease, transform 200ms cubic-bezier(0.23, 1, 0.32, 1); }
-.thread button.on::after { background: var(--gold); transform: scale(1.15); }
+.thread-line { position: absolute; right: 5px; top: 6px; bottom: 6px; width: 1px; background: color-mix(in oklab, var(--green) 35%, transparent); }
+.thread-line b { position: absolute; inset: 0; background: var(--green); transform-origin: top; transform: scaleY(0); }
+.thread button { position: relative; display: flex; align-items: center; gap: 10px; padding: 0; border: 0; background: none; color: var(--green); cursor: pointer; font: 600 10px/1 var(--f-text); letter-spacing: 0.16em; text-transform: uppercase; min-height: 24px; }
+.thread button::after { content: ""; width: 11px; height: 11px; border-radius: 50%; border: 1px solid var(--green); background: var(--bg); transition: background-color 200ms ease, transform 200ms cubic-bezier(0.23, 1, 0.32, 1); }
+.thread button.on::after { background: var(--green); transform: scale(1.15); }
 .thread button span { clip-path: inset(0 0 0 100%); transform: translateX(8px); transition: clip-path 260ms cubic-bezier(0.23, 1, 0.32, 1), transform 260ms cubic-bezier(0.23, 1, 0.32, 1); }
 .thread:hover button span, .thread button:focus-visible span, .thread button.on span { clip-path: inset(0); transform: none; }
-.thread button:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 4px; }
+.thread button:focus-visible { outline: 2px solid var(--green); outline-offset: 4px; border-radius: 4px; }
 @media (max-width: 760px) { .thread { gap: 18px; } .thread button span { display: none; } }
 
 /* ---- stage -------------------------------------------------------------- */
@@ -112,6 +113,8 @@ a { color: inherit; }
 .usd { font: 600 1.6em/1 var(--f-word); display: inline-flex; align-items: baseline; }
 .usd .roll { height: 1em; }
 .usd .roll-col { line-height: 1em; }
+.price { color: var(--green); }
+.soul em { font-style: italic; color: var(--green); }
 .deal-note { margin: 0; color: var(--ink-soft); font-size: 14px; }
 
 .hand { left: 0; top: 0; width: 0; height: 0; z-index: 3; }

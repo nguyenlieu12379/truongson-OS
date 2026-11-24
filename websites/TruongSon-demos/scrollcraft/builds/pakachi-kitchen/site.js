@@ -84,14 +84,27 @@
     hc.style.top = (mobile ? barH + VH * 0.06 : wmY + wmH + VH * 0.07) + 'px';
 
     // ---- the hand: a fan on the arc of their ring
-    const ch = mobile ? Math.min(VH * 0.24, 200) : Math.min(VH * 0.36, 330);
-    const cw = ch * 0.72;
+    // laid out under the measured deal heading, so nothing in the hand ever sits on it
+    const dealEl = $('.deal');
+    dealEl.style.top = barH + (mobile ? 8 : Math.min(VH * 0.03, 24)) + 'px';
+    const headBottom = dealEl.offsetTop + dealEl.offsetHeight;
+    const numH = mobile ? 40 : 58;                       // the numbers above the cards
     const R = mobile ? VH * 0.78 : VH * 0.98;
-    const fanCy = (mobile ? 0.56 : 0.6) * VH;           // where the middle cards sit
+    const keyH = mobile ? 54 : 0;                        // the dish key under the fan on phones
+    const spread = (c) => (mobile ? Math.min(c * 0.72 * 0.5, (VW - c * 0.72 - 64) / 5) : c * 0.72 * 0.74) / R;
+    const extent = (c) => {                              // top of the middle cards to the lowest corner of the outer ones
+      const t = 2.5 * spread(c), w = c * 0.72;
+      return c * 1.07 + R * (1 - Math.cos(t)) + (w / 2) * Math.sin(t) + (c / 2) * (1 - Math.cos(t));
+    };
+    let ch = mobile ? Math.min(VH * 0.24, 200) : Math.min(VH * 0.36, 330);
+    const room = VH - headBottom - numH - keyH - (mobile ? 14 : 22);
+    while (ch > 90 && extent(ch) > room) ch -= 4;
+    const cw = ch * 0.72;
+    const fanCy = headBottom + numH + ch * 0.57;         // the middle cards' centre (0.07ch spare for the doubled twins)
     const pivot = { x: VW / 2 - (mobile ? cw * 0.1 : 0), y: fanCy + R };
-    const step = (mobile ? Math.min(cw * 0.5, (VW - cw - 64) / 5) : cw * 0.74) / R;
+    const step = spread(ch);
     const key = $('#fanKey');
-    key.style.top = fanCy + ch / 2 + 34 + 'px';
+    key.style.top = fanCy + ch / 2 + 30 + 'px';
     const theta = [0, 1, 2, 3, 4, 5].map((i) => (i - 2.5) * step);
     const closeLift = mobile ? VH * 0.32 : VH * 0.25;  // the fan rises behind the ticket at the close
 
@@ -127,7 +140,6 @@
     Object.assign(caterP.style, mobile
       ? { left: bandL + 'px', top: bandTop + bh + 44 + 'px', right: 'auto', textAlign: 'left', maxWidth: bw + 'px' }
       : { right: bandL + 'px', left: 'auto', top: bandTop - 62 + 'px', textAlign: 'right' });
-    $('.deal').style.top = barH + (mobile ? 8 : VH * 0.03) + 'px';
 
     // order panel and ticket
     const panelH = VH - barH + 2;
@@ -158,7 +170,7 @@
     const ringBase = 1000;
     box(ring, 0, 0, ringBase, ringBase);
 
-    L = { barH, tX, tY, tW, tH, ox, oy, sc, trayWin, cw, ch, R, pivot, theta, closeLift, bw, bh, bandC, win,
+    L = { barH, headBottom, tX, tY, tW, tH, ox, oy, sc, trayWin, cw, ch, R, pivot, theta, closeLift, bw, bh, bandC, win,
       panelH, tLocal, tcy, C, ringBase, wmY, wmH, track: spacer.offsetHeight - innerHeight };
     root.classList.add('ready');
     dirty = true;
@@ -265,7 +277,8 @@
       const B = L.ringBase;
       // never much bigger than the file itself (900px), so the gold line stays sharp
       const heroC = { x: L.tX + L.ox, y: L.tY + L.oy * 0.9 }, heroD = Math.min(L.tH * 1.02, 940);
-      const fanC = { x: VW / 2, y: L.pivot.y - L.R + L.ch * 0.28 }, fanD = Math.min(mobile ? VW * 0.98 : VH * 0.8, 940);
+      const fanD = Math.min(mobile ? VW * 0.98 : VH * 0.8, 940);
+      const fanC = { x: VW / 2, y: Math.max(L.pivot.y - L.R + L.ch * 0.28, L.headBottom + 10 + fanD / 2) };   // ring top stays under the heading
       const bandC = { x: L.bandC.x, y: L.bandC.y + bandPush(p) }, bandD = L.bh * 0.92;
       const tkC = { x: VW / 2, y: L.tcy }, tkD = Math.min(Math.max(L.tLocal.w, L.tLocal.h) * 1.32, 940);
       const g = E(seg(p, 0.06, 0.19)), cb = E(seg(p, 0.54, 0.62)), z = E(seg(p, 0.88, 0.97));
