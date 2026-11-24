@@ -93,6 +93,7 @@ html:not(.ready) .stage > :not(.wm):not(.cake):not(.hero-copy) { visibility: hid
 /* ---- orbit -------------------------------------------------------------- */
 .orbit-copy { left: 0; right: 0; top: 0; z-index: 9; overflow: hidden; text-align: center; padding: 0 16px 6px; pointer-events: none; }
 .orbit-copy p { margin: 10px auto 0; max-width: 46ch; color: var(--ink-soft); font-size: 15px; }
+@media (max-height: 640px) { .orbit-copy p { display: none; } }
 .cards { margin: 0; padding: 0; list-style: none; left: 0; top: 0; width: 0; height: 0; }
 .card { position: absolute; left: 0; top: 0; transform-origin: 50% 100%; will-change: transform; }
 .card img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; box-shadow: 0 14px 26px -12px var(--shadow); background: var(--rose); }

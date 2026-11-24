@@ -108,21 +108,27 @@
     slotWord.style.width = wmW * dockS + 'px';
     slotWord.style.height = slotH + 'px';
 
-    // ---- the turntable and orbit
-    const oc = { x: VW / 2, y: mobile ? VH * 0.56 : VH * 0.56 };
-    const Rx = mobile ? VW * 0.38 : Math.min(VW * 0.36, 540);
-    const Ry = Rx * (mobile ? 0.8 : 0.4);
-    const ch = mobile ? Math.min(VH * 0.13, 112) : Math.min(VH * 0.22, 210);
+    // ---- the turntable and orbit: always fits under the heading (nothing of the orbit sits under its type)
+    orbitCopy.style.top = barH + (mobile ? 4 : 10) + 'px';
+    const ocBottom = orbitCopy.offsetTop + orbitCopy.offsetHeight + (mobile ? 14 : 18);
+    const floor = VH - 64 - 26;                     // above the rail, room for the front label
+    let Rx = mobile ? VW * 0.38 : Math.min(VW * 0.36, 540);
+    let ch = mobile ? Math.min(VH * 0.13, 112) : Math.min(VH * 0.22, 210);
+    const ryK = mobile ? 0.8 : 0.4, oK = mobile ? 1.45 : 0.95;
+    const upOf = (rx, c) => Math.max(rx * oK / CAKE_AR * BOARD[1], rx * ryK + c * 0.52);   // above the centre
+    const downOf = (rx) => rx * ryK + 10;                                                 // below the centre
+    for (let k = 0; k < 40 && upOf(Rx, ch) + downOf(Rx) > floor - ocBottom; k++) { Rx *= 0.96; ch *= 0.96; }
+    const Ry = Rx * ryK;
+    const oc = { x: VW / 2, y: Math.max(ocBottom + upOf(Rx, ch), Math.min(VH * 0.56, floor - downOf(Rx))) };
     cards.forEach((c) => {
       const im = c.querySelector('img');
       const ar = im.naturalWidth ? im.naturalWidth / im.naturalHeight : 1;
       c._w = ch * ar; c.style.width = c._w + 'px'; c.style.height = ch + 'px';
     });
-    const oW = mobile ? Rx * 1.45 : Rx * 0.95;
+    const oW = Rx * oK;
     const orb = { x: oc.x - oW * BOARD[0], y: oc.y - (oW / CAKE_AR) * BOARD[1], w: oW };
 
-    // orbit copy and the names band above the orbit
-    orbitCopy.style.top = barH + (mobile ? 4 : 10) + 'px';
+    // the names band above the orbit
     const backTop = oc.y - Ry - ch * 0.54;
     const nTop = barH + (mobile ? 8 : 12), nH = Math.max(60, backTop - nTop + ch * 0.12);
     names.style.top = nTop + 'px'; names.style.height = nH + 'px';
