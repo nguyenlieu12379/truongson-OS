@@ -452,3 +452,15 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Owner:** Son
 
 **Update (same day):** after the first test, Son said the skill was far slower than a plain prompt for one prospect. The default is now the fast path (one Google search for Instagram bios with `wa.me`, a quick no-website check, report). Scrapling only checks a single link or runs a bulk city list when asked.
+
+## 2026-11-24 - Pakachi Kitchen approved; green button; hero cursor lean is the default
+
+**Decision:** Pakachi Kitchen (Herndon VA, first lead from `/prospecting`) is approved: it's in the Sites table and the GitHub Pages list, live with noindex. Its button is Pakistan green `#0F7A46` with a cream label; green is also used for the side thread, "Karachi" and the price line. The hero cutout's cursor reaction is now a standing preference for every build: a direct lean around its own centre (about 8deg / 11deg), no inertia, no sheen, wordmark still. The Sites table now lists each brand's WhatsApp number.
+
+**Why:** Son: "add it to the approved sites list". Saffron, then Guards Red were tried for the button; Son: "red looks ugly in this site". Green pairs with their gold, matches the flag behind "Soul of Karachi" and the chillies and coriander in their food, and reads 4.9:1 on its label. The lean went through stronger and springier versions before Son settled on "no inertia, no glossing, just slightly moving", turning around the centre.
+
+**Alternatives considered:** Saffron and Guards Red buttons; a velocity-driven spring swing with a light sheen and a counter-drifting wordmark.
+
+**Open before the client sees it:** delivery zone, order cut-off times, whether $90 / $130 still hold; a real-phone check.
+
+**Owner:** Son
