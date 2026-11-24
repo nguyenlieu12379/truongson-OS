@@ -2,6 +2,7 @@ name: Deploy websites to GitHub Pages
 
 # /espresso-vivace/ -> websites/TruongSon-demos/scrollcraft/builds/espresso-vivace (concept demo, scroll-craft)
 # /delicias-cake/ -> websites/TruongSon-demos/scrollcraft/builds/delicias-cake (prospect demo, scroll-craft, noindex)
+# /brazilian-taste/ -> websites/TruongSon-demos/scrollcraft/builds/brazilian-taste (prospect demo, scroll-craft, noindex)
 # /             -> redirects to /espresso-vivace/
 
 on:
@@ -37,6 +38,9 @@ jobs:
           mkdir -p _site/delicias-cake
           cp -R websites/TruongSon-demos/scrollcraft/builds/delicias-cake/. _site/delicias-cake/
           rm -rf _site/delicias-cake/README.md _site/delicias-cake/BRIEF.md _site/delicias-cake/RESEARCH.md _site/delicias-cake/lab _site/delicias-cake/serve.ps1 _site/delicias-cake/assets/source/SOURCES.md
+          mkdir -p _site/brazilian-taste
+          cp -R websites/TruongSon-demos/scrollcraft/builds/brazilian-taste/. _site/brazilian-taste/
+          rm -rf _site/brazilian-taste/README.md _site/brazilian-taste/BRIEF.md _site/brazilian-taste/PREFS.md _site/brazilian-taste/serve.ps1 _site/brazilian-taste/assets/source
           cat > _site/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">

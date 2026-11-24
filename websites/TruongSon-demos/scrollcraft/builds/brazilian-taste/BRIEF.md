@@ -2,7 +2,7 @@
 
 Pre-build answers: [PREFS.md](PREFS.md) (Son, 2026-11-23). Topics marked **authored** were delegated and written by Claude.
 
-Spec demo only. Local until Son says live. Not shown to the client yet.
+Spec demo. Live with noindex since 2026-11-24 (Son: "Make it live"). Not shown to the client yet.
 
 ## Who they are (from their Instagram only)
 

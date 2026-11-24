@@ -18,7 +18,7 @@ Asked 2026-11-23. Answered by: Son.
 | 12 | Motion and speed | "super smooth, like at the level of delicias site" | no |
 | 13 | Facts | "as is" (only what their IG says; flag conflicts) | yes |
 | 14 | The one action | Order on WhatsApp | yes |
-| 15 | Deploy | "idk" → local only until Son says live | yes |
+| 15 | Deploy | "idk" → local only; then "Make it live" (2026-11-24) | no |
 
 Also: "btw, remember about the last failure" (Brazilian Passion Foods, see `.claude/skills/site-building/FAILURES.md`).
 

@@ -1,6 +1,6 @@
 # Brazilian Taste (spec demo)
 
-Scroll-craft build, 2026-11-23, for Brazilian Taste (Dallas, TX: premade meals, catering, personal chef; orders on WhatsApp, no website). Local only: not deployed until Son says live.
+Scroll-craft build, 2026-11-23, for Brazilian Taste (Dallas, TX: premade meals, catering, personal chef; orders on WhatsApp, no website). Live (noindex): https://nguyenlieu12379.github.io/truongson-OS/brazilian-taste/ (deployed by `.github/workflows/deploy-pages.yml` on push to main).
 
 One unbroken white world. Their real "Brazilian" wordmark splits open, their bowls appear in the gap, the photo becomes Monday in a 7-day grid that fills with their trays, then three ways to order, a green "how to order" band, and the wordmark closes again over the button. Brief, colour split and failure checks: `BRIEF.md`. Answers: `PREFS.md`. Photo sources: `assets/source/SOURCES.md`.
 
