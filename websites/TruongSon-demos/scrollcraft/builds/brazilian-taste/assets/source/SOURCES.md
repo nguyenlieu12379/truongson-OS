@@ -35,3 +35,4 @@ Not used on purpose: AI-made promo graphics in their feed (soup "festival", hand
 - `cut-tray.webp`: the tray in bt-002-tray-beef.jpg, clipped along its rim (rounded quad, traced by hand, no AI fill).
 - `cut-orange.webp`, `cut-lunchbox.webp`: the orange slice and the kraft box in bt-064-lunchbox-orange-2.jpg.
 - `logo/`: their avatar lettering (from bt-avatar.jpg) rebuilt at 3x on their green, plus green and white lockups and favicons.
+- `logo/avatar-256.jpg`: their Instagram profile picture (bt-avatar.jpg), used as-is as the logo badge in the header and the close.

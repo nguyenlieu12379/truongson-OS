@@ -299,6 +299,7 @@
   if (qp) { scrollTo(0, toS(clamp(+qp[1])) * L.track); readTarget(); cur = target; }
   render(cur);
   addEventListener('scroll', kick, { passive: true });
+  document.querySelector('.brand').addEventListener('click', (e) => { e.preventDefault(); scrollTo({ top: 0, behavior: reduced.matches ? 'auto' : 'smooth' }); });
   addEventListener('resize', () => { layout(); kick(); });
   document.fonts && document.fonts.ready.then(() => { layout(); kick(); });
   document.querySelectorAll('.stage img').forEach((img) => { if (img.decode) img.decode().catch(() => {}); });
