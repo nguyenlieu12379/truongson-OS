@@ -281,6 +281,8 @@ Checks before you build:
 - At most two `scrub` acts. Video is the heaviest thing on the page, and the
   third one stops being a surprise.
 - No two adjacent acts carry the same feeling. If they do, one is filler.
+- Worldflight only: every leg boundary has a named carry on the carry sheet
+  ([worldflight.md §0](references/worldflight.md)). No carry, no generation.
 - One act is the peak and it has the largest span by a visible margin. The act
   before it is quieter than it is.
 - Every act earns its scroll span. Eight to fourteen viewport-heights is a

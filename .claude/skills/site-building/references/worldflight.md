@@ -18,6 +18,49 @@ unpins, and there is no boundary anywhere for a seam to show at.
 
 ---
 
+## 0. The carry sheet: plan it before you generate anything
+
+The engine hides the seam in pixels. It cannot hide a seam in meaning. If leg 2
+shows a kitchen and leg 3 shows a dining room and nothing connects them, the
+crossfade is clean and the page still reads as two clips glued together.
+
+So every leg boundary names **what carries across it**: one thing the eye is
+already holding when the next leg starts. Write the sheet next to the journey,
+before any start image exists:
+
+```
+Leg 1 -> 2   carry: the steam off the cup       move: camera rises with it into the roastery
+Leg 2 -> 3   carry: the brown of the beans       move: push in until the beans fill frame, they become the bar top
+Leg 3 -> 4   carry: the doorway light            move: fly through the door, it opens onto the street
+```
+
+The carry is a real object, colour, shape or light in the frame. Common moves:
+
+- **Follow it.** The camera tracks the object out of one space and into the next.
+- **Push through it.** Zoom into a texture or opening until it fills the frame,
+  then it resolves as the next scene.
+- **Match it.** Same shape or colour sits in the same screen spot on both sides
+  (round plate becomes round sign).
+- **Frame it.** A window, door or arch in leg N is the frame leg N+1 starts inside.
+
+Rules:
+
+- A boundary with no carry, or "the crossfade" as its carry, fails. Change the
+  route, not the sheet.
+- The carry goes into both prompts: the end of leg N's prompt names it leaving,
+  the start of leg N+1's prompt names it arriving. With architecture A
+  (section 6) the chain frame already contains it, so the prompt just has to
+  keep it in view.
+- At most one carry per boundary. Two things competing to lead the eye is a cut.
+- Put the copy window for a beat after its carry lands, not across the seam, so
+  text never sits on top of the handoff.
+
+Idea credit: the "every boundary names what carries across" rule comes from
+feitangyuan/onetake (a promo-film skill). It is noted here as an idea only. No
+code from it is used, and its licence is non-commercial.
+
+---
+
 ## 1. The markup
 
 ```html
