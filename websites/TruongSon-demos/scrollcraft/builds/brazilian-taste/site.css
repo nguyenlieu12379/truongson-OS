@@ -188,5 +188,5 @@ a { color: inherit; }
   .l i, .taste i, .tray-drop, .ready .tray-bob, .ready .l.cov, .ready .tray-shadow, .fruit img, .mq-track { animation: none; }
 }
 
-/* cursor ball: a bare lens. No drop shadow, no gloss, no rim, so all you see is the page bending under it (Son, 2026-11-24) */
-.lg-ball { box-shadow: none; background: none; }
+/* cursor ball: a clear lens with a soft drop shadow under it, no gloss or rim (Son, 2026-11-24) */
+.lg-ball { background: none; box-shadow: 0 18px 38px -12px rgb(41 64 14 / .4), 0 4px 10px -4px rgb(41 64 14 / .25); }
