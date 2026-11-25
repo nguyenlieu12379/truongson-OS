@@ -34,8 +34,9 @@ How to describe it to anyone (designer, client, another AI): *"Liquid glass effe
    ```
    Keep `aria-label` constant; `aria-pressed` carries the state.
 5. **Version every asset URL** (`site.css?v=N`, `liquid-glass.js?v=N`) and bump N on every change. A returning visitor's cached old script once left the Vivace toggle dead while every test passed.
-6. **Fit the header.** The toggle adds about 40px; check 390, 360 and 320px widths for wrapping or sideways scroll.
-7. **Verify** (below), look at the screenshots, then commit. Ask before publishing.
+6. **Toggle in the corner.** Put `.lg-theme-btn` last in the bar so it sits in the far corner; any button slot goes before it. It must never float mid-bar when the slot is empty (Son, 2026-11-25).
+7. **Fit the header.** The toggle adds about 40px; check 390, 360 and 320px widths for wrapping or sideways scroll.
+8. **Verify** (below), look at the screenshots, then commit. Ask before publishing.
 
 No venom. Son removed the glass venom strands on 2026-11-23; don't add them back.
 

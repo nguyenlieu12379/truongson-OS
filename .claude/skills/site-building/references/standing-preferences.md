@@ -9,6 +9,7 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - Deploy: go live on GitHub Pages (noindex) when the build is done (Son, 2026-11-25). Before that date it needed an explicit "make it live".
 
 ## Photos and assets
+- Cutouts only from photos where the whole dish is in frame with nothing in front of it (no fries, hands, glasses, frame edge). View the cutout alone at full size on white and on black and compare every edge with the original before using it. Missing parts = pick another photo (Son, 2026-11-25, El Budare).
 - Real photos only, from the client's own Instagram (via Claude in Chrome, signed in). No generated images unless asked.
 - No photos of customers, their families or kids. No graphics with text baked in. No cut-out "stock looking" product shots.
 - Never drawn "plastic" graphic objects (CSS/SVG props such as pans, bubbles, cartoon food). Son, 2026-11-23: "always stay away from the plastic graphics objects at all cost". Effects must come from real photos or footage.
@@ -25,6 +26,8 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - Hero cutout and the cursor (Son, 2026-11-24, Pakachi): it leans toward the pointer around its own centre, about 8deg up/down and 11deg sideways. Direct: no inertia or spring, no light sheen, no slide, and the wordmark behind it stays still. Keep enough overscan that cut edges never show.
 
 ## Style and world
+- Serious business, not playful: confident text faces, no novelty or cartoon display fonts, brand colour used with restraint (Son, 2026-11-25, El Budare).
+- Value before motion: every scene answers a customer question (what to order with real names and prices, hours, where, why people come back). Motion and widgets without content read as empty (Son, 2026-11-25).
 - Frame shapes follow the dish: tall frames for dishes shot vertical (lunch boxes, long tables), wide for tray rows, square for bowls. Never crop everything to one landscape shape (Son, 2026-11-24).
 - "Unbroken" means each scene turns into the next (cells fly apart, photos grow into the next layout). A layer that just scrolls up out of view is a break (Son, 2026-11-24).
 - Add related motion so it isn't boring: real cutouts drifting, dish-name lines, counters, lines drawing in. Never drawn props.
@@ -35,6 +38,7 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - Four must-haves from `websites/README.md`: one engineered peak, layered hero, real photos, no AI tells.
 
 ## UI material
+- The light/dark toggle always sits in the bar's far corner. The travelling button docks beside it, so the toggle never floats mid-bar when the button is elsewhere (Son, 2026-11-25).
 - Cursor ball: the Espresso Vivace ball, exactly: its size (112px), its style (rim, highlight, dark inner edge, gloss, drop shadow) and its motion (spring stiffness 0.14, damping 0.72, stretch speed x 0.018, max 0.42; see `builds/espresso-vivace/site.js`). The Brazilian Taste drag is no longer the default: "too fluid" (2026-11-24, Sweets by Carla G pre-build). Don't resize, restyle or re-tune it unless asked. Liquid glass with a clear lens plus this ball is the default UI material (Son, 2026-11-25).
 - No glass venom strands (Son removed them, 2026-11-23).
 - Liquid glass on every block (buttons, text cards, nav): a clear refractive lens that magnifies and bends what's behind it along the edges and corners, with a thin specular rim. No blur, no frost.

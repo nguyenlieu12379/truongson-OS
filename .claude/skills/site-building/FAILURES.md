@@ -30,7 +30,13 @@ Earlier, same client (v1, retired): drawn CSS props (a pan, bubbles) instead of 
 
 Build: `websites/TruongSon-demos/scrollcraft/builds/el-budare-cafe/` (kept offline as the example of what not to do; not deployed). A big sit-down restaurant: two locations, 2,000+ Google reviews.
 
-What went wrong (Son's review rounds plus the diagnosis):
+Why it failed, in Son's words (2026-11-25):
+1. **Font and colour too playful.** "the font and color choice is too playful, not serious business."
+2. **Theme toggle stranded mid-bar.** "the light dark button just sit there in the middle al the time, when the CTA aren't block its way, just move it to the corner so the site looks clean." The toggle sat left of an empty CTA slot whenever the button was elsewhere.
+3. **Empty of value.** "its just show some 'nice to have' things and really no valuable at all, thats why it feels empty although there're full of motion and items in the site." Motion and widgets are not content. Nothing told a customer what to order, what it costs, when they're open or why people come back.
+4. **The cutout is never whole.** "its not full, its left half disappeared, this may be you choose the image that have obstacle in fornt of the main thing, or the image doesn't catch the whole food, or you cutting skill is bad." The stack's lower left was hidden behind fries in the source photo, so the cut lost it. The earlier cachapa was cropped by the photo's own edge.
+
+Earlier diagnosis:
 - **Not serious.** A cartoon display font (Chewy) at hero size, a food cutout floating on blank white with a soft drop shadow like a sticker, and gimmick UI (a rolling clock, "tickets", a clock chip riding a bar). It read as a demo of tricks, not as a restaurant with 2,000 reviews.
 - **Slop.** The same hero formula for the fourth build in a row (giant word + floating cutout + covered letters wobbling). Large white voids holding small widgets. Small uppercase tracked labels ("OPEN 24 HOURS"). A white card with a map. Every piece is a template part.
 - **Earlier rounds:** a saturated flag-colour sky ("make it light, not AI slops"), copy that said nothing ("don't write random text, each must do one job"), a cutout clipped by the photo's own edge ("the food's cut image looks off"), the tagline over the word ("letter overlap"), an empty scene ("the whole page looks empty"), the card and map cut off on a short screen.
@@ -43,7 +49,13 @@ Don't repeat:
 - Blank space holding small UI pieces (tickets, chips, pills). Empty is not clean.
 - Uncheck-able English names for dishes, and dishes captioned by an invented time of day.
 
+- A theme toggle anywhere but the corner. It sits at the far edge of the bar, always; the button docks beside it, never outside it.
+- A cutout from a photo where anything (fries, a hand, a glass, the frame edge) covers part of the dish. Whole dish, fully in frame, nothing in front, or don't cut it.
+
 Do instead:
+- Value before motion. Every scene must answer something a customer needs: what to order (signature dishes with real names and prices from their menu), when they're open, where, why people love it (real review quotes or numbers). Motion only carries that content.
+- Serious type and colour: a confident text face, the brand's colours used with restraint. No novelty fonts.
+- Cutout acceptance: before using a cutout, view it alone at full size on white and on black, and check every edge against the original photo. If any part of the dish is missing or blurred, pick another photo.
 - Match the business's weight. A busy restaurant gets the confidence of a real restaurant site: large, full-bleed photos of their food and their room, calm strong type, few moving parts, each one doing a clear job.
 - Before building, check the plan against: would the owner of a 2,000-review restaurant show this to customers without feeling it's a toy?
 
