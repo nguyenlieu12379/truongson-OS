@@ -72,6 +72,18 @@
         "4513"
       ],
       "port": 4513
+    },
+    {
+      "name": "tardes-calenas",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        ".claude/skills/site-building/scripts/serve.mjs",
+        "--root",
+        "websites/TruongSon-demos/scrollcraft/builds/tardes-calenas",
+        "--port",
+        "4514"
+      ],
+      "port": 4514
     }
   ]
 }

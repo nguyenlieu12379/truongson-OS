@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F7F6F3">
+<title>Tardes Caleñas · Colombian bar and restaurant · Hollywood, FL</title>
+<meta name="description" content="Bandeja paisa, sancocho, picadas and salsa caleña on Hollywood Blvd. Kitchen open every day 11AM to 4AM. Reserve on WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/bandeja.webp">
+<script>
+(function (d) {
+  var CONFIG = {
+    key: "tardes-calenas-theme",            // localStorage key, unique per site
+    colors: { light: "#F7F6F3", dark: "#121110" },   // <meta name=theme-color> per theme
+    duration: 1400                // ms for the glass sweep. 1400 reads as deliberate; 4000-7000 as a show
+  };
+  d.classList.add("js");
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+  var t = null; try { t = localStorage.getItem(CONFIG.key); } catch (e) {}
+  if (t === "dark" || t === "light") d.setAttribute("data-theme", t);
+  function now() { var x = d.getAttribute("data-theme"); return x ? x : (mq.matches ? "dark" : "light"); }
+  function render() {
+    var dark = now() === "dark";
+    d.setAttribute("data-theme-now", dark ? "dark" : "light");
+    document.querySelectorAll(".lg-theme-btn").forEach(function (b) { b.setAttribute("aria-pressed", String(dark)); });
+    if (d.hasAttribute("data-theme")) document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute("content", CONFIG.colors[dark ? "dark" : "light"]); });
+  }
+  function apply(next) {
+    d.setAttribute("data-theme", next);
+    try { localStorage.setItem(CONFIG.key, next); } catch (e) {}
+    render();
+  }
+  render();
+  document.addEventListener("DOMContentLoaded", render);
+  if (mq.addEventListener) mq.addEventListener("change", render); else if (mq.addListener) mq.addListener(render);
+
+  // ---- the glass sweep --------------------------------------------------
+  var SVGNS = "http://www.w3.org/2000/svg", filters = null;
+  function ensureFilters() {
+    if (filters) return filters;
+    var svg = document.createElementNS(SVGNS, "svg");
+    svg.setAttribute("aria-hidden", "true");
+    svg.style.cssText = "position:absolute;width:0;height:0;overflow:hidden;pointer-events:none";
+    svg.innerHTML =
+      '<filter id="lg-sweep-new" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-sweep-map-new" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>' +
+      '<feDisplacementMap id="lg-sweep-dm-new" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB" result="bent"/>' +
+      '<feColorMatrix in="map" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0.85 0 0" result="rim"/>' +
+      '<feMerge><feMergeNode in="bent"/><feMergeNode in="rim"/></feMerge></filter>' +
+      '<filter id="lg-sweep-old" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-sweep-map-old" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>' +
+      '<feDisplacementMap id="lg-sweep-dm-old" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB"/></filter>';
+    document.body.appendChild(svg);
+    return (filters = {
+      maps: [document.getElementById("lg-sweep-map-new"), document.getElementById("lg-sweep-map-old")],
+      dms: [document.getElementById("lg-sweep-dm-new"), document.getElementById("lg-sweep-dm-old")]
+    });
+  }
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function glassSwitch(next, cx, cy) {
+    var f = ensureFilters(), W = innerWidth, H = innerHeight, DUR = CONFIG.duration;
+    var band = Math.max(54, Math.min(130, Math.min(W, H) * 0.11)), push = band * 0.42, S = push * 2.2;
+    var end = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy)) + band;
+    var k = W > 900 ? 5 : 4, mw = Math.ceil(W / k), mh = Math.ceil(H / k);
+    var cv = document.createElement("canvas"); cv.width = mw; cv.height = mh;
+    var g = cv.getContext("2d"), img = g.createImageData(mw, mh), px = img.data;
+    f.maps.forEach(function (m) { m.setAttribute("width", W); m.setAttribute("height", H); });
+    f.dms.forEach(function (m) { m.setAttribute("scale", S.toFixed(1)); });
+    function paint(rad) {
+      for (var y = 0; y < mh; y++) {
+        var dy = y * k + k / 2 - cy;
+        for (var x = 0; x < mw; x++) {
+          var dx = x * k + k / 2 - cx, i = (y * mw + x) * 4;
+          var dd = Math.sqrt(dx * dx + dy * dy) || 1, u = (dd - rad) / band, R = 128, G = 128, B = 0;
+          if (u > -1 && u < 1) {
+            var bump = 1 - u * u; bump *= bump;
+            var m = push * bump;
+            R = 128 - (dx / dd) * m / S * 255; G = 128 - (dy / dd) * m / S * 255;
+            var hh = (u + 0.06) / 0.07;
+            B = Math.min(255, 150 * Math.exp(-hh * hh) + 40 * bump);   // bright rim
+          }
+          px[i] = R; px[i + 1] = G; px[i + 2] = B; px[i + 3] = 255;
+        }
+      }
+      g.putImageData(img, 0, 0);
+      var url = cv.toDataURL();
+      f.maps.forEach(function (m) { m.setAttribute("href", url); });
+    }
+    d.style.setProperty("--lg-x", cx + "px"); d.style.setProperty("--lg-y", cy + "px"); d.style.setProperty("--lg-r", "0px");
+    paint(-band);
+    d.classList.add("lg-sweeping");
+    var vt = document.startViewTransition(function () { apply(next); });
+    vt.ready.then(function () {
+      // no-op animation keeps the transition alive; frames are driven below
+      d.animate({ opacity: [1, 1] }, { duration: DUR, pseudoElement: "::view-transition-new(root)" });
+      var t0 = performance.now();
+      (function frame(t) {
+        var p = Math.min(1, (t - t0) / DUR), rad = ease(p) * end;
+        d.style.setProperty("--lg-r", rad + "px"); paint(rad);
+        if (p < 1) requestAnimationFrame(frame);
+      })(t0);
+    }).catch(function () {});
+    function done() { d.classList.remove("lg-sweeping"); ["--lg-x", "--lg-y", "--lg-r"].forEach(function (v) { d.style.removeProperty(v); }); }
+    vt.finished.then(done, done);
+  }
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest && e.target.closest(".lg-theme-btn");
+    if (!btn) return;
+    var next = now() === "dark" ? "light" : "dark";
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { apply(next); return; }
+    if (document.startViewTransition) {
+      var r = btn.getBoundingClientRect();
+      glassSwitch(next, r.left + r.width / 2, r.top + r.height / 2);
+      return;
+    }
+    d.classList.add("lg-fading"); apply(next);
+    setTimeout(function () { d.classList.remove("lg-fading"); }, 760);
+  });
+})(document.documentElement);
+</script>
+
+<link rel="stylesheet" href="liquid-glass.css?v=1">
+<link rel="stylesheet" href="site.css?v=7">
+</head>
+<body>
+<a class="skip" href="#reserve">Skip to reservations</a>
+
+<header class="bar" id="bar">
+  <a class="brand" href="#top" aria-label="Tardes Caleñas, back to the top"><span class="wm">Tardes Caleñas</span><span class="brand-sub">Bar · Restaurant · Hollywood FL</span></a>
+  <div class="bar-end">
+    <a class="cta lg-glass" href="https://wa.me/19549402515?text=Hi%20Tardes%20Cale%C3%B1as%2C%20I%27d%20like%20to%20reserve%20a%20table" target="_blank" rel="noopener"><svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/><circle class="d d2" cx="12" cy="12" r="1.15"/><circle class="d d3" cx="15.6" cy="12" r="1.15"/></svg><span class="lbl">Reserve<span class="opt"> on WhatsApp</span></span></a>
+    <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
+      <svg class="lg-i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <svg class="lg-i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="stage" id="stage">
+  <h1 class="sr-only" id="top">Tardes Caleñas, Colombian bar and restaurant in Hollywood, FL</h1>
+  <span class="word w1" aria-hidden="true"><span class="ch">T</span><span class="ch">a</span><span class="ch">r</span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span></span>
+  <span class="word w2" aria-hidden="true"><span class="ch">C</span><span class="ch">a</span><span class="ch">l</span><span class="ch">e</span><span class="ch">ñ</span><span class="ch">a</span><span class="ch">s</span></span>
+  <p class="hero-line" id="heroLine">Colombian kitchen and salsa bar on Hollywood Blvd. <b>Kitchen open every day until 4AM.</b></p>
+
+  <img class="drift" id="dr-tost" src="assets/tostones.webp" alt="">
+
+  <div class="plate" id="pl-bandeja"><img src="assets/bandeja.webp" alt="" decoding="async"></div>
+  <div class="tag" id="tg-bandeja"><b>Bandeja Paisa</b><span>Steak, chicharrón, fried egg on rice, chorizo, sweet plantain, beans and arepa.</span><i>$21.99</i></div>
+  <div class="plate" id="pl-sancocho"><img src="assets/sancocho.webp" alt="" decoding="async"></div>
+  <div class="tag" id="tg-sancocho"><b>Sancocho de Costilla</b><span>Beef rib soup with yuca, potato and corn.</span><i>$19.99</i></div>
+  <div class="plate" id="pl-lomo"><img src="assets/lomo.webp" alt="" decoding="async"></div>
+  <div class="tag" id="tg-lomo"><b>Lomo Salteado</b><span>Sautéed loin with onion and tomato, fries and rice.</span><i>$19.99</i></div>
+  <div class="plate" id="pl-chuleta"><img src="assets/chuleta.webp" alt="" decoding="async"></div>
+  <div class="tag" id="tg-chuleta"><b>Chuleta Caleña</b><span>The Cali pork chop, with rice and beans.</span><i>$16.99</i></div>
+  <div class="plate" id="pl-arrozpollo"><img src="assets/arrozpollo.webp" alt="" decoding="async"></div>
+  <div class="tag" id="tg-arrozpollo"><b>Arroz con Pollo</b><span>Rice with chicken, served with fries.</span><i>$16.99</i></div>
+  <div class="plate" id="pl-picada"><img src="assets/picada.webp" alt="" decoding="async"></div>
+  <div class="tag" id="tg-picada"><b>Picada</b><span>The sampler for the table: beef, pork, sausage, morcilla, plantain and arepa.</span><i>$34.99</i></div>
+
+  <div class="scene-head" id="anHead"><h2>The plate Hollywood orders most.</h2><p>Bandeja Paisa, <b>$21.99</b>. Number one on the menu.</p></div>
+  <div class="anat" id="anat"><span class="an" id="an-steak">Grilled steak</span><span class="an" id="an-chich">Chicharrón</span><span class="an" id="an-egg">Fried egg on rice</span><span class="an" id="an-chorizo">Chorizo</span><span class="an" id="an-plantain">Sweet plantain</span><span class="an" id="an-beans">Beans</span><span class="an" id="an-arepa">Arepa</span></div>
+  <svg class="leaders" id="leaders" aria-hidden="true"></svg>
+
+  <div class="scene-head" id="passHead"><h2>From the kitchen.</h2><p>Colombian plates, made to order.</p></div>
+
+  <div class="scene-head" id="tableHead"><h2>A table at 2AM.</h2><p><b>Kitchen open every day, 11AM to 4AM.</b> Order the picada and share it.</p></div>
+
+  <section class="nights" id="nights" aria-labelledby="hNights">
+    <h2 id="hNights">Five nights of music, every week.</h2>
+    <ol class="night-list"><li><span class="day">Wednesday</span><span class="gen">Romántico</span></li><li><span class="day">Thursday</span><span class="gen">Vallenato</span></li><li><span class="day">Friday</span><span class="gen">Salsa</span></li><li><span class="day">Saturday</span><span class="gen">Crossover</span></li><li><span class="day">Sunday</span><span class="gen">Viejoteca</span></li></ol>
+    <p class="years">15 years of salsa caleña in Hollywood.</p>
+  </section>
+
+  <section class="card" id="reserve" aria-labelledby="hReserve">
+    <h2 id="hReserve">Get a table.</h2>
+    <p class="note">Reservations are on WhatsApp. Send the day, the time and how many.</p>
+    <table class="hours">
+      <tr><th scope="row">Kitchen</th><td>Every day, 11AM to 4AM</td></tr>
+      <tr><th scope="row">Music</th><td>Wednesday to Sunday</td></tr>
+    </table>
+    <p class="addr">2025 Hollywood Blvd, Hollywood, FL 33020 · <a href="https://www.google.com/maps/dir/?api=1&amp;destination=2025+Hollywood+Blvd+Hollywood+FL+33020" target="_blank" rel="noopener">Directions</a></p>
+    <a class="cta big lg-glass" href="https://wa.me/19549402515?text=Hi%20Tardes%20Cale%C3%B1as%2C%20I%27d%20like%20to%20reserve%20a%20table" target="_blank" rel="noopener"><svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/><circle class="d d2" cx="12" cy="12" r="1.15"/><circle class="d d3" cx="15.6" cy="12" r="1.15"/></svg><span class="lbl">Reserve on WhatsApp</span></a>
+    <p class="alt">954-940-2515 on WhatsApp · Call <a href="tel:+19543917542">954-391-7542</a> · <a href="https://www.instagram.com/tardes_calenas/" target="_blank" rel="noopener">@tardes_calenas</a></p>
+  </section>
+
+  <section class="sr-only" aria-label="Menu"><h2>Menu highlights</h2><ul><li>Bandeja Paisa, $21.99. Steak, chicharrón, fried egg on rice, chorizo, sweet plantain, beans and arepa.</li><li>Sancocho de Costilla, $19.99. Beef rib soup with yuca, potato and corn.</li><li>Lomo Salteado, $19.99. Sautéed loin with onion and tomato, fries and rice.</li><li>Chuleta Caleña, $16.99. The Cali pork chop, with rice and beans.</li><li>Arroz con Pollo, $16.99. Rice with chicken, served with fries.</li><li>Picada, $34.99. The sampler for the table: beef, pork, sausage, morcilla, plantain and arepa.</li></ul></section>
+</main>
+<div class="spacer" id="spacer" aria-hidden="true"></div>
+<p class="demo-note">Concept site prepared for Tardes Caleñas. Photos from their own menu.</p>
+
+<script src="liquid-glass.js?v=1" defer></script>
+<script src="site.js?v=7" defer></script>
+<script>addEventListener("DOMContentLoaded", function () { if (window.LiquidGlass) { LiquidGlass.cursorBall(); LiquidGlass.glassify(".lg-glass"); } });</script>
+</body>
+</html>

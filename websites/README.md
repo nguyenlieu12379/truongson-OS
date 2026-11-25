@@ -33,6 +33,7 @@ Approved and live, but not the bar to aim for.
 | Owner | About | WhatsApp | Status | Path |
 | --- | --- | --- | --- | --- |
 | TruongSon-demos | 1. **Espresso Vivace**<br>2. Seattle, WA<br>3. Espresso and latte art | None (concept demo, not a WhatsApp business) | Live at https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/ | `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` |
+| TruongSon-demos | 1. **Tardes Caleñas**<br>2. Hollywood, FL<br>3. Colombian bar and restaurant, kitchen open until 4AM, salsa nights | [(954) 940-2515](https://wa.me/19549402515) (reservations; landline 954-391-7542) | New 2026-11-26, not rated yet. Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/tardes-calenas/ | `websites/TruongSon-demos/scrollcraft/builds/tardes-calenas/` |
 | TruongSon-demos | 1. **Delícias Cake & Bakery**<br>2. Burlington, MA<br>3. Brazilian custom cakes and breakfast | [(781) 365-0181](https://wa.me/17813650181) (used on the site, from their Instagram graphics). Their research also lists (781) 661-8417: to confirm | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/delicias-cake/ | `websites/TruongSon-demos/scrollcraft/builds/delicias-cake/` |
 
 ### Failures
