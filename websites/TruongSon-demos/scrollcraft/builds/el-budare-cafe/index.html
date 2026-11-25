@@ -121,10 +121,10 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="assets/cut-hero.webp?v=1">
+<link href="https://fonts.googleapis.com/css2?family=Chewy&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/cut-hero.webp?v=2">
 <link rel="stylesheet" href="liquid-glass.css?v=1">
-<link rel="stylesheet" href="site.css?v=4">
+<link rel="stylesheet" href="site.css?v=6">
 </head>
 <body>
 <a class="skip" href="#order">Skip to ordering</a>
@@ -171,30 +171,27 @@
 
   <div class="hero-copy" id="heroCopy">
     <div class="hc-in" id="heroIn">
-      <p class="lede">One bite and <em>you're home.</em></p>
-      <p class="sub">Venezuelan kitchen on Roosevelt Ave, Jackson Heights. Two spots. One never closes.</p>
+      <p class="lede">Venezuelan food in Jackson Heights, Queens.</p>
       <span class="cta-slot" id="slotHero" aria-hidden="true"></span>
     </div>
   </div>
 
   <!-- the peak: a dish for every hour of the day -->
-  <p class="clock-line" id="clockLine"><span id="clockIn">Arepas at any hour.</span></p>
+  <p class="clock-line" id="clockLine"><span id="clockIn">Open 24 hours</span></p>
   <ul class="dishes" id="dishes" aria-label="Dishes from their Instagram">
     <li class="dish" data-ar="1.636" data-h="12"><img src="assets/pepito.jpg" alt="Two toasted pepito sandwiches with ham and steak, crinkle fries and a cold drink" decoding="async"><span><b>Noon</b> Pepito</span></li>
-    <li class="dish" data-ar="1.183" data-h="15"><img src="assets/pabellon.jpg" alt="Shredded beef pabellón with black beans, fried plantain and a fried egg" decoding="async"><span><b>3 PM</b> Pabellón criollo</span></li>
-    <li class="dish" data-ar="1.263" data-h="18"><img src="assets/chicharron.jpg" alt="Golden cachapa covered in cream and cheese, piled with crispy chicharrón and a lime wedge" decoding="async"><span><b>6 PM</b> Cachapa with chicharrón</span></li>
-    <li class="dish" data-ar="0.398" data-h="21"><img src="assets/shake.jpg" alt="Tall milkshake in a mason jar with chocolate drizzle and a yellow straw" decoding="async"><span><b>9 PM</b> Shakes</span></li>
+    <li class="dish" data-ar="1.183" data-h="16"><img src="assets/pabellon.jpg" alt="Shredded beef pabellón with black beans, fried plantain and a fried egg" decoding="async"><span><b>4 PM</b> Pabellón criollo</span></li>
+    <li class="dish" data-ar="1.263" data-h="20"><img src="assets/chicharron.jpg" alt="Golden cachapa covered in cream and cheese, piled with crispy chicharrón and a lime wedge" decoding="async"><span><b>8 PM</b> Cachapa with chicharrón</span></li>
     <li class="dish" data-ar="1.929" data-h="24"><img src="assets/tequenos.jpg" alt="Tequeños pulled open, melted white cheese stretching from the pastry" decoding="async"><span><b>Midnight</b> Tequeños</span></li>
-    <li class="dish" data-ar="1.043" data-h="27"><img src="assets/tower.jpg" alt="A tall stack of golden patties, beef, ham, cheese, lettuce and tomato under white sauce, topped with grilled chorizo on a skewer, with fries" decoding="async"><span><b>3 AM</b> The big one</span></li>
+    <li class="dish" data-ar="0.398" data-h="28"><img src="assets/shake.jpg" alt="Tall milkshake in a mason jar with chocolate drizzle and a yellow straw" decoding="async"><span><b>4 AM</b> Shakes</span></li>
   </ul>
-  <p class="still" id="still"><span id="stillIn">Morning. <em>Still open.</em></span></p>
 
   <!-- the day's tickets: every dish that went out lands here -->
-  <div class="tickets" id="tickets" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="tickets" id="tickets" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
 
   <!-- holidays -->
   <section class="hol-copy" id="holCopy" aria-label="Holidays">
-    <div class="hol-in" id="holIn"><h2>Hallacas <em>season.</em></h2><p>Hallacas, pernil and party trays. Holiday combos feed six.</p></div>
+    <div class="hol-in" id="holIn"><h2>Holiday combos <em>for six.</em></h2></div>
   </section>
   <figure class="hol" data-ar="0.697"><img src="assets/pernil.jpg" alt="Tray of roast pernil, sliced, with crackling" decoding="async"><figcaption>Pernil</figcaption></figure>
   <figure class="hol" data-ar="1.317"><img src="assets/hallacas.jpg" alt="Rows of hallacas wrapped in banana leaves and tied with string" decoding="async"><figcaption>Hallacas</figcaption></figure>
@@ -203,19 +200,17 @@
   <!-- the close: their storefront, the cachapa in front of it -->
   <figure class="store" id="store" data-ar="1.303"><img src="assets/storefront.jpg" alt="The El Budare Cafe storefront at 94-06 Roosevelt Ave under the elevated train" decoding="async"></figure>
 
-  <!-- hero: their cachapa de pabellón, cut along its real edge. Its right side is the photo's edge, so it always sits on the screen's right edge -->
+  <!-- hero: their stacked patacón plate with a chorizo skewer, cut along its real edge from a 3072px photo -->
   <div class="hero" id="hero" aria-hidden="true">
-    <div class="hero-tilt" id="heroTilt"><div class="hero-bob"><img src="assets/cut-hero.webp?v=1" alt="" decoding="async"></div></div>
+    <div class="hero-tilt" id="heroTilt"><div class="hero-bob"><img src="assets/cut-hero.webp?v=2" alt="" decoding="async"></div></div>
   </div>
 
   <section class="order" id="order" aria-label="Order">
     <div class="od-in" id="odIn">
-      <h2>Pull up <em>a chair.</em></h2>
-      <p class="od-p">Order ahead on WhatsApp, or come by. Holiday combos and party trays too.</p>
-      <p class="od-line"><a href="https://wa.me/17188992404" target="_blank" rel="noopener">WhatsApp (718) 899-2404</a></p>
+      <h2>Two spots on <em>Roosevelt Ave.</em></h2>
       <ul class="spots">
-        <li><b>87-21 Roosevelt Ave</b><span>Jackson Heights, Queens · <a href="tel:+17188992404">(718) 899-2404</a></span></li>
-        <li><b>94-06 Roosevelt Ave</b><span>Open 24 hours · <a href="tel:+17182556695">(718) 255-6695</a></span></li>
+        <li><b>87-21 Roosevelt Ave</b><span>Café · <a href="tel:+17188992404">(718) 899-2404</a></span></li>
+        <li><b>94-06 Roosevelt Ave</b><span>Arepera, open 24 hours · <a href="tel:+17182556695">(718) 255-6695</a></span></li>
       </ul>
       <div class="map" id="map"><iframe id="mapFrame" title="Map of El Budare Café on Roosevelt Ave, Queens" loading="lazy" referrerpolicy="no-referrer-when-downgrade" data-src="https://www.google.com/maps?q=El+Budare+Cafe,+87-21+Roosevelt+Ave,+Queens,+NY&amp;z=14&amp;output=embed"></iframe></div>
       <span class="cta-slot" id="slotClose" aria-hidden="true"></span>
@@ -230,6 +225,6 @@
 <div class="spacer" id="spacer" aria-hidden="true"></div>
 
 <script src="liquid-glass.js?v=1" defer></script>
-<script src="site.js?v=6" defer></script>
+<script src="site.js?v=10" defer></script>
 </body>
 </html>

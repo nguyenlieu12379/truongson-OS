@@ -78,3 +78,12 @@ One fixed stage, zero scrolling: the scroll only drives motion (PREFS 10).
 
 - Used: name, both addresses, WhatsApp (718) 899-2404, (718) 255-6695 at 94-06, 94-06 open 24 hours, holiday combos for 6, 4.6 on Google with 2,000+ reviews, the dishes shown in their posts.
 - **To confirm:** whether budarecafe.com is a live site; hours for 87-21 (one post says open till 1 AM); dish names for "The big one" stack (named by us from the photo); whether they want the Google rating shown.
+
+## Revisions
+
+- 2026-11-25 (Son): "the background mustn't be noticable color". The flag-colour sky is gone; one flat clean ground.
+- 2026-11-25 (Son): "the CTA and the map got cut off screen". The order card now fits any window height: the map shrinks first, then the rating line drops.
+- 2026-11-25 (Son): "i dont like the font of hero (take the font of the logo)". Wordmark and clock are now Chewy, the closest free match to their sign and logo lettering.
+- 2026-11-25 (Son): "the food's cut image looks off, letter overlap". The hero is now their patacón stack, a whole object cut from a 3072px photo, never clipped by the screen. The tagline sits under the word and can't touch it; the stack overlaps only the last letter, which sizzles.
+- 2026-11-25 (Son): "shorten the text, dont write random text, each must do one job". Hero: one line (what and where). Clock: "Open 24 hours". Holidays: "Holiday combos for six." Card: "Two spots on Roosevelt Ave." plus the two addresses. The sub-copy, "Still open." and the WhatsApp line in the card (the button does that job) are gone. The stack dish left the clock (it is the hero); five dishes now, every four hours, noon to noon.
+- 2026-11-25 (Son): "the whole page looks empty" in the clock scene. Desktop is now two columns: the clock, its line and the tickets on the left; the dish fills the right side.
