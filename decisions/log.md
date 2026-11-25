@@ -484,3 +484,13 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Open before the client sees it:** lead times, pickup or delivery, whether to show the Google rating; a real-phone check.
 
 **Owner:** not stated (Son or Truong)
+
+## 2026-11-25: Gochón approved; centred moving hero and unbroken hand-offs become defaults
+
+**Decision:** The Gochón spec demo (Doral FL, Venezuelan pasapalos) is approved ("one of the best") and added to the Sites list and the Pages index. New standing rules in `standing-preferences.md`: centred hero with constant motion; no fades between scenes (each scene's end builds the next); real product cutouts in place of a list of products in copy; a few cutouts drifting through blank space; no tag nav or progress timeline in the header; CTA buttons with a light sweep and a typing bubble.
+
+**Why:** v1 (off-centre hero, fades, a tag nav then a timeline) read as "a little off" and "useless". v2 with these changes was approved.
+
+**Open before the client sees it:** prices (from their 2025 graphics), Sunday closing time (4 PM or 3 PM); a real-phone check.
+
+**Owner:** not stated (Son or Truong)

@@ -26,6 +26,11 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - Hero cutout and the cursor (Son, 2026-11-24, Pakachi): it leans toward the pointer around its own centre, about 8deg up/down and 11deg sideways. Direct: no inertia or spring, no light sheen, no slide, and the wordmark behind it stays still. Keep enough overscan that cut edges never show.
 
 ## Style and world
+- Hero: centre focus with constant motion. The hero subject sits in the middle and keeps moving even with no scroll (breathing, bobbing, slight lean), like Brazilian Taste, Pakachi and Sweets. An off-centre hero with a text column on the side reads "a little off" (Gochón, 2026-11-25).
+- No fades between scenes. Each scene's end builds the next one's start: a frame grows out of an object in the last scene, a label slides onto its next anchor, a pan carries on, a photo rolls up over the last. Fading things in and out reads as cuts (Gochón, 2026-11-25).
+- Prefer real cutouts over a line of copy where a list of products would go (Gochón: the five pieces with name and price replaced the "Tequeños, empanadas..." sentence).
+- Fill blank space with a few real product cutouts drifting slowly through each scene, placed clear of text. Not a nav, not widgets (Gochón, 2026-11-25).
+- No header nav of blocky tags or a progress timeline: "useless". The bar is wordmark, CTA, theme toggle (Gochón, 2026-11-25).
 - Serious business, not playful: confident text faces, no novelty or cartoon display fonts, brand colour used with restraint (Son, 2026-11-25, El Budare).
 - Value before motion: every scene answers a customer question (what to order with real names and prices, hours, where, why people come back). Motion and widgets without content read as empty (Son, 2026-11-25).
 - Frame shapes follow the dish: tall frames for dishes shot vertical (lunch boxes, long tables), wide for tray rows, square for bowls. Never crop everything to one landscape shape (Son, 2026-11-24).
@@ -38,6 +43,7 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - Four must-haves from `websites/README.md`: one engineered peak, layered hero, real photos, no AI tells.
 
 ## UI material
+- CTA buttons carry a little motion: a light sweep across the pill every few seconds and a WhatsApp bubble with typing dots (Gochón, 2026-11-25).
 - The light/dark toggle always sits in the bar's far corner. The travelling button docks beside it, so the toggle never floats mid-bar when the button is elsewhere (Son, 2026-11-25).
 - Cursor ball: the Espresso Vivace ball, exactly: its size (112px), its style (rim, highlight, dark inner edge, gloss, drop shadow) and its motion (spring stiffness 0.14, damping 0.72, stretch speed x 0.018, max 0.42; see `builds/espresso-vivace/site.js`). The Brazilian Taste drag is no longer the default: "too fluid" (2026-11-24, Sweets by Carla G pre-build). Don't resize, restyle or re-tune it unless asked. Liquid glass with a clear lens plus this ball is the default UI material (Son, 2026-11-25).
 - No glass venom strands (Son removed them, 2026-11-23).

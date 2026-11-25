@@ -3,7 +3,7 @@
 Spec site for Gochón, a Venezuelan pasapalos counter at 7868 NW 52nd St, Doral FL. WhatsApp 786-670-5020. Built 2026-11-25 with `/site-building` (pre-build defaults, scroll-craft, liquid glass).
 
 - Brief, grammar, feeling curve, gate: `BRIEF.md`. Preferences: `PREFS.md`. Facts and what to confirm: `RESEARCH.md`. Photo sources: `assets/source/SOURCES.md`.
-- Live (noindex): https://nguyenlieu12379.github.io/truongson-OS/gochon/ after the Pages deploy. Not in the approved Sites list until Son or Truong approve it.
+- Live (noindex): https://nguyenlieu12379.github.io/truongson-OS/gochon/ Approved 2026-11-25 ("one of the best").
 
 ## Run locally
 

@@ -5,7 +5,7 @@ name: Deploy websites to GitHub Pages
 # /brazilian-taste/ -> websites/TruongSon-demos/scrollcraft/builds/brazilian-taste (prospect demo, scroll-craft, noindex)
 # /pakachi-kitchen/ -> websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen (prospect demo, scroll-craft, noindex)
 # /sweets-by-carla-g/ -> websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g (prospect demo, scroll-craft, noindex)
-# /gochon/ -> websites/TruongSon-demos/scrollcraft/builds/gochon (prospect demo, scroll-craft, noindex, not in the list until approved)
+# /gochon/ -> websites/TruongSon-demos/scrollcraft/builds/gochon (prospect demo, scroll-craft, noindex)
 # /             -> a plain list of the approved sites (no primary demo, noindex)
 # Every push to main that touches these paths redeploys all sites.
 
@@ -67,6 +67,7 @@ jobs:
             <li><a href="brazilian-taste/">Brazilian Taste</a></li>
             <li><a href="pakachi-kitchen/">Pakachi Kitchen</a></li>
             <li><a href="sweets-by-carla-g/">Sweets by Carla G</a></li>
+            <li><a href="gochon/">Gochón</a></li>
           </ul>
           HTML
           touch _site/.nojekyll
