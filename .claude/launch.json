@@ -60,6 +60,18 @@
         "4512"
       ],
       "port": 4512
+    },
+    {
+      "name": "gochon",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        ".claude/skills/site-building/scripts/serve.mjs",
+        "--root",
+        "websites/TruongSon-demos/scrollcraft/builds/gochon",
+        "--port",
+        "4513"
+      ],
+      "port": 4513
     }
   ]
 }

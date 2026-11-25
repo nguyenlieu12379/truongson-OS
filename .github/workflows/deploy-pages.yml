@@ -5,6 +5,7 @@ name: Deploy websites to GitHub Pages
 # /brazilian-taste/ -> websites/TruongSon-demos/scrollcraft/builds/brazilian-taste (prospect demo, scroll-craft, noindex)
 # /pakachi-kitchen/ -> websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen (prospect demo, scroll-craft, noindex)
 # /sweets-by-carla-g/ -> websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g (prospect demo, scroll-craft, noindex)
+# /gochon/ -> websites/TruongSon-demos/scrollcraft/builds/gochon (prospect demo, scroll-craft, noindex, not in the list until approved)
 # /             -> a plain list of the approved sites (no primary demo, noindex)
 # Every push to main that touches these paths redeploys all sites.
 
@@ -49,6 +50,9 @@ jobs:
           mkdir -p _site/sweets-by-carla-g
           cp -R websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g/. _site/sweets-by-carla-g/
           rm -rf _site/sweets-by-carla-g/README.md _site/sweets-by-carla-g/BRIEF.md _site/sweets-by-carla-g/PREFS.md _site/sweets-by-carla-g/serve.ps1 _site/sweets-by-carla-g/assets/source
+          mkdir -p _site/gochon
+          cp -R websites/TruongSon-demos/scrollcraft/builds/gochon/. _site/gochon/
+          rm -rf _site/gochon/README.md _site/gochon/BRIEF.md _site/gochon/PREFS.md _site/gochon/RESEARCH.md _site/gochon/assets/source
           cat > _site/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">
