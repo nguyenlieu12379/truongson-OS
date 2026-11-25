@@ -125,7 +125,7 @@
 })(document.documentElement);
 </script>
 <link rel="stylesheet" href="liquid-glass.css?v=1">
-<link rel="stylesheet" href="site.css?v=5">
+<link rel="stylesheet" href="site.css?v=6">
 </head>
 <body>
 <a class="skip" href="#order">Skip to ordering</a>
@@ -135,18 +135,6 @@
     <span class="wm">Gochón</span>
     <span class="brand-sub">Venezuelan pasapalos · Doral</span>
   </a>
-  <nav class="line" id="line" aria-label="Page timeline" style="--n:6">
-    <div class="rail" aria-hidden="true"><i class="fill" id="lineFill"></i><i class="head" id="lineHead"></i></div>
-    <div class="stops">
-      <button type="button" class="stop" data-go="0" data-p="0" style="--i:0"><span class="pip" aria-hidden="true"></span><span class="nm">Start</span></button>
-      <button type="button" class="stop" data-go="0.17" data-p="0.17" style="--i:1"><span class="pip" aria-hidden="true"></span><span class="nm">Pieces</span></button>
-      <button type="button" class="stop" data-go="0.4" data-p="0.4" style="--i:2"><span class="pip" aria-hidden="true"></span><span class="nm">Counter</span></button>
-      <button type="button" class="stop" data-go="0.655" data-p="0.655" style="--i:3"><span class="pip" aria-hidden="true"></span><span class="nm">Boxes</span></button>
-      <button type="button" class="stop" data-go="0.735" data-p="0.735" style="--i:4"><span class="pip" aria-hidden="true"></span><span class="nm">Wholesale</span></button>
-      <button type="button" class="stop" data-go="0.83" data-p="0.83" style="--i:5"><span class="pip" aria-hidden="true"></span><span class="nm">Inside</span></button>
-      <button type="button" class="stop" data-go="1" data-p="1" style="--i:6"><span class="pip" aria-hidden="true"></span><span class="nm">Visit</span></button>
-    </div>
-  </nav>
   <div class="bar-end">
     <a class="cta lg-glass" href="https://wa.me/17866705020?text=Hi%20Goch%C3%B3n%2C%20I%27d%20like%20to%20order" target="_blank" rel="noopener"><svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/><circle class="d d2" cx="12" cy="12" r="1.15"/><circle class="d d3" cx="15.6" cy="12" r="1.15"/></svg><span class="lbl">Order<span class="opt"> on WhatsApp</span></span></a>
     <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
@@ -158,20 +146,29 @@
 
 <main class="stage" id="stage">
   <!-- 1 hero: their tray (clean plate) with the three pieces cut out on top -->
-  <section class="copy hero-copy" id="heroCopy" aria-labelledby="h1">
+  <section class="hero-copy" id="heroCopy" aria-labelledby="h1">
     <h1 id="h1">Venezuelan pasapalos, <em>fried fresh</em> in Doral.</h1>
-    <p class="lede">Tequeños, empanadas, pastelitos, papitas and mandocas. By the piece, by the box, or frozen to fry at home.</p>
-    <p class="open" id="openLine"><span class="dot" aria-hidden="true"></span><span id="openText">Mon to Sat 7 AM to 7 PM, Sun 7 AM to 4 PM</span></p>
-    <p class="addr">7868 NW 52nd St, Doral &nbsp;·&nbsp; <a href="tel:+13056312248">305-631-2248</a></p>
+    <p class="meta"><span class="open" id="openLine"><span class="dot" aria-hidden="true"></span><span id="openText">Mon to Sat 7 AM to 7 PM, Sun 7 AM to 4 PM</span></span><span class="sep" aria-hidden="true">·</span><span>7868 NW 52nd St, Doral</span><span class="sep" aria-hidden="true">·</span><a href="tel:+13056312248">305-631-2248</a></p>
   </section>
+  <p class="sr-only">On the counter: tequeños $1.50, papitas $2.00, mandocas $2.00, empanadas $1.50, pastelitos $1.50. By the piece, by the box, or frozen to fry at home.</p>
+  <img class="pc" id="d-tequeno" src="assets/p-tequeno.webp" width="420" height="372" alt="">
+  <p class="cap" id="c-tequeno"><b>Tequeño</b> <i>$1.50</i></p>
+  <img class="pc" id="d-papita" src="assets/p-papita.webp" width="313" height="313" alt="">
+  <p class="cap" id="c-papita"><b>Papita</b> <i>$2.00</i></p>
+  <img class="pc" id="d-mandoca" src="assets/p-mandoca.webp" width="343" height="359" alt="">
+  <p class="cap" id="c-mandoca"><b>Mandoca</b> <i>$2.00</i></p>
+  <img class="pc" id="d-empanada" src="assets/p-empanada.webp" width="278" height="400" alt="">
+  <p class="cap" id="c-empanada"><b>Empanada</b> <i>$1.50</i></p>
+  <img class="pc" id="d-pastelito" src="assets/p-pastelito.webp" width="336" height="331" alt="">
+  <p class="cap" id="c-pastelito"><b>Pastelito</b> <i>$1.50</i></p>
   <div class="frame" id="heroFrame"><img src="assets/tray-plate.jpg" alt="" width="1080" height="1500"></div>
   <img class="pieces" id="pieces" src="assets/pieces.webp" width="735" height="597" alt="A mandoca, a papita and a tequeño on a paper tray">
 
   <!-- 2 one of each -->
   <div class="scene-head" id="oneHead"><h2>One of each, <span class="red">$5.50.</span></h2><p>Three of the five pieces on the counter. Every piece is $1.50 or $2.00.</p></div>
-  <div class="label" id="lbMandoca" data-anchor="0.50,0.10"><b>Mandoca</b><span>Fried corn ring</span><i>$2.00</i></div>
-  <div class="label" id="lbPapita" data-anchor="0.22,0.70"><b>Papita</b><span>Fried potato ball</span><i>$2.00</i></div>
-  <div class="label" id="lbTequeno" data-anchor="0.83,0.40"><b>Tequeño</b><span>Cheese wrapped in dough</span><i>$1.50</i></div>
+  <div class="label" id="lbMandoca"><b>Mandocas</b><span>Corn rings</span><i>$2.00</i></div>
+  <div class="label" id="lbPapita"><b>Papitas</b><span>Potato balls</span><i>$2.00</i></div>
+  <div class="label" id="lbTequeno"><b>Tequeño</b><span>Cheese wrapped in dough</span><i>$1.50</i></div>
 
   <!-- 3 the counter (peak): their display case, their shelf tags become the menu -->
   <div class="frame case" id="caseFrame">
@@ -188,7 +185,7 @@
   <div class="label tag" id="tgMandocas"><b>Mandocas</b><span>Corn rings</span><i>$2.00</i></div>
 
   <!-- 4 boxes + wholesale -->
-  <div class="frame" id="boxesFrame"><img src="assets/boxes.jpg" alt="Three open boxes of tequeños, empanadas and pastelitos on a counter" width="720" height="620" loading="lazy"></div>
+  <div class="frame" id="boxesFrame"><img src="assets/boxes.jpg" alt="Three open boxes of tequeños, empanadas and pastelitos on a counter" width="720" height="620"></div>
   <section class="copy boxes-copy" id="boxesCopy" aria-labelledby="hBoxes">
     <h2 id="hBoxes">Party boxes.</h2>
     <table class="prices">
@@ -197,7 +194,7 @@
     </table>
     <p>Pick up at the counter, or we send it with Uber or DoorDash. Order the box on WhatsApp.</p>
   </section>
-  <div class="frame" id="boxFrame"><img src="assets/box.jpg" alt="A full Gochón box of tequeños, pastelitos, empanadas and mandocas" width="1080" height="1920" loading="lazy"></div>
+  <div class="frame" id="boxFrame"><img src="assets/box.jpg" alt="A full Gochón box of tequeños, pastelitos, empanadas and mandocas" width="1080" height="1920"></div>
   <section class="copy bulk-copy" id="bulkCopy" aria-labelledby="hBulk">
     <h2 id="hBulk">Frozen, <span class="red">wholesale.</span></h2>
     <p>Tequeños, empanadas, pastelitos, mandocas and papitas also come frozen, wholesale. Fry them at home, or sell them in your own shop.</p>
@@ -205,7 +202,7 @@
   </section>
 
   <!-- 5 inside -->
-  <div class="frame" id="pullFrame"><img src="assets/pull.jpg" alt="A tequeño pulled apart, the white cheese stretching" width="1080" height="1920" loading="lazy"></div>
+  <div class="frame" id="pullFrame"><img src="assets/pull.jpg" alt="A tequeño pulled apart, the white cheese stretching" width="1080" height="1920"></div>
   <section class="copy pull-copy" id="pullCopy" aria-labelledby="hPull">
     <h2 id="hPull">Why Doral <span class="red">keeps coming back.</span></h2>
     <dl class="facts">
@@ -215,7 +212,7 @@
   </section>
 
   <!-- 6 visit -->
-  <div class="frame" id="storeFrame"><img src="assets/store.jpg" alt="The Gochón storefront on NW 52nd St, red awning, open sign" width="1080" height="1400" loading="lazy"></div>
+  <div class="frame" id="storeFrame"><img src="assets/store.jpg" alt="The Gochón storefront on NW 52nd St, red awning, open sign" width="1080" height="1400"></div>
   <section class="card" id="order" aria-labelledby="hOrder">
     <h2 id="hOrder">Come to the counter.</h2>
     <p class="open" id="openLine2"><span class="dot" aria-hidden="true"></span><span id="openText2"></span></p>
@@ -234,7 +231,7 @@
 <p class="demo-note">Concept site prepared for Gochón. Photos from @gochondoral.</p>
 
 <script src="liquid-glass.js?v=1" defer></script>
-<script src="site.js?v=3" defer></script>
+<script src="site.js?v=6" defer></script>
 <script>addEventListener("DOMContentLoaded", function () { if (window.LiquidGlass) { LiquidGlass.cursorBall(); LiquidGlass.glassify(".lg-glass"); } });</script>
 </body>
 </html>

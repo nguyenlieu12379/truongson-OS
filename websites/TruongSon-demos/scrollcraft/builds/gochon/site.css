@@ -145,34 +145,6 @@ a[href^="tel:"] { white-space: nowrap; }
 }
 
 
-/* ---- header timeline: a rail with one stop per scene ----------------------- */
-.line { position: relative; flex: 1 1 auto; max-width: 760px; min-width: 0; margin: 0 auto; height: 44px; }
-.rail { position: absolute; left: 0; right: 0; top: 12px; height: 2px; background: var(--line); border-radius: 2px; }
-.fill { position: absolute; inset: 0; background: var(--red); border-radius: 2px; transform-origin: 0 50%; transform: scaleX(0); }
-.head { position: absolute; left: 0; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--red);
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--red) 18%, transparent); }
-.stops { position: absolute; inset: 0; }
-.stop { position: absolute; top: 0; left: calc(var(--i) / var(--n) * 100%); transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 6px 4px; margin-top: 0;
-  background: none; border: 0; color: var(--ink-soft); cursor: pointer; font: 500 12.5px/1 var(--f-text); white-space: nowrap; }
-.stop:first-child { transform: translateX(-4px); align-items: flex-start; }
-.stop:last-child { transform: translateX(calc(-100% + 4px)); align-items: flex-end; }
-.pip { width: 8px; height: 8px; border-radius: 50%; background: var(--bg); border: 1.5px solid var(--ink-soft); transition: background-color 200ms ease, border-color 200ms ease, transform 200ms ease; }
-.stop.past .pip { background: var(--red); border-color: var(--red); }
-.stop.now { color: var(--ink); font-weight: 650; }
-.stop.now .pip { transform: scale(1.35); border-color: var(--red); background: var(--bg); }
-.stop:hover { color: var(--ink); }
-.stop:hover .pip { transform: scale(1.3); }
-@media (max-width: 1100px) { .stop .nm { display: none; } .stop.now .nm { display: block; } }
-@media (max-width: 760px) {
-  .line { position: absolute; left: 16px; right: 16px; bottom: 0; height: 14px; max-width: none; }
-  .rail { top: 6px; }
-  .stop { padding: 3px; } .stop .nm, .stop.now .nm { display: none; }
-  .pip { width: 6px; height: 6px; }
-  .head { width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; }
-  .bar-end { margin-left: auto; }
-}
-
 /* ---- CTA motion: a light sweep across the pill, and a WhatsApp bubble typing -- */
 .cta { position: relative; overflow: hidden; isolation: isolate; gap: 9px; }
 .cta .wa { width: 20px; height: 20px; flex: none; }
@@ -194,9 +166,26 @@ a[href^="tel:"] { white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) { .cta::after, .cta .wa .d { animation: none; } .pip { transition: none; } }
 
 @media (max-width: 760px) {
-  .bar { height: 66px; align-items: flex-start; padding-top: 10px; }
-  .stage { inset: 66px 0 0 0; }
   .bar .cta { height: 38px; min-height: 38px; padding: 0 14px; }
-  .line { bottom: 2px; }
 }
 @media (max-width: 430px) { .bar .cta .opt { display: none; } }
+
+.bar-end { margin-left: auto; }
+.sr-only { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* ---- hero: centred tray, the five pieces around it ---------------------------- */
+.hero-copy { text-align: center; z-index: 5; }
+.hero-copy h1 { margin: 0 auto; font: 700 clamp(38px, 4.6vw, 78px)/0.98 var(--f-display); font-stretch: 86%; letter-spacing: -0.015em; max-width: 18ch; }
+.hero-copy h1 em { font-style: normal; color: var(--red); }
+.meta { margin: 14px 0 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 10px; color: var(--ink-soft); font-size: 15px; }
+.meta .open { display: inline-flex; color: var(--ink); }
+.meta a { text-decoration-color: var(--red); text-underline-offset: 3px; }
+.sep { opacity: 0.5; }
+.pc { z-index: 4; pointer-events: none; transform-origin: 50% 50%; filter: drop-shadow(0 14px 14px rgb(60 30 5 / 0.25)); }
+.cap { z-index: 4; margin: 0; white-space: nowrap; font: 600 14px/1 var(--f-display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
+.cap i { font-style: normal; color: var(--red); margin-left: 4px; letter-spacing: 0; }
+@media (max-width: 760px) {
+  .meta { font-size: 13px; gap: 4px 8px; margin-top: 8px; }
+  .meta .sep:first-of-type { display: none; }
+  .cap { font-size: 11px; letter-spacing: 0.03em; }
+  .cap i { display: block; margin: 3px 0 0; text-align: center; }
+}

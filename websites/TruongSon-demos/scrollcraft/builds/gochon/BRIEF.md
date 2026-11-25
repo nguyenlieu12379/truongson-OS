@@ -72,3 +72,9 @@ Track about 10.5 viewport heights, 6 scenes (outside the 6-7 acts at 13.6-13.8vh
 
 ## Authored silence
 None.
+
+## Revision 2 (2026-11-25, Son's notes)
+- Hero centred with constant motion (like Brazilian Taste, Pakachi, Sweets): the tray in the middle, the three pieces breaking out of it and breathing, the five pieces of the counter floating around it with names and prices (replaces the line of text).
+- No fades between scenes. Each scene's end builds the next: the tray drops away, the counter grows from behind the pieces, labels slide onto their shelf tags, the pan carries into the boxes, the right box grows into the full box, the cheese pull rolls up over it, then slides onto the storefront and rolls up.
+- The header nav (shelf tags, then a timeline) is gone. The five cutouts drift through each scene's blank space instead.
+- WhatsApp buttons: a light sweep and a typing bubble.
