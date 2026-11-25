@@ -1,0 +1,2 @@
+{ "name": "flight-deck-film", "private": true, "type": "module",
+  "dependencies": { "three": "0.187.0", "puppeteer-core": "25.12.0" } }

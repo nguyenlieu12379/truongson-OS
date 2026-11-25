@@ -30,6 +30,7 @@ Each pack is a full copy of one Sunaii kit with its own `VENDORED.md` (source an
 
 - **video-edit-kit:** talking-head editing, Reels and Shorts, HyperFrames motion graphics. Use for video or Instagram content. Path: `.claude/skills/video-edit-kit/`. Entry: `.claude/skills/video-edit-kit/AGENTS.md`, then `docs/WORKFLOW.md`
 - **craft-anything (storytold, MIT/Apache), `/craft-anything`:** study a website, web app or app, then rebuild our own version. Early alpha. Not set up. Only for software we own or have permission to copy; never a competitor's. Path: `.claude/skills/craft-anything/`. Entry: `.claude/skills/craft-anything/SKILL.md`, then the pack's `README.md`
+- **3d-animator (@holcdenis, no license stated):** cinematic 3D films and reels in code (three.js rendered in headless Chrome, no Blender). 8 stages from plan to posted reel, 4 looks (lit, clay, toon, neon). Free; needs Node 20+ and ffmpeg. Fine for our own Instagram; ask the author before client work. Path: `.claude/skills/3d-animator/`. Entry: `.claude/skills/3d-animator/SKILL.md`, then `kit/`
 
 ## Where things live
 

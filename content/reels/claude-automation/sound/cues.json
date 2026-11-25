@@ -1,0 +1,452 @@
+{
+ "length": 45,
+ "target_lufs": -14,
+ "voice": {
+  "file": "sound/voice.wav",
+  "at": 0,
+  "gain_db": 0
+ },
+ "music": {
+  "file": "sound/music.wav",
+  "start": 0,
+  "gain_db": -17,
+  "duck": true,
+  "fade_out": 1.2
+ },
+ "sfx": [
+  {
+   "file": "sound/sfx/pop1.wav",
+   "at": 0.02,
+   "gain_db": -10,
+   "why": "computer pops in"
+  },
+  {
+   "file": "sound/sfx/pop2.wav",
+   "at": 0.22,
+   "gain_db": -11,
+   "why": "keyboard lands"
+  },
+  {
+   "file": "sound/sfx/switch.wav",
+   "at": 0.8,
+   "gain_db": -9,
+   "why": "lamp switches on"
+  },
+  {
+   "file": "sound/sfx/blip.wav",
+   "at": 3.28,
+   "gain_db": -16,
+   "why": "screen: intro"
+  },
+  {
+   "file": "sound/sfx/whoosh.wav",
+   "at": 2.98,
+   "gain_db": -20,
+   "why": "camera move into intro"
+  },
+  {
+   "file": "sound/sfx/blip.wav",
+   "at": 5.874,
+   "gain_db": -16,
+   "why": "screen: s1"
+  },
+  {
+   "file": "sound/sfx/whoosh.wav",
+   "at": 5.574,
+   "gain_db": -20,
+   "why": "camera move into s1"
+  },
+  {
+   "file": "sound/sfx/blip.wav",
+   "at": 11.671,
+   "gain_db": -16,
+   "why": "screen: s2"
+  },
+  {
+   "file": "sound/sfx/whoosh.wav",
+   "at": 11.371,
+   "gain_db": -20,
+   "why": "camera move into s2"
+  },
+  {
+   "file": "sound/sfx/blip.wav",
+   "at": 18.015,
+   "gain_db": -16,
+   "why": "screen: s3"
+  },
+  {
+   "file": "sound/sfx/whoosh.wav",
+   "at": 17.715,
+   "gain_db": -20,
+   "why": "camera move into s3"
+  },
+  {
+   "file": "sound/sfx/blip.wav",
+   "at": 24.403,
+   "gain_db": -16,
+   "why": "screen: s4"
+  },
+  {
+   "file": "sound/sfx/whoosh.wav",
+   "at": 24.103,
+   "gain_db": -20,
+   "why": "camera move into s4"
+  },
+  {
+   "file": "sound/sfx/blip.wav",
+   "at": 29.84,
+   "gain_db": -16,
+   "why": "screen: s5"
+  },
+  {
+   "file": "sound/sfx/whoosh.wav",
+   "at": 29.54,
+   "gain_db": -20,
+   "why": "camera move into s5"
+  },
+  {
+   "file": "sound/sfx/blip.wav",
+   "at": 35.558,
+   "gain_db": -16,
+   "why": "screen: fix"
+  },
+  {
+   "file": "sound/sfx/whoosh.wav",
+   "at": 35.258,
+   "gain_db": -20,
+   "why": "camera move into fix"
+  },
+  {
+   "file": "sound/sfx/blip.wav",
+   "at": 39.532,
+   "gain_db": -16,
+   "why": "screen: cta"
+  },
+  {
+   "file": "sound/sfx/whoosh.wav",
+   "at": 39.232,
+   "gain_db": -20,
+   "why": "camera move into cta"
+  },
+  {
+   "file": "sound/sfx/pop1.wav",
+   "at": 0.35,
+   "gain_db": -15,
+   "why": "pop \"chat\""
+  },
+  {
+   "file": "sound/sfx/typing.wav",
+   "at": 0.5,
+   "gain_db": -12,
+   "why": "typing \"can you help\"",
+   "trim": 0.85
+  },
+  {
+   "file": "sound/sfx/typing.wav",
+   "at": 1.367,
+   "gain_db": -12,
+   "why": "typing \"me with this?\"",
+   "trim": 0.917
+  },
+  {
+   "file": "sound/sfx/scratch.wav",
+   "at": 2.35,
+   "gain_db": -11,
+   "why": "red strike"
+  },
+  {
+   "file": "sound/sfx/pop2.wav",
+   "at": 2.4,
+   "gain_db": -15,
+   "why": "pop \"CHATBOT\""
+  },
+  {
+   "file": "sound/sfx/typing.wav",
+   "at": 3.28,
+   "gain_db": -12,
+   "why": "typing \"> claude\"",
+   "trim": 0.583
+  },
+  {
+   "file": "sound/sfx/pop3.wav",
+   "at": 3.982,
+   "gain_db": -15,
+   "why": "pop \"AUTOMATE\""
+  },
+  {
+   "file": "sound/sfx/pop1.wav",
+   "at": 4.442,
+   "gain_db": -15,
+   "why": "pop \"PROPERLY.\""
+  },
+  {
+   "file": "sound/sfx/pop2.wav",
+   "at": 4.792,
+   "gain_db": -15,
+   "why": "pop \"5 RULES\""
+  },
+  {
+   "file": "sound/sfx/pop3.wav",
+   "at": 5.874,
+   "gain_db": -15,
+   "why": "pop \"01\""
+  },
+  {
+   "file": "sound/sfx/typing.wav",
+   "at": 6.697,
+   "gain_db": -12,
+   "why": "typing \"PICK ONE TASK\"",
+   "trim": 0.917
+  },
+  {
+   "file": "sound/sfx/pop1.wav",
+   "at": 7.868,
+   "gain_db": -15,
+   "why": "pop \"+ repeats weekly\""
+  },
+  {
+   "file": "sound/sfx/pop2.wav",
+   "at": 9.051,
+   "gain_db": -15,
+   "why": "pop \"- your whole job\""
+  },
+  {
+   "file": "sound/sfx/scratch.wav",
+   "at": 9.372,
+   "gain_db": -11,
+   "why": "red strike"
+  },
+  {
+   "file": "sound/sfx/pop3.wav",
+   "at": 10.101,
+   "gain_db": -15,
+   "why": "pop \"= ONE TASK\""
+  },
+  {
+   "file": "sound/sfx/pop1.wav",
+   "at": 11.671,
+   "gain_db": -15,
+   "why": "pop \"02\""
+  },
+  {
+   "file": "sound/sfx/typing.wav",
+   "at": 12.518,
+   "gain_db": -12,
+   "why": "typing \"WRITE A SKILL\"",
+   "trim": 0.917
+  },
+  {
+   "file": "sound/sfx/pop2.wav",
+   "at": 13.007,
+   "gain_db": -15,
+   "why": "pop \"SKILL.md\""
+  },
+  {
+   "file": "sound/sfx/typing.wav",
+   "at": 13.107,
+   "gain_db": -12,
+   "why": "typing \"1 pull the data\"",
+   "trim": 1.05
+  },
+  {
+   "file": "sound/sfx/typing.wav",
+   "at": 14.174,
+   "gain_db": -12,
+   "why": "typing \"2 clean it up\"",
+   "trim": 0.917
+  },
+  {
+   "file": "sound/sfx/typing.wav",
+   "at": 15.107,
+   "gain_db": -12,
+   "why": "typing \"3 send the report\"",
+   "trim": 1.183
+  },
+  {
+   "file": "sound/sfx/pop3.wav",
+   "at": 16.228,
+   "gain_db": -15,
+   "why": "pop \"SAME. EVERY. TIME.\""
+  },
+  {
+   "file": "sound/sfx/pop1.wav",
+   "at": 18.015,
+   "gain_db": -15,
+   "why": "pop \"03\""
+  },
+  {
+   "file": "sound/sfx/typing.wav",
+   "at": 18.907,
+   "gain_db": -12,
+   "why": "typing \"GIVE IT TOOLS\"",
+   "trim": 0.917
+  },
+  {
+   "file": "sound/sfx/pop2.wav",
+   "at": 19.353,
+   "gain_db": -15,
+   "why": "pop \"CLAUDE\""
+  },
+  {
+   "file": "sound/sfx/pop3.wav",
+   "at": 21.057,
+   "gain_db": -15,
+   "why": "pop \"APPS\""
+  },
+  {
+   "file": "sound/sfx/pop1.wav",
+   "at": 21.636,
+   "gain_db": -15,
+   "why": "pop \"MCP\""
+  },
+  {
+   "file": "sound/sfx/pop2.wav",
+   "at": 23.029,
+   "gain_db": -15,
+   "why": "pop \"SCRIPT\""
+  },
+  {
+   "file": "sound/sfx/pop3.wav",
+   "at": 24.403,
+   "gain_db": -15,
+   "why": "pop \"04\""
+  },
+  {
+   "file": "sound/sfx/typing.wav",
+   "at": 25.26,
+   "gain_db": -12,
+   "why": "typing \"CHECK ITS WORK\"",
+   "trim": 0.983
+  },
+  {
+   "file": "sound/sfx/ding.wav",
+   "at": 26.906,
+   "gain_db": -12,
+   "why": "tick \"TESTS\""
+  },
+  {
+   "file": "sound/sfx/ding.wav",
+   "at": 27.323,
+   "gain_db": -12,
+   "why": "tick \"SCREENSHOTS\""
+  },
+  {
+   "file": "sound/sfx/ding.wav",
+   "at": 28.184,
+   "gain_db": -12,
+   "why": "tick \"SECOND LOOK\""
+  },
+  {
+   "file": "sound/sfx/pop1.wav",
+   "at": 29.84,
+   "gain_db": -15,
+   "why": "pop \"05\""
+  },
+  {
+   "file": "sound/sfx/typing.wav",
+   "at": 30.764,
+   "gain_db": -12,
+   "why": "typing \"PUT IT ON\"",
+   "trim": 0.65
+  },
+  {
+   "file": "sound/sfx/typing.wav",
+   "at": 31.431,
+   "gain_db": -12,
+   "why": "typing \"A TRIGGER\"",
+   "trim": 0.65
+  },
+  {
+   "file": "sound/sfx/pop2.wav",
+   "at": 32.166,
+   "gain_db": -15,
+   "why": "pop \"schedule  09:00\""
+  },
+  {
+   "file": "sound/sfx/pop3.wav",
+   "at": 32.915,
+   "gain_db": -15,
+   "why": "pop \"hook  on new file\""
+  },
+  {
+   "file": "sound/sfx/ding.wav",
+   "at": 35.458,
+   "gain_db": -12,
+   "why": "run done"
+  },
+  {
+   "file": "sound/sfx/pop1.wav",
+   "at": 37.098,
+   "gain_db": -15,
+   "why": "pop \"FIX THE SKILL.\""
+  },
+  {
+   "file": "sound/sfx/pop2.wav",
+   "at": 37.892,
+   "gain_db": -15,
+   "why": "pop \"NOT THE OUTPUT.\""
+  },
+  {
+   "file": "sound/sfx/scratch.wav",
+   "at": 38.312,
+   "gain_db": -11,
+   "why": "red strike"
+  },
+  {
+   "file": "sound/sfx/typing.wav",
+   "at": 39.532,
+   "gain_db": -12,
+   "why": "typing \"COMMENT\"",
+   "trim": 0.517
+  },
+  {
+   "file": "sound/sfx/typing.wav",
+   "at": 39.929,
+   "gain_db": -12,
+   "why": "typing \"AUTOMATE\"",
+   "trim": 0.583
+  },
+  {
+   "file": "sound/sfx/pop3.wav",
+   "at": 7.868,
+   "gain_db": -12,
+   "why": "sticky note"
+  },
+  {
+   "file": "sound/sfx/slide.wav",
+   "at": 13.769,
+   "gain_db": -12,
+   "why": "floppy slides"
+  },
+  {
+   "file": "sound/sfx/latch.wav",
+   "at": 14.149,
+   "gain_db": -9,
+   "why": "floppy latches"
+  },
+  {
+   "file": "sound/sfx/seek.wav",
+   "at": 14.219,
+   "gain_db": -14,
+   "why": "drive reads"
+  },
+  {
+   "file": "sound/sfx/ratchet.wav",
+   "at": 32.166,
+   "gain_db": -11,
+   "why": "clock spins to 9:00"
+  },
+  {
+   "file": "sound/sfx/thunk.wav",
+   "at": 35.808,
+   "gain_db": -9,
+   "why": "mug lands"
+  },
+  {
+   "file": "sound/sfx/ding_end.wav",
+   "at": 4.565,
+   "gain_db": -9,
+   "why": "ending"
+  }
+ ]
+}
