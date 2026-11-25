@@ -63,7 +63,11 @@ Quote relevant Mindset principles when they fit:
 - *"This is the Function Breakdown — you're not automating the whole job, just this one piece."*
 - *"AI is better than you think and improving faster than you think. If it couldn't do this last quarter, it might be ready now."*
 
-**Output of Phase 1:** numbered list of 1-3 candidate opportunities, one-line "why this is leverage" per candidate. Ask: *"Pick one to scope."*
+For each candidate, get two numbers, asked once in one message: *"Roughly how many hours a week does this take, and what is an hour of your time worth?"* Plus, if it slips: *"What does it cost a month when it's late or forgotten?"* If they can't say, write "not known yet" and rank on time alone.
+
+Work the cost a month per candidate: hours a week (one decimal) × 4.33 × hourly rate, plus the slip cost if known. Mark it **(est)** unless the owner counted or checked every part, then **(confirmed)**. These are estimates for ranking, not a budget.
+
+**Output of Phase 1:** numbered list of 1-3 candidate opportunities, one-line "why this is leverage" per candidate, and its cost a month with (est) or (confirmed). Sort by cost a month, biggest first. Ask: *"Pick one to scope."*
 
 ### Phase 2 — Method interview (scope one)
 
@@ -73,6 +77,7 @@ User picks one candidate. Walk the 5-step Method pipeline:
 
 **Step 2 — EAD: Eliminate / Automate / Delegate.**
 - **Eliminate first:** *"What happens if we just stop doing this?"* If the answer is "nothing breaks" → skill exits cheerfully. *"Don't automate waste."* This is a win, log to `decisions/log.md` and stop.
+- **Check existing software before building:** *"Which software do you already pay for, and does it have this as a setting?"* (invoicing, booking, CRM, email automations). If yes → **Switch On**: the owner pastes approved wording and switches the setting on themselves. Claude never logs into their software. Log the rule and wording to `decisions/log.md`, skip Phase 3. Check the vendor's own current help page before saying a feature exists, and name the page. If the feature needs a higher plan, show that price first; the owner decides.
 - **Automate second:** apply 60/30/10 framing. ~60% deterministic, ~30% AI-assisted, ~10% manual.
 - **Delegate third:** if too complex/variable/judgment-heavy → suggest a person. Skill exits with a delegation suggestion, log it.
 
@@ -102,9 +107,9 @@ If the user can't articulate any of the five: *"If you can't explain it to a per
 - More value per customer
 - Less cost
 
-Plus a specific metric (response time, error rate, conversion rate, time-to-completion). **If the user can't name a bucket and a metric, skill stops.** *"If your automation doesn't move a number, why are you building it?"*
+Plus a specific metric (response time, error rate, conversion rate, time-to-completion), and the cost a month from Phase 1 (est or confirmed). **If the user can't name a bucket and a metric, skill stops.** *"If your automation doesn't move a number, why are you building it?"*
 
-**Output of Phase 2:** scoped automation spec written to `decisions/log.md` as a dated entry with all five answers + autonomy level + KPI. Durable record of what was decided and why.
+**Output of Phase 2:** scoped automation spec written to `decisions/log.md` as a dated entry with all five answers + autonomy level + KPI + cost a month (est or confirmed). Durable record of what was decided and why.
 
 ### Phase 3 — Machine handoff (build it)
 
@@ -116,6 +121,8 @@ Ask: *"How do you want to ship this?"* Options ordered by Boring-is-Beautiful de
 4. **Sub-agent** — multi-step agent. Last resort. Only if the work genuinely needs reasoning + tool use.
 
 **Default selected = highest non-AI option that solves the problem.** User has to explicitly choose more autonomy.
+
+Skip this phase if Phase 2 chose **Switch On**. The setting is the artifact, and the approved wording is logged.
 
 Once chosen, route to the appropriate scaffolder:
 - `skill-creator` if available globally (Anthropic-shipped)
@@ -144,7 +151,7 @@ Surface the Machine principles when scaffolding:
 Every `/level-up` run produces:
 
 1. **One `decisions/log.md` entry** — dated, with the Method spec
-2. **One delivered improvement**: a prompt, skill, or agent file, or a verified repair of the selected existing workflow/routing
+2. **One delivered improvement**: a prompt, skill, or agent file, a verified repair of the selected existing workflow/routing, or a Switch On setting with its approved wording logged
 3. **A one-screen close** — what was scoped, what was built, and the Bike Method Phase 1 reminder
 
 ## Critical implementation rules
@@ -158,6 +165,7 @@ Every `/level-up` run produces:
 7. **Bike Method ships into every artifact.** `bike-method-phase: 1` in frontmatter.
 8. **Limit edits to `decisions/log.md` and the selected artifact.** An explicitly selected audit repair may update its existing workflow or routing files; preserve unrelated content. Other files remain read-only.
 9. **Trademark + attribution on output.** Every report and every scaffolded artifact references the framework.
+10. **Customer-facing or money-moving steps wait for the owner's yes.** Anything that sends to a customer, posts, spends or moves money stays behind an explicit approval step the skill cannot skip.
 
 ## Verification (for the implementer)
 
