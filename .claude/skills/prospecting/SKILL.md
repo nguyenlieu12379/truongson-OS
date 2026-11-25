@@ -9,6 +9,8 @@ Goal: a US F&B business that **has WhatsApp** and **has no real website**, so we
 
 **No cuisine bias (Son, 2026-11-24):** the target is any US F&B business. Past prospects happened to be Brazilian; that is not a filter.
 
+**Brand, not family (Son, 2026-11-25):** pick a real brand: a named truck, cafe, restaurant or shop with a logo and its own look. Skip home bakers and family side businesses selling from a personal account (Cakes Dona Julia was rejected for this). Vary the F&B type too, not only bakeries. Prefer bigger sit-down restaurants (a storefront, hundreds or thousands of Google reviews) over food trucks and pop-ups.
+
 **Speed rule (Son, 2026-11-24):** one prospect should take a few minutes, no longer than a plain "find me a lead" prompt. Don't ask setup questions, don't run the bulk finder unless asked. Go straight to the fast path.
 
 ## The target

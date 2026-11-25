@@ -4,20 +4,62 @@
     {
       "name": "bpf",
       "runtimeExecutable": "powershell",
-      "runtimeArgs": ["-ExecutionPolicy", "Bypass", "-File", "websites/TruongSon-demos/scrollcraft/builds/brazilian-passion-foods/serve.ps1", "-Root", "websites/TruongSon-demos/scrollcraft/builds/brazilian-passion-foods", "-Port", "4502"],
+      "runtimeArgs": [
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "websites/TruongSon-demos/scrollcraft/builds/brazilian-passion-foods/serve.ps1",
+        "-Root",
+        "websites/TruongSon-demos/scrollcraft/builds/brazilian-passion-foods",
+        "-Port",
+        "4502"
+      ],
       "port": 4502
     },
     {
       "name": "brazilian-taste",
       "runtimeExecutable": "powershell",
-      "runtimeArgs": ["-ExecutionPolicy", "Bypass", "-File", "websites/TruongSon-demos/scrollcraft/builds/brazilian-taste/serve.ps1", "-Root", "websites/TruongSon-demos/scrollcraft/builds/brazilian-taste", "-Port", "4503"],
+      "runtimeArgs": [
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "websites/TruongSon-demos/scrollcraft/builds/brazilian-taste/serve.ps1",
+        "-Root",
+        "websites/TruongSon-demos/scrollcraft/builds/brazilian-taste",
+        "-Port",
+        "4503"
+      ],
       "port": 4503
     },
     {
       "name": "sweets-by-carla-g",
       "runtimeExecutable": "powershell",
-      "runtimeArgs": ["-ExecutionPolicy", "Bypass", "-File", "websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g/serve.ps1", "-Root", "websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g", "-Port", "4511"],
+      "runtimeArgs": [
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g/serve.ps1",
+        "-Root",
+        "websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g",
+        "-Port",
+        "4511"
+      ],
       "port": 4511
+    },
+    {
+      "name": "el-budare-cafe",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": [
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "websites/TruongSon-demos/scrollcraft/builds/el-budare-cafe/serve.ps1",
+        "-Root",
+        "websites/TruongSon-demos/scrollcraft/builds/el-budare-cafe",
+        "-Port",
+        "4512"
+      ],
+      "port": 4512
     }
   ]
 }

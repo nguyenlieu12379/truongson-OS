@@ -5,7 +5,8 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 ## Who and process
 - Ask "Son or Truong?" at the start. Tag the answers with the name.
 - Show photo picks before saving anything.
-- Commit, push and merge to main when asked. Deploy only on an explicit "make it live".
+- Commit, push and merge to main when asked.
+- Deploy: go live on GitHub Pages (noindex) when the build is done (Son, 2026-11-25). Before that date it needed an explicit "make it live".
 
 ## Photos and assets
 - Real photos only, from the client's own Instagram (via Claude in Chrome, signed in). No generated images unless asked.
@@ -13,6 +14,7 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - Never drawn "plastic" graphic objects (CSS/SVG props such as pans, bubbles, cartoon food). Son, 2026-11-23: "always stay away from the plastic graphics objects at all cost". Effects must come from real photos or footage.
 - Hero food must be high resolution. If the grid only gives 640px, get the full post image or a frame from their video.
 - Keep a `SOURCES.md` with the post URL for every photo.
+- Photos are Claude's call by default (Son, 2026-11-25): high res, and the object inside must fit the shape of the frame it's cut to. Never crop through the dish; pick the frame shape from the photo, not the other way round.
 
 ## Hero
 - Cut the hero from a high-res photo of their signature item (clip along its real edge), like the Delícias pudim. A flat photo hero reads as "too simple" (Son, 2026-11-24).
@@ -26,13 +28,14 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - Frame shapes follow the dish: tall frames for dishes shot vertical (lunch boxes, long tables), wide for tray rows, square for bowls. Never crop everything to one landscape shape (Son, 2026-11-24).
 - "Unbroken" means each scene turns into the next (cells fly apart, photos grow into the next layout). A layer that just scrolls up out of view is a break (Son, 2026-11-24).
 - Add related motion so it isn't boring: real cutouts drifting, dish-name lines, counters, lines drawing in. Never drawn props.
+- Background: a light, clean ground nobody notices (neutral off-white, not beige; near-black in dark mode). No saturated or shifting background colour: "the background mustn't be noticable color, make it light, so it looks clean, not AI slops" (Son, 2026-11-25, El Budare). Brand colour lives in the photos, the type at full strength and the CTA.
 - Colour split 60/30/10 (Son, 2026-11-23): 60% background, 30% most type and objects, 10% the one must-see thing (the CTA). Taken from the client's own logo, sign or avatar. Ask it in pre-build every time.
 - Match the client's Instagram vibe (Delícias: "soft, cute, juicy", playful pink).
-- One unbroken world (one fixed stage, the camera travels, no sections).
+- One unbroken world (one fixed stage, the camera travels, no sections). Default (Son, 2026-11-25): "zero cut, zero scrolling, just motion graphics". Nothing ever scrolls up the page; scroll only drives motion on a fixed stage.
 - Four must-haves from `websites/README.md`: one engineered peak, layered hero, real photos, no AI tells.
 
 ## UI material
-- Cursor ball: the Espresso Vivace ball, exactly: its size (112px), its style (rim, highlight, dark inner edge, gloss, drop shadow) and its motion (spring stiffness 0.14, damping 0.72, stretch speed x 0.018, max 0.42; see `builds/espresso-vivace/site.js`). The Brazilian Taste drag is no longer the default: "too fluid" (2026-11-24, Sweets by Carla G pre-build). Don't resize, restyle or re-tune it unless asked.
+- Cursor ball: the Espresso Vivace ball, exactly: its size (112px), its style (rim, highlight, dark inner edge, gloss, drop shadow) and its motion (spring stiffness 0.14, damping 0.72, stretch speed x 0.018, max 0.42; see `builds/espresso-vivace/site.js`). The Brazilian Taste drag is no longer the default: "too fluid" (2026-11-24, Sweets by Carla G pre-build). Don't resize, restyle or re-tune it unless asked. Liquid glass with a clear lens plus this ball is the default UI material (Son, 2026-11-25).
 - No glass venom strands (Son removed them, 2026-11-23).
 - Liquid glass on every block (buttons, text cards, nav): a clear refractive lens that magnifies and bends what's behind it along the edges and corners, with a thin specular rim. No blur, no frost.
 - A lens follows the cursor and bends the light under it; the rim light follows the cursor; buttons lean toward it.
@@ -41,11 +44,13 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 ## Motion and performance
 - Spins, rolls and carousels glide continuously: ease in, build, ease out, at most a slight slow-down at each item. Never turn-stop-turn steps ("stiff"). Give a fast peak more scroll room so it reads at normal scroll speed (Sweets by Carla G, 2026-11-24).
 - Size tweaks asked as "bigger" mean a little, not a redesign ("no not that dramatic, just slightly bigger", 2026-11-24).
+- Super smooth, never stiff, is the default for every build (Son, 2026-11-25).
 - Smooth beats effects. If it lags, cut the effect's cost before cutting the effect.
 - No per-frame layout reads after style writes; no animated SVG filters; no backdrop filters on moving elements.
 - Check on a real phone before the client sees it.
 
 ## Facts
+- English only on the page by default (Son, 2026-11-25).
 - Only facts from the client's own listing or Instagram. No invented prices or stats.
 - Flag any conflict (Delícias: two WhatsApp numbers, two sets of hours) for confirmation.
 

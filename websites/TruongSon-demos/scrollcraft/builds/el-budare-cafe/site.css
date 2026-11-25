@@ -1,0 +1,164 @@
+/* El Budare Café. 60 a clean off-white ground (Son, 2026-11-25: "the background mustn't be noticable color, make it light") / 30 logo black type and their food photos / 10 flag red, the button only.
+   One fixed stage; site.js moves everything with transform, opacity and clip-path. */
+
+:root {
+  --day: #FAF9F6;          /* 60: clean off-white, no tint */
+  --eve: var(--day);
+  --night: var(--day);
+  --ink: #1A140E;          /* 30: logo black */
+  --cream: #F4F1EA;        /* 30: type in the dark theme */
+  --card: #FFFFFF;
+  --card-ink: #1A140E;
+  --card-soft: #5C4A2E;
+  --cta: #D21034;          /* 10: flag red, the button only */
+  --on-cta: #FFFFFF;
+  --shadow: rgb(20 12 0 / 0.28);
+  --fg: var(--ink);        /* set by site.js from the sky under it */
+  --fg-soft: color-mix(in oklab, var(--fg) 72%, transparent);
+  --f-word: "Lilita One", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --f-text: "Bricolage Grotesque", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --day: #0E1014; --eve: var(--day); --night: var(--day); --card: #1A1D24; --card-ink: #FFF4D6; --card-soft: #C9BFA6;
+    --shadow: rgb(0 0 0 / 0.55); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --day: #0E1014; --eve: var(--day); --night: var(--day); --card: #1A1D24; --card-ink: #FFF4D6; --card-soft: #C9BFA6;
+  --shadow: rgb(0 0 0 / 0.55); color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--day); color: var(--fg); font: 400 16px/1.5 var(--f-text); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+h2 { margin: 0; font: 800 clamp(34px, 4.4vw, 66px)/0.98 var(--f-text); letter-spacing: -0.025em; }
+h2 em, .lede em, .still em { font: 400 1.04em/0.9 var(--f-word); font-style: normal; letter-spacing: 0; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: fixed; left: 12px; top: -60px; z-index: 50; background: var(--cta); color: var(--on-cta); padding: 10px 14px; border-radius: 8px; font-weight: 700; }
+.skip:focus { top: 12px; }
+.spacer { height: 1500vh; }
+@media (max-width: 760px) { .spacer { height: 1300vh; } }
+
+/* the type colour follows the sky; it fades rather than snaps */
+.bar, .day, .wm, .hero-copy, .hours, .clock-line, .dish span, .still, .hol-copy, .hol figcaption { color: var(--fg); transition: color 520ms ease; }
+
+/* ---- bar ---------------------------------------------------------------- */
+.bar { position: fixed; inset: 0 0 auto 0; z-index: 20; height: 66px; display: flex; align-items: center; justify-content: space-between; padding: 0 max(16px, 3vw); pointer-events: none; }
+.bar > * { pointer-events: auto; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.brand img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1.5px color-mix(in oklab, var(--fg) 20%, transparent); }
+.word-slot { display: block; height: 40px; }
+.bar-r { display: flex; align-items: center; gap: 12px; }
+.lg-theme-btn { color: var(--fg); }
+.cta-slot { display: block; }
+@media (max-width: 760px) { .bar { height: 60px; } }
+
+/* ---- the day bar (bottom) ---------------------------------------------- */
+.day { position: fixed; left: 50%; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 19; transform: translateX(-50%); display: flex; gap: clamp(22px, 3.4vw, 52px); align-items: center; padding: 0 4px; height: 44px; }
+.day-line, .day-fill { position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; border-radius: 2px; }
+.day-line { background: color-mix(in oklab, var(--fg) 22%, transparent); }
+.day-fill { background: var(--fg); transform-origin: 0 50%; transform: scaleX(0); will-change: transform; }
+.chip { position: absolute; left: 0; top: 50%; z-index: 3; transform: translate3d(0, -50%, 0); margin-left: -28px; width: 56px; height: 22px; border-radius: 11px; background: var(--fg); color: var(--day); font: 700 10.5px/22px var(--f-text); text-align: center; letter-spacing: 0.04em; white-space: nowrap; pointer-events: none; will-change: transform; transition: background 520ms ease; }
+.day button { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; padding: 0; border: 0; background: none; color: var(--fg); cursor: pointer; font: 700 10px/1 var(--f-text); letter-spacing: 0.14em; text-transform: uppercase; min-width: 44px; min-height: 44px; }
+.day button::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--fg); opacity: 0.55; }
+.day button span { position: absolute; top: -8px; white-space: nowrap; opacity: 0.6; transition: opacity 200ms ease; }
+.day button.on span { opacity: 1; }
+.day button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; border-radius: 6px; }
+@media (max-width: 760px) { .day button span { display: none; } .day { gap: 26px; } }
+
+/* ---- stage -------------------------------------------------------------- */
+.stage { position: fixed; inset: 0; overflow: hidden; height: 100vh; height: 100lvh; }
+.stage > * { position: absolute; }
+html:not(.ready) .stage > :not(.wm):not(.hero):not(.hero-copy):not(.sky) { visibility: hidden; }
+
+.sky { inset: 0; will-change: opacity; }
+.sky-day { background: var(--day); }
+.sky-eve { background: var(--eve); opacity: 0; }
+.sky-night { background: var(--night); opacity: 0; }
+
+.hours { left: 0; top: 0; width: 100%; overflow: hidden; z-index: 2; text-align: center; pointer-events: none; }
+.hours-col { will-change: transform; }
+.hours-col b { display: block; font: 400 100px/1 var(--f-word); white-space: nowrap; letter-spacing: -0.01em; }
+.hours-col b small { font-size: 0.42em; line-height: 0; vertical-align: baseline; margin-left: 0.12em; letter-spacing: 0.02em; }
+
+.wm { left: 0; top: 0; z-index: 3; display: flex; white-space: nowrap; font: 400 100px/1 var(--f-word); transform-origin: 0 0; will-change: transform; }
+.wm .l { display: block; }
+.wm.sizzle .l.cov { animation: sizzle 2.6s ease-in-out infinite; animation-delay: calc(var(--k, 0) * -0.65s); }
+@keyframes sizzle {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  30% { transform: translate3d(0, -3.5%, 0) rotate(-1.6deg); }
+  60% { transform: translate3d(0, -1%, 0) rotate(1.2deg); }
+}
+
+.hero-copy { left: max(18px, 4vw); z-index: 8; width: min(400px, 34vw); overflow: hidden; padding-bottom: 8px; }
+.lede { margin: 0 0 10px; font: 800 clamp(30px, 3.1vw, 46px)/1.02 var(--f-text); letter-spacing: -0.02em; }
+.sub { margin: 0 0 20px; color: var(--fg-soft); font-size: 16px; max-width: 32ch; }
+#slotHero { height: 52px; }
+
+/* ---- the clock and the dishes ------------------------------------------ */
+.clock-line { margin: 0; left: 0; right: 0; top: 0; z-index: 6; overflow: hidden; text-align: center; pointer-events: none; }
+.clock-line span { display: block; font: 700 13px/1 var(--f-text); letter-spacing: 0.18em; text-transform: uppercase; padding: 4px 0; }
+.dishes { margin: 0; padding: 0; list-style: none; left: 0; top: 0; width: 0; height: 0; }
+.dish { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+.dish img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; box-shadow: 0 24px 40px -20px var(--shadow); }
+.dish span { position: absolute; left: 0; top: 100%; margin-top: 12px; white-space: nowrap; font: 600 13px/1 var(--f-text); letter-spacing: 0.06em; }
+.dish span b { font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; margin-right: 8px; }
+.still { margin: 0; left: 0; right: 0; top: 0; z-index: 6; overflow: hidden; text-align: center; pointer-events: none; }
+.still span { display: block; font: 800 clamp(34px, 5vw, 76px)/1.05 var(--f-text); letter-spacing: -0.02em; padding: 0 16px 6px; }
+
+.tickets { left: 0; top: 0; z-index: 4; display: flex; gap: 8px; pointer-events: none; }
+.tickets i { display: block; width: 46px; height: 46px; border-radius: 10px; box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--fg) 28%, transparent); transition: box-shadow 520ms ease; }
+
+/* ---- holidays ----------------------------------------------------------- */
+.hol-copy { left: 0; right: 0; top: 0; z-index: 9; overflow: hidden; text-align: center; padding: 0 16px 6px; pointer-events: none; }
+.hol-copy p { margin: 8px auto 0; max-width: 44ch; color: var(--fg-soft); font-size: 16px; }
+.hol { margin: 0; left: 0; top: 0; z-index: 12; transform-origin: 0 0; will-change: transform; }
+.hol img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; box-shadow: 0 24px 40px -20px var(--shadow); }
+.hol figcaption { position: absolute; left: 0; top: 100%; margin-top: 10px; font: 800 11px/1.2 var(--f-text); letter-spacing: 0.16em; text-transform: uppercase; }
+
+/* ---- the close ---------------------------------------------------------- */
+.store { margin: 0; left: 0; top: 0; z-index: 4; transform-origin: 0 0; will-change: transform; }
+.store img { width: 100%; height: 100%; object-fit: cover; border-radius: 18px; box-shadow: 0 30px 50px -24px var(--shadow); }
+
+.hero { left: 0; top: 0; z-index: 5; perspective: 1100px; perspective-origin: 50% 50%; transform-origin: 0 0; will-change: transform; }
+.hero-tilt { width: 100%; height: 100%; transform-origin: 100% 55%; }
+.hero-bob { width: 100%; height: 100%; animation: bob 5.5s ease-in-out infinite; }
+.hero img { width: 100%; height: 100%; object-fit: fill; filter: drop-shadow(-10px 24px 22px var(--shadow)); }
+@keyframes bob { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -1.1%, 0); } }
+
+.order { left: 0; top: 0; z-index: 13; }
+.od-in { background: var(--card); color: var(--card-ink); border-radius: 22px; padding: clamp(20px, 2.4vw, 30px); box-shadow: 0 30px 60px -30px var(--shadow); }
+.order h2 { font-size: clamp(32px, 3.2vw, 48px); }
+.order h2 em { color: var(--cta); }
+.od-p { margin: 10px 0 14px; color: var(--card-soft); font-size: 15px; }
+.od-line { margin: 0 0 12px; font: 700 18px/1.2 var(--f-text); }
+.od-line a { text-decoration: none; border-bottom: 1.5px solid color-mix(in oklab, var(--card-ink) 35%, transparent); }
+.spots { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 8px; }
+.spots li { display: grid; gap: 2px; }
+.spots b { font: 800 16px/1.2 var(--f-text); }
+.spots span { color: var(--card-soft); font-size: 14px; }
+.spots a { text-decoration: none; border-bottom: 1px solid color-mix(in oklab, var(--card-ink) 25%, transparent); }
+.map { height: 150px; border-radius: 14px; overflow: hidden; background: color-mix(in oklab, var(--card-ink) 8%, transparent); margin-bottom: 16px; }
+.map iframe { width: 100%; height: 100%; border: 0; display: block; }
+#slotClose { height: 52px; margin-bottom: 12px; }
+.od-small { margin: 0; color: var(--card-soft); font-size: 13px; }
+@media (max-width: 760px) {
+  .od-p { display: none; }
+  .od-line { margin-bottom: 8px; }
+  .spots { gap: 4px; margin-bottom: 10px; }
+  .spots b { font-size: 14px; } .spots span { font-size: 12.5px; }
+  .map { height: 96px; margin-bottom: 12px; }
+}
+
+/* ---- the travelling button --------------------------------------------- */
+.cta-fly { position: fixed; left: 0; top: 0; z-index: 30; transform-origin: 0 0; will-change: transform; }
+.cta-fly .cta { background: var(--cta); color: var(--on-cta); font: 700 16px/1 var(--f-text); letter-spacing: 0.01em; padding: 0 26px; min-height: 52px; white-space: nowrap; text-shadow: none; }
+.cta-fly .cta.lg-glass { background: color-mix(in oklab, var(--cta) 92%, transparent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bob, .wm.sizzle .l.cov { animation: none; }
+}
