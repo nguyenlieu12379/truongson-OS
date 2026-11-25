@@ -5,7 +5,6 @@ name: Deploy websites to GitHub Pages
 # /brazilian-taste/ -> websites/TruongSon-demos/scrollcraft/builds/brazilian-taste (prospect demo, scroll-craft, noindex)
 # /pakachi-kitchen/ -> websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen (prospect demo, scroll-craft, noindex)
 # /sweets-by-carla-g/ -> websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g (prospect demo, scroll-craft, noindex)
-# /el-budare-cafe/ -> websites/TruongSon-demos/scrollcraft/builds/el-budare-cafe (prospect demo, scroll-craft, noindex)
 # /             -> a plain list of the approved sites (no primary demo, noindex)
 # Every push to main that touches these paths redeploys all sites.
 
@@ -50,9 +49,6 @@ jobs:
           mkdir -p _site/sweets-by-carla-g
           cp -R websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g/. _site/sweets-by-carla-g/
           rm -rf _site/sweets-by-carla-g/README.md _site/sweets-by-carla-g/BRIEF.md _site/sweets-by-carla-g/PREFS.md _site/sweets-by-carla-g/serve.ps1 _site/sweets-by-carla-g/assets/source
-          mkdir -p _site/el-budare-cafe
-          cp -R websites/TruongSon-demos/scrollcraft/builds/el-budare-cafe/. _site/el-budare-cafe/
-          rm -rf _site/el-budare-cafe/README.md _site/el-budare-cafe/BRIEF.md _site/el-budare-cafe/PREFS.md _site/el-budare-cafe/serve.ps1 _site/el-budare-cafe/assets/source
           cat > _site/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">
@@ -67,7 +63,6 @@ jobs:
             <li><a href="brazilian-taste/">Brazilian Taste</a></li>
             <li><a href="pakachi-kitchen/">Pakachi Kitchen</a></li>
             <li><a href="sweets-by-carla-g/">Sweets by Carla G</a></li>
-            <li><a href="el-budare-cafe/">El Budare Café</a></li>
           </ul>
           HTML
           touch _site/.nojekyll

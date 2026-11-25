@@ -1,6 +1,6 @@
 # El Budare Café (spec demo)
 
-Scroll-craft build, 2026-11-25, for El Budare Café (Jackson Heights, Queens: Venezuelan restaurant, two spots on Roosevelt Ave, one open 24 hours; orders on WhatsApp; no real website). Live (noindex): https://nguyenlieu12379.github.io/truongson-OS/el-budare-cafe/ (deployed by `.github/workflows/deploy-pages.yml` on push to main). Not yet approved, so not in the Sites list.
+Scroll-craft build, 2026-11-25, for El Budare Café (Jackson Heights, Queens: Venezuelan restaurant, two spots on Roosevelt Ave, one open 24 hours; orders on WhatsApp; no real website). **Failed** (Son, 2026-11-25: "this site looks no serious and slops"). Taken offline; recorded in `.claude/skills/site-building/FAILURES.md` (2). Kept as the example of what not to do.
 
 One fixed stage on a clean off-white ground. Their cachapa de pabellón sits on the screen's right edge in front of a giant "BudaRe"; the covered letters sizzle. The word docks in the bar and a giant clock rolls from noon to 11 AM the next day as you scroll; a dish lands for each stretch of the day and flies into a row of tickets when its hours are over. "Morning. Still open." The tickets ring up into the clock chip, the holidays are dealt (pernil, hallacas, party tray), then fold into their storefront while the cachapa slides back in front of it and the order card rises. Brief, colour split and failure checks: `BRIEF.md`. Answers: `PREFS.md`. Photo sources: `assets/source/SOURCES.md`.
 
