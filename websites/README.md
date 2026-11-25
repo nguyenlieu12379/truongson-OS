@@ -13,16 +13,36 @@ websites/
 
 ## Sites
 
-Only sites that worked: approved by Son or Truong. No primary demo; pick the one that fits the prospect. Failed builds never go in this table. They are recorded in `.claude/skills/site-building/FAILURES.md` and kept offline (Son, 2026-11-24).
+Three tiers (2026-11-25). No primary demo; pick the one that fits the prospect, best first.
+
+### Best sites
+
+The reference set: start a new build from what these do (centred moving hero, unbroken hand-offs, real cutouts).
+
+| Owner | Site | WhatsApp | Status | Path |
+| --- | --- | --- | --- | --- |
+| TruongSon-demos | **Gochón**, Doral FL prospect (Venezuelan pasapalos counter, WhatsApp ordering, 45K on Instagram). Centred tray with the pieces breathing and the five pasapalos floating around it; unbroken hand-offs: the display case grows from behind the pieces and their own shelf tags become the menu, the pan carries into party boxes, a cheese pull rolls onto the storefront | [(786) 670-5020](https://wa.me/17866705020) (phone 305-631-2248) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/gochon/ | `websites/TruongSon-demos/scrollcraft/builds/gochon/` |
+| TruongSon-demos | **Brazilian Taste**, Dallas TX prospect (meal prep, WhatsApp only). White world: their own wordmark splits open on their bowls, then a 7-day grid fills with their trays | [(682) 862-9545](https://wa.me/16828629545) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/brazilian-taste/ | `websites/TruongSon-demos/scrollcraft/builds/brazilian-taste/` |
+| TruongSon-demos | **Pakachi Kitchen**, Herndon VA prospect (Pakistani halal, weekly 6-dish deal, WhatsApp only). Black or white and gold: their biryani tray over a giant PAKACHI becomes card 1 of a dealt hand that doubles ($90 to $130), then a catering band and an order ticket | [(571) 341-0009](https://wa.me/15713410009) (same number for call/text) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/pakachi-kitchen/ | `websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen/` |
+| TruongSon-demos | **Sweets by Carla G**, Homestead FL prospect (home bakery, custom celebration cakes, WhatsApp only). Blush and script black: their flamingo cake over a giant brush-script "Sweets", then eight custom cakes orbit it on a turntable, a push-in that turns into their hibiscus close-up, four treats, order card with map | [(305) 399-1386](https://wa.me/13053991386) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/sweets-by-carla-g/ | `websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g/` |
+
+### Normal sites
+
+Approved and live, but not the bar to aim for.
 
 | Owner | Site | WhatsApp | Status | Path |
 | --- | --- | --- | --- | --- |
 | TruongSon-demos | **Espresso Vivace**, practical cafe concept (menu, live open-now, maps, ordering). Its style is Vivace-only | None (concept demo, not a WhatsApp business) | Live at https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/ | `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` |
 | TruongSon-demos | **Delícias Cake & Bakery**, Burlington MA prospect. Unbroken pink world: wobbling pudim hero, fly through their front door to the counter | [(781) 365-0181](https://wa.me/17813650181) (used on the site, from their Instagram graphics). Their research also lists (781) 661-8417: to confirm | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/delicias-cake/ | `websites/TruongSon-demos/scrollcraft/builds/delicias-cake/` |
-| TruongSon-demos | **Brazilian Taste**, Dallas TX prospect (meal prep, WhatsApp only). White world: their own wordmark splits open on their bowls, then a 7-day grid fills with their trays | [(682) 862-9545](https://wa.me/16828629545) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/brazilian-taste/ | `websites/TruongSon-demos/scrollcraft/builds/brazilian-taste/` |
-| TruongSon-demos | **Pakachi Kitchen**, Herndon VA prospect (Pakistani halal, weekly 6-dish deal, WhatsApp only). Black or white and gold: their biryani tray over a giant PAKACHI becomes card 1 of a dealt hand that doubles ($90 to $130), then a catering band and an order ticket | [(571) 341-0009](https://wa.me/15713410009) (same number for call/text) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/pakachi-kitchen/ | `websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen/` |
-| TruongSon-demos | **Sweets by Carla G**, Homestead FL prospect (home bakery, custom celebration cakes, WhatsApp only). Blush and script black: their flamingo cake over a giant brush-script "Sweets", then eight custom cakes orbit it on a turntable, a push-in that turns into their hibiscus close-up, four treats, order card with map | [(305) 399-1386](https://wa.me/13053991386) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/sweets-by-carla-g/ | `websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g/` |
-| TruongSon-demos | **Gochón**, Doral FL prospect (Venezuelan pasapalos counter, WhatsApp ordering, 45K on Instagram). Centred tray with the pieces breathing and the five pasapalos floating around it; unbroken hand-offs: the display case grows from behind the pieces and their own shelf tags become the menu, the pan carries into party boxes, a cheese pull rolls onto the storefront | [(786) 670-5020](https://wa.me/17866705020) (phone 305-631-2248) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/gochon/ | `websites/TruongSon-demos/scrollcraft/builds/gochon/` |
+
+### Failures
+
+Marked failed by Son or Truong. Kept offline as examples of what not to do; never deployed. Full reasons in `.claude/skills/site-building/FAILURES.md`.
+
+| Owner | Site | Why it failed | Status | Path |
+| --- | --- | --- | --- | --- |
+| TruongSon-demos | **Brazilian Passion Foods**, food truck prospect (2026-11-23) | "Looks AI slop": picture plus a text column for the whole page, washed beige colours, layers stacked with no relationship. v1 also used drawn plastic props | Offline | `websites/TruongSon-demos/scrollcraft/builds/brazilian-passion-foods/` |
+| TruongSon-demos | **El Budare Café**, sit-down restaurant prospect (2026-11-25) | "Not serious and slops": playful font and colour, toggle stranded mid-bar, motion with no real value, a cutout missing part of the dish | Offline | `websites/TruongSon-demos/scrollcraft/builds/el-budare-cafe/` |
 
 Scroll-craft builds live in `websites/TruongSon-demos/scrollcraft/builds/` (set by `.scrollcraft.json`), next to the skill's `FINGERPRINTS.md` registry.
 
