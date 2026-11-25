@@ -125,7 +125,7 @@
 })(document.documentElement);
 </script>
 <link rel="stylesheet" href="liquid-glass.css?v=1">
-<link rel="stylesheet" href="site.css?v=1">
+<link rel="stylesheet" href="site.css?v=5">
 </head>
 <body>
 <a class="skip" href="#order">Skip to ordering</a>
@@ -135,19 +135,20 @@
     <span class="wm">Gochón</span>
     <span class="brand-sub">Venezuelan pasapalos · Doral</span>
   </a>
-  <nav class="index" aria-label="Menu index">
-    <button type="button" data-go="0.17" data-on="0.10,0.235">Tequeños</button>
-    <button type="button" data-go="0.17" data-on="0.10,0.235" data-twin>Mandocas</button>
-    <button type="button" data-go="0.33" data-on="0.235,0.43">Papitas</button>
-    <button type="button" data-go="0.36" data-on="0.235,0.45">Empanadas</button>
-    <button type="button" data-go="0.50" data-on="0.43,0.575">Pastelitos</button>
-    <button type="button" data-go="0.655" data-on="0.575,0.70">Boxes</button>
-    <button type="button" data-go="0.735" data-on="0.70,0.79">Wholesale</button>
-    <button type="button" data-go="1" data-on="0.88,1.01">Visit</button>
+  <nav class="line" id="line" aria-label="Page timeline" style="--n:6">
+    <div class="rail" aria-hidden="true"><i class="fill" id="lineFill"></i><i class="head" id="lineHead"></i></div>
+    <div class="stops">
+      <button type="button" class="stop" data-go="0" data-p="0" style="--i:0"><span class="pip" aria-hidden="true"></span><span class="nm">Start</span></button>
+      <button type="button" class="stop" data-go="0.17" data-p="0.17" style="--i:1"><span class="pip" aria-hidden="true"></span><span class="nm">Pieces</span></button>
+      <button type="button" class="stop" data-go="0.4" data-p="0.4" style="--i:2"><span class="pip" aria-hidden="true"></span><span class="nm">Counter</span></button>
+      <button type="button" class="stop" data-go="0.655" data-p="0.655" style="--i:3"><span class="pip" aria-hidden="true"></span><span class="nm">Boxes</span></button>
+      <button type="button" class="stop" data-go="0.735" data-p="0.735" style="--i:4"><span class="pip" aria-hidden="true"></span><span class="nm">Wholesale</span></button>
+      <button type="button" class="stop" data-go="0.83" data-p="0.83" style="--i:5"><span class="pip" aria-hidden="true"></span><span class="nm">Inside</span></button>
+      <button type="button" class="stop" data-go="1" data-p="1" style="--i:6"><span class="pip" aria-hidden="true"></span><span class="nm">Visit</span></button>
+    </div>
   </nav>
-  <span class="now-tag" id="nowTag" aria-hidden="true"></span>
   <div class="bar-end">
-    <a class="cta lg-glass" href="https://wa.me/17866705020?text=Hi%20Goch%C3%B3n%2C%20I%27d%20like%20to%20order" target="_blank" rel="noopener">Order on WhatsApp</a>
+    <a class="cta lg-glass" href="https://wa.me/17866705020?text=Hi%20Goch%C3%B3n%2C%20I%27d%20like%20to%20order" target="_blank" rel="noopener"><svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/><circle class="d d2" cx="12" cy="12" r="1.15"/><circle class="d d3" cx="15.6" cy="12" r="1.15"/></svg><span class="lbl">Order<span class="opt"> on WhatsApp</span></span></a>
     <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
       <svg class="lg-i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
       <svg class="lg-i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -223,7 +224,7 @@
       <tr><th scope="row">Sunday</th><td>7 AM to 4 PM</td></tr>
     </table>
     <p class="addr2">7868 NW 52nd St, Doral, FL 33166 · <a href="https://www.google.com/maps/dir/?api=1&amp;destination=7868+NW+52nd+St+Doral+FL+33166" target="_blank" rel="noopener">Directions</a></p>
-    <a class="cta big lg-glass" href="https://wa.me/17866705020?text=Hi%20Goch%C3%B3n%2C%20I%27d%20like%20to%20order" target="_blank" rel="noopener">Order on WhatsApp</a>
+    <a class="cta big lg-glass" href="https://wa.me/17866705020?text=Hi%20Goch%C3%B3n%2C%20I%27d%20like%20to%20order" target="_blank" rel="noopener"><svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/><circle class="d d2" cx="12" cy="12" r="1.15"/><circle class="d d3" cx="15.6" cy="12" r="1.15"/></svg><span class="lbl">Order on WhatsApp</span></a>
     <p class="alt">786-670-5020 on WhatsApp · Call <a href="tel:+13056312248">305-631-2248</a> · <a href="https://www.instagram.com/gochondoral/" target="_blank" rel="noopener">@gochondoral</a></p>
   </section>
 
@@ -233,7 +234,7 @@
 <p class="demo-note">Concept site prepared for Gochón. Photos from @gochondoral.</p>
 
 <script src="liquid-glass.js?v=1" defer></script>
-<script src="site.js?v=1" defer></script>
+<script src="site.js?v=3" defer></script>
 <script>addEventListener("DOMContentLoaded", function () { if (window.LiquidGlass) { LiquidGlass.cursorBall(); LiquidGlass.glassify(".lg-glass"); } });</script>
 </body>
 </html>

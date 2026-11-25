@@ -20,8 +20,8 @@
   const boxesFrame = $('boxesFrame'), boxesCopy = $('boxesCopy'), boxFrame = $('boxFrame'), bulkCopy = $('bulkCopy');
   const pullFrame = $('pullFrame'), pullCopy = $('pullCopy'), storeFrame = $('storeFrame'), card = $('order');
   const svg = $('leaders');
-  const idx = [...document.querySelectorAll('.index button')];
-  const nowTag = $('nowTag');
+  const stops = [...document.querySelectorAll('.line .stop')], SP = stops.map((b) => +b.dataset.p);
+  const lineFill = $('lineFill'), lineHead = $('lineHead'), rail = document.querySelector('.line .rail');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
   const clamp = (v, a = 0, b = 1) => (v < a ? a : v > b ? b : v);
@@ -120,6 +120,7 @@
     size(pieces, R.rest.w, R.rest.w * CUT.h / CUT.w);
     Object.values(LB).concat(Object.values(TG)).forEach((el) => { el._w = el.offsetWidth; el._h = el.offsetHeight; });
     R.oneHeadH = oneHead.offsetHeight;
+    R.railW = rail.offsetWidth; lineHead._c = {}; lineFill._c = {};
     spacer.style.height = `${Math.round(VH * (mobile ? 11 : 10.5) + (innerHeight - VH))}px`;
     loadClip(mobile ? 'assets/case-m.mp4' : 'assets/case.mp4');
     dirty = true;
@@ -188,9 +189,9 @@
       const ax = px0 + ANCH[k][0] * pw, ay = py0 + ANCH[k][1] * phh;
       let lx, ly;
       if (!mobile) {
-        if (k === 'mandoca') { lx = ax + 90; ly = py0 - el._h - 10; }
-        else if (k === 'papita') { lx = px0 - el._w - 70; ly = ay + 10; }
-        else { lx = px0 + pw + 40; ly = ay + 40; }
+        if (k === 'mandoca') { lx = px0 + pw + 48; ly = py0 + phh * 0.02; }
+        else if (k === 'papita') { lx = px0 - el._w - 70; ly = ay - el._h / 2; }
+        else { lx = px0 + pw + 48; ly = Math.max(ay + 36, py0 + phh * 0.02 + LB.mandoca._h + 22); }
       } else {
         if (k === 'mandoca') { lx = VW - 16 - el._w; ly = py0 - el._h - 12; }
         else if (k === 'papita') { lx = 16; ly = py0 + phh + 18; }
@@ -262,11 +263,13 @@
     drawLeaders(leaders);
     root.classList.toggle('at-end', p > 0.97);
 
-    // index: which object is on screen
-    let cur = null;
-    idx.forEach((b) => { const [a, z] = b.dataset.on.split(',').map(Number); const on = p >= a && p < z; b.classList.toggle('on', on); if (on && !cur) cur = b.textContent; });
-    nowTag.textContent = cur || 'Menu';
-    nowTag.style.visibility = cur ? 'visible' : 'hidden';
+    // header timeline: stops are evenly spaced, so map p between the stop values
+    let k = 0; while (k < SP.length - 2 && p >= SP[k + 1]) k++;
+    const pos = clamp((k + clamp((p - SP[k]) / (SP[k + 1] - SP[k]))) / (SP.length - 1));
+    put(lineFill, 'transform', `scaleX(${pos.toFixed(4)})`);
+    put(lineHead, 'transform', `translateX(${r1(pos * R.railW)}px)`);
+    const nowI = SP.reduce((acc, v, i) => (p >= v - 0.02 ? i : acc), 0);
+    stops.forEach((b, i) => { b.classList.toggle('past', i < nowI || p >= 0.995); b.classList.toggle('now', i === nowI); if (i === nowI) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
   }
 
   // ---- loop: smoothed scroll ---------------------------------------------------------

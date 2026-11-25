@@ -44,15 +44,6 @@ a { color: inherit; }
 .brand { display: flex; flex-direction: column; text-decoration: none; line-height: 1; flex: none; }
 .wm { font: 700 28px/1 var(--f-display); font-stretch: 88%; letter-spacing: -0.01em; color: var(--red); }
 .brand-sub { margin-top: 5px; font-size: 12.5px; color: var(--ink-soft); }
-.index { display: flex; gap: 8px; margin: 0 auto; }
-.index button, .now-tag {
-  font: 600 11.5px/1 var(--f-display); letter-spacing: 0.07em; text-transform: uppercase;
-  color: var(--tag-ink); background: var(--tag-bg); border: 1px solid var(--tag-line); border-radius: 2px;
-  padding: 7px 9px 6px; cursor: pointer; transition: color 160ms ease, border-color 160ms ease, transform 160ms ease;
-}
-.index button:hover { transform: translateY(-1px); }
-.index button.on { color: #fff; background: var(--red); border-color: var(--red); }
-.now-tag { display: none; cursor: default; margin-left: auto; }
 .bar-end { display: flex; align-items: center; gap: 12px; margin-left: 0; flex: none; }
 .cta {
   display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px;
@@ -72,7 +63,7 @@ a { color: inherit; }
 .frame { overflow: hidden; border-radius: 4px; background: #d9d4cc; box-shadow: var(--shadow); }
 .frame img, .frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .frame video { background: transparent; }
-.pieces { z-index: 6; transform-origin: 0 0; filter: drop-shadow(0 22px 22px rgb(60 30 5 / 0.28)); pointer-events: none; }
+.pieces { z-index: 6; transform-origin: 50% 50%; filter: drop-shadow(0 22px 22px rgb(60 30 5 / 0.28)); pointer-events: none; }
 
 .copy h1, .copy h2, .scene-head, .card h2 {
   font-family: var(--f-display); font-weight: 700; font-stretch: 86%; letter-spacing: -0.015em; margin: 0; color: var(--ink);
@@ -134,13 +125,11 @@ a[href^="tel:"] { white-space: nowrap; }
 .demo-note { position: fixed; left: var(--pad); bottom: 10px; z-index: 2; margin: 0; font-size: 11.5px; color: var(--ink-soft); opacity: 0; transition: opacity 300ms ease; }
 .at-end .demo-note { opacity: 0.85; }
 
-@media (max-width: 1180px) { .index { display: none; } .now-tag { display: inline-block; } }
 @media (max-width: 760px) {
   .bar { height: 60px; gap: 10px; padding: 0 16px; }
   .stage { inset: 60px 0 0 0; }
   .wm { font-size: 24px; }
   .brand-sub { display: none; }
-  .now-tag { display: none; }
   .cta { height: 40px; padding: 0 14px; font-size: 14px; }
   .label { padding: 7px 10px 8px; column-gap: 10px; }
   .label b { font-size: 12.5px; }
@@ -154,4 +143,60 @@ a[href^="tel:"] { white-space: nowrap; }
   .card .hours th, .card .hours td { font-size: 14px; padding: 6px 0; }
   .demo-note { display: none; }
 }
-@media (prefers-reduced-motion: reduce) { .index button { transition: none; } }
+
+
+/* ---- header timeline: a rail with one stop per scene ----------------------- */
+.line { position: relative; flex: 1 1 auto; max-width: 760px; min-width: 0; margin: 0 auto; height: 44px; }
+.rail { position: absolute; left: 0; right: 0; top: 12px; height: 2px; background: var(--line); border-radius: 2px; }
+.fill { position: absolute; inset: 0; background: var(--red); border-radius: 2px; transform-origin: 0 50%; transform: scaleX(0); }
+.head { position: absolute; left: 0; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--red);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--red) 18%, transparent); }
+.stops { position: absolute; inset: 0; }
+.stop { position: absolute; top: 0; left: calc(var(--i) / var(--n) * 100%); transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 6px 4px; margin-top: 0;
+  background: none; border: 0; color: var(--ink-soft); cursor: pointer; font: 500 12.5px/1 var(--f-text); white-space: nowrap; }
+.stop:first-child { transform: translateX(-4px); align-items: flex-start; }
+.stop:last-child { transform: translateX(calc(-100% + 4px)); align-items: flex-end; }
+.pip { width: 8px; height: 8px; border-radius: 50%; background: var(--bg); border: 1.5px solid var(--ink-soft); transition: background-color 200ms ease, border-color 200ms ease, transform 200ms ease; }
+.stop.past .pip { background: var(--red); border-color: var(--red); }
+.stop.now { color: var(--ink); font-weight: 650; }
+.stop.now .pip { transform: scale(1.35); border-color: var(--red); background: var(--bg); }
+.stop:hover { color: var(--ink); }
+.stop:hover .pip { transform: scale(1.3); }
+@media (max-width: 1100px) { .stop .nm { display: none; } .stop.now .nm { display: block; } }
+@media (max-width: 760px) {
+  .line { position: absolute; left: 16px; right: 16px; bottom: 0; height: 14px; max-width: none; }
+  .rail { top: 6px; }
+  .stop { padding: 3px; } .stop .nm, .stop.now .nm { display: none; }
+  .pip { width: 6px; height: 6px; }
+  .head { width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; }
+  .bar-end { margin-left: auto; }
+}
+
+/* ---- CTA motion: a light sweep across the pill, and a WhatsApp bubble typing -- */
+.cta { position: relative; overflow: hidden; isolation: isolate; gap: 9px; }
+.cta .wa { width: 20px; height: 20px; flex: none; }
+.cta.big .wa { width: 23px; height: 23px; }
+.cta .wa .d { fill: currentColor; animation: wa-type 1.4s ease-in-out infinite; }
+.cta .wa .d2 { animation-delay: 0.16s; } .cta .wa .d3 { animation-delay: 0.32s; }
+@keyframes wa-type { 0%, 60%, 100% { transform: translateY(0); opacity: 0.45; } 30% { transform: translateY(-1.6px); opacity: 1; } }
+.cta .wa .d { transform-box: fill-box; transform-origin: center; }
+.cta::after {
+  content: ""; position: absolute; z-index: -1; top: -20%; bottom: -20%; left: 0; width: 40%;
+  background: linear-gradient(100deg, transparent 0%, rgb(255 255 255 / 0.55) 50%, transparent 100%);
+  transform: translateX(-160%) skewX(-18deg); animation: cta-sweep 4.2s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+}
+.cta.big::after { animation-delay: 0.9s; }
+@keyframes cta-sweep { 0%, 58% { transform: translateX(-160%) skewX(-18deg); } 86%, 100% { transform: translateX(330%) skewX(-18deg); } }
+.cta .lbl { position: relative; }
+.cta:hover::after { animation-duration: 1.6s; }
+.cta:active { transform: scale(0.97); }
+@media (prefers-reduced-motion: reduce) { .cta::after, .cta .wa .d { animation: none; } .pip { transition: none; } }
+
+@media (max-width: 760px) {
+  .bar { height: 66px; align-items: flex-start; padding-top: 10px; }
+  .stage { inset: 66px 0 0 0; }
+  .bar .cta { height: 38px; min-height: 38px; padding: 0 14px; }
+  .line { bottom: 2px; }
+}
+@media (max-width: 430px) { .bar .cta .opt { display: none; } }
