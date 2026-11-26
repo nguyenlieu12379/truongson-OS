@@ -494,3 +494,27 @@ Recorded as a must-have checklist in `websites/README.md`.
 **Open before the client sees it:** prices (from their 2025 graphics), Sunday closing time (4 PM or 3 PM); a real-phone check.
 
 **Owner:** not stated (Son or Truong)
+
+## 2026-11-25 - Lead list: batch find and track US F&B prospects (level-up)
+
+**Decision:** Build a batch lead list. Run `/prospecting` in bulk to find US F&B prospects with a WhatsApp link and no real website, record each one in a tracker file in `prospects/` (gitignored), and review before any lead is counted. Gochón goes first (live demo already built). Autonomy L2 Drafted: the skill drafts the list, the owner reviews it. Nothing contacts anyone. Qualify rule: WhatsApp live and no real website.
+
+**Method spec:**
+- Constraint: finding leads is the time sink. Without it, the pipeline stops and the business stops.
+- EAD: Eliminate fails (the business breaks without leads). No existing CRM or lead tool is paid for, so build, not Switch On. Automate: yes.
+- Process: Trigger = weekly run. Sources = Google search for Instagram bios with wa.me links. Transform = check for a real website, dedupe, record. Decision = qualify only if WhatsApp live and no real site. Destination = tracker in `prospects/`.
+- Autonomy: L2 Drafted.
+- KPI: more customers. Metric: qualified leads added per week, target 10+.
+- Cost a month: not known yet (hours and rate not given; slip cost not given).
+
+**Owner:** Son. Linked `/lead-list` in `CLAUDE.md` and `AGENTS.md` skill lists.
+
+## 2026-11-25 - Merge /prospecting into /lead-list; prospecting retired
+
+**Decision:** `/prospecting` is merged into `/lead-list`. One skill now runs the whole batch: fast Google-search path per lead, Scrapling check and bulk city list (on request), tracker in `prospects/leads.csv`. The old skill is archived to `archives/prospecting-2026-11-25/`. Its Codex copy is archived to `archives/prospecting-codex-2026-11-25/`. Routers, README, connections row 9 and `.gitignore` now point to `lead-list`. Scrapling venv moved to `.claude/skills/lead-list/.venv/` (recreated, not copied).
+
+**Why:** Son: `/prospecting` pulls one lead per run, too slow for a batch of 10. Two skills for one job means two places to keep in sync.
+
+**Alternatives considered:** Keep both and call `/prospecting` from `/lead-list` in a loop. Rejected: same one-per-run cost, and two skills to maintain.
+
+**Owner:** Son

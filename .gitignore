@@ -15,4 +15,4 @@ prospects/
 recordings/
 
 # Prospecting skill Python env
-.claude/skills/prospecting/.venv/
+.claude/skills/lead-list/.venv/
