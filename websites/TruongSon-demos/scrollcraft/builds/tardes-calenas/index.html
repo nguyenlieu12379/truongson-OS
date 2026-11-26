@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/bandeja.webp">
+<link rel="preload" as="image" href="assets/logo-mark.webp">
 <script>
 (function (d) {
   var CONFIG = {
@@ -125,13 +126,13 @@
 </script>
 
 <link rel="stylesheet" href="liquid-glass.css?v=1">
-<link rel="stylesheet" href="site.css?v=12">
+<link rel="stylesheet" href="site.css?v=13">
 </head>
 <body>
 <a class="skip" href="#reserve">Skip to reservations</a>
 
 <header class="bar" id="bar">
-  <a class="brand" href="#top" aria-label="Tardes Caleñas, back to the top"><span class="wm">Tardes Caleñas</span><span class="brand-sub">Bar · Restaurant · Hollywood FL</span></a>
+  <a class="brand" href="#top" aria-label="Tardes Caleñas, back to the top"><img class="wm" src="assets/logo-mark.webp" alt="Tardes Caleñas" width="489" height="210"></a>
   <div class="bar-end">
     <a class="cta lg-glass" id="cta" href="https://wa.me/19549402515?text=Hi%20Tardes%20Cale%C3%B1as%2C%20I%27d%20like%20to%20reserve%20a%20table" target="_blank" rel="noopener"><svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/><circle class="d d2" cx="12" cy="12" r="1.15"/><circle class="d d3" cx="15.6" cy="12" r="1.15"/></svg><span class="lbl">Reserve<span class="opt"> on WhatsApp</span></span></a>
     <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
@@ -147,7 +148,10 @@
   <span class="word w2" aria-hidden="true"><span class="ch">C</span><span class="ch">a</span><span class="ch">l</span><span class="ch">e</span><span class="ch">ñ</span><span class="ch">a</span><span class="ch">s</span></span>
   <p class="hero-line" id="heroLine">Colombian kitchen and salsa bar on Hollywood Blvd. <b>Kitchen open every day until 4AM.</b></p>
 
+  <img class="cat" id="cat" src="assets/b-cat.webp" alt="" width="92" height="103">
   <img class="drift" id="dr-tost" src="assets/tostones.webp" alt="">
+  <img class="drift item" id="dr-glass" src="assets/b-glass.webp" alt="">
+  <img class="drift item" id="dr-cut" src="assets/b-cutlery.webp" alt="">
 
   <div class="plate" id="pl-bandeja"><img src="assets/bandeja.webp" alt="" decoding="async"></div>
   <div class="tag" id="tg-bandeja"><b>Bandeja Paisa</b><span>Steak, chicharrón, fried egg on rice, chorizo, sweet plantain, beans and arepa.</span><i>$21.99</i></div>
@@ -162,21 +166,22 @@
   <div class="plate" id="pl-picada"><img src="assets/picada.webp" alt="" decoding="async"></div>
   <div class="tag" id="tg-picada"><b>Picada</b><span>The sampler for the table: beef, pork, sausage, morcilla, plantain and arepa.</span><i>$34.99</i></div>
 
-  <div class="scene-head" id="anHead"><h2>The plate Hollywood orders most.</h2><p>Bandeja Paisa, <b>$21.99</b>. Number one on the menu.</p></div>
+  <div class="scene-head" id="anHead"><h2>The plate Hollywood orders <span class="r">most.</span></h2><p>Bandeja Paisa, <b>$21.99</b>. Number one on the menu.</p></div>
   <div class="anat" id="anat"><span class="an" id="an-steak">Grilled steak</span><span class="an" id="an-chich">Chicharrón</span><span class="an" id="an-egg">Fried egg on rice</span><span class="an" id="an-chorizo">Chorizo</span><span class="an" id="an-plantain">Sweet plantain</span><span class="an" id="an-beans">Beans</span><span class="an" id="an-arepa">Arepa</span></div>
   <svg class="leaders" id="leaders" aria-hidden="true"></svg>
 
-  <div class="scene-head" id="passHead"><h2>From the kitchen.</h2><p>Colombian plates, made to order.</p></div>
+  <div class="scene-head" id="passHead"><h2>From the <span class="r">kitchen.</span></h2><p>Colombian plates, made to order.</p></div>
 
-  <div class="scene-head" id="tableHead"><h2>A table at 2AM.</h2><p><b>Kitchen open every day, 11AM to 4AM.</b> Order the picada and share it.</p></div>
+  <div class="scene-head" id="tableHead"><h2>A table at <span class="r">2AM.</span></h2><p><b>Kitchen open every day, 11AM to 4AM.</b> Order the picada and share it.</p></div>
 
   <section class="nights" id="nights" aria-labelledby="hNights">
-    <h2 id="hNights">Five nights of music, every week.</h2>
+    <h2 id="hNights">Five nights of <span class="r">music</span>, every week.</h2>
     <ol class="night-list"><li><span class="day">Wednesday</span><span class="gen">Romántico</span></li><li><span class="day">Thursday</span><span class="gen">Vallenato</span></li><li><span class="day">Friday</span><span class="gen">Salsa</span></li><li><span class="day">Saturday</span><span class="gen">Crossover</span></li><li><span class="day">Sunday</span><span class="gen">Viejoteca</span></li></ol>
     <p class="years">15 years of salsa caleña in Hollywood.</p>
   </section>
 
   <section class="card" id="reserve" aria-labelledby="hReserve">
+    <img class="card-logo" src="assets/logo.webp" alt="Tardes Caleñas, Bar and Restaurant, Hollywood FL" width="489" height="248">
     <h2 id="hReserve">Get a table.</h2>
     <p class="note">Reservations are on WhatsApp. Send the day, the time and how many.</p>
     <table class="hours">
@@ -194,7 +199,7 @@
 <p class="demo-note">Concept site prepared for Tardes Caleñas. Photos from their own menu.</p>
 
 <script src="liquid-glass.js?v=1" defer></script>
-<script src="site.js?v=12" defer></script>
+<script src="site.js?v=13" defer></script>
 <script>addEventListener("DOMContentLoaded", function () { if (window.LiquidGlass) { LiquidGlass.cursorBall(); LiquidGlass.glassify(".lg-glass"); } });</script>
 </body>
 </html>

@@ -23,7 +23,8 @@
   const KEYS = RING.concat('picada');
   const P = Object.fromEntries(KEYS.map((k) => [k, $(`pl-${k}`)]));
   const TG = Object.fromEntries(KEYS.map((k) => [k, $(`tg-${k}`)]));
-  const DR = [$('dr-tost')];
+  const DR = [$('dr-tost'), $('dr-glass'), $('dr-cut')];   // a small plate of tostones, and the glass and cutlery from their logo
+  const CAT = $('cat');   // the Cali cat from their logo
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
   // the bandeja cutout: crop box inside the 1600x900 photo, and where each part sits in that photo
@@ -173,7 +174,15 @@
       : { cx: (R.card[0]) / 2, cy: VH * 0.52, w: Math.min(R.card[0] - pad * 2, VH * 0.7 / bAR) };
 
     // drifters
-    DR.forEach((d) => { const w = mobile ? 64 : Math.min(130, VW * 0.08); d.style.width = `${w}px`; d._w = w; d._h = w * (d.naturalHeight / d.naturalWidth || 1); });
+    DR.forEach((d, i) => {
+      // the logo items stay near their own pixel size so they never go soft
+      const w = i === 0 ? (mobile ? 64 : Math.min(130, VW * 0.08)) : (mobile ? 0.7 : 1) * d.naturalWidth * (i === 1 ? 1.1 : 1.2);
+      d.style.width = `${w}px`; d._w = w; d._h = w * (d.naturalHeight / d.naturalWidth || 1);
+    });
+    // the cat sits just right of "Tardes", above the plate's top edge, the way it sits in their logo
+    const cw = mobile ? 66 : Math.min(118, fs * 0.6);
+    CAT.style.width = `${cw}px`; CAT._w = cw; CAT._h = cw * CAT.naturalHeight / CAT.naturalWidth;
+    R.cat = [Math.min(R.w1[0] + W1._w + fs * 0.06, VW - cw - 8), Math.min(pt - 4, R.w1[1] + W1._h * 0.82) - CAT._h];
 
     spacer.style.height = `${Math.round(VH * (mobile ? 11 : 10) + (innerHeight - VH))}px`;
   }
@@ -186,6 +195,9 @@
     // hero words slide off their corners
     at(W1, R.w1[0] - heroK * (R.w1[0] + W1._w + 40), R.w1[1] - heroK * VH * 0.25);
     at(W2, R.w2[0] + heroK * (VW - R.w2[0] + 40), R.w2[1] + heroK * VH * 0.25);
+    const csw = Math.sin(t * 2.4 + 1.3) * still;
+    at(CAT, R.cat[0] - heroK * (R.cat[0] + CAT._w + 40), R.cat[1] - heroK * VH * 0.25, 1, ` rotate(${(csw * 4).toFixed(2)}deg)`);
+    vis(CAT, heroK < 1);
     vis(W1, heroK < 1); vis(W2, heroK < 1);
     if (heroK < 1) {
       [W1, W2].forEach((w, wi) => [...w.children].forEach((ch, i) => {
@@ -310,16 +322,24 @@
       put(cta, 'fontSize', `${(lerp(mobile ? 14 : 15, 17, tk)).toFixed(2)}px`);
     }
 
-    // a small plate of tostones drifts through the blank space of each scene
+    // a small plate of tostones and two items from their logo drift through each scene's blank space
+    const SLOTS = mobile ? [
+      [[0.86, 0.1], [0.86, 0.94], [0.86, 0.94], [0.1, 0.94], [0.1, 0.94], [-0.3, 0.94]],
+      [[0.12, 0.72], [-0.2, 0.7], [-0.2, 0.7], [-0.2, 0.7], [0.9, 0.94], [-0.2, 0.7]],
+      [[0.9, 0.74], [1.2, 0.7], [1.2, 0.7], [0.9, 0.94], [1.2, 0.7], [1.2, 0.7]],
+    ] : [
+      [[0.88, 0.22], [0.9, 0.2], [0.92, 0.2], [0.06, 0.88], [0.06, 0.88], [0.05, 0.12]],
+      [[0.08, 0.5], [0.9, 0.5], [0.07, 0.86], [0.03, 0.45], [0.92, 0.5], [0.96, 0.9]],
+      [[0.92, 0.64], [0.95, 0.1], [0.06, 0.58], [0.36, 0.08], [0.06, 0.3], [0.05, 0.88]],
+    ];
+    const sc = p < 0.08 ? 0 : p < 0.22 ? 1 : p < 0.5 ? 2 : p < 0.74 ? 3 : p < 0.86 ? 4 : 5;
     DR.forEach((el, i) => {
-      const SLOT = mobile
-        ? [[0.86, 0.1], [0.86, 0.94], [0.86, 0.94], [0.1, 0.94], [0.1, 0.94], [-0.3, 0.94]]
-        : [[0.88, 0.22], [0.9, 0.2], [0.92, 0.2], [0.06, 0.88], [0.06, 0.88], [0.05, 0.12]];
-      const sc = p < 0.08 ? 0 : p < 0.22 ? 1 : p < 0.5 ? 2 : p < 0.74 ? 3 : p < 0.86 ? 4 : 5;
-      const nx = SLOT[sc][0] * VW + Math.sin(t * 0.4 + i * 2) * 18, ny = SLOT[sc][1] * VH + Math.cos(t * 0.33 + i) * 14;
+      const SL = SLOTS[i][sc];
+      const nx = SL[0] * VW + Math.sin(t * 0.4 + i * 2) * 18, ny = SL[1] * VH + Math.cos(t * 0.33 + i) * 14;
       el._x = el._x == null ? nx : el._x + (nx - el._x) * 0.03;
       el._y = el._y == null ? ny : el._y + (ny - el._y) * 0.03;
-      at(el, el._x - el._w / 2, el._y - el._h / 2, 1, ` rotate(${(t * 6 + i * 90) % 360}deg)`);
+      const rot = i === 0 ? (t * 6) % 360 : Math.sin(t * 0.7 + i) * 10;   // the plate turns, the logo items rock
+      at(el, el._x - el._w / 2, el._y - el._h / 2, 1, ` rotate(${rot.toFixed(2)}deg)`);
     });
   }
 
@@ -387,7 +407,7 @@
     requestAnimationFrame((n) => { last = n; tick(n); stage.classList.add('ready'); });
   }
   let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(layout, 120); });
-  const imgs = [...document.querySelectorAll('.plate img, .drift')];
+  const imgs = [...document.querySelectorAll('.plate img, .drift, .cat, .wm')];
   let started = false; const go = () => { if (!started) { started = true; start(); } };
   Promise.all(imgs.map((i) => (i.decode ? i.decode().catch(() => 0) : 0)).concat(document.fonts ? document.fonts.ready : 0)).then(go);
   setTimeout(go, 3000);   // never leave the stage hidden

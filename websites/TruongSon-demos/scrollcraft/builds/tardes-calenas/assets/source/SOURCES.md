@@ -11,3 +11,10 @@ All photos from their own ordering page, order.online/store/24882380 (DoorDash-h
 | chuleta.jpg | Chuleta Caleña / Caleña Pork Chop, $16.99 | a17f37cb-fbfc-4246-8214-62c5c0165111 |
 | arrozpollo.jpg | Arroz con Pollo / Rice with Chicken, $16.99 | b20bc628-4cc3-442d-a039-868598f5009a |
 | tostones.jpg | Tostones 3 Unidades | 3ade543e-c765-4a4b-9e30-0c7e088386ab |
+
+## Brand
+| File | What | Source |
+|---|---|---|
+| brand/avatar.jpg | Their logo (500x500 Instagram profile picture) | instagram.com/tardes_calenas, saved 2026-11-26 with Son or Truong's OK |
+
+Cut by `lab/brand.py` into `assets/logo.webp` (full lockup), `assets/logo-mark.webp` (bar), `assets/b-cat.webp` (the Cali cat), `assets/b-glass.webp`, `assets/b-cutlery.webp`. Logo colours sampled from it: yellow #E9B721, red #AF1813.

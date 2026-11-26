@@ -8,7 +8,9 @@ Prospect demo for a Colombian bar and restaurant at 2025 Hollywood Blvd: 15 year
 - Photos: their own menu photos from their order.online page. Sources: `assets/source/SOURCES.md`.
 - Cutouts: `lab/cut.py` (shape prior per plate, GrabCut or hand-traced outline), then `lab/shadow.py` bakes the contact shadow into each webp (48px pad, matches `SHADOW_PAD` in `site.js`). No CSS filter runs on a moving plate.
 - Markup: `lab/make_html.py` writes `index.html` (bump `V` there on every change to `site.css` or `site.js`).
-- Colours: 60 off-white ground, 30 their avatar yellow (big type, marker bars, price chips), 10 their avatar red (CTA only).
+- Brand: their logo (from the IG avatar, cut by `lab/brand.py`) in the bar and on the card; the Cali cat from the logo sits beside "Tardes"; the logo's martini glass and cutlery drift through each scene. Hero words copy the logo's look: yellow letters, red outline, red drop.
+- Colours, sampled from the logo: off-white ground, yellow #E9B721 (big type, marker bars, price chips), red #AF1813 (CTA, outlines, one key word per heading, leader dots).
+- One CTA: the bar's Reserve button travels into the card's slot at the close.
 - CTA: Reserve on WhatsApp (954-940-2515), their Linktree's only link is "Reservas" to that number.
 - Jump to a moment: `?p=0.6`.
 

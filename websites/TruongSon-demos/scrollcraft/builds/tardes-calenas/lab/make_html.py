@@ -35,7 +35,7 @@ THEME_BTN = '''<button class="lg-theme-btn" type="button" aria-pressed="false" a
       <svg class="lg-i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
       <svg class="lg-i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
     </button>'''
-V = 12
+V = 13
 html = f'''<!doctype html>
 <html lang="en">
 <head>
@@ -49,6 +49,7 @@ html = f'''<!doctype html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/bandeja.webp">
+<link rel="preload" as="image" href="assets/logo-mark.webp">
 {head}
 <link rel="stylesheet" href="liquid-glass.css?v=1">
 <link rel="stylesheet" href="site.css?v={V}">
@@ -57,7 +58,7 @@ html = f'''<!doctype html>
 <a class="skip" href="#reserve">Skip to reservations</a>
 
 <header class="bar" id="bar">
-  <a class="brand" href="#top" aria-label="Tardes Caleñas, back to the top"><span class="wm">Tardes Caleñas</span><span class="brand-sub">Bar · Restaurant · Hollywood FL</span></a>
+  <a class="brand" href="#top" aria-label="Tardes Caleñas, back to the top"><img class="wm" src="assets/logo-mark.webp" alt="Tardes Caleñas" width="489" height="210"></a>
   <div class="bar-end">
     <a class="cta lg-glass" id="cta" href="{WA}" target="_blank" rel="noopener">{WA_ICON}<span class="lbl">Reserve<span class="opt"> on WhatsApp</span></span></a>
     {THEME_BTN}
@@ -70,24 +71,28 @@ html = f'''<!doctype html>
   {word("Caleñas", "w2")}
   <p class="hero-line" id="heroLine">Colombian kitchen and salsa bar on Hollywood Blvd. <b>Kitchen open every day until 4AM.</b></p>
 
+  <img class="cat" id="cat" src="assets/b-cat.webp" alt="" width="92" height="103">
   <img class="drift" id="dr-tost" src="assets/tostones.webp" alt="">
+  <img class="drift item" id="dr-glass" src="assets/b-glass.webp" alt="">
+  <img class="drift item" id="dr-cut" src="assets/b-cutlery.webp" alt="">
 {plates}
 
-  <div class="scene-head" id="anHead"><h2>The plate Hollywood orders most.</h2><p>Bandeja Paisa, <b>$21.99</b>. Number one on the menu.</p></div>
+  <div class="scene-head" id="anHead"><h2>The plate Hollywood orders <span class="r">most.</span></h2><p>Bandeja Paisa, <b>$21.99</b>. Number one on the menu.</p></div>
   <div class="anat" id="anat">{anat}</div>
   <svg class="leaders" id="leaders" aria-hidden="true"></svg>
 
-  <div class="scene-head" id="passHead"><h2>From the kitchen.</h2><p>Colombian plates, made to order.</p></div>
+  <div class="scene-head" id="passHead"><h2>From the <span class="r">kitchen.</span></h2><p>Colombian plates, made to order.</p></div>
 
-  <div class="scene-head" id="tableHead"><h2>A table at 2AM.</h2><p><b>Kitchen open every day, 11AM to 4AM.</b> Order the picada and share it.</p></div>
+  <div class="scene-head" id="tableHead"><h2>A table at <span class="r">2AM.</span></h2><p><b>Kitchen open every day, 11AM to 4AM.</b> Order the picada and share it.</p></div>
 
   <section class="nights" id="nights" aria-labelledby="hNights">
-    <h2 id="hNights">Five nights of music, every week.</h2>
+    <h2 id="hNights">Five nights of <span class="r">music</span>, every week.</h2>
     <ol class="night-list">{nights}</ol>
     <p class="years">15 years of salsa caleña in Hollywood.</p>
   </section>
 
   <section class="card" id="reserve" aria-labelledby="hReserve">
+    <img class="card-logo" src="assets/logo.webp" alt="Tardes Caleñas, Bar and Restaurant, Hollywood FL" width="489" height="248">
     <h2 id="hReserve">Get a table.</h2>
     <p class="note">Reservations are on WhatsApp. Send the day, the time and how many.</p>
     <table class="hours">

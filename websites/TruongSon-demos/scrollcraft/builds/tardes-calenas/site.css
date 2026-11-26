@@ -1,9 +1,9 @@
 /* Tardes Caleñas. 60 off-white ground, 30 their avatar yellow (big type, fills), 10 their avatar red (CTA only). */
 :root {
   --ground: #F7F6F3; --ink: #17130F; --ink-soft: #5C554D; --line: rgb(23 19 15 / 0.14);
-  --yellow: #FFC21A;          /* fills, marker bars */
-  --yellow-type: #F2AE00;     /* yellow set as type on the light ground */
-  --red: #D7141E; --cta-ink: #FFFFFF;
+  --yellow: #EDB51C;          /* their logo's letter fill: fills, marker bars */
+  --yellow-type: #E9B721;     /* the same yellow set as type, always with the red outline */
+  --red: #B8191A; --red-deep: #AF1813; --red-type: #AF1813; --cta-ink: #FFFFFF;   /* their logo's red */
   --card: #FFFFFF; --shadow: rgb(40 28 12 / 0.28);
   --gen-ink: #17130F; --gen-mark: var(--yellow);
   --f-display: "Archivo", system-ui, sans-serif;
@@ -13,13 +13,13 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --ground: #121110; --ink: #F3EEE6; --ink-soft: #ADA59A; --line: rgb(243 238 230 / 0.16);
-    --yellow: #FFC62E; --yellow-type: #FFC62E; --red: #E3242C; --card: #1C1A18; --shadow: rgb(0 0 0 / 0.55); --gen-ink: #FFC62E; --gen-mark: transparent;
+    --yellow: #F0BC2A; --yellow-type: #F0BC2A; --red: #C81E1E; --red-deep: #9E1612; --red-type: #FF5A4A; --card: #1C1A18; --shadow: rgb(0 0 0 / 0.55); --gen-ink: #FFC62E; --gen-mark: transparent;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --ground: #121110; --ink: #F3EEE6; --ink-soft: #ADA59A; --line: rgb(243 238 230 / 0.16);
-  --yellow: #FFC62E; --yellow-type: #FFC62E; --red: #E3242C; --card: #1C1A18; --shadow: rgb(0 0 0 / 0.55); --gen-ink: #FFC62E; --gen-mark: transparent;
+  --yellow: #F0BC2A; --yellow-type: #F0BC2A; --red: #C81E1E; --red-deep: #9E1612; --red-type: #FF5A4A; --card: #1C1A18; --shadow: rgb(0 0 0 / 0.55); --gen-ink: #FFC62E; --gen-mark: transparent;
   color-scheme: dark;
 }
 
@@ -35,8 +35,7 @@ h2 { font: 800 clamp(30px, 3.6vw, 54px)/1.02 var(--f-display); font-stretch: 88%
 /* ---- bar: wordmark, CTA, toggle in the corner ---- */
 .bar { position: fixed; inset: 0 0 auto 0; height: 68px; z-index: 20; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(16px, 3vw, 40px); background: var(--ground); }
 .brand { display: flex; flex-direction: column; text-decoration: none; line-height: 1.05; }
-.wm { font: 900 22px/1 var(--f-display); font-stretch: 80%; letter-spacing: -0.01em; color: var(--red); }
-.brand-sub { font-size: 12px; color: var(--ink-soft); margin-top: 3px; }
+.wm { display: block; height: 50px; width: auto; }
 .bar-end { display: flex; align-items: center; gap: 10px; }
 
 .cta { display: inline-flex; align-items: center; justify-content: center; height: 46px; padding: 0 20px; border-radius: 999px;
@@ -70,7 +69,11 @@ h2 { font: 800 clamp(30px, 3.6vw, 54px)/1.02 var(--f-display); font-stretch: 88%
 .demo-note { position: fixed; right: 12px; bottom: 6px; margin: 0; font-size: 11px; color: var(--ink-soft); opacity: 0.7; z-index: 5; pointer-events: none; }
 
 /* hero words, split around the plate */
-.word { display: flex; font: 900 10px/0.8 var(--f-display); font-stretch: 72%; letter-spacing: -0.035em; color: var(--yellow-type); white-space: nowrap; z-index: 1; }
+.word { display: flex; font: 900 10px/0.8 var(--f-display); font-stretch: 72%; letter-spacing: -0.02em; color: var(--yellow-type); white-space: nowrap; z-index: 1;
+  -webkit-text-stroke: 0.035em var(--red-deep); paint-order: stroke fill; text-shadow: 0.035em 0.05em 0 var(--red-deep); }
+.cat { z-index: 2; width: 110px; height: auto; transform-origin: 50% 100%; }
+.r { color: var(--red-type); }
+.card-logo { display: block; width: min(300px, 80%); height: auto; margin: -6px 0 12px -6px; }
 .word .ch { display: inline-block; transform-origin: 50% 100%; }
 .hero-line { margin: 0; max-width: 34ch; font-size: 17px; line-height: 1.45; color: var(--ink-soft); z-index: 3; }
 .hero-line b { color: var(--ink); font-weight: 600; }
@@ -81,6 +84,7 @@ h2 { font: 800 clamp(30px, 3.6vw, 54px)/1.02 var(--f-display); font-stretch: 88%
 #pl-bandeja { z-index: 6; }
 #pl-picada { z-index: 5; }
 .drift { z-index: 2; width: 120px; height: auto; pointer-events: none; }
+.drift.item { width: auto; }
 
 .tag { z-index: 7; width: 250px; display: grid; grid-template-columns: 1fr auto; column-gap: 12px; row-gap: 2px; }
 .tag b { font: 800 22px/1.05 var(--f-display); font-stretch: 85%; }
@@ -100,7 +104,7 @@ h2 { font: 800 clamp(30px, 3.6vw, 54px)/1.02 var(--f-display); font-stretch: 88%
   font: 600 14px/1.2 var(--f-text); white-space: nowrap; will-change: transform, opacity; }
 .leaders { width: 100%; height: 100%; z-index: 7; pointer-events: none; overflow: visible; }
 .leaders path { fill: none; stroke: var(--ink); stroke-width: 1.4; }
-.leaders circle { fill: var(--yellow); stroke: var(--ink); stroke-width: 1.4; }
+.leaders circle { fill: var(--red); stroke: var(--yellow); stroke-width: 2; }
 
 /* the nights */
 .nights { z-index: 7; width: min(760px, 62vw); }
@@ -124,8 +128,8 @@ h2 { font: 800 clamp(30px, 3.6vw, 54px)/1.02 var(--f-display); font-stretch: 88%
 @media (max-width: 760px) {
   .bar { height: 60px; }
   .stage { top: 60px; }
-  .wm { font-size: 19px; }
-  .brand-sub { display: none; }
+  .wm { height: 40px; }
+  .cat { width: 72px; }
   .bar .cta { height: 40px; padding: 0 14px; font-size: 14px; }
   .hero-line { font-size: 15px; }
   .tag { width: 200px; } .tag b { font-size: 18px; } .tag i { font-size: 16px; } .tag span { font-size: 13px; }
