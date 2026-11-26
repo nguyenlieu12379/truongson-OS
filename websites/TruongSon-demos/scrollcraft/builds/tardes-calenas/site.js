@@ -16,6 +16,7 @@
   const W1 = document.querySelector('.word.w1'), W2 = document.querySelector('.word.w2');
   const heroLine = $('heroLine'), anHead = $('anHead'), passHead = $('passHead'), tableHead = $('tableHead');
   const nights = $('nights'), card = $('reserve'), svg = $('leaders');
+  const cta = $('cta'), slot = $('ctaSlot');
   const NL = [...nights.querySelectorAll('li')];
   const PASS = ['sancocho', 'lomo', 'chuleta', 'arrozpollo'];
   const RING = ['bandeja', 'sancocho', 'lomo', 'chuleta', 'arrozpollo'];
@@ -119,6 +120,20 @@
       }
       R.anat[k] = { ax, ay, lx, ly };
     });
+    // no two labels may touch: push a clashing one further from the plate (up above it, down below it),
+    // sideways if the screen edge stops it
+    const placed = [], GAP = 6;
+    Object.keys(ANAT).forEach((k) => {
+      const a = R.anat[k], el = AN[k], up = a.ly + el._h / 2 < R.anC[1];
+      for (let n = 0; n < 12; n++) {
+        const hit = placed.find((b) => a.lx < b.lx + b.w + GAP && a.lx + el._w + GAP > b.lx && a.ly < b.ly + b.h + GAP && a.ly + el._h + GAP > b.ly);
+        if (!hit) break;
+        const ny = up ? hit.ly - el._h - GAP : hit.ly + hit.h + GAP;
+        if (ny >= 6 && ny <= VH - el._h - 6) a.ly = ny;
+        else a.lx = clamp(a.lx < hit.lx ? hit.lx - el._w - GAP : hit.lx + hit.w + GAP, 8, VW - el._w - 8);
+      }
+      placed.push({ lx: a.lx, ly: a.ly, w: el._w, h: el._h });
+    });
 
     // pass and table sizes
     KEYS.forEach((k) => { if (k === 'bandeja') return; const a = ar(k); const w = mobile ? VW * 0.74 : Math.min(VH * 0.6, VW * 0.36) * (k === 'picada' ? 1.1 : 1); size(P[k], w); P[k]._w = w; P[k]._h = w * a; });
@@ -148,6 +163,12 @@
     R.nights = mobile ? [16, Math.max(12, (VH - nights._h) / 2)] : [(VW - nights._w) / 2, (VH - nights._h) / 2];
     size(card, mobile ? VW - 32 : 440); card._w = card.offsetWidth; card._h = card.offsetHeight;
     R.card = mobile ? [16, VH - card._h - 14] : [VW - pad - card._w - VW * 0.04, (VH - card._h) / 2];
+    // the one CTA: its home in the bar, and its slot in the card
+    cta.classList.remove('travel'); ['left', 'top', 'width', 'height', 'fontSize', 'transform'].forEach((k) => { cta.style[k] = ''; }); cta._c = {};
+    const hr = cta.getBoundingClientRect();
+    R.ctaHome = { x: hr.left, y: hr.top, w: hr.width, h: hr.height };
+    R.stageTop = stage.getBoundingClientRect().top;
+    R.slot = { dx: slot.offsetLeft, dy: slot.offsetTop, w: slot.offsetWidth, h: slot.offsetHeight };
     R.closeBand = mobile ? { cx: VW / 2, cy: Math.max(80, (VH - card._h - 14) / 2), w: Math.min(VW * 0.9, ((VH - card._h - 30) * 0.9) / bAR) }
       : { cx: (R.card[0]) / 2, cy: VH * 0.52, w: Math.min(R.card[0] - pad * 2, VH * 0.7 / bAR) };
 
@@ -198,8 +219,10 @@
 
     // anatomy: labels draw out of the plate
     const lin = seg(p, ...T.labels), lout = seg(p, ...T.labelsOut);
-    at(anHead, R.anHead[0] + (1 - O(seg(p, 0.08, 0.13))) * (VW - R.anHead[0]) - lout * (VW * 0.6), R.anHead[1]);
-    vis(anHead, p > 0.07 && p < 0.235);
+    // the heading slides in from the right, then drops off the bottom of the stage as the bandeja leaves
+    const anOut = E(seg(p, 0.185, 0.215));
+    at(anHead, R.anHead[0] + (1 - O(seg(p, 0.08, 0.13))) * (VW - R.anHead[0]), R.anHead[1] + anOut * (VH - R.anHead[1] + 40));
+    vis(anHead, p > 0.07 && anOut < 1);
     let d = '', dots = '';
     const keys = Object.keys(ANAT);
     keys.forEach((k, i) => {
@@ -271,7 +294,21 @@
     // the card slides in and holds
     const ck = E(seg(p, 0.87, 0.94));
     vis(card, ck > 0);
-    if (ck > 0) at(card, lerp(VW + 20, R.card[0], ck) , R.card[1]);
+    const cardX = lerp(VW + 20, R.card[0], ck);
+    if (ck > 0) at(card, cardX, R.card[1]);
+
+    // the one CTA leaves the bar and lands in the card's slot as the card arrives
+    const tk = E(seg(p, 0.875, 0.95));
+    if (tk <= 0) {
+      if (cta.classList.contains('travel')) { cta.classList.remove('travel'); ['left', 'top', 'width', 'height', 'fontSize'].forEach((k) => { cta.style[k] = ''; }); cta._c = {}; }
+    } else {
+      if (!cta.classList.contains('travel')) cta.classList.add('travel');
+      const h = R.ctaHome, sx = cardX + R.slot.dx, sy = R.stageTop + R.card[1] + R.slot.dy;
+      const lift = Math.sin(tk * Math.PI) * VH * 0.06;   // a slight arc, not a straight slide
+      put(cta, 'left', `${r1(lerp(h.x, sx, tk))}px`); put(cta, 'top', `${r1(lerp(h.y, sy, tk) + lift)}px`);
+      put(cta, 'width', `${r1(lerp(h.w, R.slot.w, tk))}px`); put(cta, 'height', `${r1(lerp(h.h, R.slot.h, tk))}px`);
+      put(cta, 'fontSize', `${(lerp(mobile ? 14 : 15, 17, tk)).toFixed(2)}px`);
+    }
 
     // a small plate of tostones drifts through the blank space of each scene
     DR.forEach((el, i) => {
@@ -287,7 +324,8 @@
   }
 
   function gatherK(i, p) { return E(clamp((p - T.gather[0] - i * 0.022) / (T.gather[1] - T.gather[0] - 4 * 0.022))); }
-  function arc(x0, y0, x1, y1, k) { const mx = (x0 + x1) / 2, my = Math.min(y0, y1) - VH * 0.12; const a = 1 - k; return [a * a * x0 + 2 * a * k * mx + k * k * x1, a * a * y0 + 2 * a * k * my + k * k * y1]; }
+  // plates arc under the heading on their way back to the table, never across it
+  function arc(x0, y0, x1, y1, k) { const mx = (x0 + x1) / 2, my = Math.max(y0, y1) + VH * 0.12; const a = 1 - k; return [a * a * x0 + 2 * a * k * mx + k * k * x1, a * a * y0 + 2 * a * k * my + k * k * y1]; }
   function openOut(rg, k) { const f = lerp(1, mobile ? 3.2 : 2.7, k); return [R.tableC[0] + (rg.cx - R.tableC[0]) * f, R.tableC[1] + (rg.cy - R.tableC[1]) * f]; }
   function offEdge(rg) { const dx = rg.cx - R.tableC[0], dy = rg.cy - R.tableC[1], d = Math.hypot(dx, dy) || 1; return [R.tableC[0] + dx / d * VW, R.tableC[1] + dy / d * VW]; }
 
@@ -295,7 +333,8 @@
   function placeTag(k, tg, x, y, s, u, gk, opn) {
     const el = P[k];
     if (mobile && k !== 'picada' && gk > 0.6) { vis(tg, false); return; }
-    if (gk > 0.6 && opn < 0.3) {
+    if (gk > 0.6 && opn >= 1) { vis(tg, false); return; }   // off the stage with its plate
+    if (gk > 0.6) {
       if (!tg.classList.contains('small')) { tg.classList.add('small'); tg._sw = tg.offsetWidth; tg._sh = tg.offsetHeight; }
       const rg = R.ring[k] || { a: Math.PI / 2 };
       const hw = el._w * s / 2, hh = el._h * s / 2;
@@ -306,15 +345,18 @@
         const c = Math.cos(rg.a); tx = c >= 0 ? x + hw * 0.8 + 6 : x - hw * 0.8 - 6 - tg._sw; ty = y - tg._sh / 2;
         if (tx + tg._sw > VW - 8 || tx < 8) { tx = x - tg._sw / 2; ty = Math.sin(rg.a) < 0 ? y - hh * 0.8 - tg._sh : y + hh * 0.8; }   // no room beside it: above or below
       }
-      at(tg, clamp(tx, 6, VW - tg._sw - 6), clamp(ty, 4, VH - tg._sh - 4));
-      vis(tg, true); op(tg, clamp((gk - 0.6) / 0.3) * (1 - clamp(opn / 0.3)));
+      // the tag slides out from under its plate as the plate lands
+      const q = O(clamp((gk - 0.6) / 0.3));
+      // kept on screen while the table holds; when it opens the tag rides off with its plate
+      const fx = lerp(clamp(tx, 6, VW - tg._sw - 6), tx, opn), fy = lerp(clamp(ty, 4, VH - tg._sh - 4), ty, opn);
+      at(tg, lerp(x - tg._sw / 2, fx, q), lerp(y - tg._sh / 2, fy, q), 0.5 + 0.5 * q);
+      vis(tg, true); op(tg, 1);
       return;
     }
     if (tg.classList.contains('small')) tg.classList.remove('small');
     const a = Math.abs(u);
     if (a > 1 || k === 'bandeja' || k === 'picada') { vis(tg, false); return; }
-    const o = 1 - clamp((a - 0.28) / 0.3);
-    vis(tg, o > 0.01); op(tg, o);
+    vis(tg, true); op(tg, 1);   // rides on and off the stage with its plate
     if (mobile) at(tg, x - tg._w / 2, y + el._h / 2 + 14);
     else at(tg, x + el._w / 2 + 34, y - tg._h / 2);
   }
@@ -333,7 +375,7 @@
   addEventListener('pointermove', (e) => { if (e.pointerType !== 'mouse') return; leanT.x = (e.clientX / innerWidth - 0.5) * 2; leanT.y = (e.clientY / innerHeight - 0.5) * 2; }, { passive: true });
   document.addEventListener('mouseleave', () => { leanT.x = 0; leanT.y = 0; });
   document.querySelector('.brand').addEventListener('click', (e) => { e.preventDefault(); scrollTo({ top: 0, behavior: 'smooth' }); });
-  document.querySelector('.skip').addEventListener('click', (e) => { e.preventDefault(); scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' }); card.querySelector('.cta').focus({ preventScroll: true }); });
+  document.querySelector('.skip').addEventListener('click', (e) => { e.preventDefault(); scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' }); cta.focus({ preventScroll: true }); });
   // keyboard focus inside the card jumps to the close
   card.addEventListener('focusin', () => { if (target() < 0.95) scrollTo({ top: document.documentElement.scrollHeight }); });
 

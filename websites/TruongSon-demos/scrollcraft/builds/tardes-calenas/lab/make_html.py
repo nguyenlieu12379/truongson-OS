@@ -35,7 +35,7 @@ THEME_BTN = '''<button class="lg-theme-btn" type="button" aria-pressed="false" a
       <svg class="lg-i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
       <svg class="lg-i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
     </button>'''
-V = 7
+V = 12
 html = f'''<!doctype html>
 <html lang="en">
 <head>
@@ -59,7 +59,7 @@ html = f'''<!doctype html>
 <header class="bar" id="bar">
   <a class="brand" href="#top" aria-label="Tardes Caleñas, back to the top"><span class="wm">Tardes Caleñas</span><span class="brand-sub">Bar · Restaurant · Hollywood FL</span></a>
   <div class="bar-end">
-    <a class="cta lg-glass" href="{WA}" target="_blank" rel="noopener">{WA_ICON}<span class="lbl">Reserve<span class="opt"> on WhatsApp</span></span></a>
+    <a class="cta lg-glass" id="cta" href="{WA}" target="_blank" rel="noopener">{WA_ICON}<span class="lbl">Reserve<span class="opt"> on WhatsApp</span></span></a>
     {THEME_BTN}
   </div>
 </header>
@@ -95,7 +95,7 @@ html = f'''<!doctype html>
       <tr><th scope="row">Music</th><td>Wednesday to Sunday</td></tr>
     </table>
     <p class="addr">2025 Hollywood Blvd, Hollywood, FL 33020 · <a href="https://www.google.com/maps/dir/?api=1&amp;destination=2025+Hollywood+Blvd+Hollywood+FL+33020" target="_blank" rel="noopener">Directions</a></p>
-    <a class="cta big lg-glass" href="{WA}" target="_blank" rel="noopener">{WA_ICON}<span class="lbl">Reserve on WhatsApp</span></a>
+    <div class="cta-slot" id="ctaSlot" aria-hidden="true"></div>
     <p class="alt">954-940-2515 on WhatsApp · Call <a href="tel:+19543917542">954-391-7542</a> · <a href="https://www.instagram.com/tardes_calenas/" target="_blank" rel="noopener">@tardes_calenas</a></p>
   </section>
 
