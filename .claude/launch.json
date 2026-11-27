@@ -84,6 +84,18 @@
         "4514"
       ],
       "port": 4514
+    },
+    {
+      "name": "lg-demo",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        ".claude/skills/site-building/scripts/serve.mjs",
+        "--root",
+        ".claude/skills/site-building",
+        "--port",
+        "4600"
+      ],
+      "port": 4600
     }
   ]
 }

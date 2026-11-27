@@ -412,6 +412,26 @@ video[data-sc-scrub].sc-has-clip { opacity: 1; }
      are the only things that go. */
   .sc-world__poster, [data-sc-copy] { transform: none !important; }
 }
+/* Motion toggle (liquid-glass head.html sets data-motion="off" on <html>).
+   Same rules as the media query above, for visitors who switch motion off on
+   the page instead of in their system settings. Keep the two in step. */
+:root[data-motion="off"] { scroll-behavior: auto; }
+:root[data-motion="off"] [data-sc-in],
+:root[data-motion="off"] [data-sc-stagger] > * { transform: none; transition-duration: 220ms; }
+:root[data-motion="off"] [data-sc-parallax],
+:root[data-motion="off"] [data-sc-pan],
+:root[data-motion="off"] .sc-split__i { transform: none !important; }
+:root[data-motion="off"] [data-sc-reveal] { clip-path: none !important; }
+:root[data-motion="off"] [data-sc-act="pan"] .sc-stage,
+:root[data-motion="off"] [data-sc-act="pan"] [data-sc-stage] {
+  overflow-x: auto; overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+}
+:root[data-motion="off"] [data-sc-pan] > * { scroll-snap-align: center; }
+:root[data-motion="off"] [data-sc-spotlight]::after { display: none; }
+:root[data-motion="off"] .sc-world__poster,
+:root[data-motion="off"] [data-sc-copy] { transform: none !important; }
 
 /* --------------------------------------------------------------- mobile -- */
 @media (max-width: 860px) {

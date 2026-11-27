@@ -2,6 +2,8 @@
 
 Defaults that pre-build offers for every new client site. Learned from Son's answers on the Delícias build (2026-11-22/23). Update this file when an answer changes a default for all future builds, not just one client.
 
+`conversion.md` (the five patterns, 2026-11-27) outranks this file. Lines below were adjusted to fit it on that date; the old wording is noted where it changed.
+
 ## Who and process
 - Ask "Son or Truong?" at the start. Tag the answers with the name.
 - Show photo picks before saving anything.
@@ -21,7 +23,8 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - Cut the hero from a high-res photo of their signature item (clip along its real edge), like the Delícias pudim. A flat photo hero reads as "too simple" (Son, 2026-11-24).
 - Food in the hero is never covered by letters. Type can sit around it, not over it (Son, 2026-11-23).
 - The hero is the product the client posts most, a real cutout (not a 3D or low-poly replica).
-- The product sits one layer in front of a giant brand word. The letters it covers animate (Delícias: they wobble with the product).
+- The product sits one layer in front of a giant brand word. The dish is the one thing that moves; the letters stay still (2026-11-27; was "the letters it covers animate", Delícias wobble).
+- The brand word is a visual layer, not the headline. The first screen also carries a real headline: who it's for and what they get, readable at first paint (mirror test, 2026-11-27).
 - The headline stays readable.
 - Hero cutout and the cursor (Son, 2026-11-24, Pakachi): it leans toward the pointer around its own centre, about 8deg up/down and 11deg sideways. Direct: no inertia or spring, no light sheen, no slide, and the wordmark behind it stays still. Keep enough overscan that cut edges never show.
 
@@ -29,13 +32,14 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - Hero: centre focus with constant motion. The hero subject sits in the middle and keeps moving even with no scroll (breathing, bobbing, slight lean), like Brazilian Taste, Pakachi and Sweets. An off-centre hero with a text column on the side reads "a little off" (Gochón, 2026-11-25).
 - No fades between scenes. Each scene's end builds the next one's start: a frame grows out of an object in the last scene, a label slides onto its next anchor, a pan carries on, a photo rolls up over the last. Fading things in and out reads as cuts (Gochón, 2026-11-25).
 - Prefer real cutouts over a line of copy where a list of products would go (Gochón: the five pieces with name and price replaced the "Tequeños, empanadas..." sentence).
-- Fill blank space with a few real product cutouts drifting slowly through each scene, placed clear of text. Not a nav, not widgets (Gochón, 2026-11-25).
-- No header nav of blocky tags or a progress timeline: "useless". The bar is wordmark, CTA, theme toggle (Gochón, 2026-11-25).
+- Fill blank space with a few real product cutouts drifting slowly, placed clear of text, only in scenes where nothing else moves (one mover per screen, 2026-11-27). Not a nav, not widgets (Gochón, 2026-11-25).
+- No header nav of blocky tags or a progress timeline: "useless". The bar is wordmark, CTA, motion toggle, theme toggle (Gochón, 2026-11-25; motion toggle added 2026-11-27).
 - Serious business, not playful: confident text faces, no novelty or cartoon display fonts, brand colour used with restraint (Son, 2026-11-25, El Budare).
 - Value before motion: every scene answers a customer question (what to order with real names and prices, hours, where, why people come back). Motion and widgets without content read as empty (Son, 2026-11-25).
 - Frame shapes follow the dish: tall frames for dishes shot vertical (lunch boxes, long tables), wide for tray rows, square for bowls. Never crop everything to one landscape shape (Son, 2026-11-24).
 - "Unbroken" means each scene turns into the next (cells fly apart, photos grow into the next layout). A layer that just scrolls up out of view is a break (Son, 2026-11-24).
-- Add related motion so it isn't boring: real cutouts drifting, dish-name lines, counters, lines drawing in. Never drawn props.
+- Add related motion so it isn't boring, but one moving thing per screen, each with a job (show the dish, point to the next step, show what just happened): real cutouts drifting, dish-name lines, lines drawing in. Never drawn props (2026-11-27; "counters" removed).
+- Every build ships one free sample: a "what should I order" picker, a catering estimator, an "open now?" check or build your plate. Real data only, 3 taps or fewer, ends at the CTA (2026-11-27).
 - Background: a light, clean ground nobody notices (neutral off-white, not beige; near-black in dark mode). No saturated or shifting background colour: "the background mustn't be noticable color, make it light, so it looks clean, not AI slops" (Son, 2026-11-25, El Budare). Brand colour lives in the photos, the type at full strength and the CTA.
 - Colour split 60/30/10 (Son, 2026-11-23): 60% background, 30% most type and objects, 10% the one must-see thing (the CTA). Taken from the client's own logo, sign or avatar. Ask it in pre-build every time.
 - Match the client's Instagram vibe (Delícias: "soft, cute, juicy", playful pink).
@@ -47,7 +51,7 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - The light/dark toggle always sits in the bar's far corner. The travelling button docks beside it, so the toggle never floats mid-bar when the button is elsewhere (Son, 2026-11-25).
 - Cursor ball: the Espresso Vivace ball, exactly: its size (112px), its style (rim, highlight, dark inner edge, gloss, drop shadow) and its motion (spring stiffness 0.14, damping 0.72, stretch speed x 0.018, max 0.42; see `builds/espresso-vivace/site.js`). The Brazilian Taste drag is no longer the default: "too fluid" (2026-11-24, Sweets by Carla G pre-build). Don't resize, restyle or re-tune it unless asked. Liquid glass with a clear lens plus this ball is the default UI material (Son, 2026-11-25).
 - No glass venom strands (Son removed them, 2026-11-23).
-- Liquid glass on every block (buttons, text cards, nav): a clear refractive lens that magnifies and bends what's behind it along the edges and corners, with a thin specular rim. No blur, no frost.
+- Liquid glass on every block except the CTA (secondary buttons, text cards, nav). The CTA stays a solid accent fill with a soft shadow, the one thing on top (2026-11-27). Glass is a clear refractive lens that magnifies and bends what's behind it along the edges and corners, with a thin specular rim. No blur, no frost.
 - A lens follows the cursor and bends the light under it; the rim light follows the cursor; buttons lean toward it.
 - Buttons may keep a colour tint so the label reads.
 

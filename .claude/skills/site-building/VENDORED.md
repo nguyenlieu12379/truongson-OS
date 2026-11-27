@@ -14,4 +14,6 @@ Needs: node, full ffmpeg, Chrome/Playwright (run `node .claude/skills/site-build
 
 Local merge (2026-11-23): this folder is now the one `site-building` skill, which also holds pre-build (stage 1) and liquid-glass (stage 3). Upstream `SKILL.md` became `02-scroll-craft.md`. Within the vendored files, only the skill's own name and paths changed (`.claude/skills/site-building/`). Upstream `README`/`CHANGELOG` keep their original plugin paths as history.
 
+Local engine patch (2026-11-27, motion toggle): `engine/scrollcraft.js` treats `data-motion="off"` on `<html>` as reduced motion, and `engine/scrollcraft.css` repeats its reduced-motion block under `:root[data-motion="off"]`. Re-apply both after an upstream update.
+
 Vendor copy. Update by re-cloning and re-copying the upstream files, then re-applying the path and stage-file renames above and bumping the commit line.

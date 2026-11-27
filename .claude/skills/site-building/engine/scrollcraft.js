@@ -139,7 +139,10 @@
 (function (global) {
   'use strict';
 
-  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // data-motion="off" comes from the liquid-glass motion toggle (head.html),
+  // applied before this script runs. Toggling it reloads the page.
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    document.documentElement.getAttribute('data-motion') === 'off';
   var fineMQ = matchMedia('(hover: hover) and (pointer: fine)');
   var smallMQ = matchMedia('(max-width: 860px)');
   var coarse = matchMedia('(hover: none) and (pointer: coarse)').matches;
