@@ -2,14 +2,14 @@
 
 Prospect demo for a Salvadoran restaurant and grill at 10855 SW 72nd St. Built 2026-11-27 with `/site-building` (pre-build, scroll-craft, liquid glass). It's the first build on the five-pattern update (`references/conversion.md`).
 
-**The comal.** One fixed stage, scroll only drives motion, one real pupusa as the thread. The hero has the headline, proof and CTA readable at first paint, with the pupusa in front of a still "Salvadoreño". The pupusa then travels left beside the 11 fillings and their real prices. Peak: it shrinks into the centre cell, 24 copies step out into a 5 by 5 grid as the count rolls to 25, and their real 25-pupusa tray wipes open over it ($99.99, 50 for $172.99). Next, four plates come in as a spread. Then comes the order builder (the free sample), and the close card with live open status, hours, address and the review quote.
+**The comal.** One fixed stage, scroll only drives motion, one real pupusa as the thread. The hero has the headline, proof and CTA readable at first paint, with the pupusa in front of a still "Salvadoreño". The pupusa then travels left beside the 11 fillings and their real prices. Peak: it shrinks into the centre cell, 24 copies step out into a 5 by 5 grid as the count rolls to 25, and the moment the 25th lands their real 25-pupusa tray wipes open over it ($99.99, 50 for $172.99). Next, four plates come in as a spread. Then comes the order builder (the free sample), and the close card with live open status, hours, address and the review quote.
 
 - Brief, first screen copy, free sample, failure checks: `BRIEF.md`. Answers: `PREFS.md`. Facts and what to confirm: `RESEARCH.md`.
 - Photos: their own SkyTab menu photos. Sources: `assets/source/SOURCES.md`. Cutout: `lab/cut.py` (checked on white and black: `lab/check-pupusa.png`).
 - Markup: `lab/make_html.py` writes `index.html` and inlines the skill's `head.html` (theme and motion toggle). Bump `V` there on every change to `site.css` or `site.js`.
 - Colours: off-white ground, avatar navy #1C3A7A (type, rules, fills), avatar gold #E5B53A (CTA only).
 - CTA everywhere: Order on WhatsApp (786-606-1159). The builder writes the order into the WhatsApp message.
-- Jump to a moment: `?p=0.57`.
+- Jump to a moment: `?p=0.5`.
 
 ## Conversion check (references/conversion.md)
 

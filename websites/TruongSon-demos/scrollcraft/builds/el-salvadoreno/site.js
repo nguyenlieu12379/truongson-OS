@@ -2,7 +2,7 @@
    1 hero: headline, line, proof, CTA readable at first paint; still "Salvadoreño" behind; the pupusa breathes
    2 fillings: the pupusa travels left and grows; the eleven fillings and prices sit beside it
    3 peak, one becomes twenty-five: the pupusa shrinks into the centre cell, copies step out into a 5x5 grid,
-     the count rolls 1 to 25, their real tray opens behind the grid
+     the count rolls 1 to 25, and the moment the 25th lands their real tray wipes open over the grid
    4 the kitchen: the tray carries out left, four plates come in as one spread
    5 build your order: the spread lifts away, the builder card rises, the pupusa comes back and sits on its edge
    6 close: the builder carries out, the close card comes in, the pupusa stays on the card's edge. Holds.
@@ -32,8 +32,8 @@
 
   // timeline windows
   const T = {
-    toFill: [0.06, 0.16], toGrid: [0.25, 0.32], multiply: [0.32, 0.48], trayOpen: [0.49, 0.545],
-    toSpread: [0.6, 0.68], toBuilder: [0.74, 0.8], toClose: [0.88, 0.94],
+    toFill: [0.06, 0.16], toGrid: [0.25, 0.32], multiply: [0.32, 0.42], trayOpen: [0.42, 0.47],
+    toSpread: [0.56, 0.64], toBuilder: [0.74, 0.8], toClose: [0.88, 0.94],
   };
 
   // ---- builder: works in both layouts --------------------------------------------------------

@@ -2,7 +2,7 @@
 Bump V on every change to site.css or site.js. Run from the build folder: python -X utf8 lab/make_html.py"""
 import pathlib
 
-V = 5
+V = 6
 HERE = pathlib.Path(__file__).resolve().parent.parent
 HEAD = (HERE.parents[4] / ".claude/skills/site-building/assets/head.html").read_text(encoding="utf8")
 HEAD = HEAD.replace('key: "site-theme",            ', 'key: "el-salvadoreno-theme",  ') \
