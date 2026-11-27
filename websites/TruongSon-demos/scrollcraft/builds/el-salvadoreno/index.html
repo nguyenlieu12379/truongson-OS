@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#F7F6F2">
-<title>El Salvadoreño Restaurant &amp; Grill · Pupusas in Kendall, Miami</title>
-<meta name="description" content="Pupusas and Salvadoran plates, made fresh in Kendall. Open 8am every day. Order on WhatsApp.">
+<title>El Salvadoreño Restaurant &amp; Grill · Salvadoran food in Kendall, Miami</title>
+<meta name="description" content="Pupusas, Salvadoran breakfast, carnes and mariscos on SW 72nd St, Kendall. Open 8am every day. Order on WhatsApp.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/pupusa.webp">
 <!-- liquid-glass: paste into <head>, before any stylesheet that reads
      data-theme. Inline on purpose: the toggle must not depend on a cached
@@ -25,53 +25,15 @@
        - toggle click: the new theme grows as a circle out of the button, its
          edge a glass lens that bends the page behind it (View Transitions +
          SVG displacement, Chromium/Safari 18+); otherwise a colour fade;
-         reduced motion switches instantly
-       - motion toggle (button class "lg-motion-btn"): sets data-motion="on" or
-         "off" on <html> before first paint, saved per site. Off when the
-         visitor turns it off, or when the system asks for reduced motion (the
-         button is then disabled: the system setting wins). Fires a
-         "lg:motion" event on document with detail { off }. Pages built on the
-         scrollcraft engine reload on change, since the engine reads motion
-         once at start. Page code checks
-         document.documentElement.dataset.motion === "off". -->
+         reduced motion switches instantly -->
 <script>
 (function (d) {
   var CONFIG = {
     key: "el-salvadoreno-theme",  // localStorage key, unique per site
-    colors: { light: "#F7F6F2", dark: "#111318" },   // <meta name=theme-color> per theme
+    colors: { light: "#F7F6F2", dark: "#0F1218" },   // <meta name=theme-color> per theme
     duration: 1400                // ms for the glass sweep. 1400 reads as deliberate; 4000-7000 as a show
   };
   d.classList.add("js");
-
-  // ---- motion toggle ----------------------------------------------------
-  var MKEY = CONFIG.key + "-motion", rm = window.matchMedia("(prefers-reduced-motion: reduce)");
-  var mv = null; try { mv = localStorage.getItem(MKEY); } catch (e) {}
-  function motionOff() { return mv === "off" || rm.matches; }
-  function renderMotion() {
-    var off = motionOff();
-    d.setAttribute("data-motion", off ? "off" : "on");
-    document.querySelectorAll(".lg-motion-btn").forEach(function (b) {
-      b.setAttribute("aria-pressed", String(!off));
-      if (rm.matches) { b.disabled = true; b.title = "Motion is off in your system settings"; }
-      else { b.disabled = false; b.title = off ? "Turn motion on" : "Turn motion off"; }
-    });
-  }
-  function motionChanged() {
-    renderMotion();
-    try { document.dispatchEvent(new CustomEvent("lg:motion", { detail: { off: motionOff() } })); } catch (e) {}
-    if (window.ScrollCraft) location.reload();
-  }
-  renderMotion();
-  document.addEventListener("DOMContentLoaded", renderMotion);
-  if (rm.addEventListener) rm.addEventListener("change", motionChanged); else if (rm.addListener) rm.addListener(motionChanged);
-  document.addEventListener("click", function (e) {
-    var btn = e.target.closest && e.target.closest(".lg-motion-btn");
-    if (!btn || rm.matches) return;
-    mv = motionOff() ? "on" : "off";
-    try { localStorage.setItem(MKEY, mv); } catch (e2) {}
-    motionChanged();
-  });
-
   var mq = window.matchMedia("(prefers-color-scheme: dark)");
   var t = null; try { t = localStorage.getItem(CONFIG.key); } catch (e) {}
   if (t === "dark" || t === "light") d.setAttribute("data-theme", t);
@@ -165,7 +127,7 @@
     var btn = e.target.closest && e.target.closest(".lg-theme-btn");
     if (!btn) return;
     var next = now() === "dark" ? "light" : "dark";
-    if (motionOff()) { apply(next); return; }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { apply(next); return; }
     if (document.startViewTransition) {
       var r = btn.getBoundingClientRect();
       glassSwitch(next, r.left + r.width / 2, r.top + r.height / 2);
@@ -176,19 +138,14 @@
   });
 })(document.documentElement);
 </script>
-<link rel="stylesheet" href="liquid-glass.css?v=6">
-<link rel="stylesheet" href="site.css?v=6">
+<link rel="stylesheet" href="liquid-glass.css?v=13">
+<link rel="stylesheet" href="site.css?v=13">
 </head>
 <body>
-<a class="skip" href="#builder">Skip to the order builder</a>
-<header class="bar">
-  <a class="mark" href="#top" aria-label="El Salvadoreño Restaurant and Grill, back to top"><b>El Salvadoreño</b><small>Restaurant &amp; Grill</small></a>
+<header class="bar" id="bar">
+  <a class="mark" href="#top" aria-label="El Salvadoreño Restaurant and Grill"><b>El Salvadoreño</b><small>Restaurant &amp; Grill</small></a>
   <div class="bar-end">
-    <a class="cta cta-bar" href="https://wa.me/17866061159?text=Hola!%20I%27d%20like%20to%20order%20from%20El%20Salvadore%C3%B1o." target="_blank" rel="noopener">Order on WhatsApp</a>
-    <button class="lg-motion-btn" type="button" aria-pressed="true" aria-label="Motion">
-      <svg class="lg-i-move" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c2.2-3 4.3-3 6.5 0s4.3 3 6.5 0 3.3-2.2 5-1.2M3 15c2.2-3 4.3-3 6.5 0s4.3 3 6.5 0 3.3-2.2 5-1.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-      <svg class="lg-i-still" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18M3 15h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-    </button>
+    <a class="cta " href="https://wa.me/17866061159?text=Hola%21%20I%27d%20like%20to%20order%20from%20El%20Salvadore%C3%B1o." target="_blank" rel="noopener"><svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/><circle class="d d2" cx="12" cy="12" r="1.15"/><circle class="d d3" cx="15.6" cy="12" r="1.15"/></svg><span class="lbl">Order<span class="opt"> on WhatsApp</span></span></a>
     <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
       <svg class="lg-i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
       <svg class="lg-i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -198,19 +155,28 @@
 
 <main id="top">
   <div class="stage" id="stage">
-    <p class="bgword" id="bgword" aria-hidden="true">Salvadoreño</p>
-
-    <section class="hero" id="hero" aria-labelledby="h1">
-      <h1 id="h1">Pupusas and Salvadoran plates, made fresh in Kendall.</h1>
-      <p class="lead">Hot off the griddle, big plates, open 8am every day.</p>
-      <p class="proof"><b>4.6</b> on Uber Eats from 1,500+ ratings</p>
-      <a class="cta cta-hero" href="https://wa.me/17866061159?text=Hola!%20I%27d%20like%20to%20order%20from%20El%20Salvadore%C3%B1o." target="_blank" rel="noopener">Order on WhatsApp</a>
-    </section>
-
-    <div class="pup" id="pup"><i class="shadow" aria-hidden="true"></i><img src="assets/pupusa.webp" alt="A pupusa de queso, fresh off the griddle" width="496" height="498" fetchpriority="high"></div>
+    <div class="band b-top" id="bTop">
+      <h1 class="word" id="word" aria-label="El Salvadoreño"><span class="ch">E</span><span class="ch">L</span><span class="ch">&nbsp;</span><span class="ch">S</span><span class="ch">A</span><span class="ch">L</span><span class="ch">V</span><span class="ch">A</span><span class="ch">D</span><span class="ch">O</span><span class="ch">R</span><span class="ch">E</span><span class="ch">Ñ</span><span class="ch">O</span></h1>
+      <p class="run" id="runTop" aria-hidden="true"><span>PUPUSAS · DESAYUNOS · CARNES ASADAS · MARISCOS · PARRILLADAS · ANTOJITOS · SOPAS · POSTRES · PUPUSAS · DESAYUNOS · CARNES ASADAS · MARISCOS · PARRILLADAS · ANTOJITOS · SOPAS · POSTRES · PUPUSAS · DESAYUNOS · CARNES ASADAS · MARISCOS · PARRILLADAS · ANTOJITOS · SOPAS · POSTRES · </span></p>
+      <p class="btxt" id="trayTop">Party trays</p>
+    </div>
+    <div class="band b-mid" id="bMid">
+      <div class="tray" id="tray"><img src="assets/pupusas-25.webp" alt="A tray of 25 pupusas" decoding="async"></div>
+      <p class="side s-l" id="sideL">Sabor único<br>e inigualable</p>
+      <p class="side s-r" id="sideR"><b>4.6</b> on Uber Eats<br>1,500+ ratings</p>
+    </div>
+    <div class="band b-bot" id="bBot">
+      <div class="hero-line" id="heroLine">
+        <p class="eyebrow">Restaurant &amp; Grill · Kendall, Miami</p>
+        <p class="tag">Pupusas, Salvadoran breakfast and the grill. Open 8am every day.</p>
+      </div>
+      <p class="run" id="runBot" aria-hidden="true"><span>OPEN 8AM EVERY DAY · 10855 SW 72ND ST, KENDALL · ORDER ON WHATSAPP (786) 606-1159 · OPEN 8AM EVERY DAY · 10855 SW 72ND ST, KENDALL · ORDER ON WHATSAPP (786) 606-1159 · OPEN 8AM EVERY DAY · 10855 SW 72ND ST, KENDALL · ORDER ON WHATSAPP (786) 606-1159 · </span></p>
+      <p class="btxt" id="trayBot"><b>25 pupusas $99.99</b> · <b>50 pupusas $172.99</b> · ready in about 30 minutes</p>
+    </div>
 
     <section class="fill" id="fill" aria-labelledby="fillH">
-      <h2 id="fillH">Eleven fillings.<br><em>From $5.00.</em></h2>
+      <h2 id="fillH">Twelve pupusas,<br><em>made on the comal.</em></h2>
+      <p class="sub">Every pupusa is patted by hand and griddled to order. Served with curtido and salsa.</p>
       <ul>
         <li><span>Frijol</span><b>$5.00</b></li>
         <li><span>Queso</span><b>$5.25</b></li>
@@ -223,139 +189,46 @@
         <li><span>Zucchini</span><b>$5.75</b></li>
         <li><span>Espinaca</span><b>$5.75</b></li>
         <li><span>Jalapeño y queso</span><b>$5.75</b></li>
+        <li><span>Carnavalera</span><b>$6.50</b></li>
       </ul>
     </section>
 
-    <section class="party" id="party" aria-labelledby="partyH">
-      <div class="tray" id="tray"><img src="assets/pupusas-25.webp" alt="A tray of 25 pupusas mixtas" width="800" height="800" decoding="async"></div>
-      <div class="grid" id="grid" aria-hidden="true"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"><img src="assets/pupusa-sm.webp" alt="" width="160" height="160" decoding="async"></div>
-      <p class="count" id="count" aria-hidden="true"><span id="countN">1</span><small>pupusa</small></p>
-      <div class="party-copy" id="partyCopy">
-        <h2 id="partyH">Feeding the whole family?</h2>
-        <p><b>25 pupusas $99.99.</b> <b>50 for $172.99.</b> Ready in about 30 to 40 minutes.</p>
-      </div>
+    <section class="kitchen" id="kitchen" aria-label="From the kitchen">
+      <figure class="dish" data-k="pupusa-ranchera"><img src="assets/c-pupusa-ranchera.webp" alt="Pupusa Ranchera" decoding="async">
+        <figcaption><b>Pupusa Ranchera</b><span>with ranchera sauce and cheese</span><em>$12.50</em></figcaption></figure>
+      <figure class="dish" data-k="chicharrones"><img src="assets/c-chicharrones.webp" alt="Chicharrones Salvadoreños" decoding="async">
+        <figcaption><b>Chicharrones Salvadoreños</b><span>with yuca, curtido and lime</span><em>$15.99</em></figcaption></figure>
+      <figure class="dish" data-k="jamaica"><img src="assets/c-jamaica.webp" alt="Jamaica" decoding="async">
+        <figcaption><b>Jamaica</b><span>house hibiscus drink</span><em>$6.50</em></figcaption></figure>
+      <figure class="dish" data-k="chuleta-cerdo"><img src="assets/c-chuleta-cerdo.webp" alt="Chuleta Encebollada" decoding="async">
+        <figcaption><b>Chuleta Encebollada</b><span>pork chop, onions, maduros, rice</span><em>$20.99</em></figcaption></figure>
+      <figure class="dish" data-k="camarones-jalapeno"><img src="assets/c-camarones-jalapeno.webp" alt="Camarones en Salsa Blanca" decoding="async">
+        <figcaption><b>Camarones en Salsa Blanca</b><span>shrimp in jalapeño cream</span><em>$26.99</em></figcaption></figure>
+      <figure class="dish" data-k="pargo-chicharron"><img src="assets/c-pargo-chicharron.webp" alt="Pargo en Chicharrones" decoding="async">
+        <figcaption><b>Pargo en Chicharrones</b><span>crispy snapper bites</span><em>$42.99</em></figcaption></figure>
     </section>
 
-    <section class="spread" id="spread" aria-labelledby="spreadH">
-      <h2 id="spreadH">Breakfast at 8.<br><em>The grill till close.</em></h2>
-      <figure class="plate pl-0">
-        <img src="assets/desayuno-tipico.webp" alt="Desayuno Típico" width="800" height="800" decoding="async">
-        <figcaption><b>Desayuno Típico</b><span>Eggs, plantains, beans, cream, cheese</span><em>$12.99</em></figcaption>
-      </figure>
-      <figure class="plate pl-1">
-        <img src="assets/pupusa-ranchera.webp" alt="Pupusa Ranchera" width="800" height="800" decoding="async">
-        <figcaption><b>Pupusa Ranchera</b><span>Topped with ranchera sauce and cheese</span><em>$12.50</em></figcaption>
-      </figure>
-      <figure class="plate pl-2">
-        <img src="assets/tipico-guanaco.webp" alt="Típico Guanaco" width="800" height="800" decoding="async">
-        <figcaption><b>Típico Guanaco</b><span>12 oz New York steak, egg, avocado</span><em>$29.99</em></figcaption>
-      </figure>
-      <figure class="plate pl-3">
-        <img src="assets/parrillada-salvadorena.webp" alt="Parrillada Salvadoreña" width="800" height="800" decoding="async">
-        <figcaption><b>Parrillada Salvadoreña</b><span>Carne asada, pollo, chorizo, yuca, pupusa</span><em>$55.99</em></figcaption>
-      </figure>
-    </section>
+    <figure class="pup" id="pup"><img src="assets/pupusa.webp" alt="Pupusa de queso, $5.25" width="496" height="498" fetchpriority="high">
+      <figcaption id="pupCap"><b>Pupusa de Queso</b><span>the one everyone orders</span><em>$5.25</em></figcaption></figure>
+    <img class="drift" id="drift" src="assets/c-jamaica.webp" alt="" aria-hidden="true">
 
-    <section class="builder" id="builder" aria-labelledby="buildH">
-      <div class="card">
-        <h2 id="buildH">Build your order</h2>
-        <p class="hint">Tap + on the pupusas you want. We send it to WhatsApp, you confirm with them.</p>
-        <ul class="rows">
-        <li class="row" data-k="frijol" data-n="Frijol" data-p="5.00">
-          <span class="rn">Frijol</span><span class="rp">$5.00</span>
-          <button type="button" class="q minus" aria-label="One less Frijol">&minus;</button>
-          <output class="qn" aria-live="polite">0</output>
-          <button type="button" class="q plus" aria-label="One more Frijol">+</button>
-        </li>
-        <li class="row" data-k="queso" data-n="Queso" data-p="5.25">
-          <span class="rn">Queso</span><span class="rp">$5.25</span>
-          <button type="button" class="q minus" aria-label="One less Queso">&minus;</button>
-          <output class="qn" aria-live="polite">0</output>
-          <button type="button" class="q plus" aria-label="One more Queso">+</button>
-        </li>
-        <li class="row" data-k="revuelta" data-n="Revuelta" data-p="5.25">
-          <span class="rn">Revuelta</span><span class="rp">$5.25</span>
-          <button type="button" class="q minus" aria-label="One less Revuelta">&minus;</button>
-          <output class="qn" aria-live="polite">0</output>
-          <button type="button" class="q plus" aria-label="One more Revuelta">+</button>
-        </li>
-        <li class="row" data-k="chicharron" data-n="Chicharrón" data-p="5.25">
-          <span class="rn">Chicharrón</span><span class="rp">$5.25</span>
-          <button type="button" class="q minus" aria-label="One less Chicharrón">&minus;</button>
-          <output class="qn" aria-live="polite">0</output>
-          <button type="button" class="q plus" aria-label="One more Chicharrón">+</button>
-        </li>
-        <li class="row" data-k="mixta" data-n="Mixta" data-p="5.25">
-          <span class="rn">Mixta</span><span class="rp">$5.25</span>
-          <button type="button" class="q minus" aria-label="One less Mixta">&minus;</button>
-          <output class="qn" aria-live="polite">0</output>
-          <button type="button" class="q plus" aria-label="One more Mixta">+</button>
-        </li>
-        <li class="row" data-k="arroz" data-n="Arroz" data-p="5.50">
-          <span class="rn">Arroz</span><span class="rp">$5.50</span>
-          <button type="button" class="q minus" aria-label="One less Arroz">&minus;</button>
-          <output class="qn" aria-live="polite">0</output>
-          <button type="button" class="q plus" aria-label="One more Arroz">+</button>
-        </li>
-        <li class="row" data-k="loroco" data-n="Loroco y queso" data-p="5.75">
-          <span class="rn">Loroco y queso</span><span class="rp">$5.75</span>
-          <button type="button" class="q minus" aria-label="One less Loroco y queso">&minus;</button>
-          <output class="qn" aria-live="polite">0</output>
-          <button type="button" class="q plus" aria-label="One more Loroco y queso">+</button>
-        </li>
-        <li class="row" data-k="pollo" data-n="Pollo y queso" data-p="5.75">
-          <span class="rn">Pollo y queso</span><span class="rp">$5.75</span>
-          <button type="button" class="q minus" aria-label="One less Pollo y queso">&minus;</button>
-          <output class="qn" aria-live="polite">0</output>
-          <button type="button" class="q plus" aria-label="One more Pollo y queso">+</button>
-        </li>
-        <li class="row" data-k="zucchini" data-n="Zucchini" data-p="5.75">
-          <span class="rn">Zucchini</span><span class="rp">$5.75</span>
-          <button type="button" class="q minus" aria-label="One less Zucchini">&minus;</button>
-          <output class="qn" aria-live="polite">0</output>
-          <button type="button" class="q plus" aria-label="One more Zucchini">+</button>
-        </li>
-        <li class="row" data-k="espinaca" data-n="Espinaca" data-p="5.75">
-          <span class="rn">Espinaca</span><span class="rp">$5.75</span>
-          <button type="button" class="q minus" aria-label="One less Espinaca">&minus;</button>
-          <output class="qn" aria-live="polite">0</output>
-          <button type="button" class="q plus" aria-label="One more Espinaca">+</button>
-        </li>
-        <li class="row" data-k="jalapeno" data-n="Jalapeño y queso" data-p="5.75">
-          <span class="rn">Jalapeño y queso</span><span class="rp">$5.75</span>
-          <button type="button" class="q minus" aria-label="One less Jalapeño y queso">&minus;</button>
-          <output class="qn" aria-live="polite">0</output>
-          <button type="button" class="q plus" aria-label="One more Jalapeño y queso">+</button>
-        </li>
-        </ul>
-        <div class="sum">
-          <p class="total"><span id="tCount">0 pupusas</span><b id="tPrice">$0.00</b></p>
-          <p class="tip" id="tip" hidden>That many? The <b>25 for $99.99</b> party tray is cheaper. Say so in your message.</p>
-          <a class="cta cta-send" id="send" href="https://wa.me/17866061159?text=Hola!%20I%27d%20like%20to%20order%20from%20El%20Salvadore%C3%B1o." target="_blank" rel="noopener">Order on WhatsApp</a>
-          <p class="fine">Prices from their online menu. The restaurant confirms the total.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="close" id="close" aria-labelledby="closeH">
-      <div class="card">
-        <p class="open" id="openNow">Open today 8am to 9pm</p>
-        <h2 id="closeH">Come hungry.</h2>
-        <blockquote>&ldquo;Everything was beyond delicious.&rdquo; <cite>Yelp review</cite></blockquote>
-        <dl>
-          <div><dt>Where</dt><dd>10855 SW 72nd St, Suite 28<br>Kendall, Miami, FL 33173 · <a href="https://www.google.com/maps/search/?api=1&amp;query=10855+SW+72nd+St+Suite+28+Miami+FL+33173" target="_blank" rel="noopener">Directions</a></dd></div>
-          <div><dt>Hours</dt><dd>Sun to Thu 8am to 9pm<br>Fri and Sat 8am to 10pm</dd></div>
-          <div><dt>Call</dt><dd><a href="tel:+13052713101">(305) 271-3101</a></dd></div>
-          <div><dt>Nights</dt><dd>Karaoke Fri and Sat, 7 to 10pm</dd></div>
-        </dl>
-        <a class="cta" href="https://wa.me/17866061159?text=Hola!%20I%27d%20like%20to%20order%20from%20El%20Salvadore%C3%B1o." target="_blank" rel="noopener">Order on WhatsApp</a>
-      </div>
+    <section class="card" id="card" aria-labelledby="cardH">
+      <p class="open" id="openNow">Open today 8am to 9pm</p>
+      <h2 id="cardH">Come hungry.</h2>
+      <blockquote>&ldquo;Everything was beyond delicious. The outside doesn&rsquo;t look like much but inside is nice and roomy.&rdquo;<cite>Yelp review</cite></blockquote>
+      <dl>
+        <div><dt>Where</dt><dd>10855 SW 72nd St, Suite 28, Miami, FL 33173 · <a href="https://www.google.com/maps/search/?api=1&amp;query=10855+SW+72nd+St+Suite+28+Miami+FL+33173" target="_blank" rel="noopener">Directions</a></dd></div>
+        <div><dt>Hours</dt><dd>Sun to Thu 8am to 9pm · Fri and Sat 8am to 10pm</dd></div>
+        <div><dt>Nights</dt><dd>Karaoke Friday and Saturday, 7 to 10pm</dd></div>
+        <div><dt>Call</dt><dd><a href="tel:+13052713101">(305) 271-3101</a></dd></div>
+      </dl>
+      <a class="cta big" href="https://wa.me/17866061159?text=Hola%21%20I%27d%20like%20to%20order%20from%20El%20Salvadore%C3%B1o." target="_blank" rel="noopener"><svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/><circle class="d d2" cx="12" cy="12" r="1.15"/><circle class="d d3" cx="15.6" cy="12" r="1.15"/></svg><span class="lbl">Order on WhatsApp</span></a>
     </section>
   </div>
   <div class="spacer" id="spacer" aria-hidden="true"></div>
 </main>
-<p class="demo">Demo site. Photos and prices from El Salvadoreño's own online menu.</p>
-<script src="liquid-glass.js?v=6" defer></script>
-<script src="site.js?v=6" defer></script>
+<p class="demo">Demo site. Photos and prices from El Salvadoreño&rsquo;s own online menu.</p>
+<script src="liquid-glass.js?v=13" defer></script>
+<script src="site.js?v=13" defer></script>
 </body>
 </html>

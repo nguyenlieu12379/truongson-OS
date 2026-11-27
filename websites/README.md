@@ -35,7 +35,7 @@ Approved and live, but not the bar to aim for.
 | --- | --- | --- | --- | --- |
 | 1 | 1. **Espresso Vivace**<br>2. Seattle, WA<br>3. Espresso and latte art | None (concept demo, not a WhatsApp business) | Live at https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/ | `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` |
 | 2 | 1. **Delícias Cake & Bakery**<br>2. Burlington, MA<br>3. Brazilian custom cakes and breakfast | [(781) 365-0181](https://wa.me/17813650181) (used on the site, from their Instagram graphics). Their research also lists (781) 661-8417: to confirm | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/delicias-cake/ | `websites/TruongSon-demos/scrollcraft/builds/delicias-cake/` |
-| 3 | 1. **El Salvadoreño Restaurant & Grill**<br>2. Kendall, Miami, FL<br>3. Salvadoran pupusas, grill, breakfast, party trays | [(786) 606-1159](https://wa.me/17866061159) (phone 305-271-3101) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/el-salvadoreno/. First build on the five-pattern update; not reviewed yet | `websites/TruongSon-demos/scrollcraft/builds/el-salvadoreno/` |
+| 3 | 1. **El Salvadoreño Restaurant & Grill**<br>2. Kendall, Miami, FL<br>3. Salvadoran pupusas, grill, breakfast, party trays | [(786) 606-1159](https://wa.me/17866061159) (phone 305-271-3101) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/el-salvadoreno/. v2 (the flag), rebuilt on the earlier skill after v1 was judged too simple; not reviewed yet | `websites/TruongSon-demos/scrollcraft/builds/el-salvadoreno/` |
 
 ### Failures
 
