@@ -96,6 +96,18 @@
         "4600"
       ],
       "port": 4600
+    },
+    {
+      "name": "el-salvadoreno",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        ".claude/skills/site-building/scripts/serve.mjs",
+        "--root",
+        "websites/TruongSon-demos/scrollcraft/builds/el-salvadoreno",
+        "--port",
+        "4515"
+      ],
+      "port": 4515
     }
   ]
 }
