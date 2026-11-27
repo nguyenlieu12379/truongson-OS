@@ -12,15 +12,7 @@
        - toggle click: the new theme grows as a circle out of the button, its
          edge a glass lens that bends the page behind it (View Transitions +
          SVG displacement, Chromium/Safari 18+); otherwise a colour fade;
-         reduced motion switches instantly
-       - motion toggle (button class "lg-motion-btn"): sets data-motion="on" or
-         "off" on <html> before first paint, saved per site. Off when the
-         visitor turns it off, or when the system asks for reduced motion (the
-         button is then disabled: the system setting wins). Fires a
-         "lg:motion" event on document with detail { off }. Pages built on the
-         scrollcraft engine reload on change, since the engine reads motion
-         once at start. Page code checks
-         document.documentElement.dataset.motion === "off". -->
+         reduced motion switches instantly -->
 <script>
 (function (d) {
   var CONFIG = {
@@ -29,36 +21,6 @@
     duration: 1400                // ms for the glass sweep. 1400 reads as deliberate; 4000-7000 as a show
   };
   d.classList.add("js");
-
-  // ---- motion toggle ----------------------------------------------------
-  var MKEY = CONFIG.key + "-motion", rm = window.matchMedia("(prefers-reduced-motion: reduce)");
-  var mv = null; try { mv = localStorage.getItem(MKEY); } catch (e) {}
-  function motionOff() { return mv === "off" || rm.matches; }
-  function renderMotion() {
-    var off = motionOff();
-    d.setAttribute("data-motion", off ? "off" : "on");
-    document.querySelectorAll(".lg-motion-btn").forEach(function (b) {
-      b.setAttribute("aria-pressed", String(!off));
-      if (rm.matches) { b.disabled = true; b.title = "Motion is off in your system settings"; }
-      else { b.disabled = false; b.title = off ? "Turn motion on" : "Turn motion off"; }
-    });
-  }
-  function motionChanged() {
-    renderMotion();
-    try { document.dispatchEvent(new CustomEvent("lg:motion", { detail: { off: motionOff() } })); } catch (e) {}
-    if (window.ScrollCraft) location.reload();
-  }
-  renderMotion();
-  document.addEventListener("DOMContentLoaded", renderMotion);
-  if (rm.addEventListener) rm.addEventListener("change", motionChanged); else if (rm.addListener) rm.addListener(motionChanged);
-  document.addEventListener("click", function (e) {
-    var btn = e.target.closest && e.target.closest(".lg-motion-btn");
-    if (!btn || rm.matches) return;
-    mv = motionOff() ? "on" : "off";
-    try { localStorage.setItem(MKEY, mv); } catch (e2) {}
-    motionChanged();
-  });
-
   var mq = window.matchMedia("(prefers-color-scheme: dark)");
   var t = null; try { t = localStorage.getItem(CONFIG.key); } catch (e) {}
   if (t === "dark" || t === "light") d.setAttribute("data-theme", t);
@@ -152,7 +114,7 @@
     var btn = e.target.closest && e.target.closest(".lg-theme-btn");
     if (!btn) return;
     var next = now() === "dark" ? "light" : "dark";
-    if (motionOff()) { apply(next); return; }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { apply(next); return; }
     if (document.startViewTransition) {
       var r = btn.getBoundingClientRect();
       glassSwitch(next, r.left + r.width / 2, r.top + r.height / 2);

@@ -4,32 +4,6 @@ Dated notes on what changed in the skill and which build's finding drove it.
 Builds live in `OtherWorlds/Ultimate Websites/builds/`; each carries a
 `BUILD-REPORT.md`.
 
-## 2026-11-27: five conversion patterns
-
-From Nate Herk, "I Studied 10,000 AI Websites" (https://youtu.be/mImbbszCjCI).
-The skill was strong on looks and weak on getting the client customers.
-
-- New `references/conversion.md`: mirror test, highlighter rule, front/middle/
-  back, motion with a job, free sample, plus a five-row pre-show check. It
-  outranks older rules where they clash.
-- `01-prebuild.md`: new Q5b (first-screen copy) and Q12b (free sample); hero
-  letters no longer animate; CTA never clear glass; motion toggle default.
-- `02-scroll-craft.md`: "Conversion first" section, `## First screen` and
-  `## Free sample` in BRIEF.md, one-mover column in the score table, no kinetic
-  text on the first screen, conversion check in Step 5 and the report, seven
-  new hard rules.
-- `03-liquid-glass.md`: CTA stays solid accent; magnet only on still screens;
-  motion toggle.
-- Motion toggle built: `assets/head.html` (`.lg-motion-btn`, `data-motion` on
-  `<html>`, saved per site, `lg:motion` event), `liquid-glass.js` (ball, pull
-  and magnet read motion live; `LiquidGlass.motionOff()`), `liquid-glass.css`
-  (button styles, motion-off stops CSS animation), `examples/demo.html`.
-- Engine change, our first on the vendored files: `scrollcraft.js` treats
-  `data-motion="off"` as reduced motion, and `scrollcraft.css` repeats the
-  reduced-motion rules under `:root[data-motion="off"]`.
-- `references/standing-preferences.md`: hero, drifting cutouts, related motion,
-  bar and glass lines adjusted to fit.
-
 ## 2026-11-24: worldflight carry sheet
 
 - `references/worldflight.md` §0: before generating, every leg boundary names

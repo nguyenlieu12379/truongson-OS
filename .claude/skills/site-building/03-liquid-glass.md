@@ -40,34 +40,13 @@ How to describe it to anyone (designer, client, another AI): *"Liquid glass effe
 
 No venom. Son removed the glass venom strands on 2026-11-23; don't add them back.
 
-## Glass and the five patterns
-
-From `references/conversion.md` (2026-11-27). These win over the kit defaults above.
-
-- **The CTA is never clear glass.** A clear lens drops the accent colour, so the one button stops standing out (highlighter rule). The CTA stays a solid accent fill with a soft offset shadow, in front of everything. A glass rim or lens edge on top of that fill is fine; the fill stays. Glass goes on secondary buttons, cards and the bar.
-- **The cursor ball and the button magnet count as moving things.** On a screen where the dish or scene already moves, the ball is the visitor's own pointer, so it can stay, but don't add `magnet()` there. Use the magnet only on a still screen, on the CTA alone.
-- **Motion toggle beside the theme toggle.** Built into `head.html`, `liquid-glass.js`, `liquid-glass.css` and the scrollcraft engine. Put `.lg-motion-btn` right before `.lg-theme-btn` in the bar's far corner:
-  ```html
-  <button class="lg-motion-btn" type="button" aria-pressed="true" aria-label="Motion">
-    <svg class="lg-i-move" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c2.2-3 4.3-3 6.5 0s4.3 3 6.5 0 3.3-2.2 5-1.2M3 15c2.2-3 4.3-3 6.5 0s4.3 3 6.5 0 3.3-2.2 5-1.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-    <svg class="lg-i-still" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18M3 15h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-  </button>
-  ```
-  What it does:
-  - Sets `data-motion="on"` or `"off"` on `<html>` before first paint. It's saved under `CONFIG.key + "-motion"`.
-  - When it's off: no ball, no cursor pull, magnet buttons spring home, instant theme switch, and all CSS animations and transitions stop (CTA sweeps, typing dots, drifting cutouts).
-  - Scrollcraft pages reload on change and show their reduced-motion composition.
-  - If the system asks for reduced motion, it is always off and the button is disabled.
-  - Your own page JS must check `document.documentElement.dataset.motion === "off"` (or `LiquidGlass.motionOff()`) and can listen for the `lg:motion` event.
-  - Keep `aria-label="Motion"` constant. `aria-pressed` is true while motion is on.
-
 ## Rules that each cost a debugging round
 
 - **Position glass with `left`/`top` or layout, never `transform: translate`.** Use transforms only for stretch and scale. For the ball's stretch, rotate, scale, then rotate back (no net rotation), so the round lens map stays aligned.
 - **`color-interpolation-filters="sRGB"` on the filter and on every primitive.** Otherwise 128 is not "no bend" and the whole lens shifts about 10px.
 - **No folding.** The pull must grow slower than the distance it acts over (slope under 1px per px). If it doesn't, content folds back on itself and thin letters smear into dark blobs. `lensMap()` defaults keep the slope near 0.66. If you raise `push`, widen `band` too.
 - **Browser reach.** The live-page bending (`backdrop-filter: url(#svg)`, used by the ball and buttons) is Chromium only (Chrome, Edge, Opera, Brave). Safari and Firefox get the rim, highlight and a light frost. The theme sweep uses View Transitions plus `filter` on the snapshots: Chromium and Safari 18+. Elsewhere it's a 0.7s colour fade.
-- **Reduced motion, or the motion toggle off:** the sweep is instant and there's no ball. **Touch:** no ball.
+- **Reduced motion:** the sweep is instant and there's no ball. **Touch:** no ball.
 - **Inline the toggle code** (`head.html`), so a stale cached script can't break it.
 - **Contrast on glass:** labels on glass over busy imagery can fail. Put glass buttons over calm areas, keep the text shadow, and check the label against the brightest frame behind it.
 - **Sweep cost:** the sweep repaints a full-screen filter every frame. Fine on desktop GPUs. Long sweeps (4 to 7s) may drop frames on older phones, so check a real device.
