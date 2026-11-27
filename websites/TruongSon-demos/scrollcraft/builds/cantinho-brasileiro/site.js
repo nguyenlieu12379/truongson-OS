@@ -59,11 +59,13 @@
     L.pad = pad;
 
     // --- hero
-    // desktop: the word splits CANT | INHO around the plate so it always reads in full
-    E.word.style.fontSize = '200px';
+    // desktop: the word splits CANT | INHO around the plate; the plate's edges land on the middle of the T
+    // and the middle of the I, so it covers T's right half and I's left half and the word still reads
+    E.word.style.fontSize = '200px'; chars.forEach((ch) => { ch.style.transform = ''; });
     const ww = E.word.scrollWidth;
-    const s0d = Math.min(VH * 0.54, VW * 0.3), gapW = Math.max(14, VW * 0.012);
-    const fs = mob ? (VW - pad * 2) / ww * 200 : Math.min((VW - pad * 2 - s0d - gapW * 2) / ww * 200, VH * 0.3);
+    const midT = chars[3].offsetLeft + chars[3].offsetWidth / 2, midI = chars[4].offsetLeft + chars[4].offsetWidth / 2;
+    const s0d = Math.min(VH * 0.56, VW * 0.32);
+    const fs = mob ? (VW - pad * 2) / ww * 200 : Math.min((VW - pad * 2 - s0d) / (midT + ww - midI) * 200, VH * 0.3);
     E.word.style.fontSize = `${fs}px`;
     L.wordW = E.word.scrollWidth; L.wordH = E.word.offsetHeight;
     L.chx = chars.map((c) => c.offsetLeft + c.offsetWidth / 2);
@@ -81,9 +83,11 @@
       L.s0 = s0d;
       L.c0 = { x: VW / 2, y: TOP + (VH - TOP) * 0.46 };
       const splitX = chars[4].offsetLeft;   // between T and I
-      L.split = L.s0 / 2 + gapW - (splitX - (chars[3].offsetLeft + chars[3].offsetWidth)) / 2;
+      const tMid = chars[3].offsetLeft + chars[3].offsetWidth / 2, iMid = chars[4].offsetLeft + chars[4].offsetWidth / 2;
+      L.splitL = L.s0 / 2 - (splitX - tMid);   // T's middle sits on the plate's left edge
+      L.splitR = L.s0 / 2 - (iMid - splitX);   // I's middle sits on the plate's right edge
       L.word = { x: L.c0.x - splitX, y: L.c0.y - L.wordH * 0.5 };
-      L.script = { x: L.word.x + L.wordW + L.split - L.scriptW, y: L.word.y + L.wordH + 4 };
+      L.script = { x: L.word.x + L.wordW + L.splitR - L.scriptW, y: L.word.y + L.wordH + 4 };
       L.hl = { x: pad, y: VH - L.hlH - 30 };
       L.hr = { x: VW - pad - L.hrW, y: VH - L.hrH - 30 };
     }
@@ -245,8 +249,8 @@
     vis(E.word, heroOn); vis(E.script, heroOn);
     // CANT and INHO sit either side of the plate and are pushed apart as the table opens
     if (!mob) {
-      const sp = L.split + u * VW * 0.35;
-      chars.forEach((ch, i) => put(ch, 'transform', `translateX(${r1(i < 4 ? -sp : sp)}px)`));
+      const push = u * VW * 0.35;
+      chars.forEach((ch, i) => put(ch, 'transform', `translateX(${r1(i < 4 ? -(L.splitL + push) : L.splitR + push)}px)`));
       put(E.script, 'transform', `translate3d(${r1(L.script.x + u * VW * 0.35)}px,${r1(L.script.y)}px,0)`);
     }
     at(E.heroL, L.hl.x, L.hl.y + u * VH * 0.6);
