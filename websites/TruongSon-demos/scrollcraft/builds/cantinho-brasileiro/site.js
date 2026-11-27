@@ -59,9 +59,11 @@
     L.pad = pad;
 
     // --- hero
+    // desktop: the word splits CANT | INHO around the plate so it always reads in full
     E.word.style.fontSize = '200px';
     const ww = E.word.scrollWidth;
-    const fs = mob ? (VW - pad * 2) / ww * 200 : Math.min((VW - pad * 2) / ww * 200, VH * 0.36);
+    const s0d = Math.min(VH * 0.54, VW * 0.3), gapW = Math.max(14, VW * 0.012);
+    const fs = mob ? (VW - pad * 2) / ww * 200 : Math.min((VW - pad * 2 - s0d - gapW * 2) / ww * 200, VH * 0.3);
     E.word.style.fontSize = `${fs}px`;
     L.wordW = E.word.scrollWidth; L.wordH = E.word.offsetHeight;
     L.chx = chars.map((c) => c.offsetLeft + c.offsetWidth / 2);
@@ -76,10 +78,12 @@
       L.hl = { x: pad, y: L.c0.y + L.s0 / 2 + 18 };
       L.hr = { x: pad, y: L.hl.y + L.hlH + 14 };
     } else {
-      L.s0 = Math.min(VH * 0.6, VW * 0.35);
+      L.s0 = s0d;
       L.c0 = { x: VW / 2, y: TOP + (VH - TOP) * 0.46 };
-      L.word = { x: (VW - L.wordW) / 2, y: L.c0.y - L.wordH * 0.55 };
-      L.script = { x: L.word.x + L.wordW - L.scriptW, y: L.word.y + L.wordH + 4 };
+      const splitX = chars[4].offsetLeft;   // between T and I
+      L.split = L.s0 / 2 + gapW - (splitX - (chars[3].offsetLeft + chars[3].offsetWidth)) / 2;
+      L.word = { x: L.c0.x - splitX, y: L.c0.y - L.wordH * 0.5 };
+      L.script = { x: L.word.x + L.wordW + L.split - L.scriptW, y: L.word.y + L.wordH + 4 };
       L.hl = { x: pad, y: VH - L.hlH - 30 };
       L.hr = { x: VW - pad - L.hrW, y: VH - L.hrH - 30 };
     }
@@ -239,12 +243,11 @@
     at(E.word, L.word.x, wy);
     at(E.script, L.script.x, L.script.y - (mob ? u * VH * 0.5 : 0));
     vis(E.word, heroOn); vis(E.script, heroOn);
-    if (u === 0 && !still && P) {
-      const pl = P.x, pr = P.x + P.s;
-      chars.forEach((ch, i) => {
-        const x = L.word.x + L.chx[i];
-        put(ch, 'transform', x > pl && x < pr ? `translateY(${(Math.sin(time * 2.2 + i * 0.8) * L.wordH * 0.03).toFixed(1)}px)` : '');
-      });
+    // CANT and INHO sit either side of the plate and are pushed apart as the table opens
+    if (!mob) {
+      const sp = L.split + u * VW * 0.35;
+      chars.forEach((ch, i) => put(ch, 'transform', `translateX(${r1(i < 4 ? -sp : sp)}px)`));
+      put(E.script, 'transform', `translate3d(${r1(L.script.x + u * VW * 0.35)}px,${r1(L.script.y)}px,0)`);
     }
     at(E.heroL, L.hl.x, L.hl.y + u * VH * 0.6);
     at(E.heroR, L.hr.x, L.hr.y + u * VH * 0.6);
