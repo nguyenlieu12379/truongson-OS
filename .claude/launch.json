@@ -108,6 +108,18 @@
         "4515"
       ],
       "port": 4515
+    },
+    {
+      "name": "cantinho-brasileiro",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        ".claude/skills/site-building/scripts/serve.mjs",
+        "--root",
+        "websites/TruongSon-demos/scrollcraft/builds/cantinho-brasileiro",
+        "--port",
+        "4516"
+      ],
+      "port": 4516
     }
   ]
 }

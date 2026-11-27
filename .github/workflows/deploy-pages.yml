@@ -8,6 +8,7 @@ name: Deploy websites to GitHub Pages
 # /gochon/ -> websites/TruongSon-demos/scrollcraft/builds/gochon (prospect demo, scroll-craft, noindex)
 # /tardes-calenas/ -> websites/TruongSon-demos/scrollcraft/builds/tardes-calenas (prospect demo, scroll-craft, noindex)
 # /el-salvadoreno/ -> websites/TruongSon-demos/scrollcraft/builds/el-salvadoreno (prospect demo, scroll-craft, noindex)
+# /cantinho-brasileiro/ -> websites/TruongSon-demos/scrollcraft/builds/cantinho-brasileiro (prospect demo, scroll-craft, noindex, not ranked yet)
 # /             -> a plain list of the approved sites (no primary demo, noindex)
 # Every push to main that touches these paths redeploys all sites.
 
@@ -61,6 +62,9 @@ jobs:
           mkdir -p _site/el-salvadoreno
           cp -R websites/TruongSon-demos/scrollcraft/builds/el-salvadoreno/. _site/el-salvadoreno/
           rm -rf _site/el-salvadoreno/README.md _site/el-salvadoreno/BRIEF.md _site/el-salvadoreno/PREFS.md _site/el-salvadoreno/RESEARCH.md _site/el-salvadoreno/assets/source _site/el-salvadoreno/lab
+          mkdir -p _site/cantinho-brasileiro
+          cp -R websites/TruongSon-demos/scrollcraft/builds/cantinho-brasileiro/. _site/cantinho-brasileiro/
+          rm -rf _site/cantinho-brasileiro/README.md _site/cantinho-brasileiro/BRIEF.md _site/cantinho-brasileiro/PREFS.md _site/cantinho-brasileiro/RESEARCH.md _site/cantinho-brasileiro/assets/source _site/cantinho-brasileiro/lab
           cat > _site/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">

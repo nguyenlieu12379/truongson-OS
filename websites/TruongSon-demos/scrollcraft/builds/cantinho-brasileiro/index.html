@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F6F4EF">
+<title>Cantinho Brasileiro · Brazilian food in Northeast Philadelphia</title>
+<meta name="description" content="Comida mineira from Dona Terezinha's kitchen on Castor Ave. Self-service lunch every day, feijoada on Saturdays, marmita delivery from 6pm. Order on WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&family=Newsreader:ital,opsz,wght@1,6..72,500;1,6..72,600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/pf.webp">
+<link rel="preload" as="image" href="assets/table.webp">
+<!-- liquid-glass: paste into <head>, before any stylesheet that reads
+     data-theme. Inline on purpose: the toggle must not depend on a cached
+     external script. Edit the three values in CONFIG.
+
+     Needs in the page:
+       - CSS tokens for both themes (see liquid-glass.css, "Theme tokens")
+       - a button with class "lg-theme-btn" (markup in 03-liquid-glass.md)
+       - liquid-glass.css loaded
+
+     What it does:
+       - applies the saved theme before first paint (no flash)
+       - toggle click: the new theme grows as a circle out of the button, its
+         edge a glass lens that bends the page behind it (View Transitions +
+         SVG displacement, Chromium/Safari 18+); otherwise a colour fade;
+         reduced motion switches instantly -->
+<script>
+(function (d) {
+  var CONFIG = {
+    key: "cantinho-brasileiro-theme",  // localStorage key, unique per site
+    colors: { light: "#F6F4EF", dark: "#0E1118" },   // <meta name=theme-color> per theme
+    duration: 1400                // ms for the glass sweep. 1400 reads as deliberate; 4000-7000 as a show
+  };
+  d.classList.add("js");
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+  var t = null; try { t = localStorage.getItem(CONFIG.key); } catch (e) {}
+  if (t === "dark" || t === "light") d.setAttribute("data-theme", t);
+  function now() { var x = d.getAttribute("data-theme"); return x ? x : (mq.matches ? "dark" : "light"); }
+  function render() {
+    var dark = now() === "dark";
+    d.setAttribute("data-theme-now", dark ? "dark" : "light");
+    document.querySelectorAll(".lg-theme-btn").forEach(function (b) { b.setAttribute("aria-pressed", String(dark)); });
+    if (d.hasAttribute("data-theme")) document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute("content", CONFIG.colors[dark ? "dark" : "light"]); });
+  }
+  function apply(next) {
+    d.setAttribute("data-theme", next);
+    try { localStorage.setItem(CONFIG.key, next); } catch (e) {}
+    render();
+  }
+  render();
+  document.addEventListener("DOMContentLoaded", render);
+  if (mq.addEventListener) mq.addEventListener("change", render); else if (mq.addListener) mq.addListener(render);
+
+  // ---- the glass sweep --------------------------------------------------
+  var SVGNS = "http://www.w3.org/2000/svg", filters = null;
+  function ensureFilters() {
+    if (filters) return filters;
+    var svg = document.createElementNS(SVGNS, "svg");
+    svg.setAttribute("aria-hidden", "true");
+    svg.style.cssText = "position:absolute;width:0;height:0;overflow:hidden;pointer-events:none";
+    svg.innerHTML =
+      '<filter id="lg-sweep-new" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-sweep-map-new" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>' +
+      '<feDisplacementMap id="lg-sweep-dm-new" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB" result="bent"/>' +
+      '<feColorMatrix in="map" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0.85 0 0" result="rim"/>' +
+      '<feMerge><feMergeNode in="bent"/><feMergeNode in="rim"/></feMerge></filter>' +
+      '<filter id="lg-sweep-old" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-sweep-map-old" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>' +
+      '<feDisplacementMap id="lg-sweep-dm-old" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB"/></filter>';
+    document.body.appendChild(svg);
+    return (filters = {
+      maps: [document.getElementById("lg-sweep-map-new"), document.getElementById("lg-sweep-map-old")],
+      dms: [document.getElementById("lg-sweep-dm-new"), document.getElementById("lg-sweep-dm-old")]
+    });
+  }
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function glassSwitch(next, cx, cy) {
+    var f = ensureFilters(), W = innerWidth, H = innerHeight, DUR = CONFIG.duration;
+    var band = Math.max(54, Math.min(130, Math.min(W, H) * 0.11)), push = band * 0.42, S = push * 2.2;
+    var end = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy)) + band;
+    var k = W > 900 ? 5 : 4, mw = Math.ceil(W / k), mh = Math.ceil(H / k);
+    var cv = document.createElement("canvas"); cv.width = mw; cv.height = mh;
+    var g = cv.getContext("2d"), img = g.createImageData(mw, mh), px = img.data;
+    f.maps.forEach(function (m) { m.setAttribute("width", W); m.setAttribute("height", H); });
+    f.dms.forEach(function (m) { m.setAttribute("scale", S.toFixed(1)); });
+    function paint(rad) {
+      for (var y = 0; y < mh; y++) {
+        var dy = y * k + k / 2 - cy;
+        for (var x = 0; x < mw; x++) {
+          var dx = x * k + k / 2 - cx, i = (y * mw + x) * 4;
+          var dd = Math.sqrt(dx * dx + dy * dy) || 1, u = (dd - rad) / band, R = 128, G = 128, B = 0;
+          if (u > -1 && u < 1) {
+            var bump = 1 - u * u; bump *= bump;
+            var m = push * bump;
+            R = 128 - (dx / dd) * m / S * 255; G = 128 - (dy / dd) * m / S * 255;
+            var hh = (u + 0.06) / 0.07;
+            B = Math.min(255, 150 * Math.exp(-hh * hh) + 40 * bump);   // bright rim
+          }
+          px[i] = R; px[i + 1] = G; px[i + 2] = B; px[i + 3] = 255;
+        }
+      }
+      g.putImageData(img, 0, 0);
+      var url = cv.toDataURL();
+      f.maps.forEach(function (m) { m.setAttribute("href", url); });
+    }
+    d.style.setProperty("--lg-x", cx + "px"); d.style.setProperty("--lg-y", cy + "px"); d.style.setProperty("--lg-r", "0px");
+    paint(-band);
+    d.classList.add("lg-sweeping");
+    var vt = document.startViewTransition(function () { apply(next); });
+    vt.ready.then(function () {
+      // no-op animation keeps the transition alive; frames are driven below
+      d.animate({ opacity: [1, 1] }, { duration: DUR, pseudoElement: "::view-transition-new(root)" });
+      var t0 = performance.now();
+      (function frame(t) {
+        var p = Math.min(1, (t - t0) / DUR), rad = ease(p) * end;
+        d.style.setProperty("--lg-r", rad + "px"); paint(rad);
+        if (p < 1) requestAnimationFrame(frame);
+      })(t0);
+    }).catch(function () {});
+    function done() { d.classList.remove("lg-sweeping"); ["--lg-x", "--lg-y", "--lg-r"].forEach(function (v) { d.style.removeProperty(v); }); }
+    vt.finished.then(done, done);
+  }
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest && e.target.closest(".lg-theme-btn");
+    if (!btn) return;
+    var next = now() === "dark" ? "light" : "dark";
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { apply(next); return; }
+    if (document.startViewTransition) {
+      var r = btn.getBoundingClientRect();
+      glassSwitch(next, r.left + r.width / 2, r.top + r.height / 2);
+      return;
+    }
+    d.classList.add("lg-fading"); apply(next);
+    setTimeout(function () { d.classList.remove("lg-fading"); }, 760);
+  });
+})(document.documentElement);
+</script>
+<link rel="stylesheet" href="liquid-glass.css?v=6">
+<link rel="stylesheet" href="site.css?v=6">
+</head>
+<body>
+<header class="bar" id="bar">
+  <a class="mark" href="#top" aria-label="Cantinho Brasileiro"><b>Cantinho</b><i>Brasileiro</i></a>
+  <div class="bar-end">
+    <a class="cta" href="https://wa.me/13025697265?text=Ol%C3%A1%21%20I%27d%20like%20to%20order%20from%20Cantinho%20Brasileiro." target="_blank" rel="noopener"><svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/><circle class="d d2" cx="12" cy="12" r="1.15"/><circle class="d d3" cx="15.6" cy="12" r="1.15"/></svg><span class="lbl">Order<span class="opt"> on WhatsApp</span></span></a>
+    <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
+      <svg class="lg-i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <svg class="lg-i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <div class="stage" id="stage">
+    <h1 class="word" id="word" aria-label="Cantinho Brasileiro"><span class="ch">C</span><span class="ch">A</span><span class="ch">N</span><span class="ch">T</span><span class="ch">I</span><span class="ch">N</span><span class="ch">H</span><span class="ch">O</span></h1>
+    <p class="script" id="script" aria-hidden="true">Brasileiro</p>
+    <div class="hero-l" id="heroL">
+      <p class="lead">Minas Gerais home cooking, <em>Dona Terezinha&rsquo;s way.</em></p>
+      <p class="sub">Self-service lunch and dinner on Castor Ave, Northeast Philadelphia. 20+ years.</p>
+    </div>
+    <dl class="hero-r" id="heroR">
+      <div><dt>Open</dt><dd>Every day, 11am to 10pm</dd></div>
+      <div><dt>Saturday</dt><dd>Feijoada da Dona Terezinha</dd></div>
+      <div><dt>Delivery</dt><dd>Marmita $14, from 6pm</dd></div>
+    </dl>
+
+    <img class="pf-shadow" id="pfShadow" src="assets/pf-shadow.webp" alt="" aria-hidden="true">
+    <div class="table" id="table"><img src="assets/table.webp" alt="Six plates on a wooden table: prato feito, frango with okra and angu, salad, spaghetti, carne de panela with beans, fried eggs" decoding="async"></div>
+    <img class="pf" id="pf" src="assets/pf.webp" alt="Prato feito: rice, beans, salad, tomato and steak with onions" fetchpriority="high">
+
+    <section class="tablecopy" id="tableCopy" aria-labelledby="tableH">
+      <h2 id="tableH">One plate. <em>Then the whole table.</em></h2>
+      <p>Self-service mineiro: fill your plate with what Dona Terezinha cooked today.</p>
+    </section>
+    <div class="labels" id="labels">
+      <p class="lab" data-l="beans"><i></i><b>Arroz e feijão</b><span>on every plate, every day</span></p>
+      <p class="lab" data-l="meat"><i></i><b>Carnes</b><span>bife, frango, carne de panela</span></p>
+      <p class="lab" data-l="side"><i></i><b>Acompanhamentos</b><span>macarrão, angu, ovo</span></p>
+      <p class="lab" data-l="salad"><i></i><b>Saladas</b><span>lettuce, tomato, beet, cucumber</span></p>
+    </div>
+
+    <section class="line" id="line" aria-labelledby="lineH">
+      <h2 id="lineH">The hot line, <em>cooked the same day.</em></h2>
+      <p>Walk the line and build your plate. Arroz, feijão, carnes, acompanhamentos and saladas.</p>
+    </section>
+    <div class="trays" id="trays">
+      <figure class="tray" data-t="lasanha"><div class="tf"><img src="assets/t-lasanha.webp" alt="Lasanha on the buffet" decoding="async"></div><figcaption><b>Lasanha</b><span>baked in the tray</span></figcaption></figure>
+      <figure class="tray" data-t="arroz"><div class="tf"><img src="assets/t-arroz.webp" alt="Arroz on the buffet" decoding="async"></div><figcaption><b>Arroz</b><span>white rice, every day</span></figcaption></figure>
+      <figure class="tray" data-t="milanesa"><div class="tf"><img src="assets/t-milanesa.webp" alt="À milanesa on the buffet" decoding="async"></div><figcaption><b>À milanesa</b><span>breaded and fried</span></figcaption></figure>
+      <figure class="tray" data-t="batata"><div class="tf"><img src="assets/t-batata.webp" alt="Batatas on the buffet" decoding="async"></div><figcaption><b>Batatas</b><span>fried golden</span></figcaption></figure>
+      <figure class="tray" data-t="legumes"><div class="tf"><img src="assets/t-legumes.webp" alt="Legumes on the buffet" decoding="async"></div><figcaption><b>Legumes</b><span>peppers, onions, carrots</span></figcaption></figure>
+      <figure class="tray" data-t="feijoada-tray"><div class="tf"><img src="assets/t-feijoada-tray.webp" alt="Feijoada on the buffet" decoding="async"></div><figcaption><b>Feijoada</b><span>black beans and pork</span></figcaption></figure>
+    </div>
+
+    <figure class="sat" id="sat"><img class="sat-t" src="assets/t-feijoada-tray.webp" alt="" aria-hidden="true" decoding="async"><img class="sat-f" src="assets/feijoada.webp" alt="Feijoada with rice, couve, farofa and vinagrete" decoding="async"><img class="sat-s" src="assets/storefront.webp" alt="Cantinho Brasileiro storefront, green sign on Castor Ave" decoding="async"></figure>
+
+    <section class="week" id="week" aria-labelledby="weekH">
+      <h2 id="weekH">Every day <em>has its dish.</em></h2>
+      <ol>
+        <li><span class="d">Thursday</span><span class="w">Canjiquinha da Dona Terezinha</span><b>$6</b></li>
+        <li><span class="d">Saturday</span><span class="w">Feijoada, with rice, couve, farofa and vinagrete</span></li>
+        <li><span class="d">Sunday</span><span class="w">Family lunch. Bring everyone.</span></li>
+        <li><span class="d">Every day, 6pm</span><span class="w">Marmita delivery: 2 meats, rice, beans, salad, 1 side</span><b>$14</b></li>
+      </ol>
+      <p class="note">Parties and family dinners: order trays on WhatsApp.</p>
+    </section>
+
+    <section class="card" id="card" aria-labelledby="cardH">
+      <img class="logo" src="assets/logo.webp" alt="Cantinho Brasileiro, Dona Terezinha" width="690" height="580">
+      <p class="open" id="openNow">Open every day 11am to 10pm</p>
+      <h2 id="cardH">Pull up a chair.</h2>
+      <p class="story">Dona Terezinha&rsquo;s recipes, 20+ years on Castor Ave. Seen on Rede Globo&rsquo;s <i>&Eacute; de Casa</i>.</p>
+      <dl>
+        <div><dt>Where</dt><dd>7536 Castor Ave, Philadelphia, PA 19152 · <a href="https://www.google.com/maps/search/?api=1&amp;query=7536+Castor+Ave+Philadelphia+PA+19152" target="_blank" rel="noopener">Directions</a></dd></div>
+        <div><dt>Hours</dt><dd>Every day, 11am to 10pm</dd></div>
+        <div><dt>Delivery</dt><dd>Marmita $14 + delivery fee, every day from 6pm</dd></div>
+        <div><dt>Call</dt><dd><a href="tel:+12157451381">(215) 745-1381</a></dd></div>
+      </dl>
+      <a class="cta big" href="https://wa.me/13025697265?text=Ol%C3%A1%21%20I%27d%20like%20to%20order%20from%20Cantinho%20Brasileiro." target="_blank" rel="noopener"><svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/><circle class="d d2" cx="12" cy="12" r="1.15"/><circle class="d d3" cx="15.6" cy="12" r="1.15"/></svg><span class="lbl">Order on WhatsApp</span></a>
+    </section>
+  </div>
+  <div class="spacer" id="spacer" aria-hidden="true"></div>
+</main>
+<p class="demo">Demo site. Photos from Cantinho Brasileiro&rsquo;s own DoorDash page and Instagram.</p>
+<script src="liquid-glass.js?v=6" defer></script>
+<script src="site.js?v=6" defer></script>
+</body>
+</html>
