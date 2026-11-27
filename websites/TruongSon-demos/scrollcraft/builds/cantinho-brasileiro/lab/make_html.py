@@ -1,6 +1,6 @@
 # Writes index.html. Bump V on every change to site.css or site.js.
 # Run from the build folder: python lab/make_html.py
-V = 6
+V = 7
 WA = "https://wa.me/13025697265?text=Ol%C3%A1%21%20I%27d%20like%20to%20order%20from%20Cantinho%20Brasileiro."
 ICON = ('<svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" '
         'fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/>'
@@ -42,7 +42,7 @@ html = f'''<!doctype html>
 <header class="bar" id="bar">
   <a class="mark" href="#top" aria-label="Cantinho Brasileiro"><b>Cantinho</b><i>Brasileiro</i></a>
   <div class="bar-end">
-    <a class="cta" href="{WA}" target="_blank" rel="noopener">{ICON}<span class="lbl">Order<span class="opt"> on WhatsApp</span></span></a>
+    <a class="cta" id="cta" href="{WA}" target="_blank" rel="noopener">{ICON}<span class="lbl">Order<span class="opt"> on WhatsApp</span></span></a>
     <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
       <svg class="lg-i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
       <svg class="lg-i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -108,7 +108,7 @@ html = f'''<!doctype html>
         <div><dt>Delivery</dt><dd>Marmita $14 + delivery fee, every day from 6pm</dd></div>
         <div><dt>Call</dt><dd><a href="tel:+12157451381">(215) 745-1381</a></dd></div>
       </dl>
-      <a class="cta big" href="{WA}" target="_blank" rel="noopener">{ICON}<span class="lbl">Order on WhatsApp</span></a>
+      <div class="cta-slot" id="ctaSlot" aria-hidden="true"></div>
     </section>
   </div>
   <div class="spacer" id="spacer" aria-hidden="true"></div>

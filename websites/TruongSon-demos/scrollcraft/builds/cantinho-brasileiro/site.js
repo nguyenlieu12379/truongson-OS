@@ -16,6 +16,7 @@
     word: $('word'), script: $('script'), heroL: $('heroL'), heroR: $('heroR'), pf: $('pf'), sh: $('pfShadow'),
     table: $('table'), tableCopy: $('tableCopy'), line: $('line'), sat: $('sat'), week: $('week'), card: $('card'),
   };
+  const cta = $('cta'), slot = $('ctaSlot');
   const chars = [...E.word.querySelectorAll('.ch')];
   const labs = [...document.querySelectorAll('.lab')];
   const trays = [...document.querySelectorAll('.tray')];
@@ -144,11 +145,30 @@
     // --- close
     L.cardW = mob ? VW - pad * 2 : Math.min(450, L.weekW);
     put(E.card, 'width', `${L.cardW}px`);
+    // the card must fit the screen: tighten it, shorten the sign, then (last resort) scale it
+    E.card.classList.remove('compact');
     L.cardH = E.card.offsetHeight;
-    // desktop close: their sign sits on top of the card as its header, the card tucks over its lower edge
-    const signH = Math.min(170, VH * 0.2);
-    L.cardXY = mob ? { x: pad, y: Math.min(L.satC.y + L.satC.h + 16, VH - L.cardH - 12) } : { x: VW - pad - L.cardW - VW * 0.03, y: Math.max(TOP + signH, (VH - L.cardH - signH) / 2 + signH + 8) };
-    if (!mob) L.satC = { x: L.cardXY.x, y: L.cardXY.y - signH + 26, w: L.cardW, h: signH };
+    const TUCK = 26;
+    let signH = Math.min(170, VH * 0.2);
+    const avail = mob ? VH - (L.satC.y + L.satC.h + 16) - 12 : VH - TOP - 24;
+    const need = () => L.cardH + (mob ? 0 : signH - TUCK);
+    if (need() > avail) { E.card.classList.add('compact'); L.cardH = E.card.offsetHeight; }
+    if (!mob) signH = Math.max(84, Math.min(signH, avail - L.cardH + TUCK));
+    L.cardS = Math.min(1, (avail - (mob ? 0 : signH - TUCK)) / L.cardH);
+    const cw = L.cardW * L.cardS, ch = L.cardH * L.cardS;
+    if (mob) L.cardXY = { x: pad, y: Math.min(L.satC.y + L.satC.h + 16, VH - ch - 12) };
+    else {
+      // desktop close: their sign sits on top of the card as its header, the card tucks over its lower edge
+      const groupH = signH - TUCK + ch, top = TOP + 12 + Math.max(0, (VH - TOP - 24 - groupH) / 2);
+      L.cardXY = { x: VW - pad - cw - VW * 0.03, y: top + signH - TUCK };
+      L.satC = { x: L.cardXY.x, y: top, w: cw, h: signH };
+    }
+    L.cardH = ch;
+    // the one CTA: its home in the bar, and its slot in the card
+    cta.classList.remove('travel'); ['left', 'top', 'width', 'height', 'fontSize'].forEach((k) => { cta.style[k] = ''; }); cta._c = {};
+    const hr = cta.getBoundingClientRect();
+    L.ctaHome = { x: hr.left, y: hr.top, w: hr.width, h: hr.height };
+    L.slot = { dx: slot.offsetLeft * L.cardS, dy: slot.offsetTop * L.cardS, w: slot.offsetWidth * L.cardS, h: slot.offsetHeight * L.cardS };
     // phone close: the plate is served under the card, in the space left at the bottom
     const below = VH - (L.cardXY.y + L.cardH) - 18;
     L.s4 = mob ? (below < 80 ? -1 : Math.min(VW * 0.4, below)) : 0;
@@ -277,8 +297,22 @@
     put(E.week.querySelector('.note'), 'transform', `translateX(${r1((1 - E3(clamp(wk * 2 - 1))) * VW * 0.7)}px)`);
     vis(E.week, wk > 0 && c < 1);
 
-    at(E.card, L.cardXY.x + (1 - c) * VW * 0.7, L.cardXY.y);
+    const cardX = L.cardXY.x + (1 - c) * VW * 0.7;
+    at(E.card, cardX, L.cardXY.y, L.cardS);
     vis(E.card, c > 0);
+
+    // the one CTA leaves the bar's corner and lands in the card's slot once the card is in
+    const tk = E3(seg(p, 0.87, 0.95));
+    if (tk <= 0) {
+      if (cta.classList.contains('travel')) { cta.classList.remove('travel'); ['left', 'top', 'width', 'height', 'fontSize'].forEach((k) => { cta.style[k] = ''; }); cta._c = {}; }
+    } else {
+      if (!cta.classList.contains('travel')) cta.classList.add('travel');
+      const h = L.ctaHome, sx = cardX + L.slot.dx, sy = L.cardXY.y + L.slot.dy;
+      const arc = Math.sin(tk * Math.PI) * Math.min(90, VW * 0.06);   // swings out a little, not a straight slide
+      put(cta, 'left', `${r1(lerp(h.x, sx, tk) + arc)}px`); put(cta, 'top', `${r1(lerp(h.y, sy, tk))}px`);
+      put(cta, 'width', `${r1(lerp(h.w, L.slot.w, tk))}px`); put(cta, 'height', `${r1(lerp(h.h, L.slot.h, tk))}px`);
+      put(cta, 'fontSize', `${lerp(mob ? 14 : 15.2, 16.8 * Math.min(1, L.cardS + 0.1), tk).toFixed(2)}px`);
+    }
   }
 
   function start() {
