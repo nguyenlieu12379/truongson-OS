@@ -13,9 +13,9 @@ websites/
 
 ## Sites
 
-Three tiers (2026-11-25). No primary demo; pick the one that fits the prospect, best first.
+Ranked S, A, B, C by Son and Truong (2026-11-27). The rank replaces the old Best, Normal and Failures tiers, and the same rank is the lead's status in `prospects/leads.csv` (`built-S`, `built-A`, `built-B`, `built-C`). No primary demo; pick the one that fits the prospect, highest rank first.
 
-### Best sites
+### S
 
 The reference set: start a new build from what these do (centred moving hero, unbroken hand-offs, real cutouts).
 
@@ -24,24 +24,31 @@ The reference set: start a new build from what these do (centred moving hero, un
 | 1 | 1. **Gochón**<br>2. Doral, FL<br>3. Venezuelan pasapalos (tequeños, empanadas, pastelitos) by the piece or the party box | [(786) 670-5020](https://wa.me/17866705020) (phone 305-631-2248) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/gochon/ | `websites/TruongSon-demos/scrollcraft/builds/gochon/` |
 | 2 | 1. **Brazilian Taste**<br>2. Dallas, TX<br>3. Brazilian premade meals for the week | [(682) 862-9545](https://wa.me/16828629545) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/brazilian-taste/ | `websites/TruongSon-demos/scrollcraft/builds/brazilian-taste/` |
 | 3 | 1. **Pakachi Kitchen**<br>2. Herndon, VA<br>3. Pakistani halal home cooking, a weekly 6-dish deal | [(571) 341-0009](https://wa.me/15713410009) (same number for call/text) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/pakachi-kitchen/ | `websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen/` |
-| 4 | 1. **Sweets by Carla G**<br>2. Homestead, FL<br>3. Custom celebration cakes | [(305) 399-1386](https://wa.me/13053991386) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/sweets-by-carla-g/ | `websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g/` |
-| 5 | 1. **Tardes Caleñas**<br>2. Hollywood, FL<br>3. Colombian bar and restaurant, kitchen open until 4AM, salsa nights | [(954) 940-2515](https://wa.me/19549402515) (reservations; landline 954-391-7542) | Best (2026-11-26). Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/tardes-calenas/ | `websites/TruongSon-demos/scrollcraft/builds/tardes-calenas/` |
+| 4 | 1. **Tardes Caleñas**<br>2. Hollywood, FL<br>3. Colombian bar and restaurant, kitchen open until 4AM, salsa nights | [(954) 940-2515](https://wa.me/19549402515) (reservations; landline 954-391-7542) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/tardes-calenas/ | `websites/TruongSon-demos/scrollcraft/builds/tardes-calenas/` |
 
-### Normal sites
+### A
+
+Strong and live, one step below S.
+
+| # | About | WhatsApp | Status | Path |
+| --- | --- | --- | --- | --- |
+| 1 | 1. **Delícias Cake & Bakery**<br>2. Burlington, MA<br>3. Brazilian custom cakes and breakfast | [(781) 365-0181](https://wa.me/17813650181) (used on the site, from their Instagram graphics). Their research also lists (781) 661-8417: to confirm | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/delicias-cake/ | `websites/TruongSon-demos/scrollcraft/builds/delicias-cake/` |
+| 2 | 1. **Sweets by Carla G**<br>2. Homestead, FL<br>3. Custom celebration cakes | [(305) 399-1386](https://wa.me/13053991386) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/sweets-by-carla-g/ | `websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g/` |
+| 3 | 1. **El Salvadoreño Restaurant & Grill**<br>2. Kendall, Miami, FL<br>3. Salvadoran pupusas, grill, breakfast, party trays | [(786) 606-1159](https://wa.me/17866061159) (phone 305-271-3101) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/el-salvadoreno/ (v2, the flag) | `websites/TruongSon-demos/scrollcraft/builds/el-salvadoreno/` |
+
+### B
 
 Approved and live, but not the bar to aim for.
 
 | # | About | WhatsApp | Status | Path |
 | --- | --- | --- | --- | --- |
 | 1 | 1. **Espresso Vivace**<br>2. Seattle, WA<br>3. Espresso and latte art | None (concept demo, not a WhatsApp business) | Live at https://nguyenlieu12379.github.io/truongson-OS/espresso-vivace/ | `websites/TruongSon-demos/scrollcraft/builds/espresso-vivace/` |
-| 2 | 1. **Delícias Cake & Bakery**<br>2. Burlington, MA<br>3. Brazilian custom cakes and breakfast | [(781) 365-0181](https://wa.me/17813650181) (used on the site, from their Instagram graphics). Their research also lists (781) 661-8417: to confirm | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/delicias-cake/ | `websites/TruongSon-demos/scrollcraft/builds/delicias-cake/` |
-| 3 | 1. **El Salvadoreño Restaurant & Grill**<br>2. Kendall, Miami, FL<br>3. Salvadoran pupusas, grill, breakfast, party trays | [(786) 606-1159](https://wa.me/17866061159) (phone 305-271-3101) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/el-salvadoreno/. v2 (the flag), rebuilt on the earlier skill after v1 was judged too simple; not reviewed yet | `websites/TruongSon-demos/scrollcraft/builds/el-salvadoreno/` |
 
-### Failures
+### C
 
 Marked failed by Son or Truong. Kept offline as examples of what not to do; never deployed. Full reasons in `.claude/skills/site-building/FAILURES.md`.
 
-| # | About | Why it failed | Status | Path |
+| # | About | Why it ranks C | Status | Path |
 | --- | --- | --- | --- | --- |
 | 1 | 1. **Brazilian Passion Foods**<br>2. Orlando, FL<br>3. Pastéis from a food truck | "Looks AI slop": picture plus a text column for the whole page, washed beige colours, layers stacked with no relationship. v1 also used drawn plastic props | Offline | `websites/TruongSon-demos/scrollcraft/builds/brazilian-passion-foods/` |
 | 2 | 1. **El Budare Café**<br>2. Jackson Heights, Queens, NY<br>3. Venezuelan arepas and cachapas, open 24 hours | "Not serious and slops": playful font and colour, toggle stranded mid-bar, motion with no real value, a cutout missing part of the dish | Offline | `websites/TruongSon-demos/scrollcraft/builds/el-budare-cafe/` |

@@ -58,11 +58,12 @@ Don't use Scrapling on Instagram or Facebook. Use the browser.
 ## Rules
 
 - Read only on Instagram and Facebook.
-- Never message, call, follow, like or email a prospect. Outreach is always a cold call by Son or Truong (owner, 2026-11-26), never email or DM, so a `built` lead goes straight to `won` or `rejected`.
+- Never message, call, follow, like or email a prospect. Outreach is always a cold call by Son or Truong (owner, 2026-11-26), never email or DM, so a `built` or `built-<rank>` lead goes straight to `won` or `rejected`.
 - `prospects/` is gitignored. Never commit `leads.csv`.
 - **`leads.csv` holds approved prospects only (owner, 2026-11-26).** Passing every check is the approval. Status values:
   - `new`: passed every check, no demo built yet, not called yet.
-  - `built`: demo built and approved by the owner, not outreached yet.
+  - `built-S`, `built-A`, `built-B`, `built-C`: demo built and ranked by the owner (S best), not outreached yet. Same rank as in `websites/README.md` (2026-11-27).
+  - `built`: demo built, not ranked yet.
   - `won`: said yes on the cold call and became a paying client.
   - `rejected`: said no on the cold call. Never use it for a prospect that failed our checks (those are not written at all).
   Change a status only when the owner says so, except `new` on add.
