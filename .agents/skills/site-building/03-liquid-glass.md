@@ -34,10 +34,32 @@ How to describe it to anyone (designer, client, another AI): *"Liquid glass effe
    ```
    Keep `aria-label` constant; `aria-pressed` carries the state.
 5. **Version every asset URL** (`site.css?v=N`, `liquid-glass.js?v=N`) and bump N on every change. A returning visitor's cached old script once left the Vivace toggle dead while every test passed.
-6. **Fit the header.** The toggle adds about 40px; check 390, 360 and 320px widths for wrapping or sideways scroll.
-7. **Verify** (below), look at the screenshots, then commit. Ask before publishing.
+6. **Toggle in the corner.** Put `.lg-theme-btn` last in the bar so it sits in the far corner; any button slot goes before it. It must never float mid-bar when the slot is empty (Son, 2026-11-25).
+7. **Fit the header.** The toggle adds about 40px; check 390, 360 and 320px widths for wrapping or sideways scroll.
+8. **Verify** (below), look at the screenshots, then commit. Ask before publishing.
 
 No venom. Son removed the glass venom strands on 2026-11-23; don't add them back.
+
+## Glass and the five patterns
+
+From `references/conversion.md` (2026-11-27). These win over the kit defaults above.
+
+- **The CTA is never clear glass.** A clear lens drops the accent colour, so the one button stops standing out (highlighter rule). The CTA stays a solid accent fill with a soft offset shadow, in front of everything. A glass rim or lens edge on top of that fill is fine; the fill stays. Glass goes on secondary buttons, cards and the bar.
+- **The cursor ball and the button magnet count as moving things.** On a screen where the dish or scene already moves, the ball is the visitor's own pointer, so it can stay, but don't add `magnet()` there. Use the magnet only on a still screen, on the CTA alone.
+- **Motion toggle beside the theme toggle.** Built into `head.html`, `liquid-glass.js`, `liquid-glass.css` and the scrollcraft engine. Put `.lg-motion-btn` right before `.lg-theme-btn` in the bar's far corner:
+  ```html
+  <button class="lg-motion-btn" type="button" aria-pressed="true" aria-label="Motion">
+    <svg class="lg-i-move" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c2.2-3 4.3-3 6.5 0s4.3 3 6.5 0 3.3-2.2 5-1.2M3 15c2.2-3 4.3-3 6.5 0s4.3 3 6.5 0 3.3-2.2 5-1.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <svg class="lg-i-still" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18M3 15h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+  ```
+  What it does:
+  - Sets `data-motion="on"` or `"off"` on `<html>` before first paint. It's saved under `CONFIG.key + "-motion"`.
+  - When it's off: no ball, no cursor pull, magnet buttons spring home, instant theme switch, and all CSS animations and transitions stop (CTA sweeps, typing dots, drifting cutouts).
+  - Scrollcraft pages reload on change and show their reduced-motion composition.
+  - If the system asks for reduced motion, it is always off and the button is disabled.
+  - Your own page JS must check `document.documentElement.dataset.motion === "off"` (or `LiquidGlass.motionOff()`) and can listen for the `lg:motion` event.
+  - Keep `aria-label="Motion"` constant. `aria-pressed` is true while motion is on.
 
 ## Rules that each cost a debugging round
 
@@ -45,7 +67,7 @@ No venom. Son removed the glass venom strands on 2026-11-23; don't add them back
 - **`color-interpolation-filters="sRGB"` on the filter and on every primitive.** Otherwise 128 is not "no bend" and the whole lens shifts about 10px.
 - **No folding.** The pull must grow slower than the distance it acts over (slope under 1px per px). If it doesn't, content folds back on itself and thin letters smear into dark blobs. `lensMap()` defaults keep the slope near 0.66. If you raise `push`, widen `band` too.
 - **Browser reach.** The live-page bending (`backdrop-filter: url(#svg)`, used by the ball and buttons) is Chromium only (Chrome, Edge, Opera, Brave). Safari and Firefox get the rim, highlight and a light frost. The theme sweep uses View Transitions plus `filter` on the snapshots: Chromium and Safari 18+. Elsewhere it's a 0.7s colour fade.
-- **Reduced motion:** the sweep is instant and there's no ball. **Touch:** no ball.
+- **Reduced motion, or the motion toggle off:** the sweep is instant and there's no ball. **Touch:** no ball.
 - **Inline the toggle code** (`head.html`), so a stale cached script can't break it.
 - **Contrast on glass:** labels on glass over busy imagery can fail. Put glass buttons over calm areas, keep the text shadow, and check the label against the brightest frame behind it.
 - **Sweep cost:** the sweep repaints a full-screen filter every frame. Fine on desktop GPUs. Long sweeps (4 to 7s) may drop frames on older phones, so check a real device.
@@ -68,8 +90,8 @@ Not covered by the script: Safari and Firefox fallbacks, real phones and real tr
 | Slower or faster sweep | `CONFIG.duration` in `head.html` |
 | Wider or stronger sweep edge | `band`, `push` in `glassSwitch` (keep `push` at about 0.42 × `band`) |
 | Bigger or smaller ball (default 112, the Vivace size; keep the default unless asked) | `LiquidGlass.cursorBall({ size: 140 })` |
-| Lazier or snappier ball | `stiffness` (default 0.055), `damping` (default 0.86): the Brazilian Taste drag is the default. Vivace's original snappy spring was 0.14 / 0.72 |
-| Longer drag (more stretch on fast moves) | `stretch` (default 0.03 per px/frame), `maxStretch` (default 0.7). Tried on Brazilian Taste, then dropped for the default |
+| Lazier or snappier ball | `stiffness` (default 0.14), `damping` (default 0.72): Vivace's spring is the default (2026-11-24). The Brazilian Taste drag (0.055 / 0.86) was dropped as "too fluid" |
+| Longer drag (more stretch on fast moves) | `stretch` (default 0.018 per px/frame), `maxStretch` (default 0.42), Vivace's values. Brazilian Taste used 0.03 / 0.7 |
 | Ball doesn't grow on links | `hoverGrow: 1` |
 | Buttons pulled toward a nearby cursor | `LiquidGlass.magnet(".cta", { reach: 140, pull: 0.35, max: 26 })`. Moves with left/top so the lens stays aligned. `reach: "page"` follows the cursor anywhere; `curve` (default 1) makes the pull grow faster up close. Brazilian Taste: `{ reach: "page", curve: 2.2, pull: 0.6, max: 46 }` |
 | Flatter or rounder buttons | `glassify(sel, { band, push, interior })`; `interior: 0` keeps the middle flat |

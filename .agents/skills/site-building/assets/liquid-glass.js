@@ -33,6 +33,13 @@
     var b = (navigator.userAgentData && navigator.userAgentData.brands) || [];
     return b.some(function (x) { return /Chromium|Google Chrome|Microsoft Edge|Opera|Brave/.test(x.brand); });
   }
+  // Motion off: the motion toggle in head.html (data-motion="off" on <html>),
+  // or the system reduced-motion setting when head.html is missing. Read live,
+  // so the ball, pull and magnet stop the moment the toggle is pressed.
+  function motionOff() {
+    var m = document.documentElement.getAttribute("data-motion");
+    return m ? m === "off" : matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
   function smooth(t) { t = t < 0 ? 0 : t > 1 ? 1 : t; return t * t * (3 - 2 * t); }
 
   // A displacement map for a rounded rectangle (a circle when w == h and
@@ -103,11 +110,10 @@
 
   // ---- cursor ball ------------------------------------------------------
   // Glass ball that springs after the mouse, stretches along its velocity
-  // and wobbles back to round. Mouse/trackpad only; off with reduced motion.
+  // and wobbles back to round. Mouse/trackpad only; off while motion is off.
   function cursorBall(opt) {
     opt = opt || {};
     if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return null;
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return null;
     var size = opt.size || 112;   // the Espresso Vivace ball: the default
     var ball = document.createElement("div");
     ball.className = "lg-ball"; ball.setAttribute("aria-hidden", "true");
@@ -118,13 +124,13 @@
       ball.style.backdropFilter = ball.style.webkitBackdropFilter = "url(#" + id + ") saturate(1.15)";
       ball.classList.add("is-lens");
     }
-    // default drag = the Brazilian Taste trail (Son, 2026-11-24): lazy spring, long stretch
-    var K = opt.stiffness || 0.055, D = opt.damping || 0.86, hoverGrow = opt.hoverGrow || 1.28;
+    // default motion = the Espresso Vivace ball, exactly (2026-11-24: the Brazilian Taste drag was "too fluid")
+    var K = opt.stiffness || 0.14, D = opt.damping || 0.72, hoverGrow = opt.hoverGrow || 1.28;
     var tx = -500, ty = -500, x = tx, y = ty, vx = 0, vy = 0, grow = 1, gT = 1, running = false;
     function frame() {
       vx = (vx + (tx - x) * K) * D; vy = (vy + (ty - y) * K) * D; x += vx; y += vy;
       grow += (gT - grow) * 0.18;
-      var sp = Math.sqrt(vx * vx + vy * vy), st = Math.min(opt.maxStretch || 0.7, sp * (opt.stretch || 0.03));
+      var sp = Math.sqrt(vx * vx + vy * vy), st = Math.min(opt.maxStretch || 0.42, sp * (opt.stretch || 0.018));
       var ang = st < 0.004 ? 0 : Math.atan2(vy, vx) * 180 / Math.PI;
       ball.style.left = x.toFixed(1) + "px"; ball.style.top = y.toFixed(1) + "px";   // never translate
       // stretch along the motion with no net rotation, so the round map lines up
@@ -135,6 +141,7 @@
     function kick() { if (!running) { running = true; requestAnimationFrame(frame); } }
     document.addEventListener("pointermove", function (e) {
       if (e.pointerType !== "mouse") return;
+      if (motionOff()) { ball.classList.remove("is-on"); return; }
       if (!ball.classList.contains("is-on")) { x = tx = e.clientX; y = ty = e.clientY; ball.classList.add("is-on"); }
       tx = e.clientX; ty = e.clientY;
       gT = e.target.closest && e.target.closest(opt.grows || "a, button, summary, label, input, select, textarea") ? hoverGrow : 1;
@@ -181,7 +188,6 @@
     opt = opt || {};
     var els = Array.prototype.slice.call(document.querySelectorAll(selector));
     if (!els.length || !matchMedia("(hover: hover) and (pointer: fine)").matches) return els;
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return els;
     var page = opt.reach === "page", reach = page ? 0 : (opt.reach || 140), curve = opt.curve || 1, pull = opt.pull || 0.35, max = opt.max || 26, K = opt.stiffness || 0.16;
     var st = els.map(function (el) {
       if (getComputedStyle(el).position === "static") el.style.position = "relative";
@@ -191,7 +197,7 @@
     function aim() {
       st.forEach(function (s) {
         var r = s.el.getBoundingClientRect();
-        if (!r.width || getComputedStyle(s.el).visibility === "hidden") { s.tx = s.ty = 0; return; }
+        if (motionOff() || !r.width || getComputedStyle(s.el).visibility === "hidden") { s.tx = s.ty = 0; return; }
         // the resting box: undo our own offset
         var cx = r.left - s.x + r.width / 2, cy = r.top - s.y + r.height / 2;
         var ex = Math.max(0, Math.abs(mx - cx) - r.width / 2), ey = Math.max(0, Math.abs(my - cy) - r.height / 2);
@@ -215,6 +221,7 @@
     function kick() { aim(); if (!running) { running = true; requestAnimationFrame(frame); } }
     document.addEventListener("pointermove", function (e) { if (e.pointerType !== "mouse") return; mx = e.clientX; my = e.clientY; kick(); }, { passive: true });
     window.addEventListener("scroll", kick, { passive: true });
+    document.addEventListener("lg:motion", kick);   // motion off: buttons spring home
     document.documentElement.addEventListener("pointerleave", function () { mx = my = -1e4; kick(); });
     return els;
   }
@@ -254,7 +261,7 @@
   function cursorPinch(opt) {
     opt = opt || {};
     if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return null;
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches || !chromium()) return null;
+    if (!chromium()) return null;
     var size = opt.size || 150, half = size / 2;
     var el = document.createElement("div");
     el.className = "lg-pinch"; el.setAttribute("aria-hidden", "true");
@@ -266,6 +273,7 @@
     // position straight from the event: the area sits exactly on the pointer, every move
     document.addEventListener("pointermove", function (e) {
       if (e.pointerType !== "mouse") return;
+      if (motionOff()) { el.style.opacity = "0"; return; }
       el.style.left = (e.clientX - half) + "px"; el.style.top = (e.clientY - half) + "px";
       if (el.style.opacity !== "1") el.style.opacity = "1";
     }, { passive: true });
@@ -274,5 +282,5 @@
     return el;
   }
 
-  root.LiquidGlass = { lensMap: lensMap, filterFor: filterFor, cursorBall: cursorBall, cursorPinch: cursorPinch, cursorPull: cursorPinch, glassify: glassify, magnet: magnet, chromium: chromium };
+  root.LiquidGlass = { lensMap: lensMap, filterFor: filterFor, cursorBall: cursorBall, cursorPinch: cursorPinch, cursorPull: cursorPinch, glassify: glassify, magnet: magnet, chromium: chromium, motionOff: motionOff };
 })(window);

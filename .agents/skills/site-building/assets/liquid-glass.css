@@ -15,17 +15,22 @@
    :root[data-theme="dark"] { --paper: #161311; --ink: #F1ECE4; ... color-scheme: dark; }
 */
 
-/* ---- Theme toggle button ---------------------------------------------- */
-.lg-theme-btn {
+/* ---- Theme and motion toggle buttons ----------------------------------- */
+.lg-theme-btn, .lg-motion-btn {
   display: inline-grid; place-items: center; flex: none;
   width: 2.5rem; height: 2.5rem; padding: 0; cursor: pointer;
   border: 1px solid color-mix(in oklab, currentColor 18%, transparent); border-radius: 50%;
   background: transparent; color: inherit;
   transition: background-color 160ms cubic-bezier(0.23, 1, 0.32, 1), transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
 }
-.lg-theme-btn:active { transform: scale(0.95); }
-.lg-theme-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
-@media (hover: hover) and (pointer: fine) { .lg-theme-btn:hover { background: color-mix(in oklab, currentColor 8%, transparent); } }
+.lg-theme-btn:active, .lg-motion-btn:active { transform: scale(0.95); }
+.lg-theme-btn:focus-visible, .lg-motion-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) { .lg-theme-btn:hover, .lg-motion-btn:hover:not(:disabled) { background: color-mix(in oklab, currentColor 8%, transparent); } }
+.lg-motion-btn:disabled { cursor: default; opacity: 0.45; }
+.lg-motion-btn svg { width: 1.15rem; height: 1.15rem; }
+.lg-motion-btn .lg-i-still { display: none; }
+:root[data-motion="off"] .lg-motion-btn .lg-i-still { display: block; }
+:root[data-motion="off"] .lg-motion-btn .lg-i-move { display: none; }
 .lg-theme-btn svg { width: 1.15rem; height: 1.15rem; animation: lg-icon 700ms cubic-bezier(0.23, 1, 0.32, 1); }
 .lg-theme-btn .lg-i-sun { display: none; }
 :root[data-theme-now="dark"] .lg-theme-btn .lg-i-sun { display: block; }
@@ -90,4 +95,15 @@ button.lg-glass:active, a.lg-glass:active { transform: scale(0.97); }
 }
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
   .lg-ball { display: none; }
+}
+
+/* ---- Motion off (toggle or system setting) -------------------------------
+   Stops page-level CSS animation and transitions too: CTA sweeps, typing
+   dots, drifting cutouts. Page JS motion must check
+   document.documentElement.dataset.motion === "off" itself. */
+:root[data-motion="off"] .lg-ball, :root[data-motion="off"] .lg-pinch { display: none; }
+:root[data-motion="off"] { scroll-behavior: auto; }
+:root[data-motion="off"] *, :root[data-motion="off"] *::before, :root[data-motion="off"] *::after {
+  animation-duration: 0.001ms !important; animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
 }

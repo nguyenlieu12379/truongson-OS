@@ -35,6 +35,14 @@ Four rules follow from that, and they are the spine of this skill:
    deliberately or every build inherits the same skeleton. The first four builds
    did exactly that. Read [references/uniqueness.md](references/uniqueness.md).
 
+## Conversion first
+
+Read [references/conversion.md](references/conversion.md) before Step 0. Its five
+patterns (mirror test, highlighter rule, front/middle/back, motion with a job,
+free sample) outrank every rule below where they clash. Variety and the
+signature move still apply, but never at the cost of a readable first screen,
+one moving thing per screen, or a CTA that is the first thing you see.
+
 ## Standing hero preference
 
 **Dimensional layering is a baseline requirement for a premium marketing hero.**
@@ -126,6 +134,10 @@ BRIEF.md must contain, at minimum:
 - **The completed tell-someone sentence.** "It's the site where ___", filled
   with an experience, not a device name.
 - Any authored silence, so the verification pass can tell it from dead scroll.
+- **`## First screen`:** who it's for, what they get, the one action, written
+  before any design (conversion.md §1).
+- **`## Free sample`:** the one tool, the customer question it answers, and the
+  real data it uses (conversion.md §5).
 
 [references/feel.md](references/feel.md) is the spec for all four.
 
@@ -291,6 +303,12 @@ Checks before you build:
   complete. Never add filler or empty pinning to hit a length target.
 - The act count and total length do not land in the 6-to-7 acts at 13.6-13.8vh
   band that all four prior builds hit. That band is a fingerprint dimension now.
+- Add a column to the score table: **the one thing that moves** in each act, and
+  its job (show the product, point to the next step, show what just happened).
+  Two moving things in one act, or a mover with no job, means cut one.
+- The first screen uses no kinetic or fading text. Kinetic devices start from
+  the second act.
+- The free sample has its own act or scene, placed before the close.
 
 ## Step 3: Generate the assets
 
@@ -373,6 +391,13 @@ Then do the part the harness cannot: **read `sheet.png`.** It proves a clip
 advances; it cannot tell you the composition is good, the motion is smooth, or
 the page means anything. Also tab through for focus order.
 
+**Then run the conversion check** ([references/conversion.md](references/conversion.md),
+"Pre-show check"). Use the first frame of `lab/shots` for the mirror and
+highlighter checks (blur it: the CTA must be the first thing you find), the
+`lab/reduced` run plus a click on the motion toggle for the motion check, and
+complete the free sample by hand on desktop and at 390px. Write pass or fail
+for all five in the report.
+
 **Then run the feel check** ([references/feel.md §6](references/feel.md)). Scroll
 the page cold, write one word per act for what you felt, and only then open
 BRIEF.md and diff it against the intended curve. Where they disagree the page is
@@ -425,11 +450,19 @@ machine-made.
 | `transition: all`, or animating width/height/top/left | `transform` and `opacity`; `clip-path` for wipes |
 | Gradient text, neon glow, zero-offset coloured halo shadows | Weight and size for emphasis; shadows with offset and blur |
 | Autoplaying audio, or any audio at all on a scrub clip | Strip the track. `encode.sh` already does |
+| The brand name alone as the first-screen headline | A headline that says who it's for and what they get (conversion.md §1) |
+| Accent colour on headlines, icons, borders or section fills | Accent on the CTA and links only (conversion.md §2) |
+| Anything covering the CTA, or shadows on every card | CTA in front with the only soft shadow, plus at most one main card (conversion.md §3) |
+| Two or more things moving on one screen | One mover per screen, everything else still (conversion.md §4) |
+| First-screen text that fades in, assembles or waits for a scrub | Readable at first paint; kinetic type from act two on |
+| No way to turn motion off | `prefers-reduced-motion` respected plus a motion toggle in the bar |
+| Explain everything, then a button | One free sample, 3 taps or fewer, real data, ends at the CTA (conversion.md §5) |
 | Shipping without running Step 5 | Run Step 5 |
 
 ## Output
 
-The build folder, including `BRIEF.md`, then a short report: the grammar and why
+The build folder, including `BRIEF.md`, then a short report: the conversion check
+(pass or fail for all five, one line of proof each), the grammar and why
 the other seven lost, the signature move, the fingerprint gate result against
 each existing row, the journey, the feeling curve and the peak, the feel-check
 diff (intended curve against felt curve, and what you changed), the score table

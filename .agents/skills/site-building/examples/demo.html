@@ -21,7 +21,15 @@
        - toggle click: the new theme grows as a circle out of the button, its
          edge a glass lens that bends the page behind it (View Transitions +
          SVG displacement, Chromium/Safari 18+); otherwise a colour fade;
-         reduced motion switches instantly -->
+         reduced motion switches instantly
+       - motion toggle (button class "lg-motion-btn"): sets data-motion="on" or
+         "off" on <html> before first paint, saved per site. Off when the
+         visitor turns it off, or when the system asks for reduced motion (the
+         button is then disabled: the system setting wins). Fires a
+         "lg:motion" event on document with detail { off }. Pages built on the
+         scrollcraft engine reload on change, since the engine reads motion
+         once at start. Page code checks
+         document.documentElement.dataset.motion === "off". -->
 <script>
 (function (d) {
   var CONFIG = {
@@ -30,6 +38,36 @@
     duration: 1400                // ms for the glass sweep. 1400 reads as deliberate; 4000-7000 as a show
   };
   d.classList.add("js");
+
+  // ---- motion toggle ----------------------------------------------------
+  var MKEY = CONFIG.key + "-motion", rm = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var mv = null; try { mv = localStorage.getItem(MKEY); } catch (e) {}
+  function motionOff() { return mv === "off" || rm.matches; }
+  function renderMotion() {
+    var off = motionOff();
+    d.setAttribute("data-motion", off ? "off" : "on");
+    document.querySelectorAll(".lg-motion-btn").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(!off));
+      if (rm.matches) { b.disabled = true; b.title = "Motion is off in your system settings"; }
+      else { b.disabled = false; b.title = off ? "Turn motion on" : "Turn motion off"; }
+    });
+  }
+  function motionChanged() {
+    renderMotion();
+    try { document.dispatchEvent(new CustomEvent("lg:motion", { detail: { off: motionOff() } })); } catch (e) {}
+    if (window.ScrollCraft) location.reload();
+  }
+  renderMotion();
+  document.addEventListener("DOMContentLoaded", renderMotion);
+  if (rm.addEventListener) rm.addEventListener("change", motionChanged); else if (rm.addListener) rm.addListener(motionChanged);
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest && e.target.closest(".lg-motion-btn");
+    if (!btn || rm.matches) return;
+    mv = motionOff() ? "on" : "off";
+    try { localStorage.setItem(MKEY, mv); } catch (e2) {}
+    motionChanged();
+  });
+
   var mq = window.matchMedia("(prefers-color-scheme: dark)");
   var t = null; try { t = localStorage.getItem(CONFIG.key); } catch (e) {}
   if (t === "dark" || t === "light") d.setAttribute("data-theme", t);
@@ -123,7 +161,7 @@
     var btn = e.target.closest && e.target.closest(".lg-theme-btn");
     if (!btn) return;
     var next = now() === "dark" ? "light" : "dark";
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { apply(next); return; }
+    if (motionOff()) { apply(next); return; }
     if (document.startViewTransition) {
       var r = btn.getBoundingClientRect();
       glassSwitch(next, r.left + r.width / 2, r.top + r.height / 2);
@@ -146,6 +184,7 @@
   body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 system-ui, sans-serif; }
   header { display: flex; justify-content: space-between; align-items: center; padding: 1rem clamp(1rem, 4vw, 3rem); }
   header b { font-size: 1.15rem; }
+  .lg-bar-end { display: flex; gap: 0.5rem; align-items: center; }
   h1 { font: 400 clamp(3rem, 9vw, 7.5rem)/0.95 Georgia, serif; letter-spacing: -0.03em; margin: 0; }
   h1 em { color: var(--accent); }
   .wrap { padding: clamp(1rem, 4vw, 3rem); }
@@ -164,14 +203,20 @@
 <body>
 <header>
   <b>Liquid glass</b>
-  <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
+  <div class="lg-bar-end">
+    <button class="lg-motion-btn" type="button" aria-pressed="true" aria-label="Motion">
+      <svg class="lg-i-move" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c2.2-3 4.3-3 6.5 0s4.3 3 6.5 0 3.3-2.2 5-1.2M3 15c2.2-3 4.3-3 6.5 0s4.3 3 6.5 0 3.3-2.2 5-1.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <svg class="lg-i-still" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18M3 15h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
     <svg class="lg-i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
     <svg class="lg-i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-  </button>
+    </button>
+  </div>
 </header>
 <main class="wrap">
   <h1>Clear glass,<br><em>bent light.</em></h1>
-  <p class="note">Move the mouse: the ball bends what is under it. Press the moon: the new theme grows from the button behind a glass edge. Bring the mouse near a button below: it sends out strands of its own colour that reach for the pointer and latch on. The panel refracts the stripes behind it.</p>
+  <p class="note">Move the mouse: the ball bends what is under it. Press the moon: the new theme grows from the button behind a glass edge. Press the wave: motion turns off (no ball, instant theme switch) and stays off on reload. Bring the mouse near a button below: it sends out strands of its own colour that reach for the pointer and latch on. The panel refracts the stripes behind it.</p>
   <div class="stage">
     <div class="row">
       <button class="lg-glass" type="button">Order ahead</button>

@@ -7,6 +7,8 @@ description: The one site-building skill for Son and Truong's websites, run in o
 
 **Read `FAILURES.md` first, every time, before stage 1.** It lists builds Son and Truong marked as failures and the patterns to avoid. BRIEF.md must say how the new build avoids each one.
 
+**Then read `references/conversion.md`.** Five patterns every build must pass before anyone sees it: mirror test (first-screen copy), highlighter rule (accent on the CTA only), front/middle/back layers, motion with a job (one mover per screen, readable first screen, motion toggle), free sample (one small tool). Where they clash with older rules, they win.
+
 Run the stages in order. Each stage's file holds its detail.
 
 | Stage | File | Does | Output |
@@ -26,6 +28,7 @@ Run the stages in order. Each stage's file holds its detail.
 - **FAILURES.md before stage 1, every time.** No exceptions for autopilot.
 - **Stage 1 before stage 2, every time.** Autopilot or "don't ask me" never skips the stage 1 questions. A settings hook reminds Claude when a prompt mentions scroll-craft. Skip stage 1 only if the build's PREFS.md exists and is from this session.
 - **Stage 3 comes after the page exists.** Glass goes over a finished layout.
+- **Conversion check before showing.** Pass or fail on all five patterns in the build report (`references/conversion.md`, "Pre-show check").
 - **Scripts run from the repo root:** `node .claude/skills/site-building/scripts/<name>`.
 - **Shared folders:** `references/`, `engine/`, `scripts/`, `templates/` (stage 2); `assets/`, `examples/` (stage 3); `agents/`, `hooks/` (stage 1).
 - **Provenance:** `VENDORED.md` lists the scroll-craft upstream commit. Everything else is ours.
