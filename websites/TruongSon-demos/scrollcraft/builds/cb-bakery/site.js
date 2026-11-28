@@ -181,8 +181,15 @@
       if (w > VW * 0.42) { w = VW * 0.42; h = w / AR.plate; }
       L.lp = { x: VW - pad - w - VW * 0.02, y: TOP + (VH - TOP - h) / 2, w, h };
       put(kitchen, 'width', `${Math.min(560, L.lp.x - pad - VW * 0.05)}px`);
-      L.kx = pad; L.ky = Math.max(TOP + 10, (VH - kitchen.offsetHeight) / 2 + TOP / 3);
+      L.kx = pad;
     }
+    // the list must end above the demo note: tighten it, then (last resort) scale it
+    kitchen.classList.remove('compact');
+    const kTop = mob ? L.ky : TOP + 12, kAvail = VH - kTop - (mob ? 12 : 40);
+    let kh = kitchen.offsetHeight;
+    if (kh > kAvail) { kitchen.classList.add('compact'); kh = kitchen.offsetHeight; }
+    L.kS = Math.min(1, kAvail / kh);
+    if (!mob) L.ky = TOP + 12 + Math.max(0, (VH - TOP - 52 - kh * L.kS) / 2);
 
     // --- the close: their room, the card; the coxinha stands on the card's top edge
     const cardW = mob ? VW - pad * 2 : Math.min(450, VW * 0.4);
@@ -340,7 +347,7 @@
 
     // --- the kitchen list sets in beside the plate; leaves left as the room rolls up
     const rk = seg(p, ...T.rows);
-    at(kitchen, L.kx - c * VW, L.ky);
+    at(kitchen, L.kx - c * VW, L.ky, L.kS);
     put(kH, 'transform', `translateX(${r1(-(1 - E3(clamp(rk * 3))) * VW * 0.7)}px)`);
     rows.forEach((row, i) => { const rr = E3(clamp(rk * 2.4 - 0.25 - i * 0.2)); put(row, 'transform', `translateX(${r1(-(1 - rr) * VW * 0.75)}px)`); });
     put(quote, 'transform', `translateX(${r1(-(1 - E3(clamp(rk * 2 - 1))) * VW * 0.75)}px)`);
