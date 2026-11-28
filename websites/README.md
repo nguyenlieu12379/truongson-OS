@@ -13,7 +13,7 @@ websites/
 
 ## Sites
 
-Ranked S, A, B, C by Son and Truong (2026-11-27). The rank replaces the old Best, Normal and Failures tiers, and the same rank is the lead's status in `prospects/leads.csv` (`built-S`, `built-A`, `built-B`, `built-C`). No primary demo; pick the one that fits the prospect, highest rank first.
+Ranked S, A, B, C by Son and Truong (2026-11-27; Sweets by Carla G up to S and Pakachi Kitchen down to A, Son, 2026-11-28). The rank replaces the old Best, Normal and Failures tiers, and the same rank is the lead's status in `prospects/leads.csv` (`built-S`, `built-A`, `built-B`, `built-C`). No primary demo; pick the one that fits the prospect, highest rank first.
 
 ### S
 
@@ -23,10 +23,10 @@ The reference set: start a new build from what these do (centred moving hero, un
 | --- | --- | --- | --- | --- |
 | 1 | 1. **Gochón**<br>2. Doral, FL<br>3. Venezuelan pasapalos (tequeños, empanadas, pastelitos) by the piece or the party box | [(786) 670-5020](https://wa.me/17866705020) (phone 305-631-2248) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/gochon/ | `websites/TruongSon-demos/scrollcraft/builds/gochon/` |
 | 2 | 1. **Brazilian Taste**<br>2. Dallas, TX<br>3. Brazilian premade meals for the week | [(682) 862-9545](https://wa.me/16828629545) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/brazilian-taste/ | `websites/TruongSon-demos/scrollcraft/builds/brazilian-taste/` |
-| 3 | 1. **Pakachi Kitchen**<br>2. Herndon, VA<br>3. Pakistani halal home cooking, a weekly 6-dish deal | [(571) 341-0009](https://wa.me/15713410009) (same number for call/text) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/pakachi-kitchen/ | `websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen/` |
-| 4 | 1. **Tardes Caleñas**<br>2. Hollywood, FL<br>3. Colombian bar and restaurant, kitchen open until 4AM, salsa nights | [(954) 940-2515](https://wa.me/19549402515) (reservations; landline 954-391-7542) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/tardes-calenas/ | `websites/TruongSon-demos/scrollcraft/builds/tardes-calenas/` |
-| 5 | 1. **Cantinho Brasileiro**<br>2. Philadelphia, PA<br>3. Brazilian comida mineira, self-service lunch, feijoada Saturdays, marmita delivery | [(302) 569-7265](https://wa.me/13025697265) (phone 215-745-1381) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/cantinho-brasileiro/ | `websites/TruongSon-demos/scrollcraft/builds/cantinho-brasileiro/` |
-| 6 | 1. **CB Bakery**<br>2. Worcester, MA<br>3. Brazilian bakery and restaurant: salgados, sweets, lunch plates, open 5am | [(508) 410-9302](https://wa.me/15084109302) (call to order 508-792-9333) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/cb-bakery/ | `websites/TruongSon-demos/scrollcraft/builds/cb-bakery/` |
+| 3 | 1. **Tardes Caleñas**<br>2. Hollywood, FL<br>3. Colombian bar and restaurant, kitchen open until 4AM, salsa nights | [(954) 940-2515](https://wa.me/19549402515) (reservations; landline 954-391-7542) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/tardes-calenas/ | `websites/TruongSon-demos/scrollcraft/builds/tardes-calenas/` |
+| 4 | 1. **Cantinho Brasileiro**<br>2. Philadelphia, PA<br>3. Brazilian comida mineira, self-service lunch, feijoada Saturdays, marmita delivery | [(302) 569-7265](https://wa.me/13025697265) (phone 215-745-1381) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/cantinho-brasileiro/ | `websites/TruongSon-demos/scrollcraft/builds/cantinho-brasileiro/` |
+| 5 | 1. **CB Bakery**<br>2. Worcester, MA<br>3. Brazilian bakery and restaurant: salgados, sweets, lunch plates, open 5am | [(508) 410-9302](https://wa.me/15084109302) (call to order 508-792-9333) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/cb-bakery/ | `websites/TruongSon-demos/scrollcraft/builds/cb-bakery/` |
+| 6 | 1. **Sweets by Carla G**<br>2. Homestead, FL<br>3. Custom celebration cakes | [(305) 399-1386](https://wa.me/13053991386) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/sweets-by-carla-g/ | `websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g/` |
 
 ### A
 
@@ -34,7 +34,7 @@ Strong and live, one step below S.
 
 | # | About | WhatsApp | Status | Path |
 | --- | --- | --- | --- | --- |
-| 1 | 1. **Sweets by Carla G**<br>2. Homestead, FL<br>3. Custom celebration cakes | [(305) 399-1386](https://wa.me/13053991386) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/sweets-by-carla-g/ | `websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g/` |
+| 1 | 1. **Pakachi Kitchen**<br>2. Herndon, VA<br>3. Pakistani halal home cooking, a weekly 6-dish deal | [(571) 341-0009](https://wa.me/15713410009) (same number for call/text) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/pakachi-kitchen/ | `websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen/` |
 | 2 | 1. **El Salvadoreño Restaurant & Grill**<br>2. Kendall, Miami, FL<br>3. Salvadoran pupusas, grill, breakfast, party trays | [(786) 606-1159](https://wa.me/17866061159) (phone 305-271-3101) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/el-salvadoreno/ (v2, the flag) | `websites/TruongSon-demos/scrollcraft/builds/el-salvadoreno/` |
 
 ### B
