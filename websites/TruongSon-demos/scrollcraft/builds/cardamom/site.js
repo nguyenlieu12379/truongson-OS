@@ -44,10 +44,6 @@
     { k: 'night', t: [605, 560, 180], v: [540, 540, 1080] },    // irani chai: the window sign, then the whole shop
   ];
   const sign = E.frame.querySelector('.sign');
-  const fly = document.createElement('div'); fly.className = 'fly'; fly.setAttribute('aria-hidden', 'true');
-  const flyImg = {};
-  Object.entries(frs).forEach(([k, f]) => { const i = document.createElement('img'); i.src = f.src; i.alt = ''; i.decoding = 'async'; fly.appendChild(i); flyImg[k] = i; });
-  stage.appendChild(fly);
   // show the square region v of photo k in a square box of side S
   const place = (img, S, v, k) => {
     const sc = S / v[2], [w, h] = SIZE[k];
@@ -56,6 +52,14 @@
   };
   const PHOTO_ORDER = ['bowls', 'apps', 'curries', 'meetha', 'night'];
   const N = rows.length;
+  // each dish photo is one box that MOVES: out of its row's round thumbnail into the frame, and back again
+  const ths = rows.map((r) => r.querySelector('.th'));
+  const mover = [null];
+  for (let i = 1; i < N - 1; i++) {
+    const k = VIEW[i].k, d = document.createElement('div'), im = document.createElement('img');
+    d.className = 'fly'; d.setAttribute('aria-hidden', 'true'); im.src = frs[k].src; im.alt = ''; im.decoding = 'async';
+    d.appendChild(im); stage.appendChild(d); mover.push({ d, im, k });
+  }
 
   const clamp = (v, a = 0, b = 1) => (v < a ? a : v > b ? b : v);
   const seg = (p, a, b) => clamp((p - a) / (b - a));
@@ -138,7 +142,9 @@
     L.menuH = E.menu.offsetHeight;
     if (!mob && L.menuH > VH - TOP - 20) { E.menu.classList.add('tight'); L.menuH = E.menu.offsetHeight; }
     L.rowY = rows.map((r) => r.offsetTop);
-    L.th = rows.map((r) => { const t = r.querySelector('.th'); return { x: list.offsetLeft + t.offsetLeft, y: list.offsetTop + t.offsetTop, s: t.offsetWidth }; });
+    // thumbnail boxes relative to the menu: walk the offset chain (a row's will-change makes it the offsetParent)
+    const offIn = (el) => { let x = 0, y = 0; for (let n = el; n && n !== E.menu; n = n.offsetParent) { x += n.offsetLeft; y += n.offsetTop; } return { x, y }; };
+    L.th = rows.map((r) => { const t = r.querySelector('.th'), o = offIn(t); return { x: o.x, y: o.y, s: t.offsetWidth }; });
     L.th0 = rows[0].querySelector('.th');
     L.rowH = rows.map((r) => r.offsetHeight);
     L.listTop = list.offsetTop;
@@ -279,7 +285,7 @@
     // --- the plate: hero, then into the frame slot beside row 1; as row 2 comes up it flies into its own
     // row thumbnail (same dish) and the frame grows out of row 2's thumbnail. Back for the close.
     // in turn, never crossing: the plate lands in its thumbnail first, then the frame opens out of row 2's
-    const g0 = E3(clamp((a + 0.1) / 0.6)), gf = E3(clamp((a - 0.45) / 0.65));
+    const g0 = E3(clamp((a + 0.1) / 0.6));
     let P = null, lean3 = '';
     if (c > 0) P = { x: L.pc4.x, y: lerp(VH + L.pw4, L.pc4.y, c) + (c >= 1 ? bob : 0), w: L.pw4 * (c >= 1 ? breathe : 1) };
     else if (g0 < 1) {
@@ -295,36 +301,37 @@
     vis(E.plate, !!P); vis(E.sh, !!P && (c > 0 || g0 < 0.6));
     vis(L.th0, !(P && c === 0));   // row 1's thumbnail is the plate itself until it lands
 
-    // --- the frame: every row's thumbnail jumps out of the list and grows into the frame over the last one,
-    // landing on that dish's own close-up. Row 2's flight opens the frame; the last (Irani chai) zooms out
-    // from the window sign to the whole storefront, which then grows into the peak.
-    const tRow = (i) => (i === 1 ? gf : E3(clamp((a - i + 0.55) / 0.6)));
-    let kSet = 0;
-    for (let i = 1; i < N; i++) if (tRow(i) >= 1) kSet = i;
-    const F = rm > 0 || c > 0 ? L.pk : rect(L.fr, L.pk, g);
+    // --- one dish out at a time: the previous photo flies back into its own row thumbnail, then the next
+    // row's photo leaves its thumbnail (the circle empties) and grows into the frame. The last row, Irani chai,
+    // is the storefront itself: it zooms out from the window sign, then grows into the peak.
+    const outT = (i) => (i === 1 ? E3(clamp((a - 0.5) / 0.5)) : E3(clamp((a - i + 0.3) / 0.35)));
+    const backT = (i) => (i >= N - 1 ? 0 : E3(clamp((a - i - 0.35) / 0.35)));
     const carry = c * (mob ? -VW * 1.1 : VW * 0.75);   // the room and the storefront carry off for the close
-    const fOn = kSet > 0 && c < 1 && rm < 1;
-    box(E.frame, { x: F.x + carry, y: F.y, w: F.w, h: F.h }, 22);
+    const fly = (i, e) => {   // where photo i is at progress e (0 = in its thumbnail, 1 = the frame)
+      const th = thumb(i), V = VIEW[i];
+      return { R: rect({ x: th.x, y: th.y, w: th.s, h: th.s }, L.fr, e), rad: lerp(th.s / 2, 22, e),
+        v: [lerp(V.t[0], V.v[0], e), lerp(V.t[1], V.v[1], e), Math.exp(lerp(Math.log(V.t[2]), Math.log(V.v[2]), e))] };
+    };
+    for (let i = 1; i < N; i++) {
+      const e = c > 0 ? 0 : outT(i) * (1 - backT(i));
+      if (i < N - 1) {
+        const m = mover[i], on = e > 0 && g === 0;
+        vis(m.d, on); vis(m.im, on);
+        if (on) { const f = fly(i, e); box(m.d, f.R, f.rad); place(m.im, f.R.w, f.v, m.k); }
+      }
+      vis(ths[i], !(e > 0) || c > 0);
+    }
+    // Irani chai: the frame is that photo
+    const e8 = outT(N - 1);
+    let F, rad = 22, v8 = VIEW[N - 1].v;
+    if (rm > 0 || c > 0) F = L.pk;
+    else if (e8 < 1) { const f = fly(N - 1, e8); F = f.R; rad = f.rad; v8 = f.v; }
+    else F = rect(L.fr, L.pk, g);
+    const fOn = e8 > 0 && c < 1 && rm < 1;
+    box(E.frame, { x: F.x + carry, y: F.y, w: F.w, h: F.h }, rad);
     vis(E.frame, fOn);
-    Object.entries(frs).forEach(([k, img]) => {
-      const on = fOn && VIEW[kSet] && VIEW[kSet].k === k;
-      vis(img, on);
-      if (on) place(img, F.w, VIEW[kSet].v, k);
-    });
-    vis(sign, fOn && kSet === N - 1);
-    // the flight in progress
-    const j = kSet + 1, tj = j < N ? tRow(j) : 0;
-    if (tj > 0 && tj < 1 && g === 0) {
-      const th = thumb(j), V = VIEW[j];
-      const R = rect({ x: th.x, y: th.y, w: th.s, h: th.s }, L.fr, tj);
-      const side = Math.exp(lerp(Math.log(V.t[2]), Math.log(V.v[2]), tj));
-      box(fly, R, lerp(th.s / 2, 22, tj));
-      Object.entries(flyImg).forEach(([k, img]) => {
-        vis(img, k === V.k);
-        if (k === V.k) place(img, R.w, [lerp(V.t[0], V.v[0], tj), lerp(V.t[1], V.v[1], tj), side], k);
-      });
-      vis(fly, true);
-    } else { vis(fly, false); Object.values(flyImg).forEach((img) => vis(img, false)); }
+    Object.entries(frs).forEach(([k, img]) => { const on = fOn && k === 'night'; vis(img, on); if (on) place(img, F.w, v8, k); });
+    vis(sign, fOn && e8 >= 1);
     // the sign: letters switch on one by one
     const sg = seg(p, ...T.sign);
     lts.forEach((el, i) => {
