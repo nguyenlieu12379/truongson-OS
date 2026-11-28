@@ -28,6 +28,7 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 ## Style and world
 - Hero: centre focus with constant motion. The hero subject sits in the middle and keeps moving even with no scroll (breathing, bobbing, slight lean), like Brazilian Taste, Pakachi and Sweets. An off-centre hero with a text column on the side reads "a little off" (Gochón, 2026-11-25).
 - No fades between scenes. Each scene's end builds the next one's start: a frame grows out of an object in the last scene, a label slides onto its next anchor, a pan carries on, a photo rolls up over the last. Fading things in and out reads as cuts (Gochón, 2026-11-25).
+- No instant pops either. Nothing may vanish or appear from one frame to the next (a visibility switch, a swap of one element for another that doesn't match pixel for pixel). Every piece leaves or arrives by motion: slides off an edge, rolls out, shrinks into or grows out of another object, or is covered by something that moves over it. Estação do Pão went to A for this (Son, 2026-11-28).
 - Prefer real cutouts over a line of copy where a list of products would go (Gochón: the five pieces with name and price replaced the "Tequeños, empanadas..." sentence).
 - Fill blank space with a few real product cutouts drifting slowly through each scene, placed clear of text. Not a nav, not widgets (Gochón, 2026-11-25).
 - No header nav of blocky tags or a progress timeline: "useless". The bar is wordmark, CTA, theme toggle (Gochón, 2026-11-25).

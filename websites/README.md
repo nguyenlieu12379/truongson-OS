@@ -13,7 +13,7 @@ websites/
 
 ## Sites
 
-Ranked S, A, B, C by Son and Truong (2026-11-27; Sweets by Carla G up to S and Pakachi Kitchen down to A, Cardamom S, Gochón down to A, Son, 2026-11-28). The rank replaces the old Best, Normal and Failures tiers, and the same rank is the lead's status in `prospects/leads.csv` (`built-S`, `built-A`, `built-B`, `built-C`). No primary demo; pick the one that fits the prospect, highest rank first.
+Ranked S, A, B, C by Son and Truong (2026-11-27; Sweets by Carla G up to S and Pakachi Kitchen down to A, Cardamom S, Gochón down to A, Estação do Pão high A, Son, 2026-11-28). The rank replaces the old Best, Normal and Failures tiers, and the same rank is the lead's status in `prospects/leads.csv` (`built-S`, `built-A`, `built-B`, `built-C`). No primary demo; pick the one that fits the prospect, highest rank first.
 
 ### S
 
@@ -34,9 +34,10 @@ Strong and live, one step below S.
 
 | # | About | WhatsApp | Status | Path |
 | --- | --- | --- | --- | --- |
-| 1 | 1. **Pakachi Kitchen**<br>2. Herndon, VA<br>3. Pakistani halal home cooking, a weekly 6-dish deal | [(571) 341-0009](https://wa.me/15713410009) (same number for call/text) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/pakachi-kitchen/ | `websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen/` |
-| 2 | 1. **El Salvadoreño Restaurant & Grill**<br>2. Kendall, Miami, FL<br>3. Salvadoran pupusas, grill, breakfast, party trays | [(786) 606-1159](https://wa.me/17866061159) (phone 305-271-3101) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/el-salvadoreno/ (v2, the flag) | `websites/TruongSon-demos/scrollcraft/builds/el-salvadoreno/` |
-| 3 | 1. **Gochón**<br>2. Doral, FL<br>3. Venezuelan pasapalos (tequeños, empanadas, pastelitos) by the piece or the party box | [(786) 670-5020](https://wa.me/17866705020) (phone 305-631-2248) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/gochon/ | `websites/TruongSon-demos/scrollcraft/builds/gochon/` |
+| 1 | 1. **Estação do Pão**<br>2. Boca Raton, FL<br>3. Brazilian bakery, buffet by the pound, cakes, weekend café colonial. High A: some pieces still vanish and appear instantly | [(561) 345-9964](https://wa.me/15613459964) (phone 561-617-1574) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/estacao-do-pao/ | `websites/TruongSon-demos/scrollcraft/builds/estacao-do-pao/` |
+| 2 | 1. **Pakachi Kitchen**<br>2. Herndon, VA<br>3. Pakistani halal home cooking, a weekly 6-dish deal | [(571) 341-0009](https://wa.me/15713410009) (same number for call/text) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/pakachi-kitchen/ | `websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen/` |
+| 3 | 1. **El Salvadoreño Restaurant & Grill**<br>2. Kendall, Miami, FL<br>3. Salvadoran pupusas, grill, breakfast, party trays | [(786) 606-1159](https://wa.me/17866061159) (phone 305-271-3101) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/el-salvadoreno/ (v2, the flag) | `websites/TruongSon-demos/scrollcraft/builds/el-salvadoreno/` |
+| 4 | 1. **Gochón**<br>2. Doral, FL<br>3. Venezuelan pasapalos (tequeños, empanadas, pastelitos) by the piece or the party box | [(786) 670-5020](https://wa.me/17866705020) (phone 305-631-2248) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/gochon/ | `websites/TruongSon-demos/scrollcraft/builds/gochon/` |
 
 ### B
 
