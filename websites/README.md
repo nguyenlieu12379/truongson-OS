@@ -13,7 +13,7 @@ websites/
 
 ## Sites
 
-Ranked S, A, B, C by Son and Truong (2026-11-27; Sweets by Carla G up to S and Pakachi Kitchen down to A, Son, 2026-11-28). The rank replaces the old Best, Normal and Failures tiers, and the same rank is the lead's status in `prospects/leads.csv` (`built-S`, `built-A`, `built-B`, `built-C`). No primary demo; pick the one that fits the prospect, highest rank first.
+Ranked S, A, B, C by Son and Truong (2026-11-27; Sweets by Carla G up to S and Pakachi Kitchen down to A, Cardamom S, Son, 2026-11-28). The rank replaces the old Best, Normal and Failures tiers, and the same rank is the lead's status in `prospects/leads.csv` (`built-S`, `built-A`, `built-B`, `built-C`). No primary demo; pick the one that fits the prospect, highest rank first.
 
 ### S
 
@@ -27,6 +27,7 @@ The reference set: start a new build from what these do (centred moving hero, un
 | 4 | 1. **Cantinho Brasileiro**<br>2. Philadelphia, PA<br>3. Brazilian comida mineira, self-service lunch, feijoada Saturdays, marmita delivery | [(302) 569-7265](https://wa.me/13025697265) (phone 215-745-1381) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/cantinho-brasileiro/ | `websites/TruongSon-demos/scrollcraft/builds/cantinho-brasileiro/` |
 | 5 | 1. **CB Bakery**<br>2. Worcester, MA<br>3. Brazilian bakery and restaurant: salgados, sweets, lunch plates, open 5am | [(508) 410-9302](https://wa.me/15084109302) (call to order 508-792-9333) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/cb-bakery/ | `websites/TruongSon-demos/scrollcraft/builds/cb-bakery/` |
 | 6 | 1. **Sweets by Carla G**<br>2. Homestead, FL<br>3. Custom celebration cakes | [(305) 399-1386](https://wa.me/13053991386) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/sweets-by-carla-g/ | `websites/TruongSon-demos/scrollcraft/builds/sweets-by-carla-g/` |
+| 7 | 1. **Cardamom**<br>2. Niles, IL<br>3. Hyderabadi (100% Zabiha halal) restaurant: biryani, starters, open late, catering and banquet. Google lists it temporarily closed: confirm before the call | [(773) 273-5730](https://wa.me/17732735730) (phone 847-410-7335) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/cardamom/ | `websites/TruongSon-demos/scrollcraft/builds/cardamom/` |
 
 ### A
 
