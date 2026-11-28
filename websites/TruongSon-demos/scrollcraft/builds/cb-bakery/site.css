@@ -24,7 +24,8 @@ h2 em, .lead em { font: italic 700 1.06em/1 var(--serif); letter-spacing: 0; col
 
 /* ---- bar: wordmark, CTA, theme toggle in the far corner ---- */
 .bar { position: fixed; inset: 0 0 auto; z-index: 30; height: 66px; display: flex; align-items: center; gap: 12px; padding: 0 clamp(16px, 3.4vw, 48px); color: var(--ink); }
-.mark { text-decoration: none; display: flex; align-items: baseline; gap: 6px; }
+.mark { text-decoration: none; display: flex; align-items: center; gap: 6px; }
+.mark .av { width: 40px; height: 40px; border-radius: 50%; margin-right: 6px; box-shadow: 0 0 0 1px rgb(var(--sh) / 0.12), 0 6px 14px -8px rgb(var(--sh) / 0.6); }
 .mark b { font: 800 1.6rem/1 var(--serif); color: var(--word); letter-spacing: 0.01em; }
 .mark i { font: 700 0.78rem/1 var(--sans); letter-spacing: 0.2em; text-transform: uppercase; font-style: normal; color: var(--ink-2); }
 .bar-end { margin-left: auto; display: flex; align-items: center; gap: 10px; }
@@ -152,6 +153,7 @@ h2 em, .lead em { font: italic 700 1.06em/1 var(--serif); letter-spacing: 0; col
 @media (max-width: 760px) {
   .bar { height: 58px; }
   .mark b { font-size: 1.35rem; }
+  .mark .av { width: 34px; height: 34px; margin-right: 4px; }
   .cta { height: 40px; padding: 0 14px; }
   .bar .cta .opt { display: none; }
   .cta-slot { height: 50px; }

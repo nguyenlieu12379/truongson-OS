@@ -1,6 +1,6 @@
 # Writes index.html. Bump V on every change to site.css or site.js.
 # Run from the build folder: python lab/make_html.py
-V = 8
+V = 9
 WA = "https://wa.me/15084109302?text=Ol%C3%A1%21%20I%27d%20like%20to%20order%20from%20CB%20Bakery."
 ICON = ('<svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" '
         'fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/>'
@@ -65,7 +65,7 @@ html = f'''<!doctype html>
 </head>
 <body>
 <header class="bar" id="bar">
-  <a class="mark" href="#top" aria-label="CB Bakery"><b>CB</b><i>Bakery</i></a>
+  <a class="mark" href="#top" aria-label="CB Bakery"><img class="av" src="assets/avatar.webp" alt="" width="150" height="150"><b>CB</b><i>Bakery</i></a>
   <div class="bar-end">
     <a class="cta" id="cta" href="{WA}" target="_blank" rel="noopener">{ICON}<span class="lbl">Order<span class="opt"> on WhatsApp</span></span></a>
     <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
