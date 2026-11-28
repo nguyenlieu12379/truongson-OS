@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F6F5F1">
+<title>Cardamom · Hyderabadi restaurant in Niles, IL</title>
+<meta name="description" content="Authentic Hyderabadi biryani, 100% Zabiha halal, on Milwaukee Ave in Niles. Dine-in, takeout, catering and banquet. Open late. Order on WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/plate.webp">
+<!-- liquid-glass: paste into <head>, before any stylesheet that reads
+     data-theme. Inline on purpose: the toggle must not depend on a cached
+     external script. Edit the three values in CONFIG.
+
+     Needs in the page:
+       - CSS tokens for both themes (see liquid-glass.css, "Theme tokens")
+       - a button with class "lg-theme-btn" (markup in 03-liquid-glass.md)
+       - liquid-glass.css loaded
+
+     What it does:
+       - applies the saved theme before first paint (no flash)
+       - toggle click: the new theme grows as a circle out of the button, its
+         edge a glass lens that bends the page behind it (View Transitions +
+         SVG displacement, Chromium/Safari 18+); otherwise a colour fade;
+         reduced motion switches instantly -->
+<script>
+(function (d) {
+  var CONFIG = {
+    key: "cardamom-theme",            // localStorage key, unique per site
+    colors: { light: "#F6F5F1", dark: "#0B0D0B" },   // <meta name=theme-color> per theme
+    duration: 1400                // ms for the glass sweep. 1400 reads as deliberate; 4000-7000 as a show
+  };
+  d.classList.add("js");
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+  var t = null; try { t = localStorage.getItem(CONFIG.key); } catch (e) {}
+  if (t === "dark" || t === "light") d.setAttribute("data-theme", t);
+  function now() { var x = d.getAttribute("data-theme"); return x ? x : (mq.matches ? "dark" : "light"); }
+  function render() {
+    var dark = now() === "dark";
+    d.setAttribute("data-theme-now", dark ? "dark" : "light");
+    document.querySelectorAll(".lg-theme-btn").forEach(function (b) { b.setAttribute("aria-pressed", String(dark)); });
+    if (d.hasAttribute("data-theme")) document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute("content", CONFIG.colors[dark ? "dark" : "light"]); });
+  }
+  function apply(next) {
+    d.setAttribute("data-theme", next);
+    try { localStorage.setItem(CONFIG.key, next); } catch (e) {}
+    render();
+  }
+  render();
+  document.addEventListener("DOMContentLoaded", render);
+  if (mq.addEventListener) mq.addEventListener("change", render); else if (mq.addListener) mq.addListener(render);
+
+  // ---- the glass sweep --------------------------------------------------
+  var SVGNS = "http://www.w3.org/2000/svg", filters = null;
+  function ensureFilters() {
+    if (filters) return filters;
+    var svg = document.createElementNS(SVGNS, "svg");
+    svg.setAttribute("aria-hidden", "true");
+    svg.style.cssText = "position:absolute;width:0;height:0;overflow:hidden;pointer-events:none";
+    svg.innerHTML =
+      '<filter id="lg-sweep-new" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-sweep-map-new" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>' +
+      '<feDisplacementMap id="lg-sweep-dm-new" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB" result="bent"/>' +
+      '<feColorMatrix in="map" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0.85 0 0" result="rim"/>' +
+      '<feMerge><feMergeNode in="bent"/><feMergeNode in="rim"/></feMerge></filter>' +
+      '<filter id="lg-sweep-old" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-sweep-map-old" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>' +
+      '<feDisplacementMap id="lg-sweep-dm-old" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB"/></filter>';
+    document.body.appendChild(svg);
+    return (filters = {
+      maps: [document.getElementById("lg-sweep-map-new"), document.getElementById("lg-sweep-map-old")],
+      dms: [document.getElementById("lg-sweep-dm-new"), document.getElementById("lg-sweep-dm-old")]
+    });
+  }
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function glassSwitch(next, cx, cy) {
+    var f = ensureFilters(), W = innerWidth, H = innerHeight, DUR = CONFIG.duration;
+    var band = Math.max(54, Math.min(130, Math.min(W, H) * 0.11)), push = band * 0.42, S = push * 2.2;
+    var end = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy)) + band;
+    var k = W > 900 ? 5 : 4, mw = Math.ceil(W / k), mh = Math.ceil(H / k);
+    var cv = document.createElement("canvas"); cv.width = mw; cv.height = mh;
+    var g = cv.getContext("2d"), img = g.createImageData(mw, mh), px = img.data;
+    f.maps.forEach(function (m) { m.setAttribute("width", W); m.setAttribute("height", H); });
+    f.dms.forEach(function (m) { m.setAttribute("scale", S.toFixed(1)); });
+    function paint(rad) {
+      for (var y = 0; y < mh; y++) {
+        var dy = y * k + k / 2 - cy;
+        for (var x = 0; x < mw; x++) {
+          var dx = x * k + k / 2 - cx, i = (y * mw + x) * 4;
+          var dd = Math.sqrt(dx * dx + dy * dy) || 1, u = (dd - rad) / band, R = 128, G = 128, B = 0;
+          if (u > -1 && u < 1) {
+            var bump = 1 - u * u; bump *= bump;
+            var m = push * bump;
+            R = 128 - (dx / dd) * m / S * 255; G = 128 - (dy / dd) * m / S * 255;
+            var hh = (u + 0.06) / 0.07;
+            B = Math.min(255, 150 * Math.exp(-hh * hh) + 40 * bump);   // bright rim
+          }
+          px[i] = R; px[i + 1] = G; px[i + 2] = B; px[i + 3] = 255;
+        }
+      }
+      g.putImageData(img, 0, 0);
+      var url = cv.toDataURL();
+      f.maps.forEach(function (m) { m.setAttribute("href", url); });
+    }
+    d.style.setProperty("--lg-x", cx + "px"); d.style.setProperty("--lg-y", cy + "px"); d.style.setProperty("--lg-r", "0px");
+    paint(-band);
+    d.classList.add("lg-sweeping");
+    var vt = document.startViewTransition(function () { apply(next); });
+    vt.ready.then(function () {
+      // no-op animation keeps the transition alive; frames are driven below
+      d.animate({ opacity: [1, 1] }, { duration: DUR, pseudoElement: "::view-transition-new(root)" });
+      var t0 = performance.now();
+      (function frame(t) {
+        var p = Math.min(1, (t - t0) / DUR), rad = ease(p) * end;
+        d.style.setProperty("--lg-r", rad + "px"); paint(rad);
+        if (p < 1) requestAnimationFrame(frame);
+      })(t0);
+    }).catch(function () {});
+    function done() { d.classList.remove("lg-sweeping"); ["--lg-x", "--lg-y", "--lg-r"].forEach(function (v) { d.style.removeProperty(v); }); }
+    vt.finished.then(done, done);
+  }
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest && e.target.closest(".lg-theme-btn");
+    if (!btn) return;
+    var next = now() === "dark" ? "light" : "dark";
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { apply(next); return; }
+    if (document.startViewTransition) {
+      var r = btn.getBoundingClientRect();
+      glassSwitch(next, r.left + r.width / 2, r.top + r.height / 2);
+      return;
+    }
+    d.classList.add("lg-fading"); apply(next);
+    setTimeout(function () { d.classList.remove("lg-fading"); }, 760);
+  });
+})(document.documentElement);
+</script>
+
+<link rel="stylesheet" href="liquid-glass.css?v=6">
+<link rel="stylesheet" href="site.css?v=6">
+</head>
+<body>
+<header class="bar" id="bar">
+  <a class="mark" href="#top" aria-label="Cardamom">cardamom</a>
+  <div class="bar-end">
+    <a class="cta" id="cta" href="https://wa.me/17732735730?text=Hi%21%20I%27d%20like%20to%20order%20from%20Cardamom." target="_blank" rel="noopener"><svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/><circle class="d d2" cx="12" cy="12" r="1.15"/><circle class="d d3" cx="15.6" cy="12" r="1.15"/></svg><span class="lbl">Order<span class="opt"> on WhatsApp</span></span></a>
+    <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
+      <svg class="lg-i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <svg class="lg-i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <div class="stage" id="stage">
+    <div class="night" id="night" aria-hidden="true"></div>
+    <h1 class="word" id="word" aria-label="Cardamom, Hyderabadi restaurant in Niles"><span class="ch">c</span><span class="ch">a</span><span class="ch">r</span><span class="ch">d</span><span class="ch">a</span><span class="ch">m</span><span class="ch">o</span><span class="ch">m</span></h1>
+    <div class="hero-l" id="heroL">
+      <p class="lead">Hyderabadi biryani, <em>slow cooked in Niles.</em></p>
+      <p class="sub">100% Zabiha halal. Dine-in, takeout, catering and banquet on Milwaukee Ave.</p>
+    </div>
+    <dl class="hero-r" id="heroR">
+      <div><dt>Google</dt><dd>4.6 from 390 reviews</dd></div>
+      <div><dt>Halal</dt><dd>100% Zabiha</dd></div>
+      <div><dt>Hours</dt><dd>Open late, till 2am</dd></div>
+    </dl>
+
+    <img class="plate-sh" id="plateSh" src="assets/plate-shadow.webp" alt="" aria-hidden="true">
+    <img class="plate" id="plate" src="assets/plate.webp" alt="Hyderabadi chicken biryani on a copper plate, two chicken pieces, onion ring and coriander" fetchpriority="high">
+
+    <div class="frame" id="frame">
+      <img class="fr fr-bowls" data-k="bowls" src="assets/f-bowls.webp" alt="Biryani bowls and Chicken 65 on a tray at their table" decoding="async">
+      <img class="fr fr-apps" data-k="apps" src="assets/f-apps.webp" alt="Chicken 65, Chicken Manchurian and Majestic Chicken in boat dishes, naan behind" decoding="async">
+      <img class="fr fr-curries" data-k="curries" src="assets/f-curries.webp" alt="Butter chicken, Nizami goat kadai, salan and naan" decoding="async">
+      <img class="fr fr-meetha" data-k="meetha" src="assets/f-meetha.webp" alt="Double ka meetha on a black plate" decoding="async">
+      <img class="fr fr-night" data-k="night" src="assets/night-off.webp" alt="Cardamom storefront at night, 7742 N Milwaukee Ave, with the IRANI CHAI sign in the window" decoding="async">
+      <div class="sign" id="sign" aria-hidden="true">
+      <span class="lt" style="left:2.778%;top:13.889%;width:8.148%;height:16.667%"><img src="assets/night-on.webp" alt="" style="width:1227.273%;left:-34.091%;top:-83.333%"></span>
+      <span class="lt" style="left:10.741%;top:13.889%;width:7.963%;height:16.667%"><img src="assets/night-on.webp" alt="" style="width:1255.814%;left:-134.884%;top:-83.333%"></span>
+      <span class="lt" style="left:18.519%;top:13.889%;width:5.370%;height:16.667%"><img src="assets/night-on.webp" alt="" style="width:1862.069%;left:-344.828%;top:-83.333%"></span>
+      <span class="lt" style="left:23.519%;top:13.889%;width:8.148%;height:16.667%"><img src="assets/night-on.webp" alt="" style="width:1227.273%;left:-288.636%;top:-83.333%"></span>
+      <span class="lt" style="left:31.481%;top:13.889%;width:7.963%;height:16.667%"><img src="assets/night-on.webp" alt="" style="width:1255.814%;left:-395.349%;top:-83.333%"></span>
+      <span class="lt" style="left:39.074%;top:13.889%;width:11.481%;height:16.667%"><img src="assets/night-on.webp" alt="" style="width:870.968%;left:-340.323%;top:-83.333%"></span>
+      <span class="lt" style="left:50.185%;top:13.889%;width:7.778%;height:16.667%"><img src="assets/night-on.webp" alt="" style="width:1285.714%;left:-645.238%;top:-83.333%"></span>
+      <span class="lt" style="left:57.593%;top:13.889%;width:11.667%;height:16.667%"><img src="assets/night-on.webp" alt="" style="width:857.143%;left:-493.651%;top:-83.333%"></span>
+      </div>
+    </div>
+    <img class="room" id="room" src="assets/f-room.webp" alt="Cardamom dining room: wooden tables and chairs, warm wall lamps" decoding="async">
+
+    <section class="menu" id="menu" aria-labelledby="menuH">
+      <h2 id="menuH">What to order <em>first.</em></h2>
+      <ol id="menuList">
+        <li data-ph="plate"><span class="n">Hyderabadi Chicken Biryani</span><span class="d">The chef&rsquo;s special. Dum cooked, Hyderabad style.</span><b>$21.99</b></li>
+        <li data-ph="bowls"><span class="n">Goat Biryani</span><span class="d">Their best seller.</span><b>$21.99</b></li>
+        <li data-ph="bowls"><span class="n">Chicken 65 Biryani</span><span class="d">Biryani with their Chicken 65.</span><b>$19.99</b></li>
+        <li data-ph="apps"><span class="n">Chicken 65</span><span class="d">Spicy fried chicken, curry leaf tempering.</span><b>$20.99</b></li>
+        <li data-ph="apps"><span class="n">Majestic Chicken</span><span class="d">Hyderabadi special: yogurt and herb sauce.</span><b>$21.99</b></li>
+        <li data-ph="curries"><span class="n">Nizami Goat Kadai</span><span class="d">Tender goat in a rich kadai masala.</span><b>$22.99</b></li>
+        <li data-ph="curries"><span class="n">Butter Chicken</span><span class="d">Creamy, mild. Butter naan $4.49.</span><b>$20.99</b></li>
+        <li data-ph="meetha"><span class="n">Double ka Meetha</span><span class="d">Hyderabadi bread pudding.</span><b>$9.99</b></li>
+        <li data-ph="night"><span class="n">Irani Chai</span><span class="d">The one on the sign in their window.</span><b>$2.49</b></li>
+      </ol>
+      <p class="note">Prices as listed on their Uber Eats menu.</p>
+    </section>
+
+    <section class="late" id="late" aria-labelledby="lateH">
+      <h2 id="lateH">The sign stays on <em>till 2am.</em></h2>
+      <p>When the rest of Milwaukee Ave is closed, the biryani is still coming out of the kitchen.</p>
+      <dl>
+        <div><dt>Most days</dt><dd>2pm to 2am</dd></div>
+        <div><dt>Wednesday</dt><dd>5pm to 2am</dd></div>
+      </dl>
+    </section>
+
+    <section class="inside" id="inside" aria-labelledby="insideH">
+      <h2 id="insideH">Bring the <em>whole family.</em></h2>
+      <ul>
+        <li><b>Dine-in</b><span>A full dining room, tables for big groups.</span></li>
+        <li><b>Catering</b><span>Free delivery on all catering orders.</span></li>
+        <li><b>Banquet</b><span>Birthdays, Eid, graduations. Ask on WhatsApp.</span></li>
+        <li><b>Halal</b><span>100% Zabiha, every dish.</span></li>
+      </ul>
+    </section>
+
+    <section class="card" id="card" aria-labelledby="cardH">
+      <p class="stars"><b>4.6</b> on Google &middot; 390 reviews</p>
+      <h2 id="cardH">Biryani tonight?</h2>
+      <p class="story">Authentic Hyderabadi cooking, 100% Zabiha halal, on Milwaukee Ave in Niles.</p>
+      <dl>
+        <div><dt>Where</dt><dd>7742 N Milwaukee Ave, Niles, IL 60714 &middot; <a href="https://www.google.com/maps/search/?api=1&amp;query=Cardamom+7742+N+Milwaukee+Ave+Niles+IL+60714" target="_blank" rel="noopener">Directions</a></dd></div>
+        <div><dt>Hours</dt><dd>2pm to 2am, Wednesday from 5pm</dd></div>
+        <div><dt>Call</dt><dd><a href="tel:+18474107335">(847) 410-7335</a></dd></div>
+        <div><dt>WhatsApp</dt><dd><a href="https://wa.me/17732735730?text=Hi%21%20I%27d%20like%20to%20order%20from%20Cardamom." target="_blank" rel="noopener">(773) 273-5730</a></dd></div>
+      </dl>
+      <div class="cta-slot" id="ctaSlot" aria-hidden="true"></div>
+    </section>
+  </div>
+  <div class="spacer" id="spacer" aria-hidden="true"></div>
+</main>
+<p class="demo">Demo site. Photos from Cardamom&rsquo;s own Instagram.</p>
+<script src="liquid-glass.js?v=6" defer></script>
+<script src="site.js?v=6" defer></script>
+</body>
+</html>

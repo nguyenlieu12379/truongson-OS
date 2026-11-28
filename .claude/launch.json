@@ -120,6 +120,30 @@
         "4516"
       ],
       "port": 4516
+    },
+    {
+      "name": "cardamom",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        ".claude/skills/site-building/scripts/serve.mjs",
+        "--root",
+        "websites/TruongSon-demos/scrollcraft/builds/cardamom",
+        "--port",
+        "4518"
+      ],
+      "port": 4518
+    },
+    {
+      "name": "cb-bakery",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        ".claude/skills/site-building/scripts/serve.mjs",
+        "--root",
+        "websites/TruongSon-demos/scrollcraft/builds/cb-bakery",
+        "--port",
+        "4517"
+      ],
+      "port": 4517
     }
   ]
 }

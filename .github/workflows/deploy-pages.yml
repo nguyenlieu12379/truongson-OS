@@ -9,6 +9,7 @@ name: Deploy websites to GitHub Pages
 # /tardes-calenas/ -> websites/TruongSon-demos/scrollcraft/builds/tardes-calenas (prospect demo, scroll-craft, noindex)
 # /el-salvadoreno/ -> websites/TruongSon-demos/scrollcraft/builds/el-salvadoreno (prospect demo, scroll-craft, noindex)
 # /cantinho-brasileiro/ -> websites/TruongSon-demos/scrollcraft/builds/cantinho-brasileiro (prospect demo, scroll-craft, noindex)
+# /cardamom/ -> websites/TruongSon-demos/scrollcraft/builds/cardamom (prospect demo, scroll-craft, noindex)
 # /             -> a plain list of the approved sites (no primary demo, noindex)
 # Every push to main that touches these paths redeploys all sites.
 
@@ -65,6 +66,9 @@ jobs:
           mkdir -p _site/cantinho-brasileiro
           cp -R websites/TruongSon-demos/scrollcraft/builds/cantinho-brasileiro/. _site/cantinho-brasileiro/
           rm -rf _site/cantinho-brasileiro/README.md _site/cantinho-brasileiro/BRIEF.md _site/cantinho-brasileiro/PREFS.md _site/cantinho-brasileiro/RESEARCH.md _site/cantinho-brasileiro/assets/source _site/cantinho-brasileiro/lab
+          mkdir -p _site/cardamom
+          cp -R websites/TruongSon-demos/scrollcraft/builds/cardamom/. _site/cardamom/
+          rm -rf _site/cardamom/README.md _site/cardamom/BRIEF.md _site/cardamom/PREFS.md _site/cardamom/RESEARCH.md _site/cardamom/assets/source _site/cardamom/lab
           cat > _site/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">
@@ -83,6 +87,7 @@ jobs:
             <li><a href="tardes-calenas/">Tardes Caleñas</a></li>
             <li><a href="el-salvadoreno/">El Salvadoreño Restaurant &amp; Grill</a></li>
             <li><a href="cantinho-brasileiro/">Cantinho Brasileiro</a></li>
+            <li><a href="cardamom/">Cardamom</a></li>
           </ul>
           HTML
           touch _site/.nojekyll
