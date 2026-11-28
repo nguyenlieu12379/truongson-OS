@@ -58,7 +58,7 @@
   const T = {
     split: [0.045, 0.13], bkIn: [0.1, 0.19], roll1: [0.162, 0.19], roll2: [0.2, 0.228],
     toPan: [0.262, 0.3], bkOut: [0.252, 0.29], deal: [0.3, 0.44], pkIn: [0.29, 0.34],
-    flip: [0.455, 0.515], shut: [0.515, 0.55],
+    flip: [0.45, 0.505], shut: [0.5, 0.57],
     toSweet: [0.585, 0.63], pkOut: [0.585, 0.615], swIn: [0.61, 0.67], s2: [0.665, 0.69], s3: [0.705, 0.73],
     toSpread: [0.74, 0.785], swOut: [0.738, 0.765], tags: [0.775, 0.825], notes: [0.785, 0.835],
     toRow: [0.86, 0.895], open: [0.895, 0.925], dayRoll: [0.915, 0.958], back: [0.865, 0.94], cta: [0.945, 0.985],
@@ -330,7 +330,7 @@
 
     // ---- the word: still in the hero, the covered letters sway; slides left under the bread pan; returns at the close
     const wOut = sp, wBack = back;
-    let wx = L.wx - wOut * VW * 0.75, wy = L.BY - L.bl, ws = 1;
+    let wx = L.wx - wOut * VW * 1.15, wy = L.BY - L.bl, ws = 1;
     if (wBack > 0) { const e = L.wEnd; wx = lerp(-L.ww * e.s - 40, e.x, wBack); wy = e.y - L.bl * e.s; ws = e.s; }
     put(word, 'transformOrigin', '0 0');
     at(word, wx, wy, ws);
@@ -340,7 +340,7 @@
       put(c, 'transform', on ? `rotate(${(Math.sin(time * 1.3 + i * 0.9) * 2.2).toFixed(2)}deg)` : '');
     });
     {
-      let x = L.w2.x - wOut * VW * 0.75, y = L.w2.y;
+      let x = L.w2.x - wOut * VW * 1.15, y = L.w2.y;
       if (wBack > 0) {
         const e = L.wEnd, wr = e.x + L.ww * e.s;
         const tx = mob ? e.x : wr - word2.offsetWidth * e.s, ty = mob ? e.y + L.fs * e.s * 0.1 : e.y + L.fs * e.s * 0.08;
@@ -350,8 +350,8 @@
       vis(word2, wOut < 1 || wBack > 0);
     }
     // hero copy: out to the sides as the bakery comes in
-    at(heroL, L.heroL.x - E3(clamp(sp * 1.4)) * VW * 0.7, L.heroL.y);
-    at(heroR, L.heroR.x + (L.heroR.left ? -1 : 1) * E3(clamp(sp * 1.4 - 0.1)) * VW * 0.7, L.heroR.y);
+    at(heroL, L.heroL.x - E3(clamp(sp * 1.4)) * VW * 1.1, L.heroL.y);
+    at(heroR, L.heroR.x + (L.heroR.left ? -1 : 1) * E3(clamp(sp * 1.4 - 0.1)) * VW * 1.1, L.heroR.y);
     vis(heroL, sp < 1); vis(heroR, sp < 1);
 
     // ---- the balls
@@ -372,9 +372,12 @@
       if (i === 0) {
         // ball 1 becomes the bread pan: hidden once the pan has grown over it; drops back in at the close
         if (back > 0) r = rl(R(home.x, -home.h - 40, home.w, home.h), home, EO(clamp(back * 1.15)));
-        else r = L.trio0[0];
-        put(b, 'zIndex', sp > 0 && back === 0 ? '3' : '11');   // on top of the pile; under the pan that grows out of it
-        vis(b, sp < 0.45 || back > 0);
+        else {
+          const k = 1 - E3(clamp(sp * 1.8)), h0 = L.trio0[0];
+          r = R(h0.x + h0.w * (1 - k) / 2, h0.y + h0.h * (1 - k) / 2, Math.max(0.5, h0.w * k), Math.max(0.5, h0.h * k));
+        }
+        put(b, 'zIndex', '11');   // on top of the pile, and on top of the pan while it shrinks into it
+        vis(b, sp < 0.56 || back > 0);
       } else {
         const dep = parkAt(i);
         if (back > 0) r = rl(dep, home, back);
@@ -394,9 +397,11 @@
     {
       const T0 = back > 0 ? L.trio2 : L.trio0;
       const x0 = T0[2].x, x1 = T0[1].x + T0[1].w, w = (x1 - x0) * 0.92, by = T0[1].y + T0[1].h;
+      const k = back > 0 ? E3(clamp(back * 1.4 - 0.4)) : 1 - E3(clamp(sp * 2.4));
       put(trioSh, 'width', `${r1(w)}px`); put(trioSh, 'height', `${r1(w * 0.12)}px`);
-      at(trioSh, (x0 + x1) / 2 - w / 2, by - w * 0.07);
-      vis(trioSh, sp === 0 || back >= 1);
+      put(trioSh, 'transformOrigin', '50% 50%');
+      put(trioSh, 'transform', `translate3d(${r1((x0 + x1) / 2 - w / 2)}px,${r1(by - w * 0.07)}px,0) scale(${Math.max(0.001, k).toFixed(3)})`);
+      vis(trioSh, k > 0.001);
     }
 
     // ---- the bread pan: grows out of ball 1, rolls through their breads, drops into the first slot of the steam table
@@ -418,7 +423,8 @@
       const e = L.emp;
       put(emp, 'width', `${r1(e.w)}px`);
       put(emp, 'transformOrigin', '50% 50%');
-      put(emp, 'transform', `translate3d(${r1(e.x + (1 - inn) * VW * 0.4)}px,${r1(e.y + out * VH * 0.8)}px,0) rotate(${r1((1 - inn) * 40 + (still ? 0 : Math.sin(time * 0.6) * 3))}deg)`);
+      const ex = lerp(-e.w - 30, e.x, inn), ey = lerp(e.y, VH + 30, out);
+      put(emp, 'transform', `translate3d(${r1(ex)}px,${r1(ey)}px,0) rotate(${r1(-(1 - inn) * 90 + (still ? 0 : Math.sin(time * 0.6) * 3))}deg)`);
       vis(emp, inn > 0 && out < 1);
     }
 
@@ -461,7 +467,7 @@
     let B = L.grid, bRad = 0;
     if (ts > 0) { B = rl(L.grid, L.sf, ts); bRad = 22 * ts; }
     if (tsp > 0) { B = rl(L.sf, L.sp, tsp); bRad = 22; }
-    if (tr > 0) { B = rl(L.sp, L.row, tr); bRad = lerp(22, mob ? 14 : 16, tr); }
+    if (tr > 0) { B = rl(L.sp, L.row, tr); bRad = lerp(22, 0, tr); }
     box(big, B, bRad);
     roll(bImgs[0], 1);
     roll(bImgs[1], ts);
@@ -474,7 +480,7 @@
     // ---- peak copy: in from the left with the deal, out to the left as the line folds
     {
       const a = E3(seg(p, ...T.pkIn)), b = E3(seg(p, ...T.pkOut));
-      at(peakCopy, L.pk.x - (1 - a) * VW * 0.6 - b * VW * 0.6, L.pk.y);
+      at(peakCopy, L.pk.x - (1 - a) * VW * 1.1 - b * VW * 1.1, L.pk.y);
       vis(peakCopy, a > 0 && b < 1);
     }
 

@@ -38,7 +38,7 @@ Defaults that pre-build offers for every new client site. Learned from Son's ans
 - "Unbroken" means each scene turns into the next (cells fly apart, photos grow into the next layout). A layer that just scrolls up out of view is a break (Son, 2026-11-24).
 - Add related motion so it isn't boring: real cutouts drifting, dish-name lines, counters, lines drawing in. Never drawn props.
 - Background: a light, clean ground nobody notices (neutral off-white, not beige; near-black in dark mode). No saturated or shifting background colour: "the background mustn't be noticable color, make it light, so it looks clean, not AI slops" (Son, 2026-11-25, El Budare). Brand colour lives in the photos, the type at full strength and the CTA.
-- Colour split 60/30/10 (Son, 2026-11-23): 60% background, 30% most type and objects, 10% the one must-see thing (the CTA). Taken from the client's own logo, sign or avatar. Ask it in pre-build every time.
+- Colour split 60/30/10 (Son, 2026-11-23): 60% background, 30% most type and objects, 10% the one must-see thing (the CTA). Taken from the client's own logo, sign or avatar. Ask it in pre-build every time. Their Instagram avatar comes first: its colours are the brand the customer already knows. Estação do Pão lost points for using the sign's plum and yellow over the avatar's green and gold (Son, 2026-11-28).
 - Match the client's Instagram vibe (Delícias: "soft, cute, juicy", playful pink).
 - One unbroken world (one fixed stage, the camera travels, no sections). Default (Son, 2026-11-25): "zero cut, zero scrolling, just motion graphics". Nothing ever scrolls up the page; scroll only drives motion on a fixed stage.
 - Four must-haves from `websites/README.md`: one engineered peak, layered hero, real photos, no AI tells.

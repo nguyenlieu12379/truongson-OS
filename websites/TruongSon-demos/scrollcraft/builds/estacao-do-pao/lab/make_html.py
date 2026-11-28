@@ -1,7 +1,7 @@
 # Writes index.html. Bump V on every change to site.css or site.js.
 # Run from the build folder: python lab/make_html.py
 import json
-V = 2
+V = 3
 WA = "https://wa.me/15613459964?text=Ol%C3%A1%21%20I%27d%20like%20to%20order%20from%20Esta%C3%A7%C3%A3o%20do%20P%C3%A3o."
 ICON = ('<svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" '
         'fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/>'
@@ -49,7 +49,7 @@ html = f'''<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#F5F4F1">
+<meta name="theme-color" content="#F5F5F1">
 <title>Estação do Pão · Brazilian bakery, buffet and café in Boca Raton</title>
 <meta name="description" content="Brazilian bakery and restaurant at 23269 State Road 7, Boca Raton. Pão de queijo from 6am, a buffet by the pound every day, cakes and café colonial. Order on WhatsApp.">
 <link rel="preconnect" href="https://fonts.googleapis.com">

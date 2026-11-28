@@ -2,13 +2,13 @@
 
 Prospect demo for a Brazilian bakery and restaurant at 23269 State Road 7, Boca Raton: breads and salgados from 6am, a buffet by the pound every day, cakes and sweets, weekend café colonial. Built 2026-11-28 with `/site-building` (pre-build, scroll-craft, liquid glass). Lead #12.
 
-**The steam table.** One fixed stage, scroll only drives motion. The photo frames are the pans of their buffet: they split, regroup and refill to frame each scene. Their three pão de queijo sit in a pile in front of a giant plum "Estação". The top one opens into a tall pan of their bread with the bakery list beside it. Peak: that pan drops into the first slot of a steam table, eleven more slide out of it one by one and get served their dishes, then every pan flips over like a station board and the gaps close into the photo of their real buffet line. The line folds back into one pan for the sweets, opens wide into their studio spread with prices pinned to the food, then drops into a row that breaks into seven pans, one per day with its hours. The word and the pile come back beside the order card.
+**The steam table.** One fixed stage, scroll only drives motion. The photo frames are the pans of their buffet: they split, regroup and refill to frame each scene. Their three pão de queijo sit in a pile in front of a giant green "Estação". The top one opens into a tall pan of their bread with the bakery list beside it. Peak: that pan drops into the first slot of a steam table, eleven more slide out of it one by one and get served their dishes, then every pan flips over like a station board and the gaps close into the photo of their real buffet line. The line folds back into one pan for the sweets, opens wide into their studio spread with prices pinned to the food, then drops into a row that breaks into seven pans, one per day with its hours. The word and the pile come back beside the order card.
 
 - Brief, colour split, failure checks: `BRIEF.md`. Answers: `PREFS.md`. Facts and what to confirm: `RESEARCH.md`.
 - Photos: their DoorDash studio spread and Google owner photos. Sources: `assets/source/SOURCES.md`.
 - Cutouts: `lab/cut.py` (check sheets in `lab/check/`), then `lab/prep.py` exports every web image and `lab/sizes.json`.
 - Markup: `lab/make_html.py` writes `index.html` (bump `V` there on every change to `site.css` or `site.js`).
-- Colours from their sign: off-white ground, plum #4B3A52 (the script on their sign, type and word), sign yellow #F2C53D (CTA only).
+- Colours from their Instagram avatar (Son, 2026-11-28): off-white ground, deep green #23401F (their green wall: type and word), avatar gold #DDAE45 (CTA only).
 - CTA: Order on WhatsApp (561) 345-9964, the number in their Instagram bio. Call (561) 617-1574 on the hero and the card.
 - Jump to a moment: `?p=0.5`. Contact sheets: `python lab/shots.py <name> <w> <h> [light|dark] [p,p,...]` with the server running.
 
