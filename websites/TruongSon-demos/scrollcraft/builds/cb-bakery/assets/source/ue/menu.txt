@@ -1,0 +1,60 @@
+4e7fc87010202437861cd13147b111fe misto-especial|Misto Quente Especial|$6.50
+6822d181955343c0f3b7e1313c091a37 rosca-tranca|Rosca Trança Creme com Coco|$11.00
+74b18f3850fdc0cbaeae7f6a46956770 caldo-misto|Caldo Misto de Frango e Feijão|$10.99
+69f3bfeae6c46b66afc62c970b00682b pastel-carne|Pastel de Carne com Queijo|$6.50
+17cf01985e7269640897ff06eeeed773 pudim|Pudim|$10.00
+08cfc420c66dc34e0808f6359a7f1d0c cenoura-box|Bolo de Cenoura Box|$9.50
+8fc7722d7e5d45c3c9377c93f37ca40f brigadeiro|Brigadeiro|$3.00
+661636df3f47355a14b5d8f7e8eac7ed catarina|Catarina de Presunto e Queijo|$5.99
+77b9f46e910cceefbda004d3a08b18a3 empadao|Empadão de Frango com Catupiry|$8.50
+2f774ac4171c9a476a67920165ddf232 empadinha|Empadinha de Frango|$6.50
+5893810d65fec01f74ca0680a879c5f9 esfirra-carne|Esfirra de Carne Moída|$5.99
+b4955328dd692f525a59264543d8fba2 esfirra-frango|Esfirra Frango|$5.99
+21171054e588c9c99e66d36516a93d95 pao-de-queijo|Pão de Queijo|$1.00
+aa4f6b90960984ee65c2ebb39caa4d0d pdq-recheado|Pão de Queijo Recheado|$5.00
+c2e205f0e1d574b8e5cae9ea01e93ed9 coxinha-cc|Coxinha com Cream Cheese|$5.50
+0c07149e7459d38a11bd91dd6f41b15a coxinha|Coxinha|$5.00
+1178c25d74656d40862587cdbf83965f kibe|Kibe de Carne Moída|$5.00
+2fcf08deb15a4bf9816689389cf94089 risole|Risole de Presunto, Queijo e Milho|$5.50
+ea117da970e3e4b9abea5315491ee980 bolinho-carne|Bolinho de Carne|$5.00
+44833e548f2919464bc47cedabca7621 coxinhas-box|Coxinhas Box|$27.00
+ebc712715f697073658e4002784706e8 coxinha-costela|Coxinha de Costela|$7.00
+094356d684eb8830b293618c9254ece4 salgados-box|Salgados Box|$27.00
+3eddb8bb350e7aebedb3b42defeeee93 pastel-banana|Pastel de Banana|$5.00
+ff21158d12321377de57673ee3973102 pastel-frango|Pastel de Frango|$5.50
+907d13933f4077f2dc426521fbc1d155 pao-caracol|Pão Caracol Pacote|$10.99
+608611f746e0b3f9ebbcce5615c36d6c pao-creme-coco|Pão com Creme e Coco|$2.25
+c80c4e02b019f396ba649285848a2929 marta-rocha|Mini Pão Doce Marta Rocha|$2.90
+db9c4fa16e86cece050e210082b9f6c4 pao-frances|Pão Unidade|$0.50
+1e064ff7b65bcfa6a96086455f170a99 rosca-flor|Pão de Rosca Flor|$12.99
+adbfd05e2ce4d44f580f17bfdfeaf325 pao-sovado|Pão Sovado Pacote|$10.99
+626ef20dbd6d02d0447a9b7ae882c0ff tropeiro|Feijão Tropeiro|$10.50
+016353f1f2d6a31f8559622d3f14d67a frango-grelhado|Frango Grelhado com Batata Frita|$16.00
+6d4538f861316278742c23c2fc7e1152 carne-de-sol|Porção de Carne de Sol com Mandioca|$18.00
+abbeff1edec8ca4c9ca9955615dc36ae bolo-banana|Bolo de Banana Fatia|$6.50
+3833832c53f8e52ac92945ac8fe6f523 bolo-cenoura|Bolo de Cenoura Fatia|$6.50
+caf19735d6ea07dccc9c62c3d5512d67 coco-gelado|Bolo de Coco Gelado|$9.50
+e6c67acc729aefb755c14889fcef63f1 bolo-chocolate|Bolo de Chocolate Box|$9.50
+e70f3b14a6048d8fcb246ef915328743 bolo-fuba|Bolo de Fubá Fatia|$6.50
+6bfff09a9d869880ff89fe6a90d60507 bolo-milho|Bolo de Milho Verde Fatia|$6.50
+4fc929183ea0367f9260e349f036aff3 tres-leites|Bolo de Três Leites|$7.99
+92935ee51deaa227102dd572dcfbe995 broa|Broa Italiana Fatia|$6.50
+bb72b34267c855ae652610da195fa1de coxinha-morango|Coxinha de Morango|$9.00
+616037465530bbbbdb8052ff23058852 sonho|Mini Sonho de Doce de Leite|$2.90
+cec100344228f3a07b7e2ed95e94d0b4 quindim|Quindim|$6.00
+4868f1d619fa9dfaa9d812c056e3664b rosca-coco|Rosca de Coco com Creme e Leite Condensado|$11.99
+d8eca1e2f7033d3d2857dde282572adf acai|Açaí Copo 470 ml|$17.50
+9f50d985dde99ba35bf726988827e033 x-tudo|X-Tudo|$17.50
+823d88187aba8bf17ff0aa7bf151f940 x-ovo|X-Ovo|$14.50
+95b9a3c22f4ee13c05ce36165a87715a caldo-frango|Caldo de Frango|$8.99
+9973ddbc32b286c93b16b0b262ea4cb0 caldo-feijao|Caldo de Feijão|$8.99
+ce98de55036ce5f70f42a94f687987c1 cachorro-quente|Cachorro Quente|$6.00
+f78c19e1b825d693357ccb68434fb491 mini-pudim|Mini Pudim|$5.50
+7ae83cc11d786d00d2f5f6396e3a814b beijinho|Beijinho|$3.00
+6b92af0769f8d2f91b090bd702f45f7f mousse|Mousse de Maracujá|$5.50
+21e8aee1459f5ccab721f5a735d875da tortinha-morango|Tortinha de Creme com Morango|$6.50
+ff32b3d7288c1f4a33ea21c8d45897a3 tortinha-limao|Tortinha de Creme com Limão|$6.00
+bfc90febbf6ab70128835674c35a65fe cueca-virada|Rosquinha Frita Cueca Virada|$2.00
+9dc1cef0ba7672f29a8963ebfe098248 misto-quente|Misto Quente|$5.00
+a057c62ef7ebf153075f660c45d61e9a misto-ovo|Misto Quente com Ovo|$6.00
+1e313ed250ecb9c295430fb488263a8c pastel-banana-queijo|Pastel de Banana com Queijo|$5.50
