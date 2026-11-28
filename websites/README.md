@@ -26,6 +26,7 @@ The reference set: start a new build from what these do (centred moving hero, un
 | 3 | 1. **Pakachi Kitchen**<br>2. Herndon, VA<br>3. Pakistani halal home cooking, a weekly 6-dish deal | [(571) 341-0009](https://wa.me/15713410009) (same number for call/text) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/pakachi-kitchen/ | `websites/TruongSon-demos/scrollcraft/builds/pakachi-kitchen/` |
 | 4 | 1. **Tardes Caleñas**<br>2. Hollywood, FL<br>3. Colombian bar and restaurant, kitchen open until 4AM, salsa nights | [(954) 940-2515](https://wa.me/19549402515) (reservations; landline 954-391-7542) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/tardes-calenas/ | `websites/TruongSon-demos/scrollcraft/builds/tardes-calenas/` |
 | 5 | 1. **Cantinho Brasileiro**<br>2. Philadelphia, PA<br>3. Brazilian comida mineira, self-service lunch, feijoada Saturdays, marmita delivery | [(302) 569-7265](https://wa.me/13025697265) (phone 215-745-1381) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/cantinho-brasileiro/ | `websites/TruongSon-demos/scrollcraft/builds/cantinho-brasileiro/` |
+| 6 | 1. **CB Bakery**<br>2. Worcester, MA<br>3. Brazilian bakery and restaurant: salgados, sweets, lunch plates, open 5am | [(508) 410-9302](https://wa.me/15084109302) (call to order 508-792-9333) | Live (noindex) at https://nguyenlieu12379.github.io/truongson-OS/cb-bakery/ | `websites/TruongSon-demos/scrollcraft/builds/cb-bakery/` |
 
 ### A
 
