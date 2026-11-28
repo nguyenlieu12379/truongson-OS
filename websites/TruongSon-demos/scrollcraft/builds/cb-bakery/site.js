@@ -66,7 +66,19 @@
     return m.actualBoundingBoxAscent || fs * 0.708;
   }
 
+  // lay out, then make sure the copy under the counter never collides with the tags or runs off the bottom:
+  // lift the baseline by the overflow, and if that squeezes the pastries, set the words smaller
   function layout() {
+    let lift = 0, shrink = 1;
+    for (let i = 0; i < 4; i++) {
+      const over = pass(lift, shrink);
+      if (over <= 0.5) break;
+      lift += over;
+      if (L.capTop - over - TOP < (VH - TOP) * 0.24) shrink *= 0.88;
+    }
+  }
+
+  function pass(lift, shrink) {
     [...stage.querySelectorAll('*')].forEach((el) => { el._c = {}; el.style.transform = ''; el.style.visibility = ''; el.style.clipPath = ''; });
     VW = root.clientWidth; VH = stage.clientHeight; mob = VW <= 760; TOP = bar.offsetHeight;
     const pad = mob ? 16 : Math.min(56, Math.max(24, VW * 0.035));
@@ -76,11 +88,11 @@
     words.forEach((w) => { w.style.fontSize = '200px'; });
     const longest = Math.max(...words.map((w) => w.scrollWidth));
     let fs = (VW - pad * 2) * (mob ? 1 : 0.94) / longest * 200;
-    fs = Math.min(fs, (VH - TOP) * (mob ? 0.2 : 0.3) / 0.708);
+    fs = Math.min(fs, (VH - TOP) * (mob ? 0.2 : 0.3) / 0.708) * shrink;
     words.forEach((w) => { w.style.fontSize = `${fs}px`; });
     L.fs = fs; L.cap = capHeight(fs);
     L.bl = words[0].querySelector('.bl').offsetTop;      // baseline inside the word box
-    L.BY = TOP + (VH - TOP) * (mob ? 0.5 : 0.63);          // the baseline on screen
+    L.BY = TOP + (VH - TOP) * (mob ? 0.5 : 0.63) - lift;   // the baseline on screen
     L.capTop = L.BY - L.cap;
     L.ww = words.map((w) => w.scrollWidth);
     L.wx = words.map((w, i) => i * VW + (VW - L.ww[i]) / 2);
@@ -160,7 +172,7 @@
     // --- copy in the band under the counter, travelling with its word
     copies.forEach((el) => {
       const i = +el.dataset.w; el._h = el.offsetHeight; el._w = el.offsetWidth;
-      let y = Math.min(L.tagBottom + (mob ? 16 : 26), VH - el._h - (mob ? 14 : 30));
+      let y = L.tagBottom + (mob ? 16 : 26);
       let x = i * VW + pad;
       if (el.classList.contains('hero-r')) { x = mob ? pad : VW - pad - el._w; }
       if (el.classList.contains('hero-l') || el.classList.contains('hero-r')) {
@@ -169,6 +181,7 @@
       }
       el._x = x; el._y = y;
     });
+    const over = Math.max(...copies.map((el) => el._y + el._h)) - (VH - (mob ? 14 : 30));
 
     // --- the kitchen list beside the plate
     if (mob) {
@@ -218,6 +231,7 @@
     const hr = cta.getBoundingClientRect();
     L.ctaHome = { x: hr.left, y: hr.top, w: hr.width, h: hr.height };
     L.slot = { dx: slot.offsetLeft * L.cardS, dy: slot.offsetTop * L.cardS, w: slot.offsetWidth * L.cardS, h: slot.offsetHeight * L.cardS };
+    return over;
   }
 
   function frame(now) {
