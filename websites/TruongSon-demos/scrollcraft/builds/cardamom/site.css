@@ -70,8 +70,9 @@ h2 em, .lead em { font-style: italic; font-weight: 500; color: var(--green); }
 
 /* one square frame: the menu photos roll up inside it, then the storefront; the sign's letters sit on top */
 .frame { z-index: 5; width: 100px; height: 100px; border-radius: 22px; overflow: hidden; background: #111; box-shadow: 0 30px 60px -30px rgb(var(--sh) / 0.7); }
-.fr { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; will-change: clip-path; }
-.fr-night { object-fit: fill; }
+.fr { position: absolute; left: 0; top: 0; max-width: none; will-change: transform; }
+.fly { z-index: 6; overflow: hidden; background: #111; box-shadow: 0 26px 50px -24px rgb(0 0 0 / 0.55); }
+.fly img { position: absolute; left: 0; top: 0; max-width: none; will-change: transform; }
 .sign { position: absolute; inset: 0; z-index: 2; }
 .lt { position: absolute; overflow: hidden; opacity: 0; will-change: opacity; }
 .lt img { position: absolute; height: auto; }

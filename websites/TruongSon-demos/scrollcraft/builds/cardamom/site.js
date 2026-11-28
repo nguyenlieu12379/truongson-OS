@@ -30,6 +30,30 @@
   const PL = { w: 794, h: 420 }, SH_PAD = 50;
   // the lit shop window in the storefront photo (fractions of the square), where the dining room grows from
   const WIN = { x: 0.0, y: 0.355, w: 0.77, h: 0.31 };
+  // each row's photo, its thumbnail's crop (t) and its close-up in the frame (v): [centre x, centre y, side]
+  // in the photo's own pixels (assets/f-*.webp, night-off.webp)
+  const SIZE = { bowls: [1080, 1090], apps: [1080, 960], curries: [1080, 670], meetha: [1080, 960], night: [1080, 1080] };
+  const VIEW = [null,
+    { k: 'bowls', t: [705, 260, 500], v: [660, 430, 820] },     // goat biryani
+    { k: 'bowls', t: [830, 790, 470], v: [690, 660, 820] },     // chicken 65 biryani
+    { k: 'apps', t: [175, 490, 430], v: [400, 480, 800] },      // chicken 65
+    { k: 'apps', t: [870, 430, 450], v: [680, 470, 800] },      // majestic
+    { k: 'curries', t: [505, 235, 340], v: [560, 335, 670] },   // nizami goat kadai
+    { k: 'curries', t: [215, 445, 370], v: [335, 335, 670] },   // butter chicken
+    { k: 'meetha', t: [450, 440, 680], v: [540, 480, 960] },    // double ka meetha
+    { k: 'night', t: [605, 560, 180], v: [540, 540, 1080] },    // irani chai: the window sign, then the whole shop
+  ];
+  const sign = E.frame.querySelector('.sign');
+  const fly = document.createElement('div'); fly.className = 'fly'; fly.setAttribute('aria-hidden', 'true');
+  const flyImg = {};
+  Object.entries(frs).forEach(([k, f]) => { const i = document.createElement('img'); i.src = f.src; i.alt = ''; i.decoding = 'async'; fly.appendChild(i); flyImg[k] = i; });
+  stage.appendChild(fly);
+  // show the square region v of photo k in a square box of side S
+  const place = (img, S, v, k) => {
+    const sc = S / v[2], [w, h] = SIZE[k];
+    put(img, 'width', `${r1(w * sc)}px`); put(img, 'height', `${r1(h * sc)}px`);
+    put(img, 'transform', `translate3d(${r1(-(v[0] - v[2] / 2) * sc)}px,${r1(-(v[1] - v[2] / 2) * sc)}px,0)`);
+  };
   const PHOTO_ORDER = ['bowls', 'apps', 'curries', 'meetha', 'night'];
   const N = rows.length;
 
@@ -271,21 +295,36 @@
     vis(E.plate, !!P); vis(E.sh, !!P && (c > 0 || g0 < 0.6));
     vis(L.th0, !(P && c === 0));   // row 1's thumbnail is the plate itself until it lands
 
-    // --- the frame: grows out of row 2's thumbnail, photos roll up per row, then grows into the storefront
-    const t1 = thumb(1);
-    let F = gf < 1 ? rect({ x: t1.x, y: t1.y, w: t1.s, h: t1.s }, L.fr, gf) : rect(L.fr, L.pk, g);
-    let fOn = gf > 0 && c < 1;
-    if (rm > 0 || c > 0) F = L.pk;
+    // --- the frame: every row's thumbnail jumps out of the list and grows into the frame over the last one,
+    // landing on that dish's own close-up. Row 2's flight opens the frame; the last (Irani chai) zooms out
+    // from the window sign to the whole storefront, which then grows into the peak.
+    const tRow = (i) => (i === 1 ? gf : E3(clamp((a - i + 0.55) / 0.6)));
+    let kSet = 0;
+    for (let i = 1; i < N; i++) if (tRow(i) >= 1) kSet = i;
+    const F = rm > 0 || c > 0 ? L.pk : rect(L.fr, L.pk, g);
     const carry = c * (mob ? -VW * 1.1 : VW * 0.75);   // the room and the storefront carry off for the close
-    box(E.frame, { x: F.x + carry, y: F.y, w: F.w, h: F.h }, gf < 1 ? lerp(t1.s / 2, 22, gf) : 22);
-    vis(E.frame, fOn && rm < 1);
-    // each photo rolls up from the bottom when its first row comes up
-    PHOTO_ORDER.forEach((k, j) => {
-      const first = rows.findIndex((r) => r.dataset.ph === k);
-      const r = j === 0 ? 1 : E3(clamp((a - first + 0.45) / 0.5));
-      put(frs[k], 'clipPath', r >= 1 ? 'none' : `inset(${r1((1 - r) * 100)}% 0 0 0)`);
-      vis(frs[k], r > 0 && fOn && rm < 1);
+    const fOn = kSet > 0 && c < 1 && rm < 1;
+    box(E.frame, { x: F.x + carry, y: F.y, w: F.w, h: F.h }, 22);
+    vis(E.frame, fOn);
+    Object.entries(frs).forEach(([k, img]) => {
+      const on = fOn && VIEW[kSet] && VIEW[kSet].k === k;
+      vis(img, on);
+      if (on) place(img, F.w, VIEW[kSet].v, k);
     });
+    vis(sign, fOn && kSet === N - 1);
+    // the flight in progress
+    const j = kSet + 1, tj = j < N ? tRow(j) : 0;
+    if (tj > 0 && tj < 1 && g === 0) {
+      const th = thumb(j), V = VIEW[j];
+      const R = rect({ x: th.x, y: th.y, w: th.s, h: th.s }, L.fr, tj);
+      const side = Math.exp(lerp(Math.log(V.t[2]), Math.log(V.v[2]), tj));
+      box(fly, R, lerp(th.s / 2, 22, tj));
+      Object.entries(flyImg).forEach(([k, img]) => {
+        vis(img, k === V.k);
+        if (k === V.k) place(img, R.w, [lerp(V.t[0], V.v[0], tj), lerp(V.t[1], V.v[1], tj), side], k);
+      });
+      vis(fly, true);
+    } else { vis(fly, false); Object.values(flyImg).forEach((img) => vis(img, false)); }
     // the sign: letters switch on one by one
     const sg = seg(p, ...T.sign);
     lts.forEach((el, i) => {
