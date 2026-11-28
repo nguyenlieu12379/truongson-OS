@@ -109,16 +109,18 @@
       L.menuXY = { x: mx, y: 0 };
     }
     put(E.menu, 'width', `${L.menuW}px`);
+    // short desktop screens: tighten the rows first; whatever still doesn't fit scrolls with the current row
+    E.menu.classList.remove('tight');
     L.menuH = E.menu.offsetHeight;
+    if (!mob && L.menuH > VH - TOP - 20) { E.menu.classList.add('tight'); L.menuH = E.menu.offsetHeight; }
     L.rowY = rows.map((r) => r.offsetTop);
     L.th = rows.map((r) => { const t = r.querySelector('.th'); return { x: list.offsetLeft + t.offsetLeft, y: list.offsetTop + t.offsetTop, s: t.offsetWidth }; });
     L.th0 = rows[0].querySelector('.th');
     L.rowH = rows.map((r) => r.offsetHeight);
     L.listTop = list.offsetTop;
     if (!mob) L.menuXY.y = Math.max(TOP + 10, TOP + (VH - TOP - L.menuH) / 2);
-    // phone: the list scrolls under the frame so the current row stays in view
+    // the list scrolls so the current row stays in view whenever the menu is taller than the screen
     L.listShift = (a) => {
-      if (!mob) return 0;
       const room = VH - L.menuXY.y - L.listTop - 40;
       const i = clamp(a, 0, N - 1), y = lerp(L.rowY[Math.floor(i)], L.rowY[Math.min(N - 1, Math.floor(i) + 1)], i % 1);
       return -clamp(y + L.listTop - room * 0.45, 0, Math.max(0, L.listTop + L.rowY[N - 1] + L.rowH[N - 1] + 30 - (VH - L.menuXY.y)));
@@ -244,9 +246,9 @@
 
     // --- menu: slides in from the right as the word parts, carries off right as the storefront grows over it
     const mx = L.menuXY.x + (1 - mIn) * VW * 0.6 + g * (mob ? 0 : VW * 0.7);
-    const my = L.menuXY.y + (mob ? E3(seg(p, T.grow[0] - 0.01, T.grow[0] + 0.04)) * VH + L.listShift(a) : 0);
+    const my = L.menuXY.y + (mob ? E3(seg(p, T.grow[0] - 0.01, T.grow[0] + 0.04)) * VH : 0) + L.listShift(a);
     at(E.menu, mx, my);
-    if (mob) put(E.menu, 'clipPath', `inset(${r1(Math.max(0, L.fr.y + L.fr.h + 6 - my))}px 0 0 0)`);
+    put(E.menu, 'clipPath', `inset(${r1(Math.max(0, (mob ? L.fr.y + L.fr.h + 6 : TOP + 2) - my))}px 0 0 0)`);
     vis(E.menu, mIn > 0 && g < 1 && !(mob && p > T.grow[0] + 0.04));
     const thumb = (i) => ({ x: mx + L.th[i].x, y: my + L.th[i].y, s: L.th[i].s });
 

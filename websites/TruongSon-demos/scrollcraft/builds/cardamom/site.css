@@ -90,6 +90,13 @@ h2 em, .lead em { font-style: italic; font-weight: 500; color: var(--green); }
 .menu li b { grid-row: 1 / span 2; grid-column: 3; align-self: center; font: 800 1.2rem/1 var(--sans); color: var(--ink); opacity: 0.55; transition: opacity 250ms ease; }
 .menu li.on .n, .menu li.on b { opacity: 1; }
 .menu li.on .n { color: var(--green); }
+.menu.tight h2 { font-size: clamp(1.6rem, 2.6vw, 2.3rem); margin-bottom: 0.6rem; }
+.menu.tight li { padding: 0.42rem 0 0.46rem; grid-template-columns: 44px 1fr auto; column-gap: 14px; }
+.menu.tight li .th { width: 44px; height: 44px; }
+.menu.tight li .n { font-size: 1.12rem; }
+.menu.tight li .d { font-size: 0.82rem; }
+.menu.tight li b { font-size: 1.05rem; }
+.menu.tight .note { margin-top: 0.5rem; }
 .menu .note { margin-top: 0.8rem; color: var(--ink-2); font-size: 0.82rem; font-weight: 600; }
 
 .late, .inside { z-index: 7; width: 440px; color: var(--nite-ink); }
