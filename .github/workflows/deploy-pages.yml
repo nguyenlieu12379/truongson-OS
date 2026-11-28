@@ -11,6 +11,7 @@ name: Deploy websites to GitHub Pages
 # /cantinho-brasileiro/ -> websites/TruongSon-demos/scrollcraft/builds/cantinho-brasileiro (prospect demo, scroll-craft, noindex)
 # /cardamom/ -> websites/TruongSon-demos/scrollcraft/builds/cardamom (prospect demo, scroll-craft, noindex)
 # /cb-bakery/ -> websites/TruongSon-demos/scrollcraft/builds/cb-bakery (prospect demo, scroll-craft, noindex)
+# /estacao-do-pao/ -> websites/TruongSon-demos/scrollcraft/builds/estacao-do-pao (prospect demo, scroll-craft, noindex)
 # /             -> a plain list of the approved sites (no primary demo, noindex)
 # Every push to main that touches these paths redeploys all sites.
 
@@ -73,6 +74,9 @@ jobs:
           mkdir -p _site/cb-bakery
           cp -R websites/TruongSon-demos/scrollcraft/builds/cb-bakery/. _site/cb-bakery/
           rm -rf _site/cb-bakery/README.md _site/cb-bakery/BRIEF.md _site/cb-bakery/PREFS.md _site/cb-bakery/RESEARCH.md _site/cb-bakery/assets/source _site/cb-bakery/lab
+          mkdir -p _site/estacao-do-pao
+          cp -R websites/TruongSon-demos/scrollcraft/builds/estacao-do-pao/. _site/estacao-do-pao/
+          rm -rf _site/estacao-do-pao/README.md _site/estacao-do-pao/BRIEF.md _site/estacao-do-pao/PREFS.md _site/estacao-do-pao/RESEARCH.md _site/estacao-do-pao/assets/source _site/estacao-do-pao/lab
           cat > _site/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">
@@ -93,6 +97,7 @@ jobs:
             <li><a href="cantinho-brasileiro/">Cantinho Brasileiro</a></li>
             <li><a href="cardamom/">Cardamom</a></li>
             <li><a href="cb-bakery/">CB Bakery</a></li>
+            <li><a href="estacao-do-pao/">Estação do Pão</a></li>
           </ul>
           HTML
           touch _site/.nojekyll

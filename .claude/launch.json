@@ -144,6 +144,18 @@
         "4517"
       ],
       "port": 4517
+    },
+    {
+      "name": "estacao-do-pao",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        ".claude/skills/site-building/scripts/serve.mjs",
+        "--root",
+        "websites/TruongSon-demos/scrollcraft/builds/estacao-do-pao",
+        "--port",
+        "4519"
+      ],
+      "port": 4519
     }
   ]
 }

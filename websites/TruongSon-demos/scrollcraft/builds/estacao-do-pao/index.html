@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F5F4F1">
+<title>Estação do Pão · Brazilian bakery, buffet and café in Boca Raton</title>
+<meta name="description" content="Brazilian bakery and restaurant at 23269 State Road 7, Boca Raton. Pão de queijo from 6am, a buffet by the pound every day, cakes and café colonial. Order on WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Albert+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/pdq1.webp">
+<link rel="preload" as="image" href="assets/pdq2.webp">
+<link rel="preload" as="image" href="assets/pdq3.webp">
+<!-- liquid-glass: paste into <head>, before any stylesheet that reads
+     data-theme. Inline on purpose: the toggle must not depend on a cached
+     external script. Edit the three values in CONFIG.
+
+     Needs in the page:
+       - CSS tokens for both themes (see liquid-glass.css, "Theme tokens")
+       - a button with class "lg-theme-btn" (markup in 03-liquid-glass.md)
+       - liquid-glass.css loaded
+
+     What it does:
+       - applies the saved theme before first paint (no flash)
+       - toggle click: the new theme grows as a circle out of the button, its
+         edge a glass lens that bends the page behind it (View Transitions +
+         SVG displacement, Chromium/Safari 18+); otherwise a colour fade;
+         reduced motion switches instantly -->
+<script>
+(function (d) {
+  var CONFIG = {
+    key: "estacao-do-pao-theme",            // localStorage key, unique per site
+    colors: { light: "#F5F4F1", dark: "#100E11" },   // <meta name=theme-color> per theme
+    duration: 1400                // ms for the glass sweep. 1400 reads as deliberate; 4000-7000 as a show
+  };
+  d.classList.add("js");
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+  var t = null; try { t = localStorage.getItem(CONFIG.key); } catch (e) {}
+  if (t === "dark" || t === "light") d.setAttribute("data-theme", t);
+  function now() { var x = d.getAttribute("data-theme"); return x ? x : (mq.matches ? "dark" : "light"); }
+  function render() {
+    var dark = now() === "dark";
+    d.setAttribute("data-theme-now", dark ? "dark" : "light");
+    document.querySelectorAll(".lg-theme-btn").forEach(function (b) { b.setAttribute("aria-pressed", String(dark)); });
+    if (d.hasAttribute("data-theme")) document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute("content", CONFIG.colors[dark ? "dark" : "light"]); });
+  }
+  function apply(next) {
+    d.setAttribute("data-theme", next);
+    try { localStorage.setItem(CONFIG.key, next); } catch (e) {}
+    render();
+  }
+  render();
+  document.addEventListener("DOMContentLoaded", render);
+  if (mq.addEventListener) mq.addEventListener("change", render); else if (mq.addListener) mq.addListener(render);
+
+  // ---- the glass sweep --------------------------------------------------
+  var SVGNS = "http://www.w3.org/2000/svg", filters = null;
+  function ensureFilters() {
+    if (filters) return filters;
+    var svg = document.createElementNS(SVGNS, "svg");
+    svg.setAttribute("aria-hidden", "true");
+    svg.style.cssText = "position:absolute;width:0;height:0;overflow:hidden;pointer-events:none";
+    svg.innerHTML =
+      '<filter id="lg-sweep-new" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-sweep-map-new" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>' +
+      '<feDisplacementMap id="lg-sweep-dm-new" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB" result="bent"/>' +
+      '<feColorMatrix in="map" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0.85 0 0" result="rim"/>' +
+      '<feMerge><feMergeNode in="bent"/><feMergeNode in="rim"/></feMerge></filter>' +
+      '<filter id="lg-sweep-old" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-sweep-map-old" x="0" y="0" width="1" height="1" preserveAspectRatio="none" color-interpolation-filters="sRGB" result="map"/>' +
+      '<feDisplacementMap id="lg-sweep-dm-old" in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB"/></filter>';
+    document.body.appendChild(svg);
+    return (filters = {
+      maps: [document.getElementById("lg-sweep-map-new"), document.getElementById("lg-sweep-map-old")],
+      dms: [document.getElementById("lg-sweep-dm-new"), document.getElementById("lg-sweep-dm-old")]
+    });
+  }
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function glassSwitch(next, cx, cy) {
+    var f = ensureFilters(), W = innerWidth, H = innerHeight, DUR = CONFIG.duration;
+    var band = Math.max(54, Math.min(130, Math.min(W, H) * 0.11)), push = band * 0.42, S = push * 2.2;
+    var end = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy)) + band;
+    var k = W > 900 ? 5 : 4, mw = Math.ceil(W / k), mh = Math.ceil(H / k);
+    var cv = document.createElement("canvas"); cv.width = mw; cv.height = mh;
+    var g = cv.getContext("2d"), img = g.createImageData(mw, mh), px = img.data;
+    f.maps.forEach(function (m) { m.setAttribute("width", W); m.setAttribute("height", H); });
+    f.dms.forEach(function (m) { m.setAttribute("scale", S.toFixed(1)); });
+    function paint(rad) {
+      for (var y = 0; y < mh; y++) {
+        var dy = y * k + k / 2 - cy;
+        for (var x = 0; x < mw; x++) {
+          var dx = x * k + k / 2 - cx, i = (y * mw + x) * 4;
+          var dd = Math.sqrt(dx * dx + dy * dy) || 1, u = (dd - rad) / band, R = 128, G = 128, B = 0;
+          if (u > -1 && u < 1) {
+            var bump = 1 - u * u; bump *= bump;
+            var m = push * bump;
+            R = 128 - (dx / dd) * m / S * 255; G = 128 - (dy / dd) * m / S * 255;
+            var hh = (u + 0.06) / 0.07;
+            B = Math.min(255, 150 * Math.exp(-hh * hh) + 40 * bump);   // bright rim
+          }
+          px[i] = R; px[i + 1] = G; px[i + 2] = B; px[i + 3] = 255;
+        }
+      }
+      g.putImageData(img, 0, 0);
+      var url = cv.toDataURL();
+      f.maps.forEach(function (m) { m.setAttribute("href", url); });
+    }
+    d.style.setProperty("--lg-x", cx + "px"); d.style.setProperty("--lg-y", cy + "px"); d.style.setProperty("--lg-r", "0px");
+    paint(-band);
+    d.classList.add("lg-sweeping");
+    var vt = document.startViewTransition(function () { apply(next); });
+    vt.ready.then(function () {
+      // no-op animation keeps the transition alive; frames are driven below
+      d.animate({ opacity: [1, 1] }, { duration: DUR, pseudoElement: "::view-transition-new(root)" });
+      var t0 = performance.now();
+      (function frame(t) {
+        var p = Math.min(1, (t - t0) / DUR), rad = ease(p) * end;
+        d.style.setProperty("--lg-r", rad + "px"); paint(rad);
+        if (p < 1) requestAnimationFrame(frame);
+      })(t0);
+    }).catch(function () {});
+    function done() { d.classList.remove("lg-sweeping"); ["--lg-x", "--lg-y", "--lg-r"].forEach(function (v) { d.style.removeProperty(v); }); }
+    vt.finished.then(done, done);
+  }
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest && e.target.closest(".lg-theme-btn");
+    if (!btn) return;
+    var next = now() === "dark" ? "light" : "dark";
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { apply(next); return; }
+    if (document.startViewTransition) {
+      var r = btn.getBoundingClientRect();
+      glassSwitch(next, r.left + r.width / 2, r.top + r.height / 2);
+      return;
+    }
+    d.classList.add("lg-fading"); apply(next);
+    setTimeout(function () { d.classList.remove("lg-fading"); }, 760);
+  });
+})(document.documentElement);
+</script>
+
+<link rel="stylesheet" href="liquid-glass.css?v=1">
+<link rel="stylesheet" href="site.css?v=1">
+</head>
+<body>
+<header class="bar" id="bar">
+  <a class="mark" href="#top" aria-label="Estação do Pão"><img class="av" src="assets/avatar.webp" alt="" width="160" height="160"><b>Estação</b><i>do Pão</i></a>
+  <div class="bar-end">
+    <a class="cta" id="cta" href="https://wa.me/15613459964?text=Ol%C3%A1%21%20I%27d%20like%20to%20order%20from%20Esta%C3%A7%C3%A3o%20do%20P%C3%A3o." target="_blank" rel="noopener"><svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/><circle class="d d2" cx="12" cy="12" r="1.15"/><circle class="d d3" cx="15.6" cy="12" r="1.15"/></svg><span class="lbl">Order<span class="opt"> on WhatsApp</span></span></a>
+    <button class="lg-theme-btn" type="button" aria-pressed="false" aria-label="Dark mode">
+      <svg class="lg-i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <svg class="lg-i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <div class="stage" id="stage">
+    <h1 class="sr">Estação do Pão, Brazilian bakery, buffet and café in Boca Raton, FL</h1>
+    <p class="word" id="word" aria-hidden="true"><span class="ch">E</span><span class="ch">s</span><span class="ch">t</span><span class="ch">a</span><span class="ch">ç</span><span class="ch">ã</span><span class="ch">o</span><i class="bl"></i></p>
+    <p class="word2" id="word2" aria-hidden="true">do Pão</p>
+
+    <div class="hero-l" id="heroL">
+      <p class="lead">Brazilian bakery, buffet and café in <em>Boca Raton.</em></p>
+      <p class="sub">Pão de queijo from 6am, a buffet by the pound every day, cakes to take home.</p>
+    </div>
+    <dl class="hero-r" id="heroR">
+      <div><dt>Today</dt><dd class="open-now">Open daily from 6am</dd></div>
+      <div><dt>Call</dt><dd><a href="tel:+15616171574">(561) 617-1574</a></dd></div>
+      <div><dt>Rated</dt><dd>4.4 on Google, 662 reviews</dd></div>
+    </dl>
+
+    <img class="emp" id="emp" src="assets/empadas.webp" alt="Three chicken pies in paper cups on a white plate" decoding="async">
+    <span class="trio-sh" id="trioSh" aria-hidden="true"></span>
+    <img class="ball" id="b1" src="assets/pdq1.webp" alt="Pão de queijo, Brazilian cheese bread" fetchpriority="high">
+    <img class="ball" id="b2" src="assets/pdq2.webp" alt="" fetchpriority="high">
+    <img class="ball" id="b3" src="assets/pdq3.webp" alt="" fetchpriority="high">
+
+    <figure class="frame" id="frame">
+      <img src="assets/bread1.webp" alt="Braided cheese breads, fresh from their oven" decoding="async">
+      <img src="assets/bread2.webp" alt="Sesame rolls on the bakery counter" decoding="async">
+      <img src="assets/bread3.webp" alt="Glazed sweet buns" decoding="async">
+      <img src="assets/pan1.webp" alt="" decoding="async">
+    </figure>
+
+    <section class="list bakery" id="bakery" aria-labelledby="bkH">
+      <h2 id="bkH">From the oven, <em>from 6am.</em></h2>
+      <ol>
+        <li><span class="n"><b>Pão de queijo</b><small>Brazilian cheese bread</small></span><span class="p">$1.61</span></li>
+        <li><span class="n"><b>Coxinha</b><small>chicken croquette with cream cheese</small></span><span class="p">$5.99</span></li>
+        <li><span class="n"><b>Empada de frango</b><small>chicken pie</small></span><span class="p">$5.49</span></li>
+        <li><span class="n"><b>Empada de palmito</b><small>heart of palm pie</small></span><span class="p">$5.49</span></li>
+        <li><span class="n"><b>Kibe</b><small>fried ground beef and bulgur</small></span><span class="p">$5.49</span></li>
+        <li><span class="n"><b>Risoles de carne</b><small>beef croquette</small></span><span class="p">$5.49</span></li>
+        <li><span class="n"><b>Pão francês</b><small>Brazilian rolls, 3 for</small></span><span class="p">$1.35</span></li>
+        <li><span class="n"><b>Pão doce</b><small>sweet bread</small></span><span class="p">$2.60</span></li>
+      </ol>
+    </section>
+
+    <section class="peak-copy" id="peakCopy" aria-labelledby="pkH">
+      <h2 id="pkH">A buffet by the pound. <em>Every day.</em></h2>
+      <p>Homemade Brazilian dishes and BBQ grilled fresh, all day. Fill your plate, pay by weight.</p>
+      <blockquote class="quote"><p>&ldquo;White rice, beans, pasta, salad, ribs, all of it on point!&rdquo;</p><cite>Michelle L., Google review</cite></blockquote>
+    </section>
+
+    <div class="pans" id="pans">
+    <div class="pan" data-i="0"><div class="face fr"><img src="assets/pan1.webp" alt="White rice, on their buffet" decoding="async"></div><div class="face bk"><img src="assets/line.webp" alt="" decoding="async"></div></div>
+    <div class="pan" data-i="1"><div class="face fr"><img src="assets/pan2.webp" alt="Chicken with okra, on their buffet" decoding="async"></div><div class="face bk"><img src="assets/line.webp" alt="" decoding="async"></div></div>
+    <div class="pan" data-i="2"><div class="face fr"><img src="assets/pan3.webp" alt="Pumpkin, baked whole, on their buffet" decoding="async"></div><div class="face bk"><img src="assets/line.webp" alt="" decoding="async"></div></div>
+    <div class="pan" data-i="3"><div class="face fr"><img src="assets/pan4.webp" alt="Shrimp with peppers, on their buffet" decoding="async"></div><div class="face bk"><img src="assets/line.webp" alt="" decoding="async"></div></div>
+    <div class="pan" data-i="4"><div class="face fr"><img src="assets/pan5.webp" alt="Eggs, sausage, tomato, on their buffet" decoding="async"></div><div class="face bk"><img src="assets/line.webp" alt="" decoding="async"></div></div>
+    <div class="pan" data-i="5"><div class="face fr"><img src="assets/pan6.webp" alt="Fried fish fillets, on their buffet" decoding="async"></div><div class="face bk"><img src="assets/line.webp" alt="" decoding="async"></div></div>
+    <div class="pan" data-i="6"><div class="face fr"><img src="assets/pan7.webp" alt="Roast pumpkin, on their buffet" decoding="async"></div><div class="face bk"><img src="assets/line.webp" alt="" decoding="async"></div></div>
+    <div class="pan" data-i="7"><div class="face fr"><img src="assets/pan8.webp" alt="Greens with olives and egg, on their buffet" decoding="async"></div><div class="face bk"><img src="assets/line.webp" alt="" decoding="async"></div></div>
+    <div class="pan" data-i="8"><div class="face fr"><img src="assets/pan9.webp" alt="Watercress over potatoes, on their buffet" decoding="async"></div><div class="face bk"><img src="assets/line.webp" alt="" decoding="async"></div></div>
+    <div class="pan" data-i="9"><div class="face fr"><img src="assets/pan10.webp" alt="Fish with spinach and tomato, on their buffet" decoding="async"></div><div class="face bk"><img src="assets/line.webp" alt="" decoding="async"></div></div>
+    <div class="pan" data-i="10"><div class="face fr"><img src="assets/pan11.webp" alt="Boiled cassava and potatoes, on their buffet" decoding="async"></div><div class="face bk"><img src="assets/line.webp" alt="" decoding="async"></div></div>
+    <div class="pan" data-i="11"><div class="face fr"><img src="assets/pan12.webp" alt="Salad with eggs, on their buffet" decoding="async"></div><div class="face bk"><img src="assets/line.webp" alt="" decoding="async"></div></div>
+    </div>
+
+    <figure class="big" id="big">
+      <img src="assets/line.webp" alt="Their buffet line: steel pans of greens, potatoes, steak with onions and stewed beef" decoding="async">
+      <img src="assets/sweet1.webp" alt="Pudim, a glossy Brazilian flan, in caramel" decoding="async">
+      <img src="assets/sweet2.webp" alt="Passion fruit pudim with seeds on top" decoding="async">
+      <img src="assets/sweet3.webp" alt="Chocolate ring cake crowned with strawberries" decoding="async">
+      <img src="assets/spread.webp" alt="Their kitchen from above: pão de queijo, crispy fish, chicken pies, crispy shrimp, a burger and açaí" decoding="async">
+    </figure>
+
+    <section class="list sweets" id="sweets" aria-labelledby="swH">
+      <h2 id="swH">Cakes and sweets, <em>by the slice.</em></h2>
+      <ol>
+        <li><span class="n"><b>Flan</b><small>pudim, in caramel</small></span><span class="p">$5.99</span></li>
+        <li><span class="n"><b>Bolo no pote</b><small>cake in a jar</small></span><span class="p">$10.50</span></li>
+        <li><span class="n"><b>Cake by the slice</b><small>corn, yuca or chocolate</small></span><span class="p">$6.25</span></li>
+        <li><span class="n"><b>Mousse de maracujá</b><small>passion fruit mousse</small></span><span class="p">$7.99</span></li>
+        <li><span class="n"><b>Carrot cake</b><small>the square box</small></span><span class="p">$12.99</span></li>
+        <li><span class="n"><b>Brigadeiro</b><small>chocolate truffle, each</small></span><span class="p">$2.99</span></li>
+      </ol>
+    </section>
+
+    <div class="tags" id="tags">
+    <p class="tag" data-x="0.135" data-y="0.2"><i></i><b>Pão de queijo</b><span>$1.61</span></p>
+    <p class="tag" data-x="0.5" data-y="0.27"><i></i><b>Isca de peixe</b><span>$18.99</span></p>
+    <p class="tag" data-x="0.835" data-y="0.34"><i></i><b>Empada de frango</b><span>$5.49</span></p>
+    <p class="tag" data-x="0.585" data-y="0.8"><i></i><b>Camarão empanado</b><span>$19.99</span></p>
+    </div>
+    <section class="notes" id="notes" aria-label="More from the kitchen">
+      <div class="note"><h3>From the kitchen</h3><p>X-Tudo $15.99, pastel $9.80, frango a passarinho $17.99, isca de picanha $26.99.</p></div>
+      <div class="note"><h3>Café colonial on weekends</h3><p>A long table of breads, cakes, cheeses and fruit. Bring the family.</p></div>
+      <div class="note"><h3>Catering</h3><p>Trays for the office and for parties. Ask on WhatsApp.</p></div>
+    </section>
+
+    <div class="days" id="days" aria-label="Opening hours">
+    <div class="day" data-d="0"><b>Mon</b><span>6am to 9pm</span><img src="assets/spread.webp" alt="" decoding="async"></div>
+    <div class="day" data-d="1"><b>Tue</b><span>6am to 9pm</span><img src="assets/spread.webp" alt="" decoding="async"></div>
+    <div class="day" data-d="2"><b>Wed</b><span>6am to 9pm</span><img src="assets/spread.webp" alt="" decoding="async"></div>
+    <div class="day" data-d="3"><b>Thu</b><span>6am to 9pm</span><img src="assets/spread.webp" alt="" decoding="async"></div>
+    <div class="day" data-d="4"><b>Fri</b><span>6am to 10pm</span><img src="assets/spread.webp" alt="" decoding="async"></div>
+    <div class="day" data-d="5"><b>Sat</b><span>6am to 10pm</span><img src="assets/spread.webp" alt="" decoding="async"></div>
+    <div class="day" data-d="6"><b>Sun</b><span>7am to 9pm</span><img src="assets/spread.webp" alt="" decoding="async"></div>
+    </div>
+
+    <section class="card" id="card" aria-labelledby="cardH">
+      <p class="open open-now" id="openNow">Open daily from 6am</p>
+      <h2 id="cardH">Pão de queijo is out <em>at 6am.</em></h2>
+      <p class="story">Brazilian bakery, buffet by the pound and café on State Road 7. Women-owned and Latino-owned.</p>
+      <dl>
+        <div><dt>Where</dt><dd>23269 FL-7, Ste 107, Boca Raton, FL 33428 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Esta%C3%A7%C3%A3o+do+P%C3%A3o+23269+FL-7+Boca+Raton" target="_blank" rel="noopener">Directions</a></dd></div>
+        <div><dt>Call</dt><dd><a href="tel:+15616171574">(561) 617-1574</a></dd></div>
+        <div><dt>Rated</dt><dd>4.4 on Google, 662 reviews</dd></div>
+        <div><dt>Delivery</dt><dd>Uber Eats and DoorDash</dd></div>
+      </dl>
+      <div class="cta-slot" id="ctaSlot" aria-hidden="true"></div>
+    </section>
+  </div>
+  <div class="spacer" id="spacer" aria-hidden="true"></div>
+</main>
+<p class="demo">Demo site. Photos from Estação do Pão&rsquo;s own Google, DoorDash and Instagram pages.</p>
+<script>window.SIZES = {"trio": {"w": 738, "h": 852, "balls": [{"x": 0, "y": 0, "w": 470, "h": 373}, {"x": 318, "y": 123, "w": 420, "h": 372}, {"x": 74, "y": 462, "w": 387, "h": 390}]}, "empadas": [760, 760], "pan1": [720, 540], "pan2": [720, 540], "pan3": [720, 540], "pan4": [720, 540], "pan5": [720, 540], "pan6": [720, 540], "pan7": [720, 540], "pan8": [720, 540], "pan9": [720, 540], "pan10": [720, 540], "pan11": [720, 540], "pan12": [720, 540], "line": [1200, 1600], "bread1": [900, 1200], "bread2": [900, 1200], "bread3": [900, 1200], "sweet1": [900, 1200], "sweet2": [900, 1200], "sweet3": [900, 1200], "spread": [2400, 1350], "avatar": [160, 160]};</script>
+<script src="liquid-glass.js?v=1" defer></script>
+<script src="site.js?v=1" defer></script>
+</body>
+</html>
