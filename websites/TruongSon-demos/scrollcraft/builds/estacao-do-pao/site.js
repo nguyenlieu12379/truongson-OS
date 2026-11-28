@@ -276,8 +276,13 @@
       };
     } else {
       L.park = {
-        bakery: [null, sq(L.bf.x + L.bf.w - 4, L.bf.y + 34), sq(VW - pad - 30, VH - 70)],
-        peak: [null, sq(pad + bs * 0.6, VH - bs * 1.05), sq(pad + bs * 1.55, VH - bs * 0.9)],
+        bakery: [null, sq(L.bf.x + L.bf.w - 4, L.bf.y + 34), sq(L.bf.x - 4, L.bf.y + L.bf.h * 0.42)],
+        peak: (() => {
+          // under the quote when there is room for them; otherwise on the steam table's bottom-left corner, clear of text
+          const below = L.pk.y + peakCopy.offsetHeight + 18;
+          if (VH - 16 - below >= bs * 1.15) { const cy = below + (VH - 16 - below) / 2; return [null, sq(pad + bs * 0.6, cy), sq(pad + bs * 1.55, cy + bs * 0.12)]; }
+          return [null, sq(L.grid.x + bs * 0.15, L.grid.y + L.grid.h - bs * 0.15), sq(L.grid.x + bs * 1.05, L.grid.y + L.grid.h + bs * 0.02)];
+        })(),
         sweets: [null, sq(L.sf.x + 4, L.sf.y + L.sf.h - 50), sq(L.sf.x + L.sf.w - 10, L.sf.y + 40)],
         kitchen: [null, sq(L.sp.x - 6, L.sp.y + L.sp.h - 30), sq(L.sp.x + L.sp.w + 4, L.sp.y + L.sp.h * 0.42)],
       };
