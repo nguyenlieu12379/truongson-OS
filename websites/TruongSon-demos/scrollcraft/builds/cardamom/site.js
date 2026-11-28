@@ -111,6 +111,8 @@
     put(E.menu, 'width', `${L.menuW}px`);
     L.menuH = E.menu.offsetHeight;
     L.rowY = rows.map((r) => r.offsetTop);
+    L.th = rows.map((r) => { const t = r.querySelector('.th'); return { x: list.offsetLeft + t.offsetLeft, y: list.offsetTop + t.offsetTop, s: t.offsetWidth }; });
+    L.th0 = rows[0].querySelector('.th');
     L.rowH = rows.map((r) => r.offsetHeight);
     L.listTop = list.offsetTop;
     if (!mob) L.menuXY.y = Math.max(TOP + 10, TOP + (VH - TOP - L.menuH) / 2);
@@ -216,7 +218,7 @@
     // --- menu progress: a runs 0..N-1 over the menu span
     const a = seg(p, ...T.menu) * (N - 1 + 0.6) - 0.3;
     const act = clamp(Math.round(a), 0, N - 1);
-    rows.forEach((r, i) => r.classList.toggle('on', i === act && p < T.grow[1]));
+    rows.forEach((r, i) => r.classList.toggle('on', i === act));
 
     // --- the word: parts left and right off the stage; comes back for the close in neon green
     const wordOn = part < 1 || c > 0;
@@ -240,23 +242,40 @@
     at(E.heroR, L.hr.x - (mob ? part * VW * 1.1 : 0), L.hr.y + (mob ? 0 : part * VH * 0.6));
     vis(E.heroL, part < 1); vis(E.heroR, part < 1);
 
-    // --- the plate: hero, then into the frame slot (row 1), covered by the frame as it grows; back for the close
-    const g0 = E3(clamp((a - 0.35) / 0.5));   // the frame grows out of the plate as row 2 comes up
+    // --- menu: slides in from the right as the word parts, carries off right as the storefront grows over it
+    const mx = L.menuXY.x + (1 - mIn) * VW * 0.6 + g * (mob ? 0 : VW * 0.7);
+    const my = L.menuXY.y + (mob ? E3(seg(p, T.grow[0] - 0.01, T.grow[0] + 0.04)) * VH + L.listShift(a) : 0);
+    at(E.menu, mx, my);
+    if (mob) put(E.menu, 'clipPath', `inset(${r1(Math.max(0, L.fr.y + L.fr.h + 6 - my))}px 0 0 0)`);
+    vis(E.menu, mIn > 0 && g < 1 && !(mob && p > T.grow[0] + 0.04));
+    const thumb = (i) => ({ x: mx + L.th[i].x, y: my + L.th[i].y, s: L.th[i].s });
+
+    // --- the plate: hero, then into the frame slot beside row 1; as row 2 comes up it flies into its own
+    // row thumbnail (same dish) and the frame grows out of row 2's thumbnail. Back for the close.
+    // in turn, never crossing: the plate lands in its thumbnail first, then the frame opens out of row 2's
+    const g0 = E3(clamp((a + 0.1) / 0.6)), gf = E3(clamp((a - 0.45) / 0.65));
     let P = null, lean3 = '';
     if (c > 0) P = { x: L.pc4.x, y: lerp(VH + L.pw4, L.pc4.y, c) + (c >= 1 ? bob : 0), w: L.pw4 * (c >= 1 ? breathe : 1) };
-    else if (g0 < 1) P = { x: lerp(L.pc0.x, L.pc1.x, part), y: lerp(L.pc0.y, L.pc1.y, part) + (part === 0 ? bob : 0), w: lerp(L.pw0, L.pw1, part) * (part === 0 ? breathe : 1) };
+    else if (g0 < 1) {
+      const P1 = { x: lerp(L.pc0.x, L.pc1.x, part), y: lerp(L.pc0.y, L.pc1.y, part) + (part === 0 ? bob : 0), w: lerp(L.pw0, L.pw1, part) * (part === 0 ? breathe : 1) };
+      const t0 = thumb(0), T0 = { x: t0.x + t0.s / 2, y: t0.y + t0.s / 2, w: t0.s * 1.62 };
+      const k = Math.exp(lerp(Math.log(P1.w), Math.log(T0.w), g0)) / P1.w;   // size eases on a log scale, no lurch at the end
+      const arc = Math.sin(g0 * Math.PI) * (mob ? 30 : 70);
+      P = { x: lerp(P1.x, T0.x, g0), y: lerp(P1.y, T0.y, g0) - arc, w: P1.w * k };
+    }
     const leanOn = !still && !mob && (part === 0 || c >= 1);
     if (leanOn) lean3 = ` perspective(1200px) rotateX(${(-lean.y * 8).toFixed(2)}deg) rotateY(${(lean.x * 11).toFixed(2)}deg)`;
     if (P) plateAt(P.x, P.y, P.w, lean3);
-    vis(E.plate, !!P); vis(E.sh, !!P);
+    vis(E.plate, !!P); vis(E.sh, !!P && (c > 0 || g0 < 0.6));
+    vis(L.th0, !(P && c === 0));   // row 1's thumbnail is the plate itself until it lands
 
-    // --- the frame: grows out of the plate's box, photos roll up per row, then grows into the storefront
-    const pr = { x: L.pc1.x - L.pw1 / 2, y: L.pc1.y - L.pw1 * PL.h / PL.w / 2, w: L.pw1, h: L.pw1 * PL.h / PL.w };
-    let F = g0 < 1 ? rect(pr, L.fr, g0) : rect(L.fr, L.pk, g);
-    let fOn = g0 > 0 && c < 1;
+    // --- the frame: grows out of row 2's thumbnail, photos roll up per row, then grows into the storefront
+    const t1 = thumb(1);
+    let F = gf < 1 ? rect({ x: t1.x, y: t1.y, w: t1.s, h: t1.s }, L.fr, gf) : rect(L.fr, L.pk, g);
+    let fOn = gf > 0 && c < 1;
     if (rm > 0 || c > 0) F = L.pk;
     const carry = c * (mob ? -VW * 1.1 : VW * 0.75);   // the room and the storefront carry off for the close
-    box(E.frame, { x: F.x + carry, y: F.y, w: F.w, h: F.h }, g0 < 1 ? lerp(90, 22, g0) : 22);
+    box(E.frame, { x: F.x + carry, y: F.y, w: F.w, h: F.h }, gf < 1 ? lerp(t1.s / 2, 22, gf) : 22);
     vis(E.frame, fOn && rm < 1);
     // each photo rolls up from the bottom when its first row comes up
     PHOTO_ORDER.forEach((k, j) => {
@@ -272,13 +291,6 @@
       const o = flick(clamp(t, 0, 1.0001));
       put(el, 'opacity', o.toFixed(2));
     });
-
-    // --- menu: slides in from the right as the word parts, carries off left as the storefront grows
-    const mx = L.menuXY.x + (1 - mIn) * VW * 0.6 + g * (mob ? 0 : VW * 0.7);
-    const my = L.menuXY.y + (mob ? g * VH + L.listShift(a) : 0);
-    at(E.menu, mx, my);
-    if (mob) put(E.menu, 'clipPath', `inset(${r1(Math.max(0, L.fr.y + L.fr.h + 6 - my))}px 0 0 0)`);
-        vis(E.menu, mIn > 0 && g < 1);
 
     // --- late copy: in from the left with the night, out to the left as the room grows
     const li = E3(seg(p, ...T.lateIn));

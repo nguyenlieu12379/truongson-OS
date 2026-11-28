@@ -1,7 +1,7 @@
 # Writes index.html. Bump V on every change to site.css or site.js.
 # Run from the build folder: python lab/make_html.py
 import json
-V = 6
+V = 10
 WA = "https://wa.me/17732735730?text=Hi%21%20I%27d%20like%20to%20order%20from%20Cardamom."
 ICON = ('<svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.2L3.3 20.8l4.5-1.2A8.7 8.7 0 1 0 12 3.2Z" '
         'fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle class="d d1" cx="8.4" cy="12" r="1.15"/>'
@@ -11,20 +11,20 @@ sign = json.load(open("lab/sign.json"))
 
 word = "".join(f'<span class="ch">{c}</span>' for c in "cardamom")
 
-# the menu: (photo, name, what it is, price). Prices as listed on their Uber Eats menu.
+# the menu: (frame photo, row thumbnail, name, what it is, price). Prices as listed on their Uber Eats menu.
 MENU = [
-    ("plate", "Hyderabadi Chicken Biryani", "The chef&rsquo;s special. Dum cooked, Hyderabad style.", "21.99"),
-    ("bowls", "Goat Biryani", "Their best seller.", "21.99"),
-    ("bowls", "Chicken 65 Biryani", "Biryani with their Chicken 65.", "19.99"),
-    ("apps", "Chicken 65", "Spicy fried chicken, curry leaf tempering.", "20.99"),
-    ("apps", "Majestic Chicken", "Hyderabadi special: yogurt and herb sauce.", "21.99"),
-    ("curries", "Nizami Goat Kadai", "Tender goat in a rich kadai masala.", "22.99"),
-    ("curries", "Butter Chicken", "Creamy, mild. Butter naan $4.49.", "20.99"),
-    ("meetha", "Double ka Meetha", "Hyderabadi bread pudding.", "9.99"),
-    ("night", "Irani Chai", "The one on the sign in their window.", "2.49"),
+    ("plate", "hyd-biryani", "Hyderabadi Chicken Biryani", "The chef&rsquo;s special. Dum cooked, Hyderabad style.", "21.99"),
+    ("bowls", "goat-biryani", "Goat Biryani", "Their best seller.", "21.99"),
+    ("bowls", "c65-biryani", "Chicken 65 Biryani", "Biryani with their Chicken 65.", "19.99"),
+    ("apps", "chicken-65", "Chicken 65", "Spicy fried chicken, curry leaf tempering.", "20.99"),
+    ("apps", "majestic", "Majestic Chicken", "Hyderabadi special: yogurt and herb sauce.", "21.99"),
+    ("curries", "goat-kadai", "Nizami Goat Kadai", "Tender goat in a rich kadai masala.", "22.99"),
+    ("curries", "butter-chicken", "Butter Chicken", "Creamy, mild. Butter naan $4.49.", "20.99"),
+    ("meetha", "meetha", "Double ka Meetha", "Hyderabadi bread pudding.", "9.99"),
+    ("night", "chai", "Irani Chai", "The one on the sign in their window.", "2.49"),
 ]
 rows = "\n".join(
-    f'        <li data-ph="{ph}"><span class="n">{n}</span><span class="d">{d}</span><b>${p}</b></li>' for ph, n, d, p in MENU)
+    f'        <li data-ph="{ph}"><img class="th" src="assets/t-{t}.webp" alt="" width="56" height="56" decoding="async"><span class="n">{n}</span><span class="d">{d}</span><b>${p}</b></li>' for ph, t, n, d, p in MENU)
 FR = [("bowls", "Biryani bowls and Chicken 65 on a tray at their table"),
       ("apps", "Chicken 65, Chicken Manchurian and Majestic Chicken in boat dishes, naan behind"),
       ("curries", "Butter chicken, Nizami goat kadai, salan and naan"),
